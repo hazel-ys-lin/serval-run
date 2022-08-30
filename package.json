@@ -18,7 +18,11 @@
   },
   "homepage": "https://github.com/01ccccccc/serval-run#readme",
   "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
     "express": "^4.15.2",
+    "ioredis": "^5.2.3",
+    "mysql2": "^2.3.3",
     "prettier": "^2.7.1",
     "pug": "^3.0.2"
   },
