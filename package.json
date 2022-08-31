@@ -23,6 +23,7 @@
     "dotenv": "^16.0.1",
     "express": "^4.15.2",
     "ioredis": "^5.2.3",
+    "mongoose": "^6.5.4",
     "mysql2": "^2.3.3",
     "node-fetch": "^2.6.7",
     "prettier": "^2.7.1",
