@@ -15,6 +15,7 @@ router.get('/unit', async (req, res) => {
   });
 
   let config = {
+    // TODO: set axios timeout length to 1 min
     method: 'post',
     url: 'https://hazlin.work/api/1.0/user/signup',
     headers: {
