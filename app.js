@@ -3,6 +3,7 @@ const express = require('express');
 
 const app = express();
 const port = process.env.PORT;
+const API_VERSION = process.env.API_VERSION;
 
 app.set('view engine', 'pug');
 app.use(express.json());
@@ -10,6 +11,8 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.render('index');
 });
+
+app.use('/api/' + API_VERSION, [require('./routes/service_route')]);
 
 // Handle 404
 app.use(function (req, res, next) {
