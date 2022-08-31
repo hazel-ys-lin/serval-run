@@ -5,6 +5,7 @@ const app = express();
 const port = process.env.PORT;
 const API_VERSION = process.env.API_VERSION;
 
+app.use(express.static('public'));
 app.set('view engine', 'pug');
 app.use(express.json());
 

@@ -1,0 +1,37 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title ServalRun®
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+
+  body
+    .header
+      a.header_logo(href='./')
+      .header_categories
+        a.header_category(href='./api/1.0/unit') 單元測試
+        a.header_category(href='./api/1.0/integrated') 整合測試
+        a.header_category(href='./api/1.0/stress') 壓力測試
+      .header_links
+        .header_link
+          a.div.header_link-icon-profile(href='./profile')
+          .header_link-text
+            a(href='./profile') 會員
+
+    block content
+
+    .footer
+      .footer_container
+        .footer_links
+          .footer_link 關於ServalRun
+          .footer_link 服務條款
+          .footer_link 隱私政策
+          .footer_link 聯絡我們
+          .footer_link FAQ
+        .footer_socialmedia
+          .footer_socialmedia-line
+          .footer_socialmedia-twitter
+          .footer_socialmedia-facebook
+        .footer_copyright &copy; 2022. All rights reserved.
