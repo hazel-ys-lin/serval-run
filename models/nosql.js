@@ -1,14 +1,11 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/serval_run', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const mongoDB = 'mongodb://localhost:27017/serval_run';
+mongoose.connect(mongoDB);
 
-// get connection status
-const mongodb = mongoose.connection;
-mongodb.on('error', (error) =>
-  console.log('mongodb connection error: ', error)
-); // connection error
-mongodb.once('open', (db) => console.log('Connected to MongoDB')); //successfully connect
+mongoose.Promise = global.Promise;
+// get default connection
+const db = mongoose.connection;
+db.on('error', (error) => console.log('mongoDB connection error: ', error)); // connection error
+db.once('open', (db) => console.log('Connected to MongoDB')); //successfully connect

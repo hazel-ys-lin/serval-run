@@ -12,5 +12,5 @@ user system to make user sign up and sign in
 
     Examples: 
       | provider | name | email         | password   | status |
-      | native   | abd  | abe@gmail.com | abdddddddd |    200 |
+      | native   | abd  | abf@gmail.com | abdddddddd |    200 |
       | native   |  123 |           123 |        123 |    403 |

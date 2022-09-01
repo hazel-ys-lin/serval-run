@@ -3,15 +3,15 @@ const axios = require('axios').default;
 
 const { testExample } = require('../service/testexample');
 
-router.get('/unit', async (req, res) => {
+router.get('/apitest', async (req, res) => {
   let result = testExample();
 
   // TODO: for loop to iterate all test data in table
   let data = JSON.stringify({
-    provider: result.testTableBody[1].provider,
-    name: result.testTableBody[1].name,
-    email: result.testTableBody[1].email,
-    password: result.testTableBody[1].password,
+    provider: result.testTableBody[0].provider,
+    name: result.testTableBody[0].name,
+    email: result.testTableBody[0].email,
+    password: result.testTableBody[0].password,
   });
 
   let config = {
@@ -28,9 +28,11 @@ router.get('/unit', async (req, res) => {
     .then(function (response) {
       // TODO: record the response http status and
       console.log(response.data);
+      return res.render('apitest');
     })
     .catch(function (error) {
       console.log(error.response?.data);
+      return res.render('error');
     });
 });
 
