@@ -5,7 +5,7 @@ const path = require('path');
 
 const testExample = function () {
   let featureFile = fs.readFileSync(
-    path.resolve(__dirname, 'user.feature'),
+    path.resolve(__dirname, 'signin.feature'),
     'utf8'
   );
 
@@ -15,6 +15,9 @@ const testExample = function () {
 
   let parser = new Gherkin.Parser(builder, matcher);
   let gherkinDocument = parser.parse(featureFile);
+  // console.log('gherkinDocument.feature: ', gherkinDocument.feature);
+  let testCaseInfo = gherkinDocument.feature.children[0].scenario;
+  // console.log('testCaseInfo: ', testCaseInfo);
 
   let tableHeader =
     gherkinDocument.feature.children[0].scenario.examples[0].tableHeader;
@@ -24,6 +27,14 @@ const testExample = function () {
   // console.log('tableBody: ', tableBody);
   // console.log('tableHeader: ', tableHeader);
   // console.log('steps: ', steps);
+
+  let testInfo = {
+    title: gherkinDocument.feature.name,
+    description: gherkinDocument.feature.description,
+    tag: testCaseInfo.tags[0]?.name,
+  };
+
+  // FIXME: put array or object into OOP format?
   let testStep = [];
   let testTableBody = [];
   let testTableHeader = [];
@@ -51,9 +62,9 @@ const testExample = function () {
   // console.log('testStep: ', testStep);
   // console.log('testTableBody: ', testTableBody);
 
-  let pickles = Gherkin.compile(gherkinDocument, 'gherkinuser.feature', uuidFn);
+  // let pickles = Gherkin.compile(gherkinDocument, 'gherkinuser.feature', uuidFn);
 
-  return { testStep, testTableBody };
+  return { testInfo, testStep, testTableBody };
 };
 
 module.exports = { testExample };

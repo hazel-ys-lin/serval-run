@@ -1,9 +1,11 @@
 extends layout.pug
 
 block content 
+  link(rel='stylesheet', href='../../css/common.css')
   div
     .error_container 
+    h2 Serval Test Failed
     p.error_message
-      | Serval Oops
+      | message: #{message}
       br
-      | #{msg}
+      | time: #{time}
