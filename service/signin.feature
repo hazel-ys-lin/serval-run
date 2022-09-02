@@ -10,6 +10,6 @@ user system to make user sign in
     Then the result should be <status> on the screen
 
     Examples: 
-      | provider | email         | password   | status |
-      | native   | abf@gmail.com | abdddddddd |    200 |
-      | native   |           123 |        123 |    403 |
+      | provider | email            | password      | status |
+      | native   | serval@gmail.com | Serval123     |    201 |
+      | native   | serval@gmail.com | Serval1234444 |    403 |

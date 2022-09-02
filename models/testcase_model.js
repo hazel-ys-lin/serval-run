@@ -25,11 +25,10 @@ const testcaseSchema = new mongoose.Schema({
       test_cases: [
         {
           case_id: Number,
-          test_case: {
-            provider: String,
-            name: String,
-            email: String,
-            password: String,
+          test_case: {},
+          expected_result: {
+            response_body: {},
+            status_code: Number,
           },
         },
       ],
@@ -38,17 +37,8 @@ const testcaseSchema = new mongoose.Schema({
     response: [
       {
         case_id: Number,
-        response_data: {
-          access_token: String,
-          access_expired: Number,
-          user: {
-            id: Number,
-            provider: String,
-            name: String,
-            email: String,
-            picture: String,
-          },
-        },
+        response_data: {},
+        response_status: Number,
         pass: Boolean,
         request_time: String,
         request_time_length: Number,
