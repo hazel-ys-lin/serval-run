@@ -5,31 +5,8 @@
 	box-sizing: border-box;
 }
 
-
-.header_logo {
-    width: 322px;
-    height: 155px;
-    background-image: url(icon/serval-run_logo-1.png);
-    background-size: contain;
-}
-
-
-
-.header_link-icon-cart, .header_link-icon-cart-number, .header_link-icon-profile, .header-campaign-container, .footer, .footer_link, .footer_socialmedia-line, .footer_socialmedia-twitter, .footer_socialmedia-facebook, .footer_copyright{
-    display: block;
-}
-
-.header, .header_links, .footer_container, .footer_links, .footer_socialmedia{
-    display: flex;
-}
-
-.header {
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-
-.footer {
-    flex-wrap: wrap;
-    flex-direction: row;
+img.brand-image {
+    opacity: .8; 
+    width: 571px; 
+    height: 198px;
 }

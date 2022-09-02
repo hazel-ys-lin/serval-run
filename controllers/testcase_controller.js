@@ -7,8 +7,8 @@ const saveCase = async (req, res) => {
   // console.log('result.testTableBody: ', result.testTableBody);
 
   // TODO: for loop to iterate all test data in table
-  let data = JSON.stringify(result.testTableBody[1]);
-  //   console.log('result.testTableBody[1]: ', result.testTableBody[1]);
+  let data = JSON.stringify(result.testTableBody[0]);
+  //   console.log('result.testTableBody[0]: ', result.testTableBody[0]);
 
   let config = {
     method: 'post',
@@ -47,10 +47,10 @@ const saveCase = async (req, res) => {
             test_cases: [
               {
                 case_id: 1,
-                test_case: result.testTableBody[1],
+                test_case: result.testTableBody[0],
                 expected_result: {
                   response_body: {},
-                  status_code: result.testTableBody[1].status,
+                  status_code: result.testTableBody[0].status,
                 },
               },
             ],
@@ -61,7 +61,7 @@ const saveCase = async (req, res) => {
               case_id: 1,
               response_data: actualResult,
               response_status: response.status,
-              pass: response.status === Number(result.testTableBody[1].status),
+              pass: response.status === Number(result.testTableBody[0].status),
               request_time: testTime,
               request_time_length: 1000,
             },
@@ -106,10 +106,10 @@ const saveCase = async (req, res) => {
             test_cases: [
               {
                 case_id: 1,
-                test_case: result.testTableBody[1],
+                test_case: result.testTableBody[0],
                 expected_result: {
                   response_body: {},
-                  status_code: result.testTableBody[1].status,
+                  status_code: result.testTableBody[0].status,
                 },
               },
             ],
@@ -122,7 +122,7 @@ const saveCase = async (req, res) => {
               response_status: error.response.status,
               pass:
                 error.response.status ===
-                Number(result.testTableBody[1].status),
+                Number(result.testTableBody[0].status),
               request_time: testTime,
               request_time_length: 1000,
             },
