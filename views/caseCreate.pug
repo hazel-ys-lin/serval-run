@@ -1,0 +1,12 @@
+extends layout.pug
+
+block content
+    link(rel='stylesheet', href='../../css/common.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js')
+    script(src='../../src/gherkin.js')
+    div.content-wrapper
+        form
+            textarea#code(name='code')
+        script.
+            var editor = CodeMirror.fromTextArea(document.getElementById("code"), {});

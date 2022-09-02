@@ -22,7 +22,6 @@ const saveCase = async (req, res) => {
 
   axios(config)
     .then(function (response) {
-      // TODO: record the response http status and response
       // TODO: verify whether the test passed or not
       let actualResult = response.data;
       let testTime = new Date().toUTCString();
@@ -72,10 +71,9 @@ const saveCase = async (req, res) => {
       awesome_instance.save(function (error) {
         if (error) console.log('instance error', error);
         else console.log('inserted');
-        // TODO: return the result from contoller to route
       });
       console.log('post call passed');
-      return res.render('apitest', {
+      return res.render('apitestResult', {
         response: response.data,
         status: response.status,
         time: testTime,
@@ -133,7 +131,6 @@ const saveCase = async (req, res) => {
       awesome_instance.save(function (error) {
         if (error) console.log('instance error', error);
         else console.log('inserted');
-        // TODO: return the result from contoller to route
       });
       console.log('post call failed');
       //   console.log('error.response: ', error.response);

@@ -10,3 +10,5 @@ img.brand-image {
     width: 571px; 
     height: 198px;
 }
+
+.CodeMirror { border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
