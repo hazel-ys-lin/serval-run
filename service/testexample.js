@@ -3,7 +3,7 @@ const Messages = require('@cucumber/messages');
 const fs = require('fs');
 const path = require('path');
 
-const testExample = function () {
+const testExample = function (featureCode) {
   let featureFile = fs.readFileSync(
     path.resolve(__dirname, 'signin.feature'),
     'utf8'
@@ -14,7 +14,7 @@ const testExample = function () {
   let matcher = new Gherkin.GherkinClassicTokenMatcher(); // or Gherkin.GherkinInMarkdownTokenMatcher()
 
   let parser = new Gherkin.Parser(builder, matcher);
-  let gherkinDocument = parser.parse(featureFile);
+  let gherkinDocument = parser.parse(featureCode);
   // console.log('gherkinDocument.feature: ', gherkinDocument.feature);
   let testCaseInfo = gherkinDocument.feature.children[0].scenario;
   // console.log('testCaseInfo: ', testCaseInfo);

@@ -3,7 +3,7 @@ const { testExample } = require('../service/testexample');
 const axios = require('axios').default;
 
 const saveCase = async (req, res) => {
-  let result = testExample();
+  let result = testExample(req.body.featureCode);
   // console.log('result.testTableBody: ', result.testTableBody);
 
   // TODO: for loop to iterate all test data in table
@@ -11,8 +11,8 @@ const saveCase = async (req, res) => {
   //   console.log('result.testTableBody[0]: ', result.testTableBody[0]);
 
   let config = {
-    method: 'post',
-    url: 'https://hazlin.work/api/1.0/user/signin',
+    method: req.body.httpMethod,
+    url: `${req.body.domainName}${req.body.apiEndpoint}`,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -34,9 +34,9 @@ const saveCase = async (req, res) => {
         project_id: 1,
         collection_id: 1,
         api_id: 1,
-        domain_name: 'https://hazlin.work',
-        http_method: 'post',
-        api_endpoint: '/api/1.0/user/signin',
+        domain_name: req.body.domainName,
+        http_method: req.body.httpMethod,
+        api_endpoint: req.body.apiEndpoint,
         test_record: {
           request: {
             title: 'User',
@@ -73,11 +73,7 @@ const saveCase = async (req, res) => {
         else console.log('inserted');
       });
       console.log('post call passed');
-      return res.render('apitestResult', {
-        response: response.data,
-        status: response.status,
-        time: testTime,
-      });
+      return res.status(200).json({ message: 'inserted' });
     })
     .catch(function (error) {
       console.log(error.response?.data);
@@ -86,15 +82,14 @@ const saveCase = async (req, res) => {
 
       const awesome_instance = new testCaseModel({
         // TODO: to automatically generate all the id?
-        // TODO: to input all the data from real test case
         user_id: 1,
         test_id: 1,
         project_id: 1,
         collection_id: 1,
         api_id: 1,
-        domain_name: 'https://hazlin.work',
-        http_method: 'post',
-        api_endpoint: '/api/1.0/user/signin',
+        domain_name: req.body.domainName,
+        http_method: req.body.httpMethod,
+        api_endpoint: req.body.apiEndpoint,
         test_record: {
           request: {
             title: 'User',
