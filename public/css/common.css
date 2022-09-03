@@ -11,4 +11,16 @@ img.brand-image {
     height: 198px;
 }
 
-.CodeMirror { border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+.CodeMirror {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.input-form {
+  width: 80%;
+  padding: 20px 60px;
+}
+
+.btn {
+  float: right;
+}

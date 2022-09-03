@@ -6,7 +6,29 @@ block content
     script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js')
     script(src='../../src/gherkin.js')
     div.content-wrapper
-        form
-            textarea#code(name='code')
+        div.input-form
+            div.form-group
+                label(for='exampleFormControlInput1') Domain Name 
+                input#exampleFormControlInput1.form-control(type='url' placeholder='https://www.sample.com/')
+            div.form-group
+                label(for='exampleFormControlInput1') API Endpoint 
+                input#exampleFormControlInput1.form-control(type='string' placeholder='api/1.0/user/signin')
+            div.form-group
+                label(for='exampleFormControlSelect1') HTTP Method
+                select#exampleFormControlSelect1.form-control
+                    option GET 
+                    option POST 
+                    option PUT 
+                    option PATCH 
+                    option DELETE
+
+            form.form-group
+                label(for='exampleFormControlSelect1') Test Document
+                textarea#code(name='code')
+                    | # Write your test document in gherkin language here! 
+                    | # The serval can only read gherkin now, meow.
+            button.btn.btn-info(type='button') Run
+            button.btn.btn-light(type='button') Reset
+
         script.
             var editor = CodeMirror.fromTextArea(document.getElementById("code"), {});
