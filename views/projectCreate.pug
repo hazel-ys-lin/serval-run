@@ -1,0 +1,14 @@
+extends layout.pug
+
+block content
+    link(rel='stylesheet', href='../../css/common.css')
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    div.content-wrapper
+        form.input-form
+            div.form-group
+                label(for='exampleFormControlInput1') Project Name 
+                input#exampleFormControlInput1.form-control.input_project-name(type='url' placeholder='Your project name')
+            div.form-group
+                label(for='exampleFormControlInput1') Collection Name 
+                input#exampleFormControlInput1.form-control.input_collection-name(type='url' placeholder='Your collection name')

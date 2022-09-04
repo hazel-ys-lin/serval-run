@@ -9,6 +9,7 @@ block content
     script(src='../../src/gherkin.js')
     div.content-wrapper
         form.input-form
+            // FIXME: to change default text of 'for' in labels
             div.form-group
                 label(for='exampleFormControlInput1') Domain Name 
                 input#exampleFormControlInput1.form-control.input_domain-name(type='url' placeholder='https://hazlin.work/')
@@ -17,7 +18,8 @@ block content
                 input#exampleFormControlInput1.form-control.input_api-endpoint(type='string' placeholder='api/1.0/user/signin')
             div.form-group
                 label(for='exampleFormControlSelect1') HTTP Method
-                select#exampleFormControlSelect1.form-control.input_http-method
+                select#exampleFormControlSelect1.form-control.text-muted.input_http-method
+                    option(value='' selected='' disabled='' hidden='') Please choose the HTTP method
                     option GET 
                     option POST 
                     option PUT 
@@ -29,6 +31,15 @@ block content
                 textarea#code(name='code' placeholder='# Write your test document in gherkin language here! \n # The serval can only read gherkin now, meow.')
                     | # Write your test document in gherkin language here! 
                     | # The serval can only read gherkin now, meow.
+            div.form-group
+                label(for='exampleFormControlSelect1') Severity
+                select#exampleFormControlSelect1.form-control.text-muted.input_severity
+                    option(value='' selected='' disabled='' hidden='') Value the severity
+                    option 1 
+                    option 2 
+                    option 3 
+                    option 4 
+                    option 5
             button.btn.btn-info.btn-testrun(type='submit') Run
             button.btn.btn-light.btn-reset(type='button') Reset
 
@@ -39,47 +50,59 @@ block content
             mode: 'text/x-feature'
         });
 
-            $('.btn-testrun').on('click', function(event) {
-                console.log('testrun clicked')
-                event.preventDefault();
+        // FIXME: reset not working
+        $('.btn-reset').on('click', function(event) {
+            console.log('reset clicked')
+            event.preventDefault();
+            $('.input_domain-name').val() = '';
+            $('.input_api-endpoint').val() = '';
+            $('.input_http-method').val() = '';
+            editor.getValue() = '';
+            $('.input_severity').val() = '';
+        })
+        $('.btn-testrun').on('click', function(event) {
+            console.log('testrun clicked')
+            event.preventDefault();
 
-                //- const caseForm = new FormData();
-                const domainName = $('.input_domain-name').val();
-                const apiEndpoint = $('.input_api-endpoint').val();
-                const httpMethod = $('.input_http-method').val();
-                const featureCode = editor.getValue();
+            //- const caseForm = new FormData();
+            const domainName = $('.input_domain-name').val();
+            const apiEndpoint = $('.input_api-endpoint').val();
+            const httpMethod = $('.input_http-method').val();
+            const featureCode = editor.getValue();
+            const severity = $('.input_severity').val();
 
-                //- caseForm.append('domainName', $('.input_domain-name').val());
-                //- caseForm.append('apiEndpoint', $('.input_api-endpoint').val());
-                //- caseForm.append('httpMethod', $('.input_http-method').val());
-                //- caseForm.append('featureCode', $('#code').val());
+            //- caseForm.append('domainName', $('.input_domain-name').val());
+            //- caseForm.append('apiEndpoint', $('.input_api-endpoint').val());
+            //- caseForm.append('httpMethod', $('.input_http-method').val());
+            //- caseForm.append('featureCode', $('#code').val());
 
-                //- console.log('caseForm: ', JSON.stringify(caseForm))
+            //- console.log('caseForm: ', JSON.stringify(caseForm))
 
-                axios({
-                    method: 'post',
-                    url: 'http://localhost:3001/api/1.0/addcase',
-                    // FIXME: why can't form data work again
-                    //- data: caseForm,
-                    data: {
-                        domainName: domainName,
-                        apiEndpoint: apiEndpoint,
-                        httpMethod: httpMethod,
-                        featureCode: featureCode
-                    },
-                    headers: {'Content-Type': 'application/json'}
-                })
-                .then((response) => {
-                    if (response.status === 200) {
-                        //- console.log('response.status: ', response.status);
-                        //- alert('create case successfully')
-                        window.location.assign('./testresult');
-                    }
-                })
-                .catch((error) => {
-                    console.log('in error');
-                    console.log('catch: ', error)
-                    alert('create case error')
-                })
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/addcase',
+                // FIXME: why can't form data work again
+                //- data: caseForm,
+                data: {
+                    domainName: domainName,
+                    apiEndpoint: apiEndpoint,
+                    httpMethod: httpMethod,
+                    featureCode: featureCode,
+                    severity: severity,
+                },
+                headers: {'Content-Type': 'application/json'}
             })
+            .then((response) => {
+                if (response.status === 200) {
+                    //- console.log('response.status: ', response.status);
+                    //- alert('create case successfully')
+                    window.location.assign('./testresult');
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch: ', error)
+                alert('create case error')
+            })
+        })
 
