@@ -13,3 +13,4 @@ user system to make user sign in
       | provider | email            | password      | status |
       | native   | serval@gmail.com | Serval123     |    201 |
       | native   | serval@gmail.com | Serval1234444 |    403 |
+      | native   | serval@gmail.com | Serval1234444 |    404 |
