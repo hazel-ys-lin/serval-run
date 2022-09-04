@@ -1,0 +1,24 @@
+extends layout.pug
+
+block content 
+    link(rel='stylesheet', href='../../css/common.css')
+    div.content-wrapper
+      .card
+        .card-header
+          h3.card-title Serval Test Failed
+          .card-tools
+            // Buttons, labels, and many other things can be placed here!
+            // Here is a label for example
+            span.badge.badge-danger FAIL
+          // /.card-tools
+        // /.card-header
+        p.error_message.card-body
+          | Message: #{message}
+          br
+          | Time: #{time}
+        // /.card-body
+        .card-footer
+          | The footer of the card
+        // /.card-footer
+      // /.card
+

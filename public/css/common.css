@@ -1,0 +1,37 @@
+/* ================================= 
+  Base Element Styles
+==================================== */
+*, ::after, ::before {
+  box-sizing: border-box;
+}
+
+img.brand-image {
+    opacity: .8; 
+    width: 571px; 
+    height: 198px;
+}
+
+.CodeMirror {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.input-form {
+  width: 80%;
+  padding: 20px 60px;
+}
+
+.card {
+  display: block;
+  flex: 0 0 50%;
+  /* max-width: 50%; */
+  position: relative;
+  width: 100%;
+  padding-right: 7.5px;
+  padding-left: 7.5px;
+}
+
+
+.btn {
+  float: right;
+}

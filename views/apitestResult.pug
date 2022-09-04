@@ -1,0 +1,24 @@
+extends layout.pug
+
+block content 
+    link(rel='stylesheet', href='../../css/common.css')
+    div.content-wrapper
+      .card
+        .card-header
+          h3.card-title Serval Test Passed
+          .card-tools
+            // Buttons, labels, and many other things can be placed here!
+            // Here is a label for example
+            span.badge.badge-success PASS
+          // /.card-tools
+        // /.card-header
+        .card-body
+          | status: #{status}
+          br
+          | time: #{time}
+        // /.card-body
+        .card-footer
+          | The footer of the card
+        // /.card-footer
+      // /.card
+
