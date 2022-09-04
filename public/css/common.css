@@ -1,8 +1,8 @@
 /* ================================= 
   Base Element Styles
 ==================================== */
-* {
-	box-sizing: border-box;
+*, ::after, ::before {
+  box-sizing: border-box;
 }
 
 img.brand-image {
@@ -20,6 +20,17 @@ img.brand-image {
   width: 80%;
   padding: 20px 60px;
 }
+
+.card {
+  display: block;
+  flex: 0 0 50%;
+  /* max-width: 50%; */
+  position: relative;
+  width: 100%;
+  padding-right: 7.5px;
+  padding-left: 7.5px;
+}
+
 
 .btn {
   float: right;
