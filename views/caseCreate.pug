@@ -11,6 +11,18 @@ block content
         form.input-form
             // FIXME: to change default text of 'for' in labels
             div.form-group
+                label(for='exampleFormControlSelect1') Project
+                select#exampleFormControlSelect1.form-control.text-muted.select_project
+                    option(value='' selected='' disabled='' hidden='') Select Project
+            div.form-group
+                label(for='exampleFormControlSelect1') Collection
+                select#exampleFormControlSelect1.form-control.text-muted.select_collection
+                    option(value='' selected='' disabled='' hidden='') Select Collection
+            div.form-group
+                label(for='exampleFormControlSelect1') API
+                select#exampleFormControlSelect1.form-control.text-muted.select_api
+                    option(value='' selected='' disabled='' hidden='') Select API
+            div.form-group
                 label(for='exampleFormControlInput1') Domain Name 
                 input#exampleFormControlInput1.form-control.input_domain-name(type='url' placeholder='https://hazlin.work/')
             div.form-group
@@ -19,7 +31,7 @@ block content
             div.form-group
                 label(for='exampleFormControlSelect1') HTTP Method
                 select#exampleFormControlSelect1.form-control.text-muted.input_http-method
-                    option(value='' selected='' disabled='' hidden='') Please choose the HTTP method
+                    option(value='' selected='' disabled='' hidden='') Please choose method to test
                     option GET 
                     option POST 
                     option PUT 
@@ -90,7 +102,8 @@ block content
                     featureCode: featureCode,
                     severity: severity,
                 },
-                headers: {'Content-Type': 'application/json'}
+                headers: {'Content-Type': 'application/json'},
+                timeout: 5000,
             })
             .then((response) => {
                 if (response.status === 200) {

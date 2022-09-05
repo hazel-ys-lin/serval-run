@@ -5,10 +5,56 @@ block content
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
     div.content-wrapper
-        form.input-form
-            div.form-group
-                label(for='exampleFormControlInput1') Project Name 
-                input#exampleFormControlInput1.form-control.input_project-name(type='url' placeholder='Your project name')
-            div.form-group
-                label(for='exampleFormControlInput1') Collection Name 
-                input#exampleFormControlInput1.form-control.input_collection-name(type='url' placeholder='Your collection name')
+        div.cards
+            div.card.card-project
+                form.input-form
+                    div.form-group
+                        label(for='exampleFormControlInput1') Create New Project 
+                        input#exampleFormControlInput1.form-control.input_project(type='string' placeholder='Project name')
+                    button.btn.btn-outline-info.btn-block.btn-create_project(type='submit') Create Project
+            div.card.card-project
+                form.input-form
+                    div.form-group
+                        label(for='exampleFormControlInput1') Create New Collection 
+                        select#exampleFormControlSelect1.form-control.text-muted.select_project
+                            option(value='' selected='' disabled='' hidden='') Select Project
+                        input#exampleFormControlInput1.form-control.create_collection(type='url' placeholder='Collection name')
+                    button.btn.btn-outline-info.btn-block.btn-create_collection(type='submit') Create Collection
+            div.card.card-project
+                form.input-form
+                    div.form-group
+                        label(for='exampleFormControlInput1') Create New API 
+                        select#exampleFormControlSelect1.form-control.text-muted.select_project
+                            option(value='' selected='' disabled='' hidden='') Select Project
+                        select#exampleFormControlSelect1.form-control.text-muted.select_collection
+                            option(value='' selected='' disabled='' hidden='') Select Collection
+                        input#exampleFormControlInput1.form-control.create_collection(type='url' placeholder='API name')
+                    button.btn.btn-outline-info.btn-block.btn-create_api(type='submit') Create API
+    script.
+        $('.btn-create_project').on('click', function(event) {
+            console.log('create_project clicked')
+            event.preventDefault();
+            const projectName = $('.input_project').val();
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/addproject',
+                data: {
+                    userId: 1,
+                    projectName: projectName,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    //- console.log('response.status: ', response.status);
+                    alert('create project successfully')
+                    //- window.location.assign('./testresult');
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch: ', error)
+                alert('create project error')
+            })
+        })

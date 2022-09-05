@@ -1,9 +1,14 @@
 const pool = require('./db');
 const mongoose = require('mongoose');
+const momentTimezone = require('moment-timezone');
 
 const testcaseSchema = new mongoose.Schema({
   user_id: Number,
   test_id: Number,
+  create_time: {
+    type: Date,
+    default: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+  },
   project_id: Number,
   collection_id: Number,
   api_id: Number,
@@ -40,7 +45,7 @@ const testcaseSchema = new mongoose.Schema({
         response_data: {},
         response_status: Number,
         pass: Boolean,
-        request_time: String,
+        request_time: Date,
         request_time_length: Number,
       },
     ],

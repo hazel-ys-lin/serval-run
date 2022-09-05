@@ -1,14 +1,15 @@
 /* ================================= 
   Base Element Styles
 ==================================== */
+
 *, ::after, ::before {
   box-sizing: border-box;
 }
 
 img.brand-image {
     opacity: .8; 
-    width: 571px; 
-    height: 198px;
+    width: 285px; 
+    height: 99px;
 }
 
 .CodeMirror {
@@ -17,8 +18,8 @@ img.brand-image {
 }
 
 .input-form {
-  width: 80%;
-  padding: 20px 60px;
+  width: 90%;
+  padding: 60px 120px;
 }
 
 .cards {
@@ -31,8 +32,14 @@ img.brand-image {
 }
 
 .card {
-  max-width: 1200px;
-  margin: auto 50px 80px;
+  width: 500px;
+  margin: auto 50px 25px;
+  /* padding: 65px 0 164px; */
+}
+
+.card-project {
+  width: 800px;
+  margin: auto 50px 5px;
   /* padding: 65px 0 164px; */
 }
 

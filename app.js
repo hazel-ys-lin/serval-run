@@ -13,7 +13,11 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.use('/api/' + API_VERSION, [require('./routes/service_route')]);
+app.use('/api/' + API_VERSION, [
+  require('./routes/apitest_route'),
+  require('./routes/project_route'),
+  require('./routes/user_route'),
+]);
 
 // Handle 404
 app.use(function (req, res, next) {

@@ -25,6 +25,8 @@ html
             a.nav-link(href='http://localhost:3001/api/1.0/apitest') API Test
           li.nav-item.d-none.d-sm-inline-block
             a.nav-link(href='http://localhost:3001/') Stress Test
+          li.nav-item.d-none.d-sm-inline-block
+            a.btn.btn-outline-secondary(href='http://localhost:3001/api/1.0/user') Profile
         // Right navbar links
         ul.navbar-nav.ml-auto
           li.nav-item
@@ -59,7 +61,7 @@ html
               a.nav-link.active(href='http://localhost:3001/')
                 i.nav-icon.fas.fa-tachometer-alt
                 p
-                  | Projects
+                  | Workspace
                   i.right.fas.fa-angle-left
               ul.nav.nav-treeview
                 //- li.nav-item
@@ -67,13 +69,17 @@ html
                 //-     i.far.fa-circle.nav-icon
                 //-     p Active Page
                 li.nav-item
-                  a.nav-link(href='http://localhost:3001/')
+                  a.nav-link(href='http://localhost:3001/api/1.0/projects')
                     i.far.fa-circle.nav-icon
-                    p Collections
+                    p Create Projects
                 li.nav-item
                   a.nav-link(href='http://localhost:3001/')
                     i.far.fa-circle.nav-icon
-                    p APIs
+                    p My Projects
+                li.nav-item
+                  a.nav-link(href='http://localhost:3001/')
+                    i.far.fa-circle.nav-icon
+                    p My Tests
               li.nav-item.menu-open
                 a.nav-link.active(href='http://localhost:3001/')
                   i.nav-icon.fas.fa-tachometer-alt
@@ -85,6 +91,10 @@ html
                     a.nav-link(href='http://localhost:3001/')
                       i.far.fa-circle.nav-icon
                       p Statistics
+                  li.nav-item
+                    a.nav-link(href='http://localhost:3001/')
+                      i.far.fa-circle.nav-icon
+                      p Documents
     block content
     .layout-footer-fixed
       footer.main-footer
