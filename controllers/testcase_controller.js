@@ -27,7 +27,7 @@ const saveCase = async (req, res) => {
         'Content-Type': 'application/json',
       },
       data: testData,
-      timeout: 1000,
+      timeout: 2000,
     };
 
     await axios(config)
@@ -93,7 +93,7 @@ const saveCase = async (req, res) => {
   });
   // console.log('actualResponseArray in finally: ', actualResponseArray);
 
-  awesome_instance.save(function (error) {
+  await awesome_instance.save(function (error) {
     if (error) console.log('instance error', error);
     else console.log('inserted');
   });

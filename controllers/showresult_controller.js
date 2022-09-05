@@ -8,8 +8,8 @@ const showResult = async (req, res) => {
   //   getAllResult.test_record
   // );
   return res.render('apitestResult', {
-    request: getAllResult.test_record.request.test_cases,
-    response: getAllResult.test_record.response,
+    request: getAllResult?.test_record?.request.test_cases,
+    response: getAllResult?.test_record?.response,
   });
 };
 

@@ -21,14 +21,19 @@ img.brand-image {
   padding: 20px 60px;
 }
 
+.cards {
+  /* display: block; */
+  display: flex;
+  flex-wrap: wrap;
+  max-width: auto;
+  margin: auto 150px 100px;
+  /* padding: 65px 0 164px; */
+}
+
 .card {
-  display: block;
-  flex: 0 0 50%;
-  /* max-width: 50%; */
-  position: relative;
-  width: 100%;
-  padding-right: 7.5px;
-  padding-left: 7.5px;
+  max-width: 1200px;
+  margin: auto 50px 80px;
+  /* padding: 65px 0 164px; */
 }
 
 

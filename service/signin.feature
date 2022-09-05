@@ -10,7 +10,9 @@ user system to make user sign in
     Then the result should be <status> on the screen
 
     Examples: 
-      | provider | email            | password      | status |
-      | native   | serval@gmail.com | Serval123     |    201 |
-      | native   | serval@gmail.com | Serval1234444 |    403 |
-      | native   | serval@gmail.com | Serval1234444 |    404 |
+      | provider | email             | password      | status |
+      | native   | serval@gmail.com  | Serval123     |    201 |
+      | native   | serval@gmail.com  | Serval1234444 |    403 |
+      | native   | serval@gmail.com  | Serval1234444 |    404 |
+      | native   | admin@company.com | admin123      |    201 |
+      | native   | admin@company.com | admin1223     |    201 |
