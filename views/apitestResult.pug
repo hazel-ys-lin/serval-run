@@ -4,17 +4,7 @@ block content
     link(rel='stylesheet', href='../../css/common.css')
     div.content-wrapper
       div.cards
-        if !response
-          div(class='card')
-            div(class='card-header')
-              h3(class='card-title') Serval Test Failed
-              div(class='card-tools')
-                span(class='badge badge-danger') FAIL
-            div(class='card-body')
-              | Response Status: Request timeout
-            div(class='card-footer')
-              | 
-        else
+        if response
           - let i = 0
           while i < response.length
             if response[i].pass
@@ -60,4 +50,13 @@ block content
                 div(class='card-footer')
                   | Time Length: #{response[i].request_time_length}
             - i++
-
+        else  
+          div(class='card')
+            div(class='card-header')
+              h3(class='card-title') Serval Test Failed
+              div(class='card-tools')
+                span(class='badge badge-danger') FAIL
+            div(class='card-body')
+              | Response Status: Request timeout
+            div(class='card-footer')
+              | 

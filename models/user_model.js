@@ -7,7 +7,12 @@ const userSchema = new mongoose.Schema({
   user_email: String,
   user_role: Number,
   user_password: String,
-  projects: [Number],
+  projects: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'project',
+    },
+  ],
 });
 
 const userModel = pool.model('user', userSchema);

@@ -2,7 +2,10 @@ const pool = require('./db');
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({
-  user_id: Number,
+  user_id: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'user',
+  },
   project_id: Number,
   project_name: String,
   collections: [Number],
