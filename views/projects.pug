@@ -1,0 +1,77 @@
+extends layout.pug
+
+block content
+    link(rel='stylesheet', href='../../css/common.css')
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    div.content-wrapper
+        form.input-form
+            div.form-group
+                label(for='exampleFormControlInput1') Project Name 
+                input#exampleFormControlInput1.form-control.input_project(type='string' placeholder='My Project')
+            div.form-group
+                label(for='exampleFormControlInput1') Domain Name (URL) 
+                input#exampleFormControlInput1.form-control.input_domain-name(type='url' placeholder='https://hazlin.work/')
+            div.form-group
+                label(for='exampleFormControlInput1') Title (Development Stage)
+                input#exampleFormControlInput1.form-control.input_title(type='string' placeholder='staging')
+            button.btn.btn-info.btn-block.btn-create_project(type='submit') Create New Project
+        
+        div.cards
+            - let i = 0
+            while i < userProjects.length
+                div(class='card') 
+                    div(class='card-header')
+                        h3(class='card-title'  value=`${userProjects[i]}`) #{userProjects[i]}
+                        div(class='card-tools')
+                    div(class='card-body')
+                        | Expected Status: #{request[i].expected_result.status_code}
+                        br
+                        | Response Status: #{response[i].response_status} 
+                        br
+                        | Time: #{response[i].request_time}
+                    div(class='card-footer')
+                - i++
+
+            //- div.card.card-project
+            //-     form.input-form
+            //-         div.form-group
+            //-             label(for='exampleFormControlInput1') Create New API 
+            //-             select#exampleFormControlSelect1.form-control.text-muted.select_project
+            //-                 option(value='' selected='' disabled='' hidden='') Select Project
+            //-             select#exampleFormControlSelect1.form-control.text-muted.select_collection
+            //-                 option(value='' selected='' disabled='' hidden='') Select Collection
+            //-             input#exampleFormControlInput1.form-control.create_collection(type='url' placeholder='API name')
+            //-         button.btn.btn-outline-info.btn-block.btn-create_api(type='submit') Create API
+    script.
+        $('.btn-create_project').on('click', function(event) {
+            console.log('create_project clicked')
+            event.preventDefault();
+            const projectName = $('.input_project').val();
+            const projectDomain = $('.input_domain-name').val();
+            const projectTitle = $('.input_title').val();
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/addproject',
+                data: {
+                    //- userEmail: 'serval_meow@gmail.com',
+                    projectName: projectName,
+                    projectDomain: projectDomain,
+                    projectTitle: projectTitle,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    //- console.log('response.status: ', response.status);
+                    alert('create project successfully')
+                    //- window.location.assign('./testresult');
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch: ', error)
+                alert('create project error')
+            })
+        })

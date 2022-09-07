@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-const uri = 'mongodb://localhost:27017/serval_run';
+const uri = process.env.MONGODB_URI;
 const pool = mongoose.createConnection(uri, {
   useNewUrlParser: true,
   serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s

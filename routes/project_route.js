@@ -1,15 +1,13 @@
 const router = require('express').Router();
+const { createCase } = require('../controllers/case_controller');
 const {
-  createCase,
   createProject,
-  getProject,
-  saveProject,
-} = require('../controllers/createcase_controller');
+  insertProject,
+} = require('../controllers/project_cotroller');
 const { wrapAsync } = require('../util/util');
 
 router.route('/apitest').get(wrapAsync(createCase));
 router.route('/projects').get(wrapAsync(createProject));
-router.route('/getproject').get(wrapAsync(getProject));
-router.route('/addproject').post(wrapAsync(saveProject));
+router.route('/addproject').post(wrapAsync(insertProject));
 
 module.exports = router;

@@ -10,48 +10,11 @@ block content
     div.content-wrapper
         form.input-form
             // FIXME: to change default text of 'for' in labels
-            div.form-group
-                label(for='exampleFormControlSelect1') Project
-                select#exampleFormControlSelect1.form-control.text-muted.select_project
-                    option(value='' selected='' disabled='' hidden='') Select Project
-            div.form-group
-                label(for='exampleFormControlSelect1') Collection
-                select#exampleFormControlSelect1.form-control.text-muted.select_collection
-                    option(value='' selected='' disabled='' hidden='') Select Collection
-            div.form-group
-                label(for='exampleFormControlSelect1') API
-                select#exampleFormControlSelect1.form-control.text-muted.select_api
-                    option(value='' selected='' disabled='' hidden='') Select API
-            div.form-group
-                label(for='exampleFormControlInput1') Domain Name 
-                input#exampleFormControlInput1.form-control.input_domain-name(type='url' placeholder='https://hazlin.work/')
-            div.form-group
-                label(for='exampleFormControlInput1') API Endpoint 
-                input#exampleFormControlInput1.form-control.input_api-endpoint(type='string' placeholder='api/1.0/user/signin')
-            div.form-group
-                label(for='exampleFormControlSelect1') HTTP Method
-                select#exampleFormControlSelect1.form-control.text-muted.input_http-method
-                    option(value='' selected='' disabled='' hidden='') Please choose method to test
-                    option GET 
-                    option POST 
-                    option PUT 
-                    option PATCH 
-                    option DELETE
-
             .form-group
                 label(for='exampleFormControlSelect1') Test Document
                 textarea#code(name='code' placeholder='# Write your test document in gherkin language here! \n # The serval can only read gherkin now, meow.')
                     | # Write your test document in gherkin language here! 
                     | # The serval can only read gherkin now, meow.
-            div.form-group
-                label(for='exampleFormControlSelect1') Severity
-                select#exampleFormControlSelect1.form-control.text-muted.input_severity
-                    option(value='' selected='' disabled='' hidden='') Value the severity
-                    option 1 
-                    option 2 
-                    option 3 
-                    option 4 
-                    option 5
             button.btn.btn-info.btn-testrun(type='submit') Run
             button.btn.btn-light.btn-reset(type='button') Reset
 

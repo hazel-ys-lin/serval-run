@@ -1,7 +1,13 @@
-const testCaseModel = require('../models/testcase_model');
+const { caseModel, responseModel } = require('../models/case_model');
+const { userModel } = require('../models/user_model');
 const { testExample } = require('../service/testexample');
-const axios = require('axios').default;
+const apiReq = require('../service/httpRequest');
+// const axios = require('axios').default;
 const momentTimezone = require('moment-timezone');
+
+const createCase = async (req, res) => {
+  res.render('cases');
+};
 
 const saveCase = async (req, res) => {
   let result = testExample(req.body.featureCode);
@@ -68,34 +74,21 @@ const saveCase = async (req, res) => {
       });
     // console.log('actualResponseArray after finally: ', actualResponseArray);
   }
-  const testcase_instance = new testCaseModel({
+  const caseInstance = new caseModel({
     // TODO: to automatically generate all the id?
-    user_id: 1,
-    test_id: 1,
-    project_id: 1,
-    collection_id: 1,
-    api_id: 1,
-    domain_name: req.body.domainName,
-    http_method: req.body.httpMethod,
-    api_endpoint: req.body.apiEndpoint,
-    test_record: {
-      request: {
-        title: 'User',
-        description: 'user system to make user sign up and sign in',
-        tags: [],
-        scenario: result.testStep,
-        test_cases: testCaseArray,
-        severity: req.body.severity,
-      },
-      response: actualResponseArray,
-    },
+    title: '',
+    description: '',
+    tags: [],
+    scenario: result.testStep,
+    test_cases: testCaseArray,
+    severity: req.body.severity,
   });
 
-  await testcase_instance.save(function (error) {
+  await caseInstance.save(function (error) {
     if (error) console.log('test case instance error', error);
     else console.log('test case inserted');
   });
   return res.status(200).json({ message: 'test case inserted' });
 };
 
-module.exports = { saveCase };
+module.exports = { createCase, saveCase };

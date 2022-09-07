@@ -15,18 +15,13 @@ const testExample = function (featureCode) {
 
   let parser = new Gherkin.Parser(builder, matcher);
   let gherkinDocument = parser.parse(featureCode);
-  // console.log('gherkinDocument.feature: ', gherkinDocument.feature);
   let testCaseInfo = gherkinDocument.feature.children[0].scenario;
-  // console.log('testCaseInfo: ', testCaseInfo);
 
   let tableHeader =
     gherkinDocument.feature.children[0].scenario.examples[0].tableHeader;
   let tableBody =
     gherkinDocument.feature.children[0].scenario.examples[0].tableBody;
   let steps = gherkinDocument.feature.children[0].scenario.steps;
-  // console.log('tableBody: ', tableBody);
-  // console.log('tableHeader: ', tableHeader);
-  // console.log('steps: ', steps);
 
   let testInfo = {
     title: gherkinDocument.feature.name,
@@ -58,10 +53,6 @@ const testExample = function (featureCode) {
     }
     testTableBody.push(value);
   }
-
-  // console.log('testStep: ', testStep);
-  // console.log('testTableBody: ', testTableBody);
-
   // let pickles = Gherkin.compile(gherkinDocument, 'gherkinuser.feature', uuidFn);
 
   return { testInfo, testStep, testTableBody };

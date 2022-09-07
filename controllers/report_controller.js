@@ -1,7 +1,8 @@
-const testCaseModel = require('../models/testcase_model');
+const caseModel = require('../models/case_model');
+const reportModel = require('../models/report_model');
 
 const showResult = async (req, res) => {
-  let getAllResult = await testCaseModel.findOne({ api_id: 1 }).exec();
+  let getAllResult = await caseModel.findOne({ api_id: 1 }).exec();
   // console.log('getAllResult: ', getAllResult);
   setTimeout(function () {
     return res.render('apitestResult', {
@@ -16,4 +17,6 @@ const showResult = async (req, res) => {
   // );
 };
 
-module.exports = { showResult };
+const showReport = async () => {};
+
+module.exports = { showResult, showReport };

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
-const { saveCase } = require('../controllers/testcase_controller');
-const { showResult } = require('../controllers/showresult_controller');
+const { saveCase } = require('../controllers/case_controller');
+const { showResult } = require('../controllers/report_controller');
 const { wrapAsync } = require('../util/util');
 
 router.route('/addcase').post(wrapAsync(saveCase));

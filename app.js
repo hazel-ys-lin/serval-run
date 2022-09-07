@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const session = require('express-session');
 
 const app = express();
 const port = process.env.PORT;
@@ -8,6 +9,13 @@ const API_VERSION = process.env.API_VERSION;
 app.use(express.static('public'));
 app.set('view engine', 'pug');
 app.use(express.json());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+); // save session id to auth
 
 app.get('/', (req, res) => {
   res.render('index');
