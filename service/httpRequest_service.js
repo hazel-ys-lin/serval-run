@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
   timeout: 10000,
 });
 
-console.log('axiosInstance url: ', axiosInstance.defaults.baseURL);
+// console.log('axiosInstance url: ', axiosInstance.defaults.baseURL);
 
 axiosInstance.interceptors.request.use(
   function (config) {

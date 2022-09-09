@@ -1,6 +1,3 @@
-const pool = require('../models/db');
-const mongoose = require('mongoose');
-
 const projectCheck = async function (projectName, projectArray) {
   for (let i = 0; i < projectArray.length; i++) {
     if (projectName === projectArray[i].project_name) {

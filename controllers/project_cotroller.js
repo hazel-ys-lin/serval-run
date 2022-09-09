@@ -1,5 +1,9 @@
 const { userModel } = require('../models/user_model');
-const { projectModel, projectInsertModel } = require('../models/project_model');
+const {
+  projectModel,
+  projectInsertModel,
+  projectDeleteModel,
+} = require('../models/project_model');
 
 const displayProject = async (req, res) => {
   // get all the projects to array in database
@@ -15,7 +19,10 @@ const displayProject = async (req, res) => {
       let findProject = await projectModel.findOne({
         _id: userData.projects[i].project_id,
       });
-      userProjects.push(findProject);
+      // console.log('findProject: ', findProject);
+      if (findProject !== null) {
+        userProjects.push(findProject);
+      }
     }
   }
   // console.log('userProjects: ', userProjects);
@@ -41,6 +48,25 @@ const projectInsertController = async (req, res) => {
   }
 };
 
+const projectDeleteController = async (req, res) => {
+  // const userEmail = req.body.userEmail;
+  const projectInfo = {
+    userEmail: 'serval_meow@gmail.com', // req.body.userEmail
+    projectId: req.body.projectId,
+  };
+  let deleteProjectResult = await projectDeleteModel(projectInfo);
+  if (deleteProjectResult) {
+    return res.status(200).json({ message: 'Project deleted' });
+  } else {
+    return res.status(403).json({ message: 'Delete project error' });
+  }
+};
+
 // TODO: update project (add environment, modify domain, etc)
 
-module.exports = { displayProject, projectForm, projectInsertController };
+module.exports = {
+  displayProject,
+  projectForm,
+  projectInsertController,
+  projectDeleteController,
+};

@@ -73,7 +73,7 @@ const collectionGetModel = async function (userEmail) {
   });
 
   let [projectData] = await projectModel.find({
-    user_id: userData._id,
+    user_id: userData?._id,
   });
 
   let userCollections;

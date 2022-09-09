@@ -40,7 +40,7 @@ block content
                                             button.btn.btn-warning.btn-details(type='submit') View All
                                         td 
                                             button.btn.btn-primary.btn-modify(type='submit') modify
-                                            button.btn.btn-danger.btn-delete(type='submit') delete
+                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userProjects[i]._id}`) delete
                                     - i++
                             //- tr
                             //-     td 1.
@@ -55,6 +55,37 @@ block content
             console.log('create_project clicked')
             event.preventDefault();
             window.location.assign('./editproject');
+        })
+
+        $('.btn-delete').on('click', function(event) {
+            console.log('delete_project clicked')
+            event.preventDefault();
+
+            console.log('this.id: ', this.id)
+            const projectId = this.id;
+
+            axios({
+                method: 'delete',
+                url: 'http://localhost:3001/api/1.0/editproject',
+                data: {
+                    //- userEmail: 'serval_meow@gmail.com',
+                    projectId: projectId,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    //- console.log('response.status: ', response.status);
+                    alert('delete project successfully')
+                    //- window.location.assign('./testresult');
+                    // TODO: settimeout and let page return to show all projects
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch: ', error)
+                alert('delete project error')
+            })
         })
             //- div.card.card-project
             //-     form.input-form

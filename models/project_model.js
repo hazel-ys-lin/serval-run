@@ -26,7 +26,7 @@ const projectSchema = new mongoose.Schema({
 const projectModel = pool.model('project', projectSchema);
 
 const projectInsertModel = async function (projectInfo) {
-  console.log('projectInfo in projectinsert model: ', projectInfo);
+  // console.log('projectInfo in projectinsert model: ', projectInfo);
   const session = await projectModel.startSession();
   session.startTransaction();
   try {
@@ -61,7 +61,7 @@ const projectInsertModel = async function (projectInfo) {
       //   opts
       // );
 
-      console.log('inserted._id: ', inserted._id);
+      // console.log('inserted._id: ', inserted._id);
       await userModel.updateOne(
         { _id: userData._id.toString() },
         {
@@ -89,7 +89,58 @@ const projectInsertModel = async function (projectInfo) {
   }
 };
 
+const projectDeleteModel = async function (projectInfo) {
+  const session = await projectModel.startSession();
+  session.startTransaction();
+  try {
+    const opts = { session };
+    const userData = await userModel.findOne({
+      user_email: projectInfo.userEmail,
+    });
+    // console.log('projectInfo: ', projectInfo);
+    // console.log('userData: ', userData);
+
+    let deleted = await projectModel
+      .deleteOne(
+        { user_id: userData._id.toString() },
+        {
+          _id: projectInfo.projectId,
+        }
+      )
+      .session(session);
+    // .catch(function (err) {
+    //   console.log(err);
+    // });
+
+    // console.log('inserted._id: ', inserted._id);
+    // FIXME: delete one project
+    await userModel
+      .findOneAndUpdate(
+        { _id: userData._id.toString() },
+        {
+          $pull: {
+            projects: {
+              project_id: projectInfo.projectId,
+            },
+          },
+        }
+      )
+      .session(session);
+
+    await session.commitTransaction();
+    session.endSession();
+    return true;
+  } catch (error) {
+    // If an error occurred, abort the whole transaction and
+    // undo any changes that might have happened
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
+};
+
 module.exports = {
   projectModel,
   projectInsertModel,
+  projectDeleteModel,
 };

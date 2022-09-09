@@ -4,6 +4,7 @@ const {
   displayProject,
   projectForm,
   projectInsertController,
+  projectDeleteController,
 } = require('../controllers/project_cotroller');
 const {
   displayCollection,
@@ -17,6 +18,7 @@ const {
 router.route('/projects').get(wrapAsync(displayProject));
 router.route('/editproject').get(wrapAsync(projectForm));
 router.route('/editproject').post(wrapAsync(projectInsertController));
+router.route('/editproject').delete(wrapAsync(projectDeleteController));
 
 router.route('/collections').get(wrapAsync(displayCollection));
 router.route('/editenv').get(wrapAsync());
