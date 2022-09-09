@@ -1,10 +1,9 @@
 const router = require('express').Router();
 
-const { saveCase } = require('../controllers/case_controller');
-const { showResult } = require('../controllers/report_controller');
+const { displayCase, saveCase } = require('../controllers/case_controller');
 const { wrapAsync } = require('../util/util');
 
-router.route('/addcase').post(wrapAsync(saveCase));
-router.route('/testresult').get(wrapAsync(showResult));
+router.route('/cases').get(wrapAsync(displayCase));
+router.route('/editcase').post(wrapAsync(saveCase));
 
 module.exports = router;

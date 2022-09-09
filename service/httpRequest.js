@@ -1,13 +1,18 @@
-const axios = require('axios').default;
+const axios = require('axios');
 
+// Create a new Axios instance with a custom config.
+// The timeout is set to 10s. If the request takes longer than
+// that then the request will be aborted.
 const axiosInstance = axios.create({
   baseURL: '',
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
-  timeout: 20000,
+  timeout: 10000,
 });
+
+console.log('axiosInstance url: ', axiosInstance.defaults.baseURL);
 
 axiosInstance.interceptors.request.use(
   function (config) {
@@ -47,47 +52,47 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-const getAPI = async (url, params) => {
-  try {
-    const res = await axiosInstance.get(url, {
-      params,
-    });
-    return res.data;
-  } catch (response) {
-    return Promise.reject(response.data);
-  }
-};
-
-const postAPI = async (url, data) => {
-  try {
-    const res = await axiosInstance.post(url, {
-      data,
-    });
-    return res.data;
-  } catch (response) {
-    return Promise.reject(response.data);
-  }
-};
-
-module.exports = { getAPI };
-
-// const httpRequest = function (method, url, data = null, config) {
-//   method = method.toLowerCase();
-//   switch (method) {
-//     case 'post':
-//       return axiosInstance.post(url, data, config);
-//     case 'get':
-//       return axiosInstance.get(url, { params: data });
-//     case 'delete':
-//       return axiosInstance.delete(url, { params: data });
-//     case 'put':
-//       return axiosInstance.put(url, data);
-//     case 'patch':
-//       return axiosInstance.patch(url, data);
-//     default:
-//       console.log(`unknown http method: ${method}`);
-//       return false;
+// const getAPI = async (url, params) => {
+//   try {
+//     const res = await axiosInstance.get(url, {
+//       params,
+//     });
+//     return res.data;
+//   } catch (response) {
+//     return Promise.reject(response.data);
 //   }
 // };
+
+// const postAPI = async (url, data) => {
+//   try {
+//     const res = await axiosInstance.post(url, {
+//       data,
+//     });
+//     return res.data;
+//   } catch (response) {
+//     return Promise.reject(response.data);
+//   }
+// };
+
+// module.exports = { axiosInstance, getAPI };
+
+module.exports = function (method, url, data = null, config) {
+  method = method.toLowerCase();
+  switch (method) {
+    case 'post':
+      return axiosInstance.post(url, data, config);
+    case 'get':
+      return axiosInstance.get(url, { params: data });
+    case 'delete':
+      return axiosInstance.delete(url, { params: data });
+    case 'put':
+      return axiosInstance.put(url, data);
+    case 'patch':
+      return axiosInstance.patch(url, data);
+    default:
+      console.log(`unknown http method: ${method}`);
+      return false;
+  }
+};
 
 // module.exports = { httpRequest };

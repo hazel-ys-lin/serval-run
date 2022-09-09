@@ -6,33 +6,58 @@ block content
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
     div.content-wrapper
         form.input-form
-            div.form-group
-                label(for='exampleFormControlInput1') Project Name 
-                input#exampleFormControlInput1.form-control.input_project(type='string' placeholder='My Project')
-            div.form-group
-                label(for='exampleFormControlInput1') Domain Name (URL) 
-                input#exampleFormControlInput1.form-control.input_domain-name(type='url' placeholder='https://hazlin.work/')
-            div.form-group
-                label(for='exampleFormControlInput1') Title (Development Stage)
-                input#exampleFormControlInput1.form-control.input_title(type='string' placeholder='staging')
-            button.btn.btn-info.btn-block.btn-create_project(type='submit') Create New Project
-        
-        div.cards
-            - let i = 0
-            while i < userProjects.length
-                div(class='card') 
-                    div(class='card-header')
-                        h3(class='card-title'  value=`${userProjects[i]}`) #{userProjects[i]}
-                        div(class='card-tools')
-                    div(class='card-body')
-                        | Expected Status: #{request[i].expected_result.status_code}
-                        br
-                        | Response Status: #{response[i].response_status} 
-                        br
-                        | Time: #{response[i].request_time}
-                    div(class='card-footer')
-                - i++
-
+            h1 Projects
+            button.btn.btn-success.btn-block.btn-create_project(type='submit') Create Project
+        .cards
+            .card
+                .card-header
+                    h3.card-title Projects
+                    .card-tools
+                        ul.pagination.pagination-sm.float-right
+                            li.page-item
+                                a.page-link(href='#') &laquo;
+                            li.page-item
+                                a.page-link(href='#') 1
+                            li.page-item
+                                a.page-link(href='#') 2
+                            li.page-item
+                                a.page-link(href='#') 3
+                            li.page-item
+                                a.page-link(href='#') &raquo;
+                .card-body.p-0
+                    table.table
+                        thead
+                            tr
+                                //- th(style='width: 10px') #
+                                th ID
+                                th Name
+                                th Environments
+                                th Edit 
+                                //- th(style='width: 40px') Label
+                        tbody
+                            if userProjects
+                                - let i = 0
+                                while i < userProjects.length
+                                    tr 
+                                        td #{userProjects[i]._id}
+                                        td #{userProjects[i].project_name}
+                                        td #{userProjects[i].environments}
+                                        td edit
+                                    - i++
+                            //- tr
+                            //-     td 1.
+                            //-     td Update software
+                            //-     td
+                            //-         .progress.progress-xs
+                            //-             .progress-bar.progress-bar-danger(style='width: 55%')
+                            //-     td
+                            //-         span.badge.bg-danger 55%
+    script.
+        $('.btn-create_project').on('click', function(event) {
+            console.log('create_project clicked')
+            event.preventDefault();
+            window.location.assign('./editproject');
+        })
             //- div.card.card-project
             //-     form.input-form
             //-         div.form-group
@@ -43,35 +68,3 @@ block content
             //-                 option(value='' selected='' disabled='' hidden='') Select Collection
             //-             input#exampleFormControlInput1.form-control.create_collection(type='url' placeholder='API name')
             //-         button.btn.btn-outline-info.btn-block.btn-create_api(type='submit') Create API
-    script.
-        $('.btn-create_project').on('click', function(event) {
-            console.log('create_project clicked')
-            event.preventDefault();
-            const projectName = $('.input_project').val();
-            const projectDomain = $('.input_domain-name').val();
-            const projectTitle = $('.input_title').val();
-
-            axios({
-                method: 'post',
-                url: 'http://localhost:3001/api/1.0/addproject',
-                data: {
-                    //- userEmail: 'serval_meow@gmail.com',
-                    projectName: projectName,
-                    projectDomain: projectDomain,
-                    projectTitle: projectTitle,
-                },
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then((response) => {
-                if (response.status === 200) {
-                    //- console.log('response.status: ', response.status);
-                    alert('create project successfully')
-                    //- window.location.assign('./testresult');
-                }
-            })
-            .catch((error) => {
-                console.log('in error');
-                console.log('catch: ', error)
-                alert('create project error')
-            })
-        })

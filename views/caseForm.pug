@@ -1,0 +1,68 @@
+extends layout.pug
+
+block content
+    link(rel='stylesheet', href='../../css/common.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js')
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    script(src='../../src/gherkin.js')
+    div.content-wrapper
+        form.input-form
+            h1 Add Test Case
+            // FIXME: to change default text of 'for' in labels
+            .form-group
+                label(for='exampleFormControlSelect1') Test Document
+                textarea#code(name='code' placeholder='# Write your test document in gherkin language here! \n # The serval can only read gherkin now, meow.')
+                    | # Write your test document in gherkin language here! 
+                    | # The serval can only read gherkin now, meow.
+            button.btn.btn-info.btn-testrun(type='submit') Run
+            button.btn.btn-light.btn-reset(type='button') Reset
+
+    script.
+        let editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: 'text/x-feature'
+        });
+
+        // FIXME: reset not working
+        $('.btn-reset').on('click', function(event) {
+            console.log('reset clicked')
+            event.preventDefault();
+            editor.getValue() = '';
+        })
+        $('.btn-testrun').on('click', function(event) {
+            console.log('testrun clicked')
+            event.preventDefault();
+
+            //- const caseForm = new FormData();
+            const featureCode = editor.getValue();
+            //- caseForm.append('featureCode', $('#code').val());
+
+            //- console.log('caseForm: ', JSON.stringify(caseForm))
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/addcase',
+                // FIXME: why can't form data work again
+                //- data: caseForm,
+                data: {
+                    featureCode: featureCode,
+                },
+                headers: {'Content-Type': 'application/json'},
+                timeout: 10000,
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('create case successfully')
+                    //- window.location.assign('./testresult');
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch: ', error)
+                alert('create case error')
+            })
+        })
+

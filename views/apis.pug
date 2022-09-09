@@ -6,12 +6,12 @@ block content
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
     div.content-wrapper
         form.input-form
-            h1 Cases
-            button.btn.btn-success.btn-block.btn-create_case(type='submit') Create Case
+            h1 APIs
+            button.btn.btn-success.btn-block.btn-create_api(type='submit') Create API
         .cards
             .card
                 .card-header
-                    h3.card-title Test Cases
+                    h3.card-title APIs
                     .card-tools
                         ul.pagination.pagination-sm.float-right
                             li.page-item
@@ -30,29 +30,29 @@ block content
                             tr
                                 //- th(style='width: 10px') #
                                 th ID
-                                th Title
-                                th Description
-                                th Scenario
-                                th Data 
+                                th Name
+                                th HTTP Method
+                                th Endpoint
+                                th Test Cases 
                                 th Edit 
                                 th Run Test
                                 //- th(style='width: 40px') Label
                         tbody
-                            if userCases
+                            if userApis
                                 - let i = 0
-                                while i < userCases.length
+                                while i < userApis.length
                                     tr 
-                                        td #{userCases[i]._id}
-                                        td #{userCases[i].title}
-                                        td #{userCases[i].description}
-                                        td #{userCases[i].scenario}
-                                        td #{userCases[i].cases}
+                                        td #{userApis[i]._id}
+                                        td #{userApis[i].project_name}
+                                        td #{userApis[i].http_method}
+                                        td #{userApis[i].endpoint}
+                                        td #{userApis[i].cases}
                                         td edit
                                         td Run Test
                                     - i++
     script.
-        $('.btn-create_case').on('click', function(event) {
-            console.log('create_case clicked')
+        $('.btn-create_api').on('click', function(event) {
+            console.log('create_api clicked')
             event.preventDefault();
-            window.location.assign('./editcase');
+            window.location.assign('./editapi');
         })

@@ -5,12 +5,21 @@ const apiReq = require('../service/httpRequest');
 // const axios = require('axios').default;
 const momentTimezone = require('moment-timezone');
 
-const createCase = async (req, res) => {
+const displayCase = async (req, res) => {
   res.render('cases');
 };
 
+const caseForm = async (req, res) => {
+  return res.render('caseForm');
+};
+
 const saveCase = async (req, res) => {
-  let result = testExample(req.body.featureCode);
+  let compiledFeature = testExample(req.body.featureCode);
+  const caseInfo = {
+    apiName: req.body.apiName,
+    featureCode: compiledFeature,
+  };
+  let saveCaseResult = projectInsertModel(projectInfo);
 
   let testCaseArray = [];
   let actualResponseArray = [];
@@ -91,4 +100,4 @@ const saveCase = async (req, res) => {
   return res.status(200).json({ message: 'test case inserted' });
 };
 
-module.exports = { createCase, saveCase };
+module.exports = { displayCase, caseForm, saveCase };

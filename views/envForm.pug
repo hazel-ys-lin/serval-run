@@ -1,0 +1,49 @@
+extends layout.pug
+
+block content
+    link(rel='stylesheet', href='../../css/common.css')
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    div.content-wrapper
+        form.input-form
+            h1 Add Test Environment
+            div.form-group
+                label(for='exampleFormControlInput1') Domain Name (URL) 
+                input#exampleFormControlInput1.form-control.input_domain-name(type='url' placeholder='https://hazlin.work/')
+            div.form-group
+                label(for='exampleFormControlInput1') Title (Development Stage)
+                input#exampleFormControlInput1.form-control.input_title(type='string' placeholder='staging')
+            button.btn.btn-info.btn-block.btn-create_collection(type='submit') Add Environment
+    script.
+        $('.btn-create_collection').on('click', function(event) {
+            console.log('create_collection clicked')
+            event.preventDefault();
+            const collectionName = $('.input_collection').val();
+            const projectDomain = $('.input_domain-name').val();
+            const projectTitle = $('.input_title').val();
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/addproject',
+                data: {
+                    //- userEmail: 'serval_meow@gmail.com',
+                    projectName: projectName,
+                    projectDomain: projectDomain,
+                    projectTitle: projectTitle,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    //- console.log('response.status: ', response.status);
+                    alert('create project successfully')
+                    // TODO: settimeout and let page return to show all collections
+                    //- window.location.assign('./testresult');
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch: ', error)
+                alert('create project error')
+            })
+        })

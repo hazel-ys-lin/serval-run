@@ -14,20 +14,20 @@ const userSignUp = async (req, res) => {
     return res.status(403).json({ msg: req.session.msg });
   }
   const user = {
-    userName: req.body.userName,
+    // userName: req.body.userName,
     userEmail: req.body.userEmail,
-    userPassword: req.body.userPassword,
-    userPicture: req.body.userPicture,
+    // userPassword: req.body.userPassword,
+    // userPicture: req.body.userPicture,
   };
 
   // encrypted the password
-  user.userPassword = await bcrypt.hash(user.userPassword, 8);
+  // user.userPassword = await bcrypt.hash(user.userPassword, 8);
 
   const user_instance = new userModel({
-    user_name: user.userName,
+    // user_name: user.userName,
     user_email: user.userEmail,
-    user_password: user.userEmail,
-    user_picture: user.userPicture,
+    // user_password: user.userEmail,
+    // user_picture: user.userPicture,
   });
 
   try {
@@ -36,10 +36,10 @@ const userSignUp = async (req, res) => {
     // FIXME: 丟出error應該在controller處理，如果model撈不到資料應該會給空字串
     // database會有error的情況應該是sql指令有問題
     return {
-      user_name: user.userName,
+      // user_name: user.userName,
       user_email: user.userEmail,
-      user_password: user.userEmail,
-      user_picture: user.userPicture,
+      // user_password: user.userEmail,
+      // user_picture: user.userPicture,
     };
   } catch (error) {
     console.log('user instance error', error);

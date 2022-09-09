@@ -24,19 +24,38 @@ const projectSchema = new mongoose.Schema({
 
 const projectModel = pool.model('project', projectSchema);
 
-const projectInsert = async function (userEmail, projectName) {
+const projectInsertModel = async function (projectInfo) {
+  console.log('projectInfo in projectinsert model: ', projectInfo);
   const session = await projectModel.startSession();
   session.startTransaction();
   try {
     const opts = { session };
-    const userData = await userModel.findOne({ user_email: userEmail });
-    await projectModel({
+    const userData = await userModel.findOne({
+      user_email: projectInfo.userEmail,
+    });
+    let inserted = await projectModel({
       user_id: userData._id.toString(),
-      project_name: projectName,
+      project_name: projectInfo.projectName,
     }).save(opts);
+    await projectModel.updateOne(
+      { _id: inserted._id.toString() },
+      {
+        $push: {
+          environments: [
+            {
+              domain_name: projectInfo.projectDomain,
+              title: projectInfo.projectTitle,
+            },
+          ],
+        },
+      },
+      opts
+    );
+
+    console.log('inserted._id: ', inserted._id);
     await userModel.updateOne(
-      { user_email: userEmail },
-      { $push: { projects: [projectInsert._id] } },
+      { _id: userData._id.toString() },
+      { $push: { projects: [inserted._id] } },
       opts
     );
 
@@ -54,5 +73,5 @@ const projectInsert = async function (userEmail, projectName) {
 
 module.exports = {
   projectModel,
-  projectInsert,
+  projectInsertModel,
 };

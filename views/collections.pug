@@ -6,37 +6,58 @@ block content
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
     div.content-wrapper
         form.input-form
-            div.form-group
-                label(for='exampleFormControlInput1') Collection Name 
-                input#exampleFormControlInput1.form-control.input_collection(type='string' placeholder='My Collection')
-            button.btn.btn-info.btn-block.btn-create_collection(type='submit') Create Collection
-        div.cards
-            - let i = 0
-            while i < collection.length
-                div(class='card') 
-                    div(class='card-header')
-                        h3(class='card-title'  value=`${collection[i]}`) #{collection[i]}
-                        div(class='card-tools')
-                    div(class='card-body')
-                        label(for='exampleFormControlInput1') API Name 
-                        input#exampleFormControlInput1.form-control.input_api(type='string' placeholder='My Collection')
-                        label(for='exampleFormControlInput1') HTTP Method 
-                        select#exampleFormControlSelect1.form-control.text-muted.input_http-method
-                            option(value='' selected='' disabled='' hidden='') Please choose method to test
-                            option GET 
-                            option POST 
-                            option PUT 
-                            option PATCH 
-                            option DELETE
-                        label(for='exampleFormControlInput1') API Endpoint 
-                        input#exampleFormControlInput1.form-control.input_api-endpoint(type='string' placeholder='api/1.0/user/signin')
-                        label(for='exampleFormControlSelect1') Severity
-                        select#exampleFormControlSelect1.form-control.text-muted.input_severity
-                            option(value='' selected='' disabled='' hidden='') Value the severity
-                            option 1 
-                            option 2 
-                            option 3 
-                            option 4 
-                            option 5
-                    div(class='card-footer')
-                - i++
+            h1 Collections
+            button.btn.btn-success.btn-block.btn-create_collection(type='submit') Create Collection
+        .cards
+            .card
+                .card-header
+                    h3.card-title 
+                    .card-tools
+                        ul.pagination.pagination-sm.float-right
+                            li.page-item
+                                a.page-link(href='#') &laquo;
+                            li.page-item
+                                a.page-link(href='#') 1
+                            li.page-item
+                                a.page-link(href='#') 2
+                            li.page-item
+                                a.page-link(href='#') 3
+                            li.page-item
+                                a.page-link(href='#') &raquo;
+                .card-body.p-0
+                    table.table
+                        thead
+                            tr
+                                //- th(style='width: 10px') #
+                                th ID
+                                th Name
+                                th API
+                                th Edit 
+                                th Run Test
+                                //- th(style='width: 40px') Label
+                        tbody
+                            if userCollections
+                                - let i = 0
+                                while i < userCollections.length
+                                    tr 
+                                        td #{userCollections[i]._id}
+                                        td #{userCollections[i].collection_name}
+                                        td #{userCollections[i].apis}
+                                        td edit
+                                    - i++
+        //- div.cards
+        //-     - let i = 0
+        //-     while i < userCollections.length
+        //-         div(class='card') 
+        //-             div(class='card-header')
+        //-                 h3(class='card-title'  value=`${userCollections[i]}`) #{userCollections[i]}
+        //-                 div(class='card-tools')
+        //-             div(class='card-body')
+        //-             div(class='card-footer')
+        //-         - i++
+    script.
+        $('.btn-create_collection').on('click', function(event) {
+            console.log('create_collection clicked')
+            event.preventDefault();
+            window.location.assign('./editcollection');
+        })
