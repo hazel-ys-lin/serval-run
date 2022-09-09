@@ -10,6 +10,7 @@ const {
   collectionForm,
   collectionInsertController,
   displayApi,
+  apiForm,
   apiInsertController,
 } = require('../controllers/collection_controller');
 
@@ -24,7 +25,7 @@ router.route('/editcollection').get(wrapAsync(collectionForm));
 router.route('/editcollection').post(wrapAsync(collectionInsertController));
 
 router.route('/apis').get(wrapAsync(displayApi));
-router.route('/editapi').get(wrapAsync());
+router.route('/editapi').get(wrapAsync(apiForm));
 router.route('/editapi').post(wrapAsync(apiInsertController));
 
 module.exports = router;

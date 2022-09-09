@@ -5,25 +5,17 @@ block content
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
     div.content-wrapper
+        nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
+            ol.breadcrumb
+                li.breadcrumb-item.active(aria-current='page') Project
         form.input-form
             h1 Projects
-            button.btn.btn-success.btn-block.btn-create_project(type='submit') Create Project
+            button.btn.btn-right.btn-success.btn-block.btn-create_project(type='submit') Create Project
         .cards
             .card
                 .card-header
-                    h3.card-title Projects
+                    .card-title 
                     .card-tools
-                        ul.pagination.pagination-sm.float-right
-                            li.page-item
-                                a.page-link(href='#') &laquo;
-                            li.page-item
-                                a.page-link(href='#') 1
-                            li.page-item
-                                a.page-link(href='#') 2
-                            li.page-item
-                                a.page-link(href='#') 3
-                            li.page-item
-                                a.page-link(href='#') &raquo;
                 .card-body.p-0
                     table.table
                         thead
@@ -32,6 +24,7 @@ block content
                                 th ID
                                 th Name
                                 th Environments
+                                th Collections
                                 th Edit 
                                 //- th(style='width: 40px') Label
                         tbody
@@ -41,8 +34,13 @@ block content
                                     tr 
                                         td #{userProjects[i]._id}
                                         td #{userProjects[i].project_name}
-                                        td #{userProjects[i].environments}
-                                        td edit
+                                        td 
+                                            button.btn.btn-secondary.btn-details(type='submit') details
+                                        td 
+                                            button.btn.btn-warning.btn-details(type='submit') View All
+                                        td 
+                                            button.btn.btn-primary.btn-modify(type='submit') modify
+                                            button.btn.btn-danger.btn-delete(type='submit') delete
                                     - i++
                             //- tr
                             //-     td 1.

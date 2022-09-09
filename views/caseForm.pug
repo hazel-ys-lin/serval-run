@@ -16,8 +16,8 @@ block content
                 textarea#code(name='code' placeholder='# Write your test document in gherkin language here! \n # The serval can only read gherkin now, meow.')
                     | # Write your test document in gherkin language here! 
                     | # The serval can only read gherkin now, meow.
-            button.btn.btn-info.btn-testrun(type='submit') Run
-            button.btn.btn-light.btn-reset(type='button') Reset
+            button.btn.btn-right.btn-info.btn-testrun(type='submit') Run
+            button.btn.btn-right.btn-light.btn-reset(type='button') Reset
 
     script.
         let editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -44,7 +44,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/addcase',
+                url: 'http://localhost:3001/api/1.0/editcase',
                 // FIXME: why can't form data work again
                 //- data: caseForm,
                 data: {

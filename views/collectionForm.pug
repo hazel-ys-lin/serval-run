@@ -16,17 +16,14 @@ block content
             console.log('create_collection clicked')
             event.preventDefault();
             const collectionName = $('.input_collection').val();
-            const projectDomain = $('.input_domain-name').val();
-            const projectTitle = $('.input_title').val();
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/addproject',
+                url: 'http://localhost:3001/api/1.0/editcollection',
                 data: {
                     //- userEmail: 'serval_meow@gmail.com',
                     projectName: projectName,
-                    projectDomain: projectDomain,
-                    projectTitle: projectTitle,
+                    collectionName: collectionName,
                 },
                 headers: {'Content-Type': 'application/json'}
             })

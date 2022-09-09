@@ -7,7 +7,6 @@ const displayProject = async (req, res) => {
   let [userData] = await userModel.find({
     user_email: userEmail,
   });
-  // console.log('userData: ', userData);
 
   let userProjects = [];
   if (userData.projects[0] !== null) {

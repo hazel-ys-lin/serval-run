@@ -1,7 +1,7 @@
 const { caseModel, responseModel } = require('../models/case_model');
 const { userModel } = require('../models/user_model');
-const { testExample } = require('../service/testexample');
-const apiReq = require('../service/httpRequest');
+const { testExample } = require('../service/testexample_service');
+const apiReq = require('../service/httpRequest_service');
 // const axios = require('axios').default;
 const momentTimezone = require('moment-timezone');
 

@@ -43,7 +43,11 @@ img.brand-image {
   /* padding: 65px 0 164px; */
 }
 
-
 .btn {
+  margin-right: 10px;
+}
+
+.btn-right {
+  width: 180px;
   float: right;
 }
