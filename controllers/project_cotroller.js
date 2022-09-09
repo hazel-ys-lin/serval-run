@@ -7,17 +7,18 @@ const displayProject = async (req, res) => {
   let [userData] = await userModel.find({
     user_email: userEmail,
   });
+  // console.log('userData: ', userData);
 
   let userProjects = [];
-  if (userData.projects[0] !== null) {
+  if (userData) {
     for (let i = 0; i < userData.projects.length; i++) {
       let findProject = await projectModel.findOne({
-        _id: userData.projects[i],
+        _id: userData.projects[i].project_id,
       });
       userProjects.push(findProject);
     }
   }
-  console.log('userProjects: ', userProjects);
+  // console.log('userProjects: ', userProjects);
   res.render('projects', { userProjects: userProjects });
 };
 
@@ -30,10 +31,9 @@ const projectInsertController = async (req, res) => {
   const projectInfo = {
     userEmail: 'serval_meow@gmail.com', // req.body.userEmail
     projectName: req.body.projectName,
-    projectDomain: req.body.projectDomain,
-    projectTitle: req.body.projectTitle,
   };
-  let saveProjectResult = projectInsertModel(projectInfo);
+  // console.log('projectInfo: ', projectInfo);
+  let saveProjectResult = await projectInsertModel(projectInfo);
   if (saveProjectResult) {
     return res.status(200).json({ message: 'Project inserted' });
   } else {

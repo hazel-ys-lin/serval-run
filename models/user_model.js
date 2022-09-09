@@ -8,8 +8,11 @@ const userSchema = new mongoose.Schema({
   user_password: String,
   projects: [
     {
-      type: mongoose.Schema.ObjectId,
-      ref: 'project',
+      project_id: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'project',
+      },
+      project_name: String,
     },
   ],
 });

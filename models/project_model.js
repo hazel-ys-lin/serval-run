@@ -1,6 +1,7 @@
 const pool = require('./db');
 const mongoose = require('mongoose');
 const { userModel } = require('./user_model');
+const { projectCheck } = require('../service/dbUpdate_service');
 
 const projectSchema = new mongoose.Schema({
   user_id: {
@@ -33,31 +34,48 @@ const projectInsertModel = async function (projectInfo) {
     const userData = await userModel.findOne({
       user_email: projectInfo.userEmail,
     });
-    let inserted = await projectModel({
-      user_id: userData._id.toString(),
-      project_name: projectInfo.projectName,
-    }).save(opts);
-    await projectModel.updateOne(
-      { _id: inserted._id.toString() },
-      {
-        $push: {
-          environments: [
-            {
-              domain_name: projectInfo.projectDomain,
-              title: projectInfo.projectTitle,
-            },
-          ],
-        },
-      },
-      opts
+    // console.log('userData: ', userData);
+
+    const uniqueProject = await projectCheck(
+      projectInfo.projectName,
+      userData.projects
     );
 
-    console.log('inserted._id: ', inserted._id);
-    await userModel.updateOne(
-      { _id: userData._id.toString() },
-      { $push: { projects: [inserted._id] } },
-      opts
-    );
+    if (uniqueProject) {
+      let inserted = await projectModel({
+        user_id: userData._id.toString(),
+        project_name: projectInfo.projectName,
+      }).save(opts);
+      // await projectModel.updateOne(
+      //   { _id: inserted._id.toString() },
+      //   {
+      //     $push: {
+      //       environments: [
+      //         {
+      //           domain_name: projectInfo.projectDomain,
+      //           title: projectInfo.projectTitle,
+      //         },
+      //       ],
+      //     },
+      //   },
+      //   opts
+      // );
+
+      console.log('inserted._id: ', inserted._id);
+      await userModel.updateOne(
+        { _id: userData._id.toString() },
+        {
+          $push: {
+            projects: [
+              { project_id: inserted._id, project_name: inserted.project_name },
+            ],
+          },
+        },
+        opts
+      );
+    } else {
+      return false;
+    }
 
     await session.commitTransaction();
     session.endSession();
