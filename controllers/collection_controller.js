@@ -82,7 +82,18 @@ const apiInsertController = async function (req, res) {
   }
 };
 
-const apiDeleteController = async function (req, res) {};
+const apiDeleteController = async function (req, res) {
+  const apiInfo = {
+    collectionId: req.body.collectionId,
+    apiId: req.body.apiId,
+  };
+  let deleteApiResult = await apiDeleteModel(apiInfo);
+  if (deleteApiResult) {
+    return res.status(200).json({ message: 'API deleted' });
+  } else {
+    return res.status(403).json({ message: 'Delete API error' });
+  }
+};
 
 const envForm = async function (req, res) {
   return res.render('envForm');

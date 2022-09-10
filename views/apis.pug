@@ -57,7 +57,7 @@ block content
         .cards
             .card
                 .card-header
-                    .card-title 
+                    .card-title Collection ID: #{userApis[0].collectionId}
                     .card-tools
                 .card-body.p-0
                     table.table
@@ -144,33 +144,33 @@ block content
         })
 
 
-        //- $('.btn-delete').on('click', function(event) {
-        //-     console.log('delete_api clicked')
-        //-     event.preventDefault();
+        $('.btn-delete').on('click', function(event) {
+            console.log('delete_api clicked')
+            event.preventDefault();
 
-        //-     const collectionId = $('.card-title').text().replace('Collection ID: ', '');
-        //-     const apiId = this.id;
-        //-     console.log('apiId: ', apiId)
+            const collectionId = $('.card-title').text().replace('Collection ID: ', '');
+            const apiId = this.id;
+            console.log('apiId: ', apiId)
 
-        //-     axios({
-        //-         method: 'delete',
-        //-         url: 'http://localhost:3001/api/1.0/editapi',
-        //-         data: {
-        //-             projectId: projectId,
-        //-             collectionId: collectionId,
-        //-         },
-        //-         headers: {'Content-Type': 'application/json'}
-        //-     })
-        //-     .then((response) => {
-        //-         if (response.status === 200) {
-        //-             alert('delete project successfully')
-        //-             //- window.location.assign('./testresult');
-        //-             window.location.reload();
-        //-         }
-        //-     })
-        //-     .catch((error) => {
-        //-         console.log('in error');
-        //-         console.log('catch: ', error)
-        //-         alert('delete project error')
-        //-     })
-        //- })
+            axios({
+                method: 'delete',
+                url: 'http://localhost:3001/api/1.0/editapi',
+                data: {
+                    collectionId: collectionId,
+                    apiId: apiId,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('delete API successfully')
+                    //- window.location.assign('./testresult');
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch: ', error)
+                alert('delete API error')
+            })
+        })

@@ -232,7 +232,47 @@ const apiGetModel = async function (collectionId) {
   return userApis;
 };
 
-const apiDeleteModel = async function () {};
+const apiDeleteModel = async function (apiInfo) {
+  const session = await apiModel.startSession();
+  session.startTransaction();
+  try {
+    const collectionData = await collectionModel.findOne({
+      _id: apiInfo.collectionId,
+    });
+    // console.log('projectInfo: ', projectInfo);
+    console.log('collectionData: ', collectionData);
+
+    let deleted = await apiModel
+      .deleteOne({
+        _id: apiInfo.apiId,
+      })
+      .session(session);
+
+    // FIXME: collection delete array element not working
+    await collectionModel
+      .findOneAndUpdate(
+        { _id: apiInfo.collectionId },
+        {
+          $pull: {
+            apis: {
+              api_id: apiInfo.apiId,
+            },
+          },
+        }
+      )
+      .session(session);
+
+    await session.commitTransaction();
+    session.endSession();
+    return true;
+  } catch (error) {
+    // If an error occurred, abort the whole transaction and
+    // undo any changes that might have happened
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
+};
 
 module.exports = {
   collectionModel,
