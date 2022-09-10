@@ -2,6 +2,7 @@ const pool = require('./db');
 const mongoose = require('mongoose');
 const { projectModel } = require('./project_model');
 const { userModel } = require('./user_model');
+const { collectionCheck } = require('../service/dbUpdate_service');
 
 const collectionSchema = new mongoose.Schema({
   project_id: {
@@ -37,23 +38,43 @@ const apiSchema = new mongoose.Schema({
 const collectionModel = pool.model('collection', collectionSchema);
 const apiModel = pool.model('api', apiSchema);
 
-const collectionInsertModel = async function (projectName, collectionName) {
+const collectionInsertModel = async function (collectionInfo) {
   const session = await collectionModel.startSession();
   session.startTransaction();
   try {
     const opts = { session };
     const projectData = await projectModel.findOne({
-      project_name: projectName,
+      _id: collectionInfo.projectId,
     });
-    let inserted = await collectionModel({
-      project_id: projectData._id.toString(),
-      collection_name: collectionName,
-    }).save(opts);
-    await projectModel.updateOne(
-      { project_id: projectData._id.toString() },
-      { $push: { collections: [inserted._id] } },
-      opts
+
+    const uniqueCollection = await collectionCheck(
+      collectionInfo.collectionName,
+      projectData.collections
     );
+
+    if (uniqueCollection) {
+      let inserted = await collectionModel({
+        project_id: projectData._id.toString(),
+        collection_name: collectionInfo.collectionName,
+      }).save(opts);
+
+      await projectModel.updateOne(
+        { project_id: projectData._id.toString() },
+        {
+          $push: {
+            collections: [
+              {
+                collection_id: inserted._id,
+                collection_name: inserted.collection_name,
+              },
+            ],
+          },
+        },
+        opts
+      );
+    } else {
+      return false;
+    }
 
     await session.commitTransaction();
     session.endSession();
@@ -67,22 +88,71 @@ const collectionInsertModel = async function (projectName, collectionName) {
   }
 };
 
-const collectionGetModel = async function (userEmail) {
-  let [userData] = await userModel.find({
-    user_email: userEmail,
-  });
-
+const collectionGetModel = async function (projectId) {
   let [projectData] = await projectModel.find({
-    user_id: userData?._id,
+    _id: projectId,
   });
 
-  let userCollections;
+  let userCollections = [];
   if (projectData) {
-    userCollections = await collectionModel.find({
-      project_id: projectData._id,
-    });
+    for (let i = 0; i < projectData.collections.length; i++) {
+      let findCollection = await collectionModel.findOne({
+        _id: projectData.collections[i].collection_id,
+      });
+      if (findCollection !== null) {
+        userCollections.push({
+          projectId: projectData._id,
+          collection: findCollection,
+        });
+      }
+    }
   }
+
   return userCollections;
+};
+
+const collectionDeleteModel = async function (collectionInfo) {
+  const session = await collectionModel.startSession();
+  session.startTransaction();
+  try {
+    const projectData = await projectModel.findOne({
+      _id: collectionInfo.projectId,
+    });
+    // console.log('projectInfo: ', projectInfo);
+    console.log('projectData: ', projectData);
+
+    let deleted = await collectionModel
+      .deleteOne({
+        _id: collectionInfo.collectionId,
+      })
+      .session(session);
+    // .catch(function (err) {
+    //   console.log(err);
+    // });
+
+    await projectModel
+      .findOneAndUpdate(
+        { _id: collectionInfo.projectId },
+        {
+          $pull: {
+            collections: {
+              collection_id: collectionInfo.collectionId,
+            },
+          },
+        }
+      )
+      .session(session);
+
+    await session.commitTransaction();
+    session.endSession();
+    return true;
+  } catch (error) {
+    // If an error occurred, abort the whole transaction and
+    // undo any changes that might have happened
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
 };
 
 const apiInsertModel = async function (apiInfo) {
@@ -127,6 +197,7 @@ module.exports = {
   apiModel,
   collectionInsertModel,
   collectionGetModel,
+  collectionDeleteModel,
   apiInsertModel,
   apiGetModel,
 };

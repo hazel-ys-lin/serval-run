@@ -9,4 +9,20 @@ const projectCheck = async function (projectName, projectArray) {
   return true;
 };
 
-module.exports = { projectCheck };
+const collectionCheck = async function (collectionName, collectionArray) {
+  console.log(
+    'collectionName, collectionArray: ',
+    collectionName,
+    collectionArray
+  );
+  for (let i = 0; i < collectionArray.length; i++) {
+    if (collectionName === collectionArray[i].collection_name) {
+      console.log('collection check fail');
+      return false;
+    }
+  }
+  console.log('collection check pass');
+  return true;
+};
+
+module.exports = { projectCheck, collectionCheck };

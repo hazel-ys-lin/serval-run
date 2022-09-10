@@ -17,8 +17,11 @@ const projectSchema = new mongoose.Schema({
   ],
   collections: [
     {
-      type: mongoose.Schema.ObjectId,
-      ref: 'collection',
+      collection_id: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'collection',
+      },
+      collection_name: String,
     },
   ],
 });
@@ -46,20 +49,6 @@ const projectInsertModel = async function (projectInfo) {
         user_id: userData._id.toString(),
         project_name: projectInfo.projectName,
       }).save(opts);
-      // await projectModel.updateOne(
-      //   { _id: inserted._id.toString() },
-      //   {
-      //     $push: {
-      //       environments: [
-      //         {
-      //           domain_name: projectInfo.projectDomain,
-      //           title: projectInfo.projectTitle,
-      //         },
-      //       ],
-      //     },
-      //   },
-      //   opts
-      // );
 
       // console.log('inserted._id: ', inserted._id);
       await userModel.updateOne(

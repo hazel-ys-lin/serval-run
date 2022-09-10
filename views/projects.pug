@@ -35,12 +35,12 @@ block content
                                         td #{userProjects[i]._id}
                                         td #{userProjects[i].project_name}
                                         td 
-                                            button.btn.btn-secondary.btn-details(type='submit') details
+                                            button.btn.btn-secondary.btn-enviroments(type='submit') Details
                                         td 
-                                            button.btn.btn-warning.btn-details(type='submit') View All
+                                            button.btn.btn-warning.btn-collections(type='submit' id=`${userProjects[i]._id}`) View All
                                         td 
-                                            button.btn.btn-primary.btn-modify(type='submit') modify
-                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userProjects[i]._id}`) delete
+                                            button.btn.btn-primary.btn-modify(type='submit') Modify
+                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userProjects[i]._id}`) Delete
                                     - i++
                             //- tr
                             //-     td 1.
@@ -55,6 +55,13 @@ block content
             console.log('create_project clicked')
             event.preventDefault();
             window.location.assign('./editproject');
+        })
+
+        $('.btn-collections').on('click', function(event) {
+            console.log('view collection clicked')
+            event.preventDefault();
+            const projectId = this.id;
+            window.location.assign(`./collections?projectid=${projectId}`);
         })
 
         $('.btn-delete').on('click', function(event) {

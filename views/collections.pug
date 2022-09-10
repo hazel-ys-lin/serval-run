@@ -13,47 +13,131 @@ block content
 
         form.input-form
             h1 Collections
-            button.btn.btn-right.btn-success.btn-block.btn-create_collection(type='submit') Create Collection
+            button.btn.btn-right.btn-success.btn-block.btn-create_collection(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userCollections[0].projectId}`) Create Collection
+            #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                .modal-dialog
+                    .modal-content
+                        .modal-header
+                            h5#exampleModalLabel.modal-title Add Collection
+                            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                        .modal-body
+                            form
+                                .mb-3
+                                    label.col-form-label(for='project-id') Project ID
+                                    input#project-id.form-control.input_projectid
+                                .mb-3
+                                    label.col-form-label(for='collection-name') Collection Name
+                                    input#collection-name.form-control.input_collection(type='string' placeholder='My Collection')
+                        .modal-footer
+                            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                            button.btn.btn-primary.btn-modal-create_collection(type='submit') Create Collection
+
         .cards
             .card
                 .card-header
-                    .card-title 
+                    .card-title Project ID: #{userCollections[0].projectId}
                     .card-tools
                 .card-body.p-0
                     table.table
                         thead
                             tr
                                 //- th(style='width: 10px') #
-                                th ID
+                                th Collection ID
                                 th Name
                                 th API
                                 th Edit 
                                 th Run Test
                                 //- th(style='width: 40px') Label
                         tbody
-                            if userCollections
+                            if userCollections[0].collection
                                 - let i = 0
                                 while i < userCollections.length
                                     tr 
-                                        td #{userCollections[i]._id}
-                                        td #{userCollections[i].collection_name}
-                                        td #{userCollections[i].apis}
+                                        td #{userCollections[i].collection._id}
+                                        td #{userCollections[i].collection.collection_name}
                                         td 
-                                            button.btn.btn-primary.btn-details(type='submit') details
+                                            button.btn.btn-warning.btn-apis(type='submit' id=`${userCollections[i].collection._id}`) View All
+                                        td 
+                                            button.btn.btn-primary.btn-modify(type='submit' id=`${userCollections[i].collection._id}`) Modify
+                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userCollections[i].collection._id}`) Delete
+                                        td 
+                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userCollections[i].collection._id}`) Run
                                     - i++
-        //- div.cards
-        //-     - let i = 0
-        //-     while i < userCollections.length
-        //-         div(class='card') 
-        //-             div(class='card-header')
-        //-                 h3(class='card-title'  value=`${userCollections[i]}`) #{userCollections[i]}
-        //-                 div(class='card-tools')
-        //-             div(class='card-body')
-        //-             div(class='card-footer')
-        //-         - i++
     script.
         $('.btn-create_collection').on('click', function(event) {
             console.log('create_collection clicked')
             event.preventDefault();
-            window.location.assign('./editcollection');
+            //- window.location.assign('./editcollection');
+        })
+
+        $('#exampleModal').on('show.bs.modal', function(event) {
+            console.log('#exampleModal')
+            // Button that triggered the modal
+            let button = event.relatedTarget;
+            //- // Extract info from data-bs-* attributes
+            let projectId = $('.btn-create_collection').attr('data-bs-whatever');
+            //- // If necessary, you could initiate an AJAX request here
+            //- // and then do the updating in a callback.
+
+            //- // Update the modal's content.
+            $('input#project-id').val(projectId);
+        })
+
+        $('.btn-modal-create_collection').on('click', function(event) {
+            console.log('create_collection in modal clicked')
+            event.preventDefault();
+            const projectId = $('.input_projectid').val();
+            const collectionName = $('.input_collection').val();
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/editcollection',
+                data: {
+                    projectId: projectId,
+                    collectionName: collectionName,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('create collection successfully')
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catchcollection error')
+            })
+        })
+
+
+        $('.btn-delete').on('click', function(event) {
+            console.log('delete_collection clicked')
+            event.preventDefault();
+
+            const projectId = $('.card-title').text().replace('Project ID: ', '');
+            const collectionId = this.id;
+            console.log('projectId: ', projectId)
+
+            axios({
+                method: 'delete',
+                url: 'http://localhost:3001/api/1.0/editcollection',
+                data: {
+                    projectId: projectId,
+                    collectionId: collectionId,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('delete project successfully')
+                    //- window.location.assign('./testresult');
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch: ', error)
+                alert('delete project error')
+            })
         })
