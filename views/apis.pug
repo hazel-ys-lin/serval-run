@@ -15,7 +15,45 @@ block content
                 
         form.input-form
             h1 APIs
-            button.btn.btn-right.btn-success.btn-block.btn-create_api(type='submit') Create API
+            button.btn.btn-right.btn-success.btn-block.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userApis[0].collectionId}`) Create API
+            #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                .modal-dialog
+                    .modal-content
+                        .modal-header
+                            h5#exampleModalLabel.modal-title Add API
+                            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                        .modal-body
+                            form
+                                .mb-3
+                                    label.col-form-label(for='collection-id') Collection ID
+                                    input#collection-id.form-control.input_collectionid
+                                .mb-3
+                                    label.col-form-label(for='api-name') API Name
+                                    input#api-name.form-control.input_api-name(type='string' placeholder='My API')
+                                .mb-3
+                                    label.col-form-label(for='http-method') HTTP Method
+                                    select#http-method.form-control.text-muted.input_http-method
+                                        option(value='' selected='' disabled='' hidden='') Please choose method to test
+                                        option GET 
+                                        option POST 
+                                        option PUT 
+                                        option PATCH 
+                                        option DELETE
+                                .mb-3
+                                    label.col-form-label(for='api-endpoint') API Endpoint
+                                    input#api-endpoint.form-control.input_api-endpoint(type='string' placeholder='api/1.0/signin')
+                                .mb-3
+                                    label.col-form-label(for='api-severity') Severity
+                                    select#api-severity.form-control.text-muted.input_api-severity
+                                        option(value='' selected='' disabled='' hidden='') Please value the severity
+                                            option 1 
+                                            option 2 
+                                            option 3 
+                                            option 4 
+                                            option 5
+                        .modal-footer
+                            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                            button.btn.btn-primary.btn-modal-create_api(type='submit') Create API
         .cards
             .card
                 .card-header
@@ -30,26 +68,109 @@ block content
                                 th Name
                                 th HTTP Method
                                 th Endpoint
+                                th Severity
                                 th Test Cases 
                                 th Edit 
                                 th Run Test
                                 //- th(style='width: 40px') Label
                         tbody
-                            if userApis
+                            if userApis[0].api
                                 - let i = 0
                                 while i < userApis.length
                                     tr 
-                                        td #{userApis[i]._id}
-                                        td #{userApis[i].project_name}
-                                        td #{userApis[i].http_method}
-                                        td #{userApis[i].endpoint}
-                                        td #{userApis[i].cases}
-                                        td edit
-                                        td Run Test
+                                        td #{userApis[i].api._id}
+                                        td #{userApis[i].api.api_name}
+                                        td #{userApis[i].api.http_method}
+                                        td #{userApis[i].api.api_endpoint}
+                                        td #{userApis[i].api.severity}
+                                        td 
+                                            button.btn.btn-warning.btn-apis(type='submit' id=`${userApis[i].api._id}`) View All
+                                        td 
+                                            button.btn.btn-primary.btn-modify(type='submit' id=`${userApis[i].api._id}`) Modify
+                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
+                                        td 
+                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userApis[i].api._id}`) Run
                                     - i++
     script.
         $('.btn-create_api').on('click', function(event) {
             console.log('create_api clicked')
             event.preventDefault();
-            window.location.assign('./editapi');
         })
+
+        $('#exampleModal').on('show.bs.modal', function(event) {
+            console.log('#exampleModal')
+            // Button that triggered the modal
+            let button = event.relatedTarget;
+            // Extract info from data-bs-* attributes
+            let collectionId = $('.btn-create_api').attr('data-bs-whatever');
+            // If necessary, you could initiate an AJAX request here
+            // and then do the updating in a callback.
+
+            // Update the modal's content.
+            $('input#collection-id').val(collectionId);
+        })
+
+        $('.btn-modal-create_api').on('click', function(event) {
+            console.log('create_api in modal clicked')
+            event.preventDefault();
+            const collectionId = $('.input_collectionid').val();
+            const apiName = $('.input_api-name').val();
+            const httpMethod = $('.input_http-method').val();
+            const apiEndpoint = $('.input_api-endpoint').val();
+            const apiSeverity = $('.input_api-severity').val();
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/editapi',
+                data: {
+                    collectionId: collectionId,
+                    apiName: apiName,
+                    httpMethod: httpMethod,
+                    apiEndpoint: apiEndpoint,
+                    apiSeverity: apiSeverity,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('create api successfully')
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch api error')
+            })
+        })
+
+
+        //- $('.btn-delete').on('click', function(event) {
+        //-     console.log('delete_api clicked')
+        //-     event.preventDefault();
+
+        //-     const collectionId = $('.card-title').text().replace('Collection ID: ', '');
+        //-     const apiId = this.id;
+        //-     console.log('apiId: ', apiId)
+
+        //-     axios({
+        //-         method: 'delete',
+        //-         url: 'http://localhost:3001/api/1.0/editapi',
+        //-         data: {
+        //-             projectId: projectId,
+        //-             collectionId: collectionId,
+        //-         },
+        //-         headers: {'Content-Type': 'application/json'}
+        //-     })
+        //-     .then((response) => {
+        //-         if (response.status === 200) {
+        //-             alert('delete project successfully')
+        //-             //- window.location.assign('./testresult');
+        //-             window.location.reload();
+        //-         }
+        //-     })
+        //-     .catch((error) => {
+        //-         console.log('in error');
+        //-         console.log('catch: ', error)
+        //-         alert('delete project error')
+        //-     })
+        //- })

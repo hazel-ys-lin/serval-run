@@ -2,7 +2,7 @@ const pool = require('./db');
 const mongoose = require('mongoose');
 const { projectModel } = require('./project_model');
 const { userModel } = require('./user_model');
-const { collectionCheck } = require('../service/dbUpdate_service');
+const { collectionCheck, apiCheck } = require('../service/dbUpdate_service');
 
 const collectionSchema = new mongoose.Schema({
   project_id: {
@@ -12,8 +12,11 @@ const collectionSchema = new mongoose.Schema({
   collection_name: String,
   apis: [
     {
-      type: mongoose.Schema.ObjectId,
-      ref: 'api',
+      api_id: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'api',
+      },
+      api_name: String,
     },
   ],
 });
@@ -156,27 +159,43 @@ const collectionDeleteModel = async function (collectionInfo) {
 };
 
 const apiInsertModel = async function (apiInfo) {
-  const session = await collectionModel.startSession();
+  const session = await apiModel.startSession();
   session.startTransaction();
   try {
     const opts = { session };
     const collectionData = await collectionModel.findOne({
-      collection_name: apiInfo.collectionName,
+      _id: apiInfo.collectionId,
     });
-    await apiModel({
-      collection_id: collectionData._id.toString(),
-      api_name: apiInfo.apiName,
-      http_method: apiInfo.httpMethod,
-      api_endpoint: apiInfo.apiEndpoint,
-      testcases: apiInfo.testCases,
-      severity: apiInfo.severity,
-    }).save(opts);
+    console.log('collectionData in api insert model: ', collectionData);
 
-    await collectionModel.updateOne(
-      { collection_id: collectionData._id.toString() },
-      { $push: { apis: [apiInsertModel._id] } },
-      opts
-    );
+    const uniqueApi = await apiCheck(apiInfo.apiName, collectionData.apis);
+
+    if (uniqueApi) {
+      let inserted = await apiModel({
+        collection_id: collectionData._id.toString(),
+        api_name: apiInfo.apiName,
+        http_method: apiInfo.httpMethod,
+        api_endpoint: apiInfo.apiEndpoint,
+        severity: apiInfo.apiSeverity,
+      }).save(opts);
+
+      await collectionModel.updateOne(
+        { _id: collectionData._id.toString() },
+        {
+          $push: {
+            apis: [
+              {
+                api_id: inserted._id,
+                api_name: inserted.api_name,
+              },
+            ],
+          },
+        },
+        opts
+      );
+    } else {
+      return false;
+    }
 
     await session.commitTransaction();
     session.endSession();
@@ -190,7 +209,30 @@ const apiInsertModel = async function (apiInfo) {
   }
 };
 
-const apiGetModel = async function () {};
+const apiGetModel = async function (collectionId) {
+  let [collectionData] = await collectionModel.find({
+    _id: collectionId,
+  });
+
+  let userApis = [];
+  if (collectionData) {
+    for (let i = 0; i < collectionData.apis.length; i++) {
+      let findApi = await apiModel.findOne({
+        _id: collectionData.apis[i].api_id,
+      });
+      if (findApi !== null) {
+        userApis.push({
+          collectionId: collectionData._id,
+          api: findApi,
+        });
+      }
+    }
+  }
+
+  return userApis;
+};
+
+const apiDeleteModel = async function () {};
 
 module.exports = {
   collectionModel,
@@ -200,4 +242,5 @@ module.exports = {
   collectionDeleteModel,
   apiInsertModel,
   apiGetModel,
+  apiDeleteModel,
 };

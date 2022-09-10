@@ -70,6 +70,14 @@ block content
             //- window.location.assign('./editcollection');
         })
 
+        $('.btn-apis').on('click', function(event) {
+            console.log('view api clicked')
+            event.preventDefault();
+            const collectionId = this.id;
+            window.location.assign(`./apis?collectionid=${collectionId}`);
+        })
+        
+
         $('#exampleModal').on('show.bs.modal', function(event) {
             console.log('#exampleModal')
             // Button that triggered the modal

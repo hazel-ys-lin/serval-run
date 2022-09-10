@@ -25,4 +25,15 @@ const collectionCheck = async function (collectionName, collectionArray) {
   return true;
 };
 
-module.exports = { projectCheck, collectionCheck };
+const apiCheck = async function (apiName, apiArray) {
+  for (let i = 0; i < apiArray.length; i++) {
+    if (apiName === apiArray[i].api_name) {
+      console.log('api check fail');
+      return false;
+    }
+  }
+  console.log('api check pass');
+  return true;
+};
+
+module.exports = { projectCheck, collectionCheck, apiCheck };

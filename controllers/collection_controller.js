@@ -6,6 +6,8 @@ const {
   collectionGetModel,
   collectionDeleteModel,
   apiInsertModel,
+  apiGetModel,
+  apiDeleteModel,
 } = require('../models/collection_model');
 const { projectModel } = require('../models/project_model');
 
@@ -21,10 +23,6 @@ const displayCollection = async function (req, res) {
     userCollections.push({ projectId: projectId });
     res.render('collections', { userCollections: userCollections });
   }
-};
-
-const collectionForm = async (req, res) => {
-  return res.render('collectionForm');
 };
 
 const collectionInsertController = async function (req, res) {
@@ -55,34 +53,36 @@ const collectionDeleteController = async function (req, res) {
 };
 
 const displayApi = async function (req, res) {
-  // get all the projects to array in database
-  // const userEmail = 'serval_meow@gmail.com'; //req.params.userEmail
-  // const collectionId = req.query.collectionId;
+  const collectionId = req.query.collectionid;
 
-  // //FIXME: move db codes to model
-  // let [collectionData] = await collectionModel.find({
-  //   user_email: collectionId,
-  // });
-
-  // let [apiData] = await apiModel.find({
-  //   collection_id: collectionData?._id,
-  // });
-
-  // let apis;
-  // if (apiData) {
-  //   apis = await apiModel.find({
-  //     api_id: apiData._id,
-  //   });
-  // }
-  // console.log('apis: ', apis);
-  res.render('apis');
+  let userApis = await apiGetModel(collectionId);
+  console.log('userApis: ', userApis);
+  if (userApis.length !== 0) {
+    res.render('apis', { userApis: userApis });
+  } else {
+    userApis.push({ collectionId: collectionId });
+    res.render('apis', { userApis: userApis });
+  }
 };
 
-const apiForm = async (req, res) => {
-  return res.render('apiForm');
+const apiInsertController = async function (req, res) {
+  const apiInfo = {
+    collectionId: req.body.collectionId,
+    apiName: req.body.apiName,
+    httpMethod: req.body.httpMethod,
+    apiEndpoint: req.body.apiEndpoint,
+    apiSeverity: req.body.apiSeverity,
+  };
+  let saveApiResult = await apiInsertModel(apiInfo);
+
+  if (saveApiResult) {
+    return res.status(200).json({ message: 'API inserted' });
+  } else {
+    return res.status(403).json({ message: 'Insert API error' });
+  }
 };
 
-const apiInsertController = async function (req, res) {};
+const apiDeleteController = async function (req, res) {};
 
 const envForm = async function (req, res) {
   return res.render('envForm');
@@ -91,12 +91,11 @@ const envInsertController = async function (req, res) {};
 
 module.exports = {
   displayCollection,
-  collectionForm,
   collectionInsertController,
   collectionDeleteController,
   displayApi,
-  apiForm,
   apiInsertController,
+  apiDeleteController,
   envForm,
   envInsertController,
 };
