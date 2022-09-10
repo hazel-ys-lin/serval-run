@@ -88,7 +88,7 @@ block content
             //- // and then do the updating in a callback.
 
             //- // Update the modal's content.
-            $('input#project-id').val(projectId);
+            $('input#project-id').val(projectId).prop('readonly', true);
         })
 
         $('.btn-modal-create_collection').on('click', function(event) {

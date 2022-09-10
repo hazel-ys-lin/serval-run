@@ -2,8 +2,11 @@ extends layout.pug
 
 block content
     link(rel='stylesheet', href='../../css/common.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js')
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    script(src='../../src/gherkin.js')
     div.content-wrapper
         nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
             ol.breadcrumb
@@ -17,7 +20,26 @@ block content
 
         form.input-form
             h1 Cases
-            button.btn.btn-right.btn-success.btn-block.btn-create_case(type='submit') Create Case
+            button.btn.btn-right.btn-success.btn-block.btn-create_case(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userCases[0].apiId}`) Create Test Case
+            #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                .modal-dialog.modal-lg
+                    .modal-content
+                        .modal-header
+                            h5#exampleModalLabel.modal-title Add Test Case
+                            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                        .modal-body
+                            form
+                                .mb-3
+                                    label.col-form-label(for='test-case') Test Document
+                                    textarea#code(name='code' placeholder='# Write your test document in gherkin language here! \n # The serval can only read gherkin now, meow.')
+                                        | # Write your test document in gherkin language here! 
+                                        | # The serval can only read gherkin now, meow.
+                        .modal-footer
+                            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                            button.btn.btn-primary.btn-modal-create_case(type='submit') Create Test Case
+
+
+
         .cards
             .card
                 .card-header
@@ -37,21 +59,37 @@ block content
                                 th Run Test
                                 //- th(style='width: 40px') Label
                         tbody
-                            if userCases
+                            if userCases[0].case
                                 - let i = 0
                                 while i < userCases.length
                                     tr 
                                         td #{userCases[i]._id}
                                         td #{userCases[i].title}
                                         td #{userCases[i].description}
-                                        td #{userCases[i].scenario}
-                                        td #{userCases[i].cases}
-                                        td edit
-                                        td Run Test
+                                        td 
+                                            button.btn.btn-warning.btn-cases(type='submit' id=`${userCases[i]._id}`) View More
+                                        td 
+                                            button.btn.btn-warning.btn-cases(type='submit' id=`${userCases[i]._id}`) View More
+                                        td 
+                                            button.btn.btn-primary.btn-modify(type='submit' id=`${userCases[i]._id}`) Modify
+                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userCases[i]._id}`) Delete
+                                        td 
+                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userCases[i]._id}`) Run
                                     - i++
     script.
+        $('#exampleModal').on('shown.bs.modal', function() {
+            // src: https://stackoverflow.com/questions/17086538/codemirror-content-not-visible-in-bootstrap-modal-until-it-is-clicked
+            // initialize codemirror here
+            let editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                lineNumbers: true,
+                matchBrackets: true,
+                mode: 'text/x-feature'
+            });
+        })
+
+
         $('.btn-create_case').on('click', function(event) {
             console.log('create_case clicked')
             event.preventDefault();
-            window.location.assign('./editcase');
+            //- window.location.assign('./editcase');
         })

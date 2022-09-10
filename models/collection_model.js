@@ -29,7 +29,7 @@ const apiSchema = new mongoose.Schema({
   api_name: String,
   http_method: String,
   api_endpoint: String,
-  testcases: [
+  cases: [
     {
       type: mongoose.Schema.ObjectId,
       ref: 'case',

@@ -1,11 +1,10 @@
 const router = require('express').Router();
-
+const { wrapAsync } = require('../util/util');
 const {
   displayCase,
   caseForm,
   saveCase,
 } = require('../controllers/case_controller');
-const { wrapAsync } = require('../util/util');
 
 router.route('/cases').get(wrapAsync(displayCase));
 router.route('/editcase').get(wrapAsync(caseForm));

@@ -84,7 +84,7 @@ block content
                                         td #{userApis[i].api.api_endpoint}
                                         td #{userApis[i].api.severity}
                                         td 
-                                            button.btn.btn-warning.btn-apis(type='submit' id=`${userApis[i].api._id}`) View All
+                                            button.btn.btn-warning.btn-cases(type='submit' id=`${userApis[i].api._id}`) View All
                                         td 
                                             button.btn.btn-primary.btn-modify(type='submit' id=`${userApis[i].api._id}`) Modify
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
@@ -97,6 +97,14 @@ block content
             event.preventDefault();
         })
 
+        $('.btn-cases').on('click', function(event) {
+            console.log('view case clicked')
+            event.preventDefault();
+            const apiId = this.id;
+            window.location.assign(`./cases?apiid=${apiId}`);
+        })
+
+
         $('#exampleModal').on('show.bs.modal', function(event) {
             console.log('#exampleModal')
             // Button that triggered the modal
@@ -107,7 +115,7 @@ block content
             // and then do the updating in a callback.
 
             // Update the modal's content.
-            $('input#collection-id').val(collectionId);
+            $('input#collection-id').val(collectionId).prop('readonly', true);
         })
 
         $('.btn-modal-create_api').on('click', function(event) {

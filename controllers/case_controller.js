@@ -1,4 +1,8 @@
-const { caseModel, responseModel } = require('../models/case_model');
+const {
+  caseModel,
+  responseModel,
+  caseGetModel,
+} = require('../models/case_model');
 const { userModel } = require('../models/user_model');
 const { testExample } = require('../service/testexample_service');
 const apiReq = require('../service/httpRequest_service');
@@ -6,11 +10,16 @@ const apiReq = require('../service/httpRequest_service');
 const momentTimezone = require('moment-timezone');
 
 const displayCase = async (req, res) => {
-  res.render('cases');
-};
+  // console.log('req.query.projectid: ', req.query.projectid);
+  const apiId = req.query.apiid;
 
-const caseForm = async (req, res) => {
-  return res.render('caseForm');
+  let userCases = await caseGetModel(apiId);
+  if (userCases.length !== 0) {
+    res.render('cases', { userCases: userCases });
+  } else {
+    userCases.push({ apiId: apiId });
+    res.render('cases', { userCases: userCases });
+  }
 };
 
 const saveCase = async (req, res) => {
@@ -100,4 +109,4 @@ const saveCase = async (req, res) => {
   return res.status(200).json({ message: 'test case inserted' });
 };
 
-module.exports = { displayCase, caseForm, saveCase };
+module.exports = { displayCase, saveCase };

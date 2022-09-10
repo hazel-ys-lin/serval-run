@@ -8,9 +8,28 @@ block content
         nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
             ol.breadcrumb
                 li.breadcrumb-item.active(aria-current='page') Project
+        
         form.input-form
             h1 Projects
-            button.btn.btn-right.btn-success.btn-block.btn-create_project(type='submit') Create Project
+            button.btn.btn-right.btn-success.btn-block.btn-create_project(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever='') Create Project
+            #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                .modal-dialog
+                    .modal-content
+                        .modal-header
+                            h5#exampleModalLabel.modal-title Add Project
+                            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                        .modal-body
+                            form
+                                .mb-3
+                                    label.col-form-label(for='project-name') Project Name
+                                    input#project-name.form-control.input_project-name(type='string' placeholder='My Project')
+                        .modal-footer
+                            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                            button.btn.btn-primary.btn-modal-create_project(type='submit') Create Project
+
+        
+        
+        
         .cards
             .card
                 .card-header
@@ -54,7 +73,7 @@ block content
         $('.btn-create_project').on('click', function(event) {
             console.log('create_project clicked')
             event.preventDefault();
-            window.location.assign('./editproject');
+            //- window.location.assign('./editproject');
         })
 
         $('.btn-collections').on('click', function(event) {
@@ -63,6 +82,33 @@ block content
             const projectId = this.id;
             window.location.assign(`./collections?projectid=${projectId}`);
         })
+
+
+        $('.btn-modal-create_project').on('click', function(event) {
+            console.log('create_project in modal clicked')
+            event.preventDefault();
+            const projectName = $('.input_project-name').val();
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/editproject',
+                data: {
+                    projectName: projectName,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('Create project successfully')
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('Catch project error')
+            })
+        })
+
 
         $('.btn-delete').on('click', function(event) {
             console.log('delete_project clicked')
@@ -94,13 +140,3 @@ block content
                 alert('delete project error')
             })
         })
-            //- div.card.card-project
-            //-     form.input-form
-            //-         div.form-group
-            //-             label(for='exampleFormControlInput1') Create New API 
-            //-             select#exampleFormControlSelect1.form-control.text-muted.select_project
-            //-                 option(value='' selected='' disabled='' hidden='') Select Project
-            //-             select#exampleFormControlSelect1.form-control.text-muted.select_collection
-            //-                 option(value='' selected='' disabled='' hidden='') Select Collection
-            //-             input#exampleFormControlInput1.form-control.create_collection(type='url' placeholder='API name')
-            //-         button.btn.btn-outline-info.btn-block.btn-create_api(type='submit') Create API

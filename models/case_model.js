@@ -55,6 +55,29 @@ const responseSchema = new mongoose.Schema({
 const caseModel = pool.model('case', caseSchema);
 const responseModel = pool.model('response', responseSchema);
 
+const caseGetModel = async function (apiId) {
+  let [apiData] = await apiModel.find({
+    _id: apiId,
+  });
+
+  let userCases = [];
+  if (apiData) {
+    for (let i = 0; i < apiData.cases.length; i++) {
+      let findCase = await caseModel.findOne({
+        _id: apiData.cases[i].case_id,
+      });
+      if (findCase !== null) {
+        userCases.push({
+          apiId: apiData._id,
+          case: findCase,
+        });
+      }
+    }
+  }
+
+  return userCases;
+};
+
 const caseInsertModel = async function (apiName, featureCode) {
   const session = await caseModel.startSession();
   session.startTransaction();
@@ -109,6 +132,7 @@ const responseInsertModel = async function () {};
 module.exports = {
   caseModel,
   responseModel,
+  caseGetModel,
   caseInsertModel,
   responseInsertModel,
 };
