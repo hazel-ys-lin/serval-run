@@ -29,6 +29,9 @@ block content
                             button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
                         .modal-body
                             form
+                                .mb-3 
+                                    label.col-form-label(for='api-id') API ID
+                                    input#api-id.form-control.input_apiid
                                 .mb-3
                                     label.col-form-label(for='test-case') Test Document
                                     textarea#code(name='code' placeholder='# Write your test document in gherkin language here! \n # The serval can only read gherkin now, meow.')
@@ -43,15 +46,15 @@ block content
         .cards
             .card
                 .card-header
-                    .card-title
+                    .card-title API ID: #{userCases[0].apiId}
                     .card-tools
                 .card-body.p-0
                     table.table
                         thead
                             tr
                                 //- th(style='width: 10px') #
-                                th ID
-                                th Title
+                                th(style='width: 5px') ID
+                                th(style='width: 10px') Title
                                 th Description
                                 th Scenario
                                 th Data 
@@ -63,18 +66,18 @@ block content
                                 - let i = 0
                                 while i < userCases.length
                                     tr 
-                                        td #{userCases[i]._id}
-                                        td #{userCases[i].title}
-                                        td #{userCases[i].description}
+                                        td #{userCases[i].case._id}
+                                        td #{userCases[i].case.title}
+                                        td #{userCases[i].case.description}
                                         td 
-                                            button.btn.btn-warning.btn-cases(type='submit' id=`${userCases[i]._id}`) View More
+                                            button.btn.btn-warning.btn-cases(type='submit' id=`${userCases[i].case._id}`) View More
                                         td 
-                                            button.btn.btn-warning.btn-cases(type='submit' id=`${userCases[i]._id}`) View More
+                                            button.btn.btn-warning.btn-cases(type='submit' id=`${userCases[i].case._id}`) View More
                                         td 
-                                            button.btn.btn-primary.btn-modify(type='submit' id=`${userCases[i]._id}`) Modify
-                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userCases[i]._id}`) Delete
+                                            button.btn.btn-primary.btn-modify(type='submit' id=`${userCases[i].case._id}`) Modify
+                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userCases[i].case._id}`) Delete
                                         td 
-                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userCases[i]._id}`) Run
+                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userCases[i].case._id}`) Run
                                     - i++
     script.
         $('#exampleModal').on('shown.bs.modal', function() {
@@ -85,11 +88,79 @@ block content
                 matchBrackets: true,
                 mode: 'text/x-feature'
             });
+
+            $('.btn-modal-create_case').on('click', function(event) {
+                console.log('create case in modal clicked')
+                event.preventDefault();
+
+                const apiId = $('.input_apiid').val();
+                const featureCode = editor.getValue();
+
+                axios({
+                    method: 'post',
+                    url: 'http://localhost:3001/api/1.0/editcase',
+                    data: {
+                        apiId: apiId,
+                        featureCode: featureCode,
+                    },
+                    headers: {'Content-Type': 'application/json'},
+                })
+                .then((response) => {
+                    if (response.status === 200) {
+                        alert('create case successfully')
+                        window.location.reload();
+                    }
+                })
+                .catch((error) => {
+                    console.log('in error');
+                    console.log('catch: ', error)
+                    alert('create case error')
+                })
+            })
         })
 
+
+        $('#exampleModal').on('show.bs.modal', function(event) {
+            let button = event.relatedTarget;
+            let apiId = $('.btn-create_case').attr('data-bs-whatever');
+            $('input#api-id').val(apiId).prop('readonly', true);
+        })
 
         $('.btn-create_case').on('click', function(event) {
             console.log('create_case clicked')
             event.preventDefault();
-            //- window.location.assign('./editcase');
         })
+
+
+        $('.btn-delete').on('click', function(event) {
+            console.log('delete_case clicked')
+            event.preventDefault();
+
+            const apiId = $('.card-title').text().replace('API ID: ', '');
+            const caseId = this.id;
+            console.log('caseId: ', caseId)
+
+            axios({
+                method: 'delete',
+                url: 'http://localhost:3001/api/1.0/editcase',
+                data: {
+                    apiId: apiId,
+                    caseId: caseId,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('delete case successfully')
+                    //- window.location.assign('./testresult');
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch: ', error)
+                alert('delete case error')
+            })
+        })
+
+

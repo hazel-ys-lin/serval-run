@@ -3,11 +3,11 @@ const Messages = require('@cucumber/messages');
 const fs = require('fs');
 const path = require('path');
 
-const testExample = function (featureCode) {
-  let featureFile = fs.readFileSync(
-    path.resolve(__dirname, 'signin.feature'),
-    'utf8'
-  );
+const gherkinCompile = function (featureCode) {
+  // let featureFile = fs.readFileSync(
+  //   path.resolve(__dirname, 'signin.feature'),
+  //   'utf8'
+  // );
 
   let uuidFn = Messages.IdGenerator.uuid();
   let builder = new Gherkin.AstBuilder(uuidFn);
@@ -15,6 +15,7 @@ const testExample = function (featureCode) {
 
   let parser = new Gherkin.Parser(builder, matcher);
   let gherkinDocument = parser.parse(featureCode);
+  // console.log('gherkinDocument in gherkinCompile service: ', gherkinDocument);
   let testCaseInfo = gherkinDocument.feature.children[0].scenario;
 
   let tableHeader =
@@ -58,4 +59,4 @@ const testExample = function (featureCode) {
   return { testInfo, testStep, testTableBody };
 };
 
-module.exports = { testExample };
+module.exports = { gherkinCompile };
