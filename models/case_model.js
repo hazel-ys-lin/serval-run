@@ -1,7 +1,7 @@
 const pool = require('./db');
 const mongoose = require('mongoose');
 const momentTimezone = require('moment-timezone');
-const { collectionModel, apiModel } = require('./collection_model');
+const { apiModel } = require('./collection_model');
 
 const caseSchema = new mongoose.Schema({
   create_time: {
@@ -31,28 +31,7 @@ const caseSchema = new mongoose.Schema({
   ],
 });
 
-const responseSchema = new mongoose.Schema({
-  api_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'api',
-  },
-  case_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'testcase',
-  },
-  report_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'report',
-  },
-  response_data: {},
-  response_status: Number,
-  pass: Boolean,
-  request_time: Date,
-  request_time_length: Number,
-});
-
 const caseModel = pool.model('case', caseSchema);
-const responseModel = pool.model('response', responseSchema);
 
 const caseGetModel = async function (apiId) {
   let [apiData] = await apiModel.find({
@@ -133,9 +112,11 @@ const caseDeleteModel = async function (caseInfo) {
   const session = await caseModel.startSession();
   session.startTransaction();
   try {
-    const apiData = await apiModel.findOne({
-      _id: caseInfo.apiId,
-    });
+    const apiData = await apiModel
+      .findOne({
+        _id: caseInfo.apiId,
+      })
+      .exec();
     // console.log('projectInfo: ', projectInfo);
     console.log('apiData: ', apiData);
 
@@ -143,6 +124,7 @@ const caseDeleteModel = async function (caseInfo) {
       .deleteOne({
         _id: caseInfo.caseId,
       })
+      .exec()
       .session(session);
 
     await apiModel
@@ -156,6 +138,7 @@ const caseDeleteModel = async function (caseInfo) {
           },
         }
       )
+      .exec()
       .session(session);
 
     await session.commitTransaction();
@@ -174,7 +157,6 @@ const responseInsertModel = async function () {};
 
 module.exports = {
   caseModel,
-  responseModel,
   caseGetModel,
   caseInsertModel,
   caseDeleteModel,

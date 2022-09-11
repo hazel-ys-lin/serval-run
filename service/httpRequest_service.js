@@ -76,7 +76,7 @@ axiosInstance.interceptors.response.use(
 
 // module.exports = { axiosInstance, getAPI };
 
-module.exports = function (method, url, data = null, config) {
+module.exports = function (method, url, data, config) {
   method = method.toLowerCase();
   switch (method) {
     case 'post':

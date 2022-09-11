@@ -49,9 +49,11 @@ const collectionInsertModel = async function (collectionInfo) {
   session.startTransaction();
   try {
     const opts = { session };
-    const projectData = await projectModel.findOne({
-      _id: collectionInfo.projectId,
-    });
+    const projectData = await projectModel
+      .findOne({
+        _id: collectionInfo.projectId,
+      })
+      .exec();
 
     const uniqueCollection = await collectionCheck(
       collectionInfo.collectionName,
@@ -62,22 +64,26 @@ const collectionInsertModel = async function (collectionInfo) {
       let inserted = await collectionModel({
         project_id: projectData._id.toString(),
         collection_name: collectionInfo.collectionName,
-      }).save(opts);
+      })
+        .save(opts)
+        .exec();
 
-      await projectModel.updateOne(
-        { project_id: projectData._id.toString() },
-        {
-          $push: {
-            collections: [
-              {
-                collection_id: inserted._id,
-                collection_name: inserted.collection_name,
-              },
-            ],
+      await projectModel
+        .updateOne(
+          { project_id: projectData._id.toString() },
+          {
+            $push: {
+              collections: [
+                {
+                  collection_id: inserted._id,
+                  collection_name: inserted.collection_name,
+                },
+              ],
+            },
           },
-        },
-        opts
-      );
+          opts
+        )
+        .exec();
     } else {
       return false;
     }
@@ -102,9 +108,11 @@ const collectionGetModel = async function (projectId) {
   let userCollections = [];
   if (projectData) {
     for (let i = 0; i < projectData.collections.length; i++) {
-      let findCollection = await collectionModel.findOne({
-        _id: projectData.collections[i].collection_id,
-      });
+      let findCollection = await collectionModel
+        .findOne({
+          _id: projectData.collections[i].collection_id,
+        })
+        .exec();
       if (findCollection !== null) {
         userCollections.push({
           projectId: projectData._id,
@@ -121,9 +129,11 @@ const collectionDeleteModel = async function (collectionInfo) {
   const session = await collectionModel.startSession();
   session.startTransaction();
   try {
-    const projectData = await projectModel.findOne({
-      _id: collectionInfo.projectId,
-    });
+    const projectData = await projectModel
+      .findOne({
+        _id: collectionInfo.projectId,
+      })
+      .exec();
     // console.log('projectInfo: ', projectInfo);
     console.log('projectData: ', projectData);
 
@@ -131,6 +141,7 @@ const collectionDeleteModel = async function (collectionInfo) {
       .deleteOne({
         _id: collectionInfo.collectionId,
       })
+      .exec()
       .session(session);
     // .catch(function (err) {
     //   console.log(err);
@@ -147,6 +158,7 @@ const collectionDeleteModel = async function (collectionInfo) {
           },
         }
       )
+      .exec()
       .session(session);
 
     await session.commitTransaction();
@@ -166,9 +178,11 @@ const apiInsertModel = async function (apiInfo) {
   session.startTransaction();
   try {
     const opts = { session };
-    const collectionData = await collectionModel.findOne({
-      _id: apiInfo.collectionId,
-    });
+    const collectionData = await collectionModel
+      .findOne({
+        _id: apiInfo.collectionId,
+      })
+      .exec();
     console.log('collectionData in api insert model: ', collectionData);
 
     const uniqueApi = await apiCheck(apiInfo.apiName, collectionData.apis);
@@ -180,22 +194,26 @@ const apiInsertModel = async function (apiInfo) {
         http_method: apiInfo.httpMethod,
         api_endpoint: apiInfo.apiEndpoint,
         severity: apiInfo.apiSeverity,
-      }).save(opts);
+      })
+        .save(opts)
+        .exec();
 
-      await collectionModel.updateOne(
-        { _id: collectionData._id.toString() },
-        {
-          $push: {
-            apis: [
-              {
-                api_id: inserted._id,
-                api_name: inserted.api_name,
-              },
-            ],
+      await collectionModel
+        .updateOne(
+          { _id: collectionData._id.toString() },
+          {
+            $push: {
+              apis: [
+                {
+                  api_id: inserted._id,
+                  api_name: inserted.api_name,
+                },
+              ],
+            },
           },
-        },
-        opts
-      );
+          opts
+        )
+        .exec();
     } else {
       return false;
     }
@@ -220,9 +238,11 @@ const apiGetModel = async function (collectionId) {
   let userApis = [];
   if (collectionData) {
     for (let i = 0; i < collectionData.apis.length; i++) {
-      let findApi = await apiModel.findOne({
-        _id: collectionData.apis[i].api_id,
-      });
+      let findApi = await apiModel
+        .findOne({
+          _id: collectionData.apis[i].api_id,
+        })
+        .exec();
       if (findApi !== null) {
         userApis.push({
           collectionId: collectionData._id,
@@ -239,9 +259,11 @@ const apiDeleteModel = async function (apiInfo) {
   const session = await apiModel.startSession();
   session.startTransaction();
   try {
-    const collectionData = await collectionModel.findOne({
-      _id: apiInfo.collectionId,
-    });
+    const collectionData = await collectionModel
+      .findOne({
+        _id: apiInfo.collectionId,
+      })
+      .exec();
     // console.log('projectInfo: ', projectInfo);
     console.log('collectionData: ', collectionData);
 
@@ -249,6 +271,7 @@ const apiDeleteModel = async function (apiInfo) {
       .deleteOne({
         _id: apiInfo.apiId,
       })
+      .exec()
       .session(session);
 
     // FIXME: collection delete array element not working
@@ -263,6 +286,7 @@ const apiDeleteModel = async function (apiInfo) {
           },
         }
       )
+      .exec()
       .session(session);
 
     await session.commitTransaction();

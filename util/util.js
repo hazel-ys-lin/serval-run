@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { promisify } = require('util'); // util from native nodejs library
+const axios = require('axios');
 
 // reference: https://thecodebarbarian.com/80-20-guide-to-express-error-handling
 const wrapAsync = (fn) => {
