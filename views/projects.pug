@@ -26,10 +26,6 @@ block content
                         .modal-footer
                             button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
                             button.btn.btn-primary.btn-modal-create_project(type='submit') Create Project
-
-        
-        
-        
         .cards
             .card
                 .card-header
@@ -61,14 +57,7 @@ block content
                                             button.btn.btn-primary.btn-modify(type='submit') Modify
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userProjects[i]._id}`) Delete
                                     - i++
-                            //- tr
-                            //-     td 1.
-                            //-     td Update software
-                            //-     td
-                            //-         .progress.progress-xs
-                            //-             .progress-bar.progress-bar-danger(style='width: 55%')
-                            //-     td
-                            //-         span.badge.bg-danger 55%
+
     script.
         $('.btn-create_project').on('click', function(event) {
             console.log('create_project clicked')
