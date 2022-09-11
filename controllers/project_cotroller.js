@@ -86,7 +86,8 @@ const displayEnvironment = async (req, res) => {
   if (environments.length !== 0) {
     res.render('environments', { environments: environments });
   } else {
-    environments.push({ projectId: projectId });
+    environments.push({ project_id: projectId });
+    // console.log('environments: ', environments);
     res.render('environments', { environments: environments });
   }
 };
