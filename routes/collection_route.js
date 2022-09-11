@@ -13,9 +13,6 @@ router.route('/collections').get(wrapAsync(displayCollection));
 router.route('/editcollection').post(wrapAsync(collectionInsertController));
 router.route('/editcollection').delete(wrapAsync(collectionDeleteController));
 
-router.route('/editenv').get(wrapAsync());
-router.route('/editenv').post(wrapAsync());
-
 router.route('/apis').get(wrapAsync(displayApi));
 router.route('/editapi').post(wrapAsync(apiInsertController));
 router.route('/editapi').delete(wrapAsync(apiDeleteController));

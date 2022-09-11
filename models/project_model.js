@@ -1,7 +1,10 @@
 const pool = require('./db');
 const mongoose = require('mongoose');
 const { userModel } = require('./user_model');
-const { projectCheck } = require('../service/dbUpdate_service');
+const {
+  projectCheck,
+  environmentCheck,
+} = require('../service/dbUpdate_service');
 
 const projectSchema = new mongoose.Schema({
   user_id: {
@@ -11,6 +14,10 @@ const projectSchema = new mongoose.Schema({
   project_name: String,
   environments: [
     {
+      environment_id: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'environment',
+      },
       domain_name: String,
       title: String,
     },
@@ -26,7 +33,17 @@ const projectSchema = new mongoose.Schema({
   ],
 });
 
+const environmentSchema = new mongoose.Schema({
+  project_id: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'project',
+  },
+  domain_name: String,
+  title: String,
+});
+
 const projectModel = pool.model('project', projectSchema);
+const environmentModel = pool.model('environment', environmentSchema);
 
 const projectInsertModel = async function (projectInfo) {
   // console.log('projectInfo in projectinsert model: ', projectInfo);
@@ -101,8 +118,6 @@ const projectDeleteModel = async function (projectInfo) {
     //   console.log(err);
     // });
 
-    // console.log('inserted._id: ', inserted._id);
-    // FIXME: delete one project
     await userModel
       .findOneAndUpdate(
         { _id: userData._id.toString() },
@@ -128,8 +143,107 @@ const projectDeleteModel = async function (projectInfo) {
   }
 };
 
+const environmentInsertModel = async function (environmentInfo) {
+  const session = await environmentModel.startSession();
+  session.startTransaction();
+  try {
+    const opts = { session };
+    const projectData = await projectModel.findOne({
+      _id: environmentInfo.projectId,
+    });
+
+    const uniqueEnvironment = await environmentCheck(
+      environmentInfo.domainName,
+      environmentInfo.title,
+      projectData.environments
+    );
+
+    if (uniqueEnvironment) {
+      let inserted = await environmentModel({
+        project_id: projectData._id.toString(),
+        domain_name: environmentInfo.domainName,
+        title: environmentInfo.title,
+      }).save(opts);
+
+      await projectModel.updateOne(
+        { _id: projectData._id.toString() },
+        {
+          $push: {
+            environments: [
+              {
+                environment_id: inserted._id,
+                domain_name: inserted.domain_name,
+                title: inserted.title,
+              },
+            ],
+          },
+        },
+        opts
+      );
+    } else {
+      return false;
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+    return true;
+  } catch (error) {
+    // If an error occurred, abort the whole transaction and
+    // undo any changes that might have happened
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
+};
+
+const environmentDeleteModel = async function (environmentInfo) {
+  const session = await environmentModel.startSession();
+  session.startTransaction();
+  try {
+    const projectData = await projectModel.findOne({
+      _id: environmentInfo.projectId,
+    });
+    // console.log('projectData: ', projectData);
+
+    let deleted = await environmentModel
+      .deleteOne({
+        _id: environmentInfo.environmentId,
+      })
+      .session(session);
+    // .catch(function (err) {
+    //   console.log(err);
+    // });
+
+    await projectModel
+      .findOneAndUpdate(
+        { _id: environmentInfo.projectId },
+        {
+          $pull: {
+            environments: {
+              environment_id: environmentInfo.environmentId,
+            },
+          },
+        }
+      )
+      .session(session);
+
+    await session.commitTransaction();
+    session.endSession();
+    return true;
+  } catch (error) {
+    // If an error occurred, abort the whole transaction and
+    // undo any changes that might have happened
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
+};
+
 module.exports = {
   projectModel,
+  environmentModel,
   projectInsertModel,
   projectDeleteModel,
+  environmentInsertModel,
+  environmentDeleteModel,
 };

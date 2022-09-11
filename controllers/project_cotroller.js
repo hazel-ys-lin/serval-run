@@ -1,8 +1,11 @@
 const { userModel } = require('../models/user_model');
 const {
   projectModel,
+  environmentModel,
   projectInsertModel,
   projectDeleteModel,
+  environmentInsertModel,
+  environmentDeleteModel,
 } = require('../models/project_model');
 
 const displayProject = async (req, res) => {
@@ -27,10 +30,6 @@ const displayProject = async (req, res) => {
   }
   // console.log('userProjects: ', userProjects);
   res.render('projects', { userProjects: userProjects });
-};
-
-const projectForm = async (req, res) => {
-  return res.render('projectForm');
 };
 
 const projectInsertController = async (req, res) => {
@@ -62,11 +61,69 @@ const projectDeleteController = async (req, res) => {
   }
 };
 
-// TODO: update project (add environment, modify domain, etc)
+const displayEnvironment = async (req, res) => {
+  // console.log('req.query.projectid: ', req.query.projectid);
+  const projectId = req.query.projectid;
+  // console.log('projectId: ', projectId);
+
+  let [projectData] = await projectModel.find({
+    project_id: projectId,
+  });
+  // console.log('projectData: ', projectData);
+
+  let environments = [];
+  if (projectData) {
+    for (let i = 0; i < projectData.environments.length; i++) {
+      let findEnvironment = await environmentModel.findOne({
+        _id: projectData.environments[i].environment_id,
+      });
+      if (findEnvironment !== null) {
+        environments.push(findEnvironment);
+      }
+    }
+  }
+  // console.log('environments: ', environments);
+  if (environments.length !== 0) {
+    res.render('environments', { environments: environments });
+  } else {
+    environments.push({ projectId: projectId });
+    res.render('environments', { environments: environments });
+  }
+};
+
+const envInsertController = async function (req, res) {
+  const environmentInfo = {
+    projectId: req.body.projectId,
+    domainName: req.body.domainName,
+    title: req.body.title,
+  };
+  let saveEnvironmentResult = await environmentInsertModel(environmentInfo);
+
+  if (saveEnvironmentResult) {
+    return res.status(200).json({ message: 'Environment inserted' });
+  } else {
+    return res.status(403).json({ message: 'Insert environment error' });
+  }
+};
+
+const envDeleteController = async function (req, res) {
+  const environmentInfo = {
+    projectId: req.body.projectId,
+    environmentId: req.body.environmentId,
+  };
+  let deleteEnvironmentResult = await environmentDeleteModel(environmentInfo);
+  if (deleteEnvironmentResult) {
+    return res.status(200).json({ message: 'Environment deleted' });
+  } else {
+    return res.status(403).json({ message: 'Delete environment error' });
+  }
+};
 
 module.exports = {
   displayProject,
-  projectForm,
   projectInsertController,
   projectDeleteController,
+  displayEnvironment,
+  envInsertController,
+  envDeleteController,
 };

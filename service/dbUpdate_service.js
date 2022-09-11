@@ -36,4 +36,18 @@ const apiCheck = async function (apiName, apiArray) {
   return true;
 };
 
-module.exports = { projectCheck, collectionCheck, apiCheck };
+const environmentCheck = async function (domain, title, environmentArray) {
+  for (let i = 0; i < environmentArray.length; i++) {
+    if (
+      domain === environmentArray[i].domainName &&
+      title === environmentArray[i].title
+    ) {
+      console.log('environment check fail');
+      return false;
+    }
+  }
+  console.log('environment check pass');
+  return true;
+};
+
+module.exports = { projectCheck, collectionCheck, apiCheck, environmentCheck };

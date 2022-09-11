@@ -1,7 +1,4 @@
-const { userModel } = require('../models/user_model');
 const {
-  collectionModel,
-  apiModel,
   collectionInsertModel,
   collectionGetModel,
   collectionDeleteModel,
@@ -9,14 +6,12 @@ const {
   apiGetModel,
   apiDeleteModel,
 } = require('../models/collection_model');
-const { projectModel } = require('../models/project_model');
 
 const displayCollection = async function (req, res) {
   // console.log('req.query.projectid: ', req.query.projectid);
   const projectId = req.query.projectid;
 
   let userCollections = await collectionGetModel(projectId);
-  // TODO: add environment table
   if (userCollections.length !== 0) {
     res.render('collections', { userCollections: userCollections });
   } else {
@@ -95,11 +90,6 @@ const apiDeleteController = async function (req, res) {
   }
 };
 
-const envForm = async function (req, res) {
-  return res.render('envForm');
-};
-const envInsertController = async function (req, res) {};
-
 module.exports = {
   displayCollection,
   collectionInsertController,
@@ -107,6 +97,4 @@ module.exports = {
   displayApi,
   apiInsertController,
   apiDeleteController,
-  envForm,
-  envInsertController,
 };
