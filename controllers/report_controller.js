@@ -10,7 +10,11 @@ const {
   environmentGetModel,
   projectInfoGetModel,
 } = require('../models/project_model');
-const { caseResponseInsertModel } = require('../models/report_model');
+const {
+  caseResponseInsertModel,
+  getCaseReportModel,
+  getReportResponseModel,
+} = require('../models/report_model');
 const apiCall = require('../service/httpRequest_service');
 const momentTimezone = require('moment-timezone');
 
@@ -114,6 +118,51 @@ const showResult = async (req, res) => {
   // );
 };
 
-const showReport = async () => {};
+const displayReport = async (req, res) => {
+  // get all the projects to array in database
+  const userEmail = 'serval_meow@gmail.com'; //req.session.email
+  // const userId = await userGetModel(userEmail);
 
-module.exports = { caseRunController, showResult, showReport };
+  let userProjects = await projectGetModel(userEmail);
+  console.log('userProjects: ', userProjects);
+  if (userProjects.length !== 0) {
+    res.render('reports', { userProjects: userProjects });
+  } else {
+    userProjects.push({ user_id: userId });
+    res.render('reports', { userProjects: userProjects });
+  }
+};
+
+const getCaseReport = async (req, res) => {
+  const projectId = req.body.projectId;
+  const envId = req.body.envId;
+
+  let testCaseReport = await getCaseReportModel(projectId, envId);
+  console.log('testCaseReport: ', testCaseReport.toString());
+  if (testCaseReport.toString()) {
+    res.status(200).json({ report_id: testCaseReport.toString() });
+  } else {
+    res.status(403).json({ msg: 'no report found' });
+  }
+};
+
+const getReportResponseController = async (req, res) => {
+  console.log('req.query.reportid: ', req.query.reportid);
+  const reportId = req.query.reportid;
+  let reportResponse = await getReportResponseModel(reportId);
+  console.log('reportResponse: ', reportResponse);
+  if (reportResponse) {
+    res.render('casereport', { reportResponse: reportResponse });
+  } else {
+    reportResponse.push({ msg: 'no report found' });
+    res.render('casereport', { reportResponse: reportResponse });
+  }
+};
+
+module.exports = {
+  caseRunController,
+  showResult,
+  displayReport,
+  getCaseReport,
+  getReportResponseController,
+};

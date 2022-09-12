@@ -49,7 +49,6 @@ block content
                                 th Domain Name (URL)
                                 th Title
                                 th Edit 
-                                th Run Test
                                 //- th(style='width: 40px') Label
                         tbody
                             if environments[0].title
@@ -61,8 +60,6 @@ block content
                                         td #{environments[i].title}
                                         td 
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${environments[i]._id}`) Delete
-                                        td 
-                                            button.btn.btn-info.btn-runtest(type='submit' id=`${environments[i]._id}`) Run
                                     - i++
     script.
         $('.btn-create_environment').on('click', function(event) {

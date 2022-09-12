@@ -1,0 +1,73 @@
+extends layout.pug
+
+block content 
+  link(rel='stylesheet', href='../../css/common.css')
+  script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+  script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+
+  div.content-wrapper
+    div
+      #accordionExample.accordion
+        if userProjects[0].project_name
+          - let i = 0
+          while i < userProjects.length
+            .accordion-item
+              h2#headingOne.accordion-header
+                button.accordion-button(type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne' aria-expanded='true' aria-controls='collapseOne')
+                  | #{userProjects[i].project_name}
+              #collapseOne.accordion-collapse.collapse.show(aria-labelledby='headingOne' data-bs-parent='#accordionExample')
+                .accordion-body
+                  p Project ID: #{userProjects[i]._id}
+                  if userProjects[i].environments.length > 0
+                    button.btn.btn-info.btn-runtest(type='submit' id=`${userProjects[i]._id}` data-bs-toggle='collapse' data-bs-target='#collapseExample' aria-expanded='false' aria-controls='collapseExample') Choose environment
+                    #collapseExample.collapse
+                        .card.card-body.p-0
+                            table.table
+                                thead
+                                tbody
+                                  - let j = 0
+                                  while j < userProjects[i].environments.length
+                                      tr 
+                                          td #{userProjects[i].environments[j].domain_name}
+                                          td #{userProjects[i].environments[j].title}
+                                          td 
+                                            button.btn.btn-info.btn-viewreport-in-toggle(type='submit' id=`${userProjects[i]._id}` domain=`${userProjects[i].environments[j].domain_name}` title=`${userProjects[i].environments[j].title}` envid=`${userProjects[i].environments[j].environment_id}`) View Report
+                                      - j++
+            - i++
+
+
+  script.
+    $('.btn-viewreport-in-toggle').on('click', function(event) {
+        console.log('view report in toggle clicked');
+        event.preventDefault();
+        const projectId = $(this).attr('id');
+        const envId = $('.btn-viewreport-in-toggle').attr('envid');
+        const domainName = $('.btn-viewreport-in-toggle').attr('domain');
+        const title = $('.btn-viewreport-in-toggle').attr('title');
+
+        axios({
+            method: 'post',
+            url: 'http://localhost:3001/api/1.0/reports',
+            data: {
+                projectId: projectId,
+                envId: envId,
+                domainName: domainName,
+                title: title,
+            }, 
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then((response) => {
+            if (response.status === 200) {
+                alert('Found report successfully')
+                let reportId = response.data.report_id;
+                console.log('reportId: ', reportId);
+                window.location.assign(`./report?reportid=${reportId}`);
+                //- window.location.assign('/casereport');
+                //- window.location.reload();
+            }
+        })
+        .catch((error) => {
+            console.log('catch: ', error)
+            alert('Found report error')
+        })
+    })

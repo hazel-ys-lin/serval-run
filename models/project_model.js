@@ -140,13 +140,9 @@ const projectDeleteModel = async function (projectInfo) {
     // console.log('userData: ', userData);
 
     let deleted = await projectModel
-      .deleteOne(
-        { user_id: userData._id.toString() },
-        {
-          _id: projectInfo.projectId,
-        }
-      )
-
+      .deleteOne({
+        _id: projectInfo.projectId,
+      })
       .session(session);
     // .catch(function (err) {
     //   console.log(err);
@@ -163,7 +159,6 @@ const projectDeleteModel = async function (projectInfo) {
           },
         }
       )
-
       .session(session);
 
     await session.commitTransaction();
