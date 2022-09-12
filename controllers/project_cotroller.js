@@ -1,3 +1,4 @@
+const { userGetModel } = require('../models/user_model');
 const {
   projectInsertModel,
   projectGetModel,
@@ -10,12 +11,13 @@ const {
 const displayProject = async (req, res) => {
   // get all the projects to array in database
   const userEmail = 'serval_meow@gmail.com'; //req.session.email
+  const userId = await userGetModel(userEmail);
 
   let userProjects = await projectGetModel(userEmail);
   if (userProjects.length !== 0) {
     res.render('projects', { userProjects: userProjects });
   } else {
-    userProjects.push({ user_id: user_id });
+    userProjects.push({ user_id: userId });
     res.render('projects', { userProjects: userProjects });
   }
 };

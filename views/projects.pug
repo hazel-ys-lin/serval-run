@@ -29,7 +29,7 @@ block content
         .cards
             .card
                 .card-header
-                    .card-title 
+                    .card-title User ID: #{userProjects[0].user_id}
                     .card-tools
                 .card-body.p-0
                     table.table
@@ -43,7 +43,7 @@ block content
                                 th Edit 
                                 //- th(style='width: 40px') Label
                         tbody
-                            if userProjects
+                            if userProjects[0].project_name
                                 - let i = 0
                                 while i < userProjects.length
                                     tr 

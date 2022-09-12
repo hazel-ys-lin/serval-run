@@ -19,4 +19,11 @@ const userSchema = new mongoose.Schema({
 
 const userModel = pool.model('user', userSchema);
 
-module.exports = { userModel };
+const userGetModel = async function (userEmail) {
+  let [userData] = await userModel.find({
+    user_email: userEmail,
+  });
+  return userData._id;
+};
+
+module.exports = { userModel, userGetModel };

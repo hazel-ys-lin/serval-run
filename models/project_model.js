@@ -233,20 +233,21 @@ const environmentGetModel = async function (projectId) {
   let [projectData] = await projectModel.find({
     project_id: projectId,
   });
-  console.log('projectData: ', projectData);
+  // console.log('projectData: ', projectData);
 
   let environments = [];
   if (projectData) {
     for (let i = 0; i < projectData.environments.length; i++) {
       let findEnvironment = await environmentModel.findOne({
         _id: projectData.environments[i].environment_id,
+        project_id: projectId,
       });
       if (findEnvironment !== null) {
         environments.push(findEnvironment);
       }
     }
   }
-  console.log('environments: ', environments);
+  // console.log('environments: ', environments);
   return environments;
 };
 
