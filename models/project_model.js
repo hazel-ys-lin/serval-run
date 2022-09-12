@@ -51,11 +51,9 @@ const projectInsertModel = async function (projectInfo) {
   session.startTransaction();
   try {
     const opts = { session };
-    const userData = await userModel
-      .findOne({
-        user_email: projectInfo.userEmail,
-      })
-      .exec();
+    const userData = await userModel.findOne({
+      user_email: projectInfo.userEmail,
+    });
     // console.log('userData: ', userData);
 
     const uniqueProject = await projectCheck(
@@ -67,27 +65,22 @@ const projectInsertModel = async function (projectInfo) {
       let inserted = await projectModel({
         user_id: userData._id.toString(),
         project_name: projectInfo.projectName,
-      })
-        .save(opts)
-        .exec();
-
+      }).save(opts);
       // console.log('inserted._id: ', inserted._id);
-      await userModel
-        .updateOne(
-          { _id: userData._id.toString() },
-          {
-            $push: {
-              projects: [
-                {
-                  project_id: inserted._id,
-                  project_name: inserted.project_name,
-                },
-              ],
-            },
+      await userModel.updateOne(
+        { _id: userData._id.toString() },
+        {
+          $push: {
+            projects: [
+              {
+                project_id: inserted._id,
+                project_name: inserted.project_name,
+              },
+            ],
           },
-          opts
-        )
-        .exec();
+        },
+        opts
+      );
     } else {
       return false;
     }
@@ -104,16 +97,45 @@ const projectInsertModel = async function (projectInfo) {
   }
 };
 
+const projectGetModel = async function (userEmail) {
+  let [userData] = await userModel.find({
+    user_email: userEmail,
+  });
+  // console.log('userData: ', userData);
+
+  let userProjects = [];
+  if (userData) {
+    for (let i = 0; i < userData.projects.length; i++) {
+      let findProject = await projectModel.findOne({
+        _id: userData.projects[i].project_id,
+      });
+      // console.log('findProject: ', findProject);
+      if (findProject !== null) {
+        userProjects.push(findProject);
+      }
+    }
+  }
+  return userProjects;
+};
+
+const projectInfoGetModel = async function (domainName, title) {
+  let [projectInfo] = await environmentModel.find({
+    domain_name: domainName,
+    title: title,
+  });
+  // console.log('projectInfo: ', projectInfo);
+
+  return { projectId: projectInfo.project_id, envId: projectInfo._id };
+};
+
 const projectDeleteModel = async function (projectInfo) {
   const session = await projectModel.startSession();
   session.startTransaction();
   try {
     const opts = { session };
-    const userData = await userModel
-      .findOne({
-        user_email: projectInfo.userEmail,
-      })
-      .exec();
+    const userData = await userModel.findOne({
+      user_email: projectInfo.userEmail,
+    });
     // console.log('projectInfo: ', projectInfo);
     // console.log('userData: ', userData);
 
@@ -124,7 +146,7 @@ const projectDeleteModel = async function (projectInfo) {
           _id: projectInfo.projectId,
         }
       )
-      .exec()
+
       .session(session);
     // .catch(function (err) {
     //   console.log(err);
@@ -141,7 +163,7 @@ const projectDeleteModel = async function (projectInfo) {
           },
         }
       )
-      .exec()
+
       .session(session);
 
     await session.commitTransaction();
@@ -161,12 +183,9 @@ const environmentInsertModel = async function (environmentInfo) {
   session.startTransaction();
   try {
     const opts = { session };
-    const projectData = await projectModel
-      .findOne({
-        _id: environmentInfo.projectId,
-      })
-      .exec();
-
+    const projectData = await projectModel.findOne({
+      _id: environmentInfo.projectId,
+    });
     const uniqueEnvironment = await environmentCheck(
       environmentInfo.domainName,
       environmentInfo.title,
@@ -178,27 +197,22 @@ const environmentInsertModel = async function (environmentInfo) {
         project_id: projectData._id.toString(),
         domain_name: environmentInfo.domainName,
         title: environmentInfo.title,
-      })
-        .save(opts)
-        .exec();
-
-      await projectModel
-        .updateOne(
-          { _id: projectData._id.toString() },
-          {
-            $push: {
-              environments: [
-                {
-                  environment_id: inserted._id,
-                  domain_name: inserted.domain_name,
-                  title: inserted.title,
-                },
-              ],
-            },
+      }).save(opts);
+      await projectModel.updateOne(
+        { _id: projectData._id.toString() },
+        {
+          $push: {
+            environments: [
+              {
+                environment_id: inserted._id,
+                domain_name: inserted.domain_name,
+                title: inserted.title,
+              },
+            ],
           },
-          opts
-        )
-        .exec();
+        },
+        opts
+      );
     } else {
       return false;
     }
@@ -215,22 +229,49 @@ const environmentInsertModel = async function (environmentInfo) {
   }
 };
 
+const environmentGetModel = async function (projectId) {
+  let [projectData] = await projectModel.find({
+    project_id: projectId,
+  });
+  console.log('projectData: ', projectData);
+
+  let environments = [];
+  if (projectData) {
+    for (let i = 0; i < projectData.environments.length; i++) {
+      let findEnvironment = await environmentModel.findOne({
+        _id: projectData.environments[i].environment_id,
+      });
+      if (findEnvironment !== null) {
+        environments.push(findEnvironment);
+      }
+    }
+  }
+  console.log('environments: ', environments);
+  return environments;
+};
+
+const envInfoGetModel = async function (projectId) {
+  let envInfo = await environmentModel.find({
+    project_id: projectId,
+  });
+
+  return envInfo;
+};
+
 const environmentDeleteModel = async function (environmentInfo) {
   const session = await environmentModel.startSession();
   session.startTransaction();
   try {
-    const projectData = await projectModel
-      .findOne({
-        _id: environmentInfo.projectId,
-      })
-      .exec();
+    const projectData = await projectModel.findOne({
+      _id: environmentInfo.projectId,
+    });
     // console.log('projectData: ', projectData);
 
     let deleted = await environmentModel
       .deleteOne({
         _id: environmentInfo.environmentId,
       })
-      .exec()
+
       .session(session);
     // .catch(function (err) {
     //   console.log(err);
@@ -247,7 +288,7 @@ const environmentDeleteModel = async function (environmentInfo) {
           },
         }
       )
-      .exec()
+
       .session(session);
 
     await session.commitTransaction();
@@ -266,7 +307,11 @@ module.exports = {
   projectModel,
   environmentModel,
   projectInsertModel,
+  projectGetModel,
+  projectInfoGetModel,
   projectDeleteModel,
   environmentInsertModel,
+  environmentGetModel,
   environmentDeleteModel,
+  envInfoGetModel,
 };

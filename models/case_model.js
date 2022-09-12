@@ -37,7 +37,7 @@ const caseGetModel = async function (apiId) {
   let [apiData] = await apiModel.find({
     _id: apiId,
   });
-  console.log('apiData: ', apiData);
+  // console.log('apiData: ', apiData);
 
   let userCases = [];
   if (apiData) {
@@ -112,19 +112,16 @@ const caseDeleteModel = async function (caseInfo) {
   const session = await caseModel.startSession();
   session.startTransaction();
   try {
-    const apiData = await apiModel
-      .findOne({
-        _id: caseInfo.apiId,
-      })
-      .exec();
+    const apiData = await apiModel.findOne({
+      _id: caseInfo.apiId,
+    });
     // console.log('projectInfo: ', projectInfo);
-    console.log('apiData: ', apiData);
+    // console.log('apiData: ', apiData);
 
     let deleted = await caseModel
       .deleteOne({
         _id: caseInfo.caseId,
       })
-      .exec()
       .session(session);
 
     await apiModel
@@ -138,7 +135,6 @@ const caseDeleteModel = async function (caseInfo) {
           },
         }
       )
-      .exec()
       .session(session);
 
     await session.commitTransaction();
@@ -153,6 +149,15 @@ const caseDeleteModel = async function (caseInfo) {
   }
 };
 
+const testDataGetModel = async function (caseId) {
+  let [caseTestData] = await caseModel.find({
+    _id: caseId,
+  });
+  // console.log('caseTestData in testDataGetModel: ', caseTestData);
+
+  return caseTestData.test_cases;
+};
+
 const responseInsertModel = async function () {};
 
 module.exports = {
@@ -160,5 +165,6 @@ module.exports = {
   caseGetModel,
   caseInsertModel,
   caseDeleteModel,
+  testDataGetModel,
   responseInsertModel,
 };

@@ -1,35 +1,23 @@
-const { userModel } = require('../models/user_model');
 const {
-  projectModel,
-  environmentModel,
   projectInsertModel,
+  projectGetModel,
   projectDeleteModel,
   environmentInsertModel,
+  environmentGetModel,
   environmentDeleteModel,
 } = require('../models/project_model');
 
 const displayProject = async (req, res) => {
   // get all the projects to array in database
-  const userEmail = 'serval_meow@gmail.com';
-  let [userData] = await userModel.find({
-    user_email: userEmail,
-  });
-  // console.log('userData: ', userData);
+  const userEmail = 'serval_meow@gmail.com'; //req.session.email
 
-  let userProjects = [];
-  if (userData) {
-    for (let i = 0; i < userData.projects.length; i++) {
-      let findProject = await projectModel.findOne({
-        _id: userData.projects[i].project_id,
-      });
-      // console.log('findProject: ', findProject);
-      if (findProject !== null) {
-        userProjects.push(findProject);
-      }
-    }
+  let userProjects = await projectGetModel(userEmail);
+  if (userProjects.length !== 0) {
+    res.render('projects', { userProjects: userProjects });
+  } else {
+    userProjects.push({ user_id: user_id });
+    res.render('projects', { userProjects: userProjects });
   }
-  // console.log('userProjects: ', userProjects);
-  res.render('projects', { userProjects: userProjects });
 };
 
 const projectInsertController = async (req, res) => {
@@ -66,22 +54,7 @@ const displayEnvironment = async (req, res) => {
   const projectId = req.query.projectid;
   // console.log('projectId: ', projectId);
 
-  let [projectData] = await projectModel.find({
-    project_id: projectId,
-  });
-  // console.log('projectData: ', projectData);
-
-  let environments = [];
-  if (projectData) {
-    for (let i = 0; i < projectData.environments.length; i++) {
-      let findEnvironment = await environmentModel.findOne({
-        _id: projectData.environments[i].environment_id,
-      });
-      if (findEnvironment !== null) {
-        environments.push(findEnvironment);
-      }
-    }
-  }
+  let environments = await environmentGetModel(projectId);
   // console.log('environments: ', environments);
   if (environments.length !== 0) {
     res.render('environments', { environments: environments });

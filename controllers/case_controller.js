@@ -1,3 +1,8 @@
+const { envInfoGetModel } = require('../models/project_model');
+const {
+  collectionInfoGetModel,
+  apiInfoGetModel,
+} = require('../models/collection_model');
 const {
   caseGetModel,
   caseInsertModel,
@@ -9,13 +14,18 @@ const displayCase = async (req, res) => {
   // console.log('req.query.projectid: ', req.query.projectid);
   const apiId = req.query.apiid;
 
+  let { collectionId } = await apiInfoGetModel(apiId);
+  let projectId = await collectionInfoGetModel(collectionId);
+  let envInfo = await envInfoGetModel(projectId);
+  // console.log('envInfo: ', envInfo);
+
   let userCases = await caseGetModel(apiId);
   // console.log('userCases: ', userCases);
   if (userCases.length !== 0) {
-    res.render('cases', { userCases: userCases });
+    res.render('cases', { userCases: userCases, envInfo: envInfo });
   } else {
     userCases.push({ apiId: apiId });
-    res.render('cases', { userCases: userCases });
+    res.render('cases', { userCases: userCases, envInfo: envInfo });
   }
 };
 

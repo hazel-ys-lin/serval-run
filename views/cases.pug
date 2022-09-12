@@ -40,9 +40,6 @@ block content
                         .modal-footer
                             button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
                             button.btn.btn-primary.btn-modal-create_case(type='submit') Create Test Case
-
-
-
         .cards
             .card
                 .card-header
@@ -77,7 +74,22 @@ block content
                                             button.btn.btn-primary.btn-modify(type='submit' id=`${userCases[i].case._id}`) Modify
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userCases[i].case._id}`) Delete
                                         td 
-                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userCases[i].case._id}`) Run
+                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userCases[i].case._id}` data-bs-toggle='collapse' data-bs-target='#collapseExample' aria-expanded='false' aria-controls='collapseExample') Choose environment
+                                            #collapseExample.collapse
+                                                .card.card-body.p-0
+                                                    table.table
+                                                        thead
+                                                        tbody
+                                                            if envInfo
+                                                                - let j = 0
+                                                                while j < envInfo.length
+                                                                    tr 
+                                                                        td #{envInfo[j].domain_name}
+                                                                        td #{envInfo[j].title}
+                                                                        td 
+                                                                            button.btn.btn-info.btn-runtest-in-toggle(type='submit' id=`${userCases[i].case._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
+                                                                    - j++
+
                                     - i++
     script.
         $('#exampleModal').on('shown.bs.modal', function() {
@@ -129,6 +141,37 @@ block content
         $('.btn-create_case').on('click', function(event) {
             console.log('create_case clicked')
             event.preventDefault();
+        })
+
+        $('.btn-runtest-in-toggle').on('click', function(event) {
+            console.log('run test in toggle clicked');
+            event.preventDefault();
+            const apiId = $('.card-title').text().replace('API ID: ', '');
+            const caseId = this.id;
+            const domainName = $('.btn-runtest-in-toggle').attr('domain');
+            const title = $('.btn-runtest-in-toggle').attr('title');
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/testrun',
+                data: {
+                    apiId: apiId,
+                    caseId: caseId,
+                    domainName: domainName,
+                    title: title,
+                }, 
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('Run case successfully')
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('catch: ', error)
+                alert('Run case error')
+            })
         })
 
 
