@@ -54,14 +54,15 @@ const environmentCheck = async function (domain, title, environmentArray) {
 
 const userCheckService = async function (userEmail) {
   let findUser = await userModel.findOne({
-    userEmail: userEmail,
+    user_email: userEmail,
   });
-  if (findUser) {
+  console.log('findUser: ', findUser);
+  if (!findUser) {
+    console.log('user check pass');
+    return true;
+  } else {
     console.log('user check fail');
     return false;
-  } else {
-    console.log('environment check pass');
-    return true;
   }
 };
 

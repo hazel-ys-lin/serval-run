@@ -7,11 +7,22 @@ const { userCheckService } = require('../service/dbUpdate_service');
 const bcrypt = require('bcryptjs');
 
 const userCheck = async (req, res) => {
-  return res.render('user');
+  if (!req.session.userId) {
+    return res.render('user');
+  }
+
+  const userInfo = {
+    userId: req.session.userId,
+    userName: req.session.userName,
+    userEmail: req.session.userEmail,
+  };
+
+  return res.render('profile', { userInfo: userInfo });
 };
 
 const userSignUpController = async (req, res) => {
-  let userCheckResult = userCheckService(req.body.userEmail);
+  let userCheckResult = await userCheckService(req.body.userEmail);
+  // console.log('userCheckResult: ', userCheckResult);
 
   if (!userCheckResult) {
     req.session.msg = 'Email already exists';
@@ -29,21 +40,65 @@ const userSignUpController = async (req, res) => {
   userInfo.userPassword = await bcrypt.hash(userInfo.userPassword, 8);
 
   let insertUserResult = await userSignUpModel(userInfo);
+  // console.log('insertUserResult: ', insertUserResult);
 
   if (!insertUserResult) {
-    return res.status(403).json({ msg: 'user insert error' });
+    return res.status(403).json({ msg: 'create account fail' });
   } else {
-    return res.status(200).json({ msg: 'user insert successfully' });
+    req.session.userId = insertUserResult.userId;
+    req.session.userName = insertUserResult.userName;
+    req.session.userEmail = insertUserResult.userEmail;
+    return res.status(200).json({ msg: 'create account successfully' });
   }
 };
 
 const userSignInController = async (req, res) => {
+  // console.log('req.body.userEmail: ', req.body.userEmail);
+  const userInfo = {
+    userEmail: req.body.userEmail,
+    userPassword: req.body.userPassword,
+  };
   try {
-  } catch (error) {}
+    let userSignInResult = await userSignInModel(userInfo);
+
+    if (!userSignInResult) {
+      return res.status(403).json({ msg: 'Sign in failed' });
+    } else {
+      req.session.userId = userSignInResult._id;
+      req.session.userName = userSignInResult.user_name;
+      req.session.userEmail = userSignInResult.user_email;
+
+      const userInfo = {
+        userId: userSignInResult._id,
+        userName: userSignInResult.user_name,
+        userEmail: userSignInResult.user_email,
+      };
+
+      return res.render('profile', { userInfo: userInfo });
+    }
+  } catch (error) {
+    console.log('error in user signin controller', error);
+    return false;
+  }
+};
+
+const userDisplayController = async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(403);
+  }
+
+  const userInfo = {
+    userId: req.session.userId,
+    userName: req.session.userName,
+    userEmail: req.session.userEmail,
+  };
+
+  return res.render('profile', { userInfo: userInfo });
 };
 
 module.exports = {
   userCheck,
   userSignUpController,
   userSignInController,
+  userDisplayController,
 };

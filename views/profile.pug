@@ -1,0 +1,19 @@
+extends layout.pug
+
+block content
+    link(rel='stylesheet', href='../../css/common.css')
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    
+    div.content-wrapper
+        .cards
+            h1.display-3 Welcome Back!
+                br 
+                | Start your test journey with Serval now.
+                br
+                button.btn.btn-primary My Projects 
+                button.btn.btn-info My Reports
+            .card
+                h1.display-5 #{userInfo.userName}
+                    h1.display-6 #{userInfo.userId}
+                    h1.display-6 #{userInfo.userEmail}

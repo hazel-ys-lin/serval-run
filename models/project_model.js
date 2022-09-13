@@ -226,7 +226,7 @@ const environmentInsertModel = async function (environmentInfo) {
 
 const environmentGetModel = async function (projectId) {
   let [projectData] = await projectModel.find({
-    project_id: projectId,
+    _id: projectId,
   });
   // console.log('projectData: ', projectData);
 

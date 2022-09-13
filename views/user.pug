@@ -7,26 +7,26 @@ block content
     
     div.content-wrapper
         div.cards
-            div.card.card-sign_up
-                form.input-form
-                    div.form-group
-                        h5 Sign Up 
-                            label(for='user-name') User Name 
-                            input#user-name.form-control.input_signup-username(type='string' placeholder='coolServal')
-                            label(for='user-email') Email 
-                            input#user-email.form-control.input_signup-email(type='email' placeholder='serval_meow@gmail.com')
-                            label(for='user-password') Password 
-                            input#user-password.form-control.input_signup-password(type='password')
-                    button.btn.btn-outline-info.btn-block.btn-sign_up(type='submit') Sign Up
             div.card.card-sign_in
                 form.input-form
                     div.form-group
-                        h5 Sign in
-                            label(for='user-email') Email 
-                            input#user-email.form-control.input_signin-email(type='email' placeholder='serval_meow@gmail.com')
-                            label(for='user-password') Password 
-                            input#user-password.form-control.input_signin-password(type='password')
-                    button.btn.btn-outline-info.btn-block.btn-sign_in(type='submit') Sign In
+                        h1.display-6 Sign In
+                        label(for='user-email') Email 
+                        input#user-signin-email.form-control.input_signin-email(type='email' placeholder='serval_meow@gmail.com')
+                        label(for='user-password') Password 
+                        input#user-signin-password.form-control.input_signin-password(type='password')
+                    button.btn.btn-outline-info.btn-sign_in(type='submit') Sign In
+            div.card.card-sign_up
+                form.input-form
+                    div.form-group
+                        h1.display-6 Sign Up
+                        label(for='user-name') User Name 
+                        input#user-signup-name.form-control.input_signup-username(type='string' placeholder='coolServal')
+                        label(for='user-email') Email 
+                        input#user-signup-email.form-control.input_signup-email(type='email' placeholder='serval_meow@gmail.com')
+                        label(for='user-password') Password 
+                        input#user-signup-password.form-control.input_signup-password(type='password')
+                    button.btn.btn-outline-info.btn-sign_up(type='submit') Sign Up
     script.
         $('.btn-sign_up').on('click', function(event) {
             console.log('sign up clicked')
@@ -47,8 +47,8 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('Create account successfully')
-                    window.location.assign('./user/profile');
+                    alert('Welcome to servalRun!')
+                    window.location.assign('./profile');
                 }
             })
             .catch((error) => {
@@ -61,8 +61,8 @@ block content
         $('.btn-sign_in').on('click', function(event) {
             console.log('sign in clicked')
             event.preventDefault();
-            const userEmail = $('.input_signup-email').val();
-            const userPassword = $('.input_signup-password').val();
+            const userEmail = $('.input_signin-email').val();
+            const userPassword = $('.input_signin-password').val();
 
             axios({
                 method: 'post',
@@ -76,7 +76,7 @@ block content
             .then((response) => {
                 if (response.status === 200) {
                     alert('Welcome back to servalRun!')
-                    window.location.assign('./user/profile');
+                    window.location.assign('./profile');
                 }
             })
             .catch((error) => {
