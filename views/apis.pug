@@ -69,7 +69,7 @@ block content
                                 th HTTP Method
                                 th Endpoint
                                 th Severity
-                                th Test Cases 
+                                th Scenarios
                                 th Edit 
                                 th Run Test
                                 //- th(style='width: 40px') Label
@@ -84,7 +84,7 @@ block content
                                         td #{userApis[i].api.api_endpoint}
                                         td #{userApis[i].api.severity}
                                         td 
-                                            button.btn.btn-warning.btn-cases(type='submit' id=`${userApis[i].api._id}`) View All
+                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userApis[i].api._id}`) View All
                                         td 
                                             button.btn.btn-primary.btn-modify(type='submit' id=`${userApis[i].api._id}`) Modify
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
@@ -97,11 +97,11 @@ block content
             event.preventDefault();
         })
 
-        $('.btn-cases').on('click', function(event) {
-            console.log('view case clicked')
+        $('.btn-scenarios').on('click', function(event) {
+            console.log('view scenario clicked')
             event.preventDefault();
             const apiId = this.id;
-            window.location.assign(`./cases?apiid=${apiId}`);
+            window.location.assign(`./scenarios?apiid=${apiId}`);
         })
 
 

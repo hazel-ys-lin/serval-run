@@ -3,9 +3,13 @@ const mongoose = require('mongoose');
 const momentTimezone = require('moment-timezone');
 
 const responseSchema = new mongoose.Schema({
-  case_id: {
+  scenario_id: {
     type: mongoose.Schema.ObjectId,
-    ref: 'case',
+    ref: 'scenario',
+  },
+  example_id: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'scenario',
   },
   report_id: {
     type: mongoose.Schema.ObjectId,
@@ -39,9 +43,9 @@ const reportSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'api',
   },
-  case_id: {
+  scenario_id: {
     type: mongoose.Schema.ObjectId,
-    ref: 'case',
+    ref: 'scenario',
   },
   responses: [
     {
@@ -61,7 +65,7 @@ const caseResponseInsertModel = async function (
   envId,
   collectionId,
   apiId,
-  caseId,
+  scenarioId,
   responseArray
 ) {
   const session = await responseModel.startSession();
@@ -74,13 +78,14 @@ const caseResponseInsertModel = async function (
       environment_id: envId,
       collection_id: collectionId,
       api_id: apiId,
-      case_id: caseId,
+      scenario_id: scenarioId,
     }).save(opts);
 
     // let responseToInsert = [];
     for (let i = 0; i < responseArray.length; i++) {
       let objectToInsert = {
-        case_id: caseId,
+        scenario_id: scenarioId,
+        example_id: responseArray[i].example_id,
         report_id: reportId._id,
         response_data: responseArray[i].response_data,
         response_status: responseArray[i].response_status,
@@ -93,7 +98,7 @@ const caseResponseInsertModel = async function (
       // responseToInsert.push(inserted._id);
 
       await reportModel.updateOne(
-        { api_id: apiId, case_id: caseId },
+        { api_id: apiId, scenario_id: scenarioId },
         {
           $push: {
             responses: [
@@ -120,7 +125,7 @@ const caseResponseInsertModel = async function (
 };
 
 const getCaseReportModel = async function (projectId, envId) {
-  console.log('projectId, envId: ', projectId, envId);
+  // console.log('projectId, envId: ', projectId, envId);
   let [reportData] = await reportModel.find({
     project_id: projectId,
     environment_id: envId,

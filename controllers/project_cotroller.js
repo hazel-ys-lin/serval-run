@@ -10,7 +10,10 @@ const {
 
 const displayProject = async (req, res) => {
   // get all the projects to array in database
-  const userEmail = 'serval_meow@gmail.com'; //req.session.email
+  if (!req.session.userId) {
+    return res.status(400).json({ msg: 'Please sign in' });
+  }
+  const userEmail = req.session.userEmail; //req.session.email
   const userId = await userGetModel(userEmail);
 
   let userProjects = await projectGetModel(userEmail);
@@ -25,7 +28,7 @@ const displayProject = async (req, res) => {
 const projectInsertController = async (req, res) => {
   // const userEmail = req.body.userEmail;
   const projectInfo = {
-    userEmail: 'serval_meow@gmail.com', // req.body.userEmail
+    userEmail: req.session.userEmail, // req.body.userEmail
     projectName: req.body.projectName,
   };
   // console.log('projectInfo: ', projectInfo);
@@ -40,7 +43,7 @@ const projectInsertController = async (req, res) => {
 const projectDeleteController = async (req, res) => {
   // const userEmail = req.body.userEmail;
   const projectInfo = {
-    userEmail: 'serval_meow@gmail.com', // req.body.userEmail
+    userEmail: req.session.userEmail, // req.body.userEmail
     projectId: req.body.projectId,
   };
   let deleteProjectResult = await projectDeleteModel(projectInfo);

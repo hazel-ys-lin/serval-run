@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/' + API_VERSION, [
-  require('./routes/case_route'),
+  require('./routes/scenario_route'),
   require('./routes/project_route'),
   require('./routes/collection_route'),
   require('./routes/report_route'),

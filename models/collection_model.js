@@ -29,13 +29,13 @@ const apiSchema = new mongoose.Schema({
   api_name: String,
   http_method: String,
   api_endpoint: String,
-  cases: [
+  scenarios: [
     {
-      case_id: {
+      scenario_id: {
         type: mongoose.Schema.ObjectId,
-        ref: 'case',
+        ref: 'scenario',
       },
-      case_title: String,
+      scenario_title: String,
     },
   ],
   severity: Number,

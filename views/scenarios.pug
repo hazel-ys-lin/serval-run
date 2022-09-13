@@ -16,16 +16,16 @@ block content
                     a(href='') Collection
                 li.breadcrumb-item
                     a(href='') API
-                li.breadcrumb-item.active(aria-current='page') Case
+                li.breadcrumb-item.active(aria-current='page') Scenario
 
         form.input-form
-            h1 Cases
-            button.btn.btn-right.btn-success.btn-block.btn-create_case(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userCases[0].apiId}`) Create Test Case
+            h1 Scenarios
+            button.btn.btn-right.btn-success.btn-block.btn-create_scenario(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userScenarios[0].apiId}`) Create Scenario
             #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
                 .modal-dialog.modal-lg
                     .modal-content
                         .modal-header
-                            h5#exampleModalLabel.modal-title Add Test Case
+                            h5#exampleModalLabel.modal-title Add Scenario
                             button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
                         .modal-body
                             form
@@ -33,17 +33,17 @@ block content
                                     label.col-form-label(for='api-id') API ID
                                     input#api-id.form-control.input_apiid
                                 .mb-3
-                                    label.col-form-label(for='test-case') Test Document
+                                    label.col-form-label(for='scenario') Test Document (Scenario)
                                     textarea#code(name='code' placeholder='# Write your test document in gherkin language here! \n # The serval can only read gherkin now, meow.')
-                                        | # Write your test document in gherkin language here! 
+                                        | # Write your test document scenario in gherkin language here! 
                                         | # The serval can only read gherkin now, meow.
                         .modal-footer
                             button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
-                            button.btn.btn-primary.btn-modal-create_case(type='submit') Create Test Case
+                            button.btn.btn-primary.btn-modal-create_scenario(type='submit') Create Scenario
         .cards
             .card
                 .card-header
-                    .card-title API ID: #{userCases[0].apiId}
+                    .card-title API ID: #{userScenarios[0].apiId}
                     .card-tools
                 .card-body.p-0
                     table.table
@@ -53,28 +53,28 @@ block content
                                 th(style='width: 5px') ID
                                 th(style='width: 10px') Title
                                 th Description
-                                th Scenario
+                                th Steps
                                 th Data 
                                 th Edit 
                                 th Run Test
                                 //- th(style='width: 40px') Label
                         tbody
-                            if userCases[0].case
+                            if userScenarios[0].scenario
                                 - let i = 0
-                                while i < userCases.length
+                                while i < userScenarios.length
                                     tr 
-                                        td #{userCases[i].case._id}
-                                        td #{userCases[i].case.title}
-                                        td #{userCases[i].case.description}
+                                        td #{userScenarios[i].scenario._id}
+                                        td #{userScenarios[i].scenario.title}
+                                        td #{userScenarios[i].scenario.description}
                                         td 
-                                            button.btn.btn-warning.btn-cases(type='submit' id=`${userCases[i].case._id}`) View More
+                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userScenarios[i].scenario._id}`) View More
                                         td 
-                                            button.btn.btn-warning.btn-cases(type='submit' id=`${userCases[i].case._id}`) View More
+                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userScenarios[i].scenario._id}`) View More
                                         td 
-                                            button.btn.btn-primary.btn-modify(type='submit' id=`${userCases[i].case._id}`) Modify
-                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userCases[i].case._id}`) Delete
+                                            button.btn.btn-primary.btn-modify(type='submit' id=`${userScenarios[i].scenario._id}`) Modify
+                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userScenarios[i].scenario._id}`) Delete
                                         td 
-                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userCases[i].case._id}` data-bs-toggle='collapse' data-bs-target='#collapseExample' aria-expanded='false' aria-controls='collapseExample') Choose environment
+                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target='#collapseExample' aria-expanded='false' aria-controls='collapseExample') Choose environment
                                             #collapseExample.collapse
                                                 .card.card-body.p-0
                                                     table.table
@@ -87,7 +87,7 @@ block content
                                                                         td #{envInfo[j].domain_name}
                                                                         td #{envInfo[j].title}
                                                                         td 
-                                                                            button.btn.btn-info.btn-runtest-in-toggle(type='submit' id=`${userCases[i].case._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
+                                                                            button.btn.btn-info.btn-runtest-in-toggle(type='submit' id=`${userScenarios[i].scenario._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
                                                                     - j++
 
                                     - i++
@@ -101,8 +101,8 @@ block content
                 mode: 'text/x-feature'
             });
 
-            $('.btn-modal-create_case').on('click', function(event) {
-                console.log('create case in modal clicked')
+            $('.btn-modal-create_scenario').on('click', function(event) {
+                console.log('create scenario in modal clicked')
                 event.preventDefault();
 
                 const apiId = $('.input_apiid').val();
@@ -110,7 +110,7 @@ block content
 
                 axios({
                     method: 'post',
-                    url: 'http://localhost:3001/api/1.0/editcase',
+                    url: 'http://localhost:3001/api/1.0/editscenario',
                     data: {
                         apiId: apiId,
                         featureCode: featureCode,
@@ -119,14 +119,14 @@ block content
                 })
                 .then((response) => {
                     if (response.status === 200) {
-                        alert('create case successfully')
+                        alert('create scenario successfully')
                         window.location.reload();
                     }
                 })
                 .catch((error) => {
                     console.log('in error');
                     console.log('catch: ', error)
-                    alert('create case error')
+                    alert('create scenario error')
                 })
             })
         })
@@ -134,12 +134,12 @@ block content
 
         $('#exampleModal').on('show.bs.modal', function(event) {
             let button = event.relatedTarget;
-            let apiId = $('.btn-create_case').attr('data-bs-whatever');
+            let apiId = $('.btn-create_scenario').attr('data-bs-whatever');
             $('input#api-id').val(apiId).prop('readonly', true);
         })
 
-        $('.btn-create_case').on('click', function(event) {
-            console.log('create_case clicked')
+        $('.btn-create_scenario').on('click', function(event) {
+            console.log('create_scenario clicked')
             event.preventDefault();
         })
 
@@ -147,7 +147,7 @@ block content
             console.log('run test in toggle clicked');
             event.preventDefault();
             const apiId = $('.card-title').text().replace('API ID: ', '');
-            const caseId = this.id;
+            const scenarioId = this.id;
             const domainName = $('.btn-runtest-in-toggle').attr('domain');
             const title = $('.btn-runtest-in-toggle').attr('title');
 
@@ -156,7 +156,7 @@ block content
                 url: 'http://localhost:3001/api/1.0/testrun',
                 data: {
                     apiId: apiId,
-                    caseId: caseId,
+                    scenarioId: scenarioId,
                     domainName: domainName,
                     title: title,
                 }, 
@@ -164,37 +164,37 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('Run case successfully')
+                    alert('Run scenario successfully')
                     window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('catch: ', error)
-                alert('Run case error')
+                alert('Run scenario error')
             })
         })
 
 
         $('.btn-delete').on('click', function(event) {
-            console.log('delete_case clicked')
+            console.log('delete_scenario clicked')
             event.preventDefault();
 
             const apiId = $('.card-title').text().replace('API ID: ', '');
-            const caseId = this.id;
-            console.log('caseId: ', caseId)
+            const scenarioId = this.id;
+            console.log('scenarioId: ', scenarioId)
 
             axios({
                 method: 'delete',
-                url: 'http://localhost:3001/api/1.0/editcase',
+                url: 'http://localhost:3001/api/1.0/editscenario',
                 data: {
                     apiId: apiId,
-                    caseId: caseId,
+                    scenarioId: scenarioId,
                 },
                 headers: {'Content-Type': 'application/json'}
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('delete case successfully')
+                    alert('delete scenario successfully')
                     //- window.location.assign('./testresult');
                     window.location.reload();
                 }
@@ -202,7 +202,7 @@ block content
             .catch((error) => {
                 console.log('in error');
                 console.log('catch: ', error)
-                alert('delete case error')
+                alert('delete scenario error')
             })
         })
 

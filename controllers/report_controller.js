@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { testDataGetModel } = require('../models/case_model');
+const { testCaseGetModel } = require('../models/scenario_model');
 const {
   collectionGetModel,
   apiGetModel,
@@ -20,14 +20,14 @@ const momentTimezone = require('moment-timezone');
 
 const caseRunController = async (req, res) => {
   const apiId = req.body.apiId;
-  const caseId = req.body.caseId;
+  const scenarioId = req.body.scenarioId;
   const domainName = req.body.domainName;
   const title = req.body.title;
   const { collectionId, httpMethod, apiEndpoint } = await apiInfoGetModel(
     apiId
   );
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
-  const testData = await testDataGetModel(caseId);
+  const testData = await testCaseGetModel(scenarioId);
   // console.log('${domainName}${apiEndpoint}: ', `${domainName}${apiEndpoint}`);
 
   let config = {
@@ -39,27 +39,19 @@ const caseRunController = async (req, res) => {
     timeout: 2000,
   };
 
-  // await axios(config)
-  //   .then(function (response) {
-  //     console.log('response: ', response);
-  //   })
-  //   .catch(function (error) {
-  //     console.log('error: ', error);
-  //   });
   let actualResponseArray = [];
   for (let i = 0; i < testData.length; i++) {
     let timeBeforeAxios = Date.now();
-    // // TODO: use service or util to call api from cases
-    (config.data = JSON.stringify(testData[i].test_case)),
-      // console.log('config.data: ', config.data);
+    (config.data = testData[i].example),
+      // console.log('testData[i]._id: ', testData[i]._id);
 
       await axios(config)
         .then(function (response) {
           let actualResult = response.data;
           let timeAfterAxios = Date.now();
 
-          // TODO: call insert response model: insertmany?
           actualResponseArray.push({
+            example_id: testData[i]._id,
             response_data: actualResult,
             response_status: response.status,
             pass: response.status === Number(testData[i].expected_status_code),
@@ -72,8 +64,8 @@ const caseRunController = async (req, res) => {
           let actualResult = error.response?.data;
           let timeAfterAxios = Date.now();
 
-          // TODO: call insert response model: insertmany?
           actualResponseArray.push({
+            example_id: testData[i]._id,
             response_data: actualResult,
             response_status: error.response?.status,
             pass:
@@ -88,16 +80,16 @@ const caseRunController = async (req, res) => {
     // });
     // console.log('actualResponseArray after finally: ', actualResponseArray);
   }
-  console.log('projectId: ', projectId);
+  console.log('actualResponseArray: ', actualResponseArray);
   let insertTestResult = await caseResponseInsertModel(
     projectId,
     envId,
     collectionId,
     apiId,
-    caseId,
+    scenarioId,
     actualResponseArray
   );
-  console.log('insertTestResult: ', insertTestResult);
+  // console.log('insertTestResult: ', insertTestResult);
 
   return res.status(200).json({ message: 'test case inserted' });
 };
@@ -119,16 +111,17 @@ const showResult = async (req, res) => {
 };
 
 const displayReport = async (req, res) => {
-  // get all the projects to array in database
-  const userEmail = 'serval_meow@gmail.com'; //req.session.email
-  // const userId = await userGetModel(userEmail);
+  if (!req.session.userId) {
+    return res.status(400).json({ msg: 'Please sign in' });
+  }
+  const userEmail = req.session.userEmail; //req.session.email
 
   let userProjects = await projectGetModel(userEmail);
   console.log('userProjects: ', userProjects);
   if (userProjects.length !== 0) {
     res.render('reports', { userProjects: userProjects });
   } else {
-    userProjects.push({ user_id: userId });
+    userProjects.push({ user_id: req.session.userId });
     res.render('reports', { userProjects: userProjects });
   }
 };
