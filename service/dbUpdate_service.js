@@ -1,3 +1,5 @@
+const { userModel } = require('../models/user_model');
+
 const projectCheck = async function (projectName, projectArray) {
   for (let i = 0; i < projectArray.length; i++) {
     if (projectName === projectArray[i].project_name) {
@@ -50,4 +52,23 @@ const environmentCheck = async function (domain, title, environmentArray) {
   return true;
 };
 
-module.exports = { projectCheck, collectionCheck, apiCheck, environmentCheck };
+const userCheckService = async function (userEmail) {
+  let findUser = await userModel.findOne({
+    userEmail: userEmail,
+  });
+  if (findUser) {
+    console.log('user check fail');
+    return false;
+  } else {
+    console.log('environment check pass');
+    return true;
+  }
+};
+
+module.exports = {
+  projectCheck,
+  collectionCheck,
+  apiCheck,
+  environmentCheck,
+  userCheckService,
+};

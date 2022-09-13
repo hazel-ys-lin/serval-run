@@ -1,0 +1,87 @@
+extends layout.pug
+
+block content
+    link(rel='stylesheet', href='../../css/common.css')
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    
+    div.content-wrapper
+        div.cards
+            div.card.card-sign_up
+                form.input-form
+                    div.form-group
+                        h5 Sign Up 
+                            label(for='user-name') User Name 
+                            input#user-name.form-control.input_signup-username(type='string' placeholder='coolServal')
+                            label(for='user-email') Email 
+                            input#user-email.form-control.input_signup-email(type='email' placeholder='serval_meow@gmail.com')
+                            label(for='user-password') Password 
+                            input#user-password.form-control.input_signup-password(type='password')
+                    button.btn.btn-outline-info.btn-block.btn-sign_up(type='submit') Sign Up
+            div.card.card-sign_in
+                form.input-form
+                    div.form-group
+                        h5 Sign in
+                            label(for='user-email') Email 
+                            input#user-email.form-control.input_signin-email(type='email' placeholder='serval_meow@gmail.com')
+                            label(for='user-password') Password 
+                            input#user-password.form-control.input_signin-password(type='password')
+                    button.btn.btn-outline-info.btn-block.btn-sign_in(type='submit') Sign In
+    script.
+        $('.btn-sign_up').on('click', function(event) {
+            console.log('sign up clicked')
+            event.preventDefault();
+            const userName = $('.input_signup-username').val();
+            const userEmail = $('.input_signup-email').val();
+            const userPassword = $('.input_signup-password').val();
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/user/signup',
+                data: {
+                    userName: userName,
+                    userEmail: userEmail,
+                    userPassword: userPassword,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('Create account successfully')
+                    window.location.assign('./user/profile');
+                }
+            })
+            .catch((error) => {
+                console.log('catch error: ', error)
+                alert('Create account error')
+                window.location.reload();
+            })
+        })
+
+        $('.btn-sign_in').on('click', function(event) {
+            console.log('sign in clicked')
+            event.preventDefault();
+            const userEmail = $('.input_signup-email').val();
+            const userPassword = $('.input_signup-password').val();
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/user/signin',
+                data: {
+                    userEmail: userEmail,
+                    userPassword: userPassword,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('Welcome back to servalRun!')
+                    window.location.assign('./user/profile');
+                }
+            })
+            .catch((error) => {
+                console.log('catch error: ', error)
+                alert('Sign in error')
+                window.location.reload();
+            })
+        })
