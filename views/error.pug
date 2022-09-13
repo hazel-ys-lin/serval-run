@@ -2,23 +2,17 @@ extends layout.pug
 
 block content 
     link(rel='stylesheet', href='../../css/common.css')
-    div.content-wrapper
-      .card
-        .card-header
-          h3.card-title Serval Test Failed
-          .card-tools
-            // Buttons, labels, and many other things can be placed here!
-            // Here is a label for example
-            span.badge.badge-danger FAIL
-          // /.card-tools
-        // /.card-header
-        p.error_message.card-body
-          | Message: #{message}
-          br
-          | Time: #{time}
-        // /.card-body
-        .card-footer
-          | The footer of the card
-        // /.card-footer
-      // /.card 
-      
+    .content-wrapper(style='min-height: 1604.44px;')
+      section.content-header
+      section.content
+        .error-page
+          h2.headline.text-danger 500
+          .error-content
+            h3
+              i.fas.fa-exclamation-triangle.text-danger
+              |  Serval Oops! Something went wrong.
+            p
+              | We will work on fixing that right away.
+              br
+              | Meanwhile, you may 
+              a(href='../') return to Home
