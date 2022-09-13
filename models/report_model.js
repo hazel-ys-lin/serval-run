@@ -27,6 +27,7 @@ const reportSchema = new mongoose.Schema({
     type: Date,
     default: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
   },
+  report_level: String,
   project_id: {
     type: mongoose.Schema.ObjectId,
     ref: 'project',

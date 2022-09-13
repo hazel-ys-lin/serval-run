@@ -32,7 +32,7 @@ const scenarioGetModel = async function (apiId) {
   let [apiData] = await apiModel.find({
     _id: apiId,
   });
-  // console.log('apiData: ', apiData);
+  console.log('apiData: ', apiData);
 
   let userScenarios = [];
   if (apiData) {
@@ -84,7 +84,7 @@ const scenarioInsertModel = async function (scenarioInfo) {
     }).save(opts);
 
     await apiModel.updateOne(
-      { api_id: apiData._id.toString() },
+      { _id: apiData._id },
       {
         $push: {
           scenarios: [
