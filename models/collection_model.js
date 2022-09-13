@@ -1,7 +1,6 @@
 const pool = require('./db');
 const mongoose = require('mongoose');
 const { projectModel } = require('./project_model');
-const { userModel } = require('./user_model');
 const { collectionCheck, apiCheck } = require('../service/dbUpdate_service');
 
 const collectionSchema = new mongoose.Schema({

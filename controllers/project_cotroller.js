@@ -26,12 +26,11 @@ const displayProject = async (req, res) => {
 };
 
 const projectInsertController = async (req, res) => {
-  // const userEmail = req.body.userEmail;
   const projectInfo = {
     userEmail: req.session.userEmail, // req.body.userEmail
     projectName: req.body.projectName,
   };
-  // console.log('projectInfo: ', projectInfo);
+
   let saveProjectResult = await projectInsertModel(projectInfo);
   if (saveProjectResult) {
     return res.status(200).json({ message: 'Project inserted' });
@@ -41,7 +40,6 @@ const projectInsertController = async (req, res) => {
 };
 
 const projectDeleteController = async (req, res) => {
-  // const userEmail = req.body.userEmail;
   const projectInfo = {
     userEmail: req.session.userEmail, // req.body.userEmail
     projectId: req.body.projectId,
@@ -55,17 +53,13 @@ const projectDeleteController = async (req, res) => {
 };
 
 const displayEnvironment = async (req, res) => {
-  // console.log('req.query.projectid: ', req.query.projectid);
   const projectId = req.query.projectid;
-  // console.log('projectId: ', projectId);
 
   let environments = await environmentGetModel(projectId);
-  // console.log('environments: ', environments);
   if (environments.length !== 0) {
     res.render('environments', { environments: environments });
   } else {
     environments.push({ project_id: projectId });
-    // console.log('environments: ', environments);
     res.render('environments', { environments: environments });
   }
 };

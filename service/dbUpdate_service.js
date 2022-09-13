@@ -12,11 +12,6 @@ const projectCheck = async function (projectName, projectArray) {
 };
 
 const collectionCheck = async function (collectionName, collectionArray) {
-  console.log(
-    'collectionName, collectionArray: ',
-    collectionName,
-    collectionArray
-  );
   for (let i = 0; i < collectionArray.length; i++) {
     if (collectionName === collectionArray[i].collection_name) {
       console.log('collection check fail');
@@ -56,7 +51,6 @@ const userCheckService = async function (userEmail) {
   let findUser = await userModel.findOne({
     user_email: userEmail,
   });
-  console.log('findUser: ', findUser);
   if (!findUser) {
     console.log('user check pass');
     return true;

@@ -8,7 +8,6 @@ const {
 } = require('../models/collection_model');
 
 const displayCollection = async function (req, res) {
-  // console.log('req.query.projectid: ', req.query.projectid);
   const projectId = req.query.projectid;
 
   let userCollections = await collectionGetModel(projectId);
@@ -51,7 +50,7 @@ const displayApi = async function (req, res) {
   const collectionId = req.query.collectionid;
 
   let userApis = await apiGetModel(collectionId);
-  console.log('userApis: ', userApis);
+  // console.log('userApis: ', userApis);
   if (userApis.length !== 0) {
     res.render('apis', { userApis: userApis });
   } else {

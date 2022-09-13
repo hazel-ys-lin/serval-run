@@ -28,7 +28,6 @@ const userGetModel = async function (userEmail) {
 };
 
 const userSignUpModel = async function (userInfo) {
-  console.log('userInfo: ', userInfo);
   try {
     let inserted = await userModel.create({
       user_name: userInfo.userName,
@@ -36,7 +35,6 @@ const userSignUpModel = async function (userInfo) {
       user_role: 2,
       user_password: userInfo.userPassword,
     });
-    // console.log('inserted: ', inserted);
 
     const userData = {
       userId: inserted._id,
@@ -51,7 +49,6 @@ const userSignUpModel = async function (userInfo) {
   }
 };
 const userSignInModel = async function (userInfo) {
-  // console.log('userInfo: ', userInfo);
   try {
     let userData = await userModel.findOne({
       user_email: userInfo.userEmail,

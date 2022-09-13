@@ -1,4 +1,3 @@
-const axios = require('axios');
 const { testCaseGetModel } = require('../models/scenario_model');
 const {
   collectionGetModel,
@@ -28,13 +27,13 @@ const caseRunController = async (req, res) => {
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
   const testData = await testCaseGetModel(scenarioId);
 
-  let testInfo = {
-    apiId: apiId,
-    scenarioId: scenarioId,
-    collectionId: collectionId,
-    projectId: projectId,
-    envId: envId,
-  };
+  // let testInfo = {
+  //   apiId: apiId,
+  //   scenarioId: scenarioId,
+  //   collectionId: collectionId,
+  //   projectId: projectId,
+  //   envId: envId,
+  // };
 
   let testConfig = {
     method: `${httpMethod}`,
@@ -44,7 +43,7 @@ const caseRunController = async (req, res) => {
     },
   };
 
-  let httpRequestResult = await callHttpRequest(testInfo, testConfig, testData);
+  let httpRequestResult = await callHttpRequest(testConfig, testData);
 
   let insertTestResult = await caseResponseInsertModel(
     projectId,
@@ -94,7 +93,7 @@ const getReportResponseController = async (req, res) => {
   console.log('req.query.reportid: ', req.query.reportid);
   const reportId = req.query.reportid;
   let reportResponse = await getReportResponseModel(reportId);
-  console.log('reportResponse: ', reportResponse);
+  // console.log('reportResponse: ', reportResponse);
   if (reportResponse) {
     res.render('casereport', { reportResponse: reportResponse });
   } else {

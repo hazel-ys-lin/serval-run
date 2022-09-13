@@ -32,7 +32,6 @@ const scenarioGetModel = async function (apiId) {
   let [apiData] = await apiModel.find({
     _id: apiId,
   });
-  console.log('apiData: ', apiData);
 
   let userScenarios = [];
   if (apiData) {
@@ -83,17 +82,18 @@ const scenarioInsertModel = async function (scenarioInfo) {
       examples: exampleArray,
     }).save(opts);
 
-    await apiModel.updateOne(
-      { _id: apiData._id },
-      {
-        $push: {
-          scenarios: [
-            { scenario_id: inserted._id, scenario_title: inserted.title },
-          ],
-        },
-      },
-      opts
-    );
+    await apiModel
+      .updateOne(
+        { _id: apiData._id },
+        {
+          $push: {
+            scenarios: [
+              { scenario_id: inserted._id, scenario_title: inserted.title },
+            ],
+          },
+        }
+      )
+      .session(session);
 
     await session.commitTransaction();
     session.endSession();
@@ -146,10 +146,6 @@ const testCaseGetModel = async function (scenarioId) {
   let [scenarioData] = await scenarioModel.find({
     _id: scenarioId,
   });
-  // console.log(
-  //   'scenarioData.examples in testCaseGetModel: ',
-  //   scenarioData.examples
-  // );
 
   return scenarioData.examples;
 };

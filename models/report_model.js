@@ -126,12 +126,10 @@ const caseResponseInsertModel = async function (
 };
 
 const getCaseReportModel = async function (projectId, envId) {
-  // console.log('projectId, envId: ', projectId, envId);
   let [reportData] = await reportModel.find({
     project_id: projectId,
     environment_id: envId,
   });
-  // console.log('reportData: ', reportData);
 
   return reportData._id;
 };
@@ -140,7 +138,6 @@ const getReportResponseModel = async function (reportId) {
   let responseData = await responseModel.find({
     report_id: reportId,
   });
-  // console.log('responseData: ', responseData);
   return responseData;
 };
 

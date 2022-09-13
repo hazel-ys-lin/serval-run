@@ -22,7 +22,6 @@ const userCheck = async (req, res) => {
 
 const userSignUpController = async (req, res) => {
   let userCheckResult = await userCheckService(req.body.userEmail);
-  // console.log('userCheckResult: ', userCheckResult);
 
   if (!userCheckResult) {
     req.session.msg = 'Email already exists';
@@ -40,7 +39,6 @@ const userSignUpController = async (req, res) => {
   userInfo.userPassword = await bcrypt.hash(userInfo.userPassword, 8);
 
   let insertUserResult = await userSignUpModel(userInfo);
-  // console.log('insertUserResult: ', insertUserResult);
 
   if (!insertUserResult) {
     return res.status(403).json({ msg: 'create account fail' });
@@ -53,7 +51,6 @@ const userSignUpController = async (req, res) => {
 };
 
 const userSignInController = async (req, res) => {
-  // console.log('req.body.userEmail: ', req.body.userEmail);
   const userInfo = {
     userEmail: req.body.userEmail,
     userPassword: req.body.userPassword,
