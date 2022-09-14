@@ -40,7 +40,7 @@ block content
                                 th Name
                                 th Environments
                                 th Collections
-                                th Edit 
+                                th Operations
                                 //- th(style='width: 40px') Label
                         tbody
                             if userProjects[0].project_name
@@ -50,11 +50,10 @@ block content
                                         td #{userProjects[i]._id}
                                         td #{userProjects[i].project_name}
                                         td 
-                                            button.btn.btn-warning.btn-environments(type='submit' id=`${userProjects[i]._id}`) View All
+                                            button.btn.btn-primary.btn-environments(type='submit' id=`${userProjects[i]._id}`) View
                                         td 
-                                            button.btn.btn-warning.btn-collections(type='submit' id=`${userProjects[i]._id}`) View All
+                                            button.btn.btn-warning.btn-collections(type='submit' id=`${userProjects[i]._id}`) View
                                         td 
-                                            button.btn.btn-primary.btn-modify(type='submit') Modify
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userProjects[i]._id}`) Delete
                                     - i++
 

@@ -54,8 +54,8 @@ block content
                                 th(style='width: 10px') Title
                                 th Description
                                 th Steps
-                                th Data 
-                                th Edit 
+                                th Examples
+                                th Operations
                                 th Run Test
                                 //- th(style='width: 40px') Label
                         tbody
@@ -67,9 +67,9 @@ block content
                                         td #{userScenarios[i].scenario.title}
                                         td #{userScenarios[i].scenario.description}
                                         td 
-                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userScenarios[i].scenario._id}`) More
+                                            button.btn.btn-primary.btn-steps(type='submit' id=`${userScenarios[i].scenario._id}`) More
                                         td 
-                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userScenarios[i].scenario._id}`) More
+                                            button.btn.btn-warning.btn-examples(type='submit' id=`${userScenarios[i].scenario._id}`) More
                                         td 
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userScenarios[i].scenario._id}`) Delete
                                         td 
