@@ -55,8 +55,6 @@ const displayApi = async function (req, res) {
   let userApis = await apiGetModel(collectionId);
   let projectId = await collectionInfoGetModel(collectionId);
   let envInfo = await envInfoGetModel(projectId);
-  console.log('userApis: ', userApis);
-  console.log('envInfo: ', envInfo);
 
   // console.log('userApis: ', userApis);
   if (userApis.length !== 0) {

@@ -88,11 +88,25 @@ block content
                                         td 
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
                                         td 
-                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userApis[i].api._id}`) Run
+                                            button.btn.btn-info.btn-apitest(type='submit' id=`${userApis[i].api._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-api-${i}` aria-expanded='false' aria-controls=`#runtest-api-${i}`) Run API
+                                            .collapse(id=`runtest-api-${i}`)
+                                                .card.card-body.p-0
+                                                    table.table
+                                                        thead
+                                                        tbody
+                                                            if envInfo
+                                                                - let j = 0
+                                                                while j < envInfo.length
+                                                                    tr 
+                                                                        td #{envInfo[j].domain_name}
+                                                                        td #{envInfo[j].title}
+                                                                        td 
+                                                                            button.btn.btn-info.btn-apitest-in-toggle(type='submit' id=`${userApis[i].api._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
+                                                                    - j++
                                     - i++
         .input-form
             if envInfo && userApis[0].api
-                button.btn.btn-right.btn-secondary.btn-runtest-multi(type='submit' id=`${userApis[0].collectionId}` data-bs-toggle='collapse' data-bs-target='#runtest-multi' aria-expanded='false' aria-controls='runtest-multi') Run all the APIs
+                button.btn.btn-right.btn-secondary.btn-runtest-collection(type='submit' id=`${userApis[0].collectionId}` data-bs-toggle='collapse' data-bs-target='#runtest-multi' aria-expanded='false' aria-controls='runtest-multi') Run Collection Test
                 #runtest-multi.collapse
                     .card.card-body.p-0
                         table.table
@@ -105,7 +119,7 @@ block content
                                             td #{envInfo[k].domain_name}
                                             td #{envInfo[k].title}
                                             td 
-                                                button.btn.btn-secondary.btn-runalltest-in-toggle(type='submit' id=`${userApis[0].collectionId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Run 
+                                                button.btn.btn-secondary.btn-collectiontest-in-toggle(type='submit' id=`${userApis[0].collectionId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Run 
                                         - k++
     
     script.
@@ -197,5 +211,73 @@ block content
                 console.log('in error');
                 console.log('catch: ', error)
                 alert('delete API error')
+            })
+        })
+
+        $('.btn-apitest-in-toggle').on('click', function(event) {
+            console.log('run scenario test in toggle clicked');
+            event.preventDefault();
+            const collectionId = $('.card-title').text().replace('Collection ID: ', '');
+            const apiId = this.id;
+            const domainName = $('.btn-apitest-in-toggle').attr('domain');
+            const title = $('.btn-apitest-in-toggle').attr('title');
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/apirun',
+                data: {
+                    collectionId: collectionId,
+                    apiId: apiId,
+                    domainName: domainName,
+                    title: title,
+                    report_info: {
+                        report_level: 2,
+                        report_type: 'api',
+                    }
+                }, 
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('Run api test successfully')
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('catch: ', error)
+                alert('Run api test error')
+            })
+        })
+
+        $('.btn-collectiontest-in-toggle').on('click', function(event) {
+            console.log('run collection test in toggle clicked');
+            event.preventDefault();
+            const collectionId = this.id;
+            const domainName = $('.btn-collectiontest-in-toggle').attr('domain');
+            const title = $('.btn-collectiontest-in-toggle').attr('title');
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/collectionrun',
+                data: {
+                    collectionId: collectionId,
+                    domainName: domainName,
+                    title: title,
+                    report_info: {
+                        report_level: 3,
+                        report_type: 'collection',
+                    }
+                }, 
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('Run collection test successfully')
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('catch: ', error)
+                alert('Run collection test error')
             })
         })

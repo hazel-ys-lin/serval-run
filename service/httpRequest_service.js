@@ -2,136 +2,189 @@ const axios = require('axios');
 const momentTimezone = require('moment-timezone');
 
 const callHttpRequest = async function (testConfig, testData) {
-  // console.log('testInfo: ', testInfo);
-  // console.log('testConfig: ', testConfig);
-  // console.log('testData: ', testData);
-
   let httpMethod = testConfig.method;
   if (httpMethod === 'PUT' || httpMethod === 'POST' || httpMethod === 'PATCH') {
     let actualResponseArray = [];
+    // console.log('testData.length in callHttpRequest: ', testData.length);
 
-    for (let i = 0; i < testData.length; i++) {
-      let timeBeforeAxios = Date.now();
-      testConfig.data = testData[i].example;
-      await axios(testConfig)
-        .then(function (response) {
-          let actualResult = response.data;
-          let timeAfterAxios = Date.now();
-
-          actualResponseArray.push({
-            example_id: testData[i]._id,
-            response_data: actualResult,
-            response_status: response.status,
-            pass: response.status === Number(testData[i].expected_status_code),
-            request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
-            request_time_length: timeAfterAxios - timeBeforeAxios,
-          });
-        })
-        .catch(function (error) {
-          let actualResult = error.response?.data;
-          let timeAfterAxios = Date.now();
-
-          actualResponseArray.push({
-            example_id: testData[i]._id,
-            response_data: actualResult,
-            response_status: error.response?.status,
-            pass:
-              error.response?.status ===
-              Number(testData[i].expected_status_code),
-            request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
-            request_time_length: timeAfterAxios - timeBeforeAxios,
-          });
-        });
-    }
-    // console.log('actualResponseArray: ', actualResponseArray);
-  } else if (httpMethod === 'GET' || httpMethod === 'DELETE') {
-    let actualResponseArray = [];
-    let timeBeforeAxios = Date.now();
-
-    for (let i = 0; i < testData.length; i++) {
-      if (testData[i].example.withCredentials) {
-        testConfig.withCredentials = testData[i].example.withCredentials;
-        testConfig.headers['connect.sid'] = testData[i].example.sid;
-        testConfig.params = {};
-        // console.log(
-        //   'testConfig.withCredentials, testConfig.headers[connect.sid]:  ',
-        //   testConfig.withCredentials,
-        //   testConfig.headers['connect.sid']
-        // );
-
+    if (!testData.length) {
+      for (let i = 0; i < testData.examples.length; i++) {
+        let timeBeforeAxios = Date.now();
+        testConfig.data = testData.examples[i].example;
         await axios(testConfig)
           .then(function (response) {
             let actualResult = response.data;
-            console.log('response in axios: ', response);
             let timeAfterAxios = Date.now();
 
             actualResponseArray.push({
-              example_id: testData[i]._id,
+              scenario_id: testData.scenarioId,
+              example_id: testData.examples[i]._id,
               response_data: actualResult,
               response_status: response.status,
               pass:
-                response.status === Number(testData[i].expected_status_code),
+                response.status ===
+                Number(testData.examples[i].expected_status_code),
               request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
               request_time_length: timeAfterAxios - timeBeforeAxios,
             });
-            // console.log('actualResponseArray in axios then: ', actualResponseArray);
           })
           .catch(function (error) {
             let actualResult = error.response?.data;
-            console.log('error in axios: ', error);
             let timeAfterAxios = Date.now();
 
             actualResponseArray.push({
-              example_id: testData[i]._id,
+              scenario_id: testData.scenarioId,
+              example_id: testData.examples[i]._id,
               response_data: actualResult,
               response_status: error.response?.status,
               pass:
                 error.response?.status ===
-                Number(testData[i].expected_status_code),
-              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
-              request_time_length: timeAfterAxios - timeBeforeAxios,
-            });
-          });
-      } else {
-        delete testData[i].example.status;
-        testConfig.params = testData[i].example;
-
-        await axios(testConfig)
-          .then(function (response) {
-            let actualResult = response.data;
-            console.log('response in axios: ', response);
-            let timeAfterAxios = Date.now();
-
-            actualResponseArray.push({
-              example_id: testData[i]._id,
-              response_data: actualResult,
-              response_status: response.status,
-              pass:
-                response.status === Number(testData[i].expected_status_code),
-              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
-              request_time_length: timeAfterAxios - timeBeforeAxios,
-            });
-            // console.log('actualResponseArray in axios then: ', actualResponseArray);
-          })
-          .catch(function (error) {
-            let actualResult = error.response?.data;
-            console.log('error in axios: ', error);
-            let timeAfterAxios = Date.now();
-
-            actualResponseArray.push({
-              example_id: testData[i]._id,
-              response_data: actualResult,
-              response_status: error.response?.status,
-              pass:
-                error.response?.status ===
-                Number(testData[i].expected_status_code),
+                Number(testData.examples[i].expected_status_code),
               request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
               request_time_length: timeAfterAxios - timeBeforeAxios,
             });
           });
       }
+      return actualResponseArray;
     }
-    // console.log('actualResponseArray: ', actualResponseArray);
+
+    for (let j = 0; j < testData.length; j++) {
+      for (let i = 0; i < testData[j].examples.length; i++) {
+        let timeBeforeAxios = Date.now();
+        // console.log('testData: ', testData);
+        testConfig.data = testData[j].examples[i].example;
+        testConfig.timeout = 5000;
+        await axios(testConfig)
+          .then(function (response) {
+            let actualResult = response.data;
+            // console.log('response in axios then: ');
+            let timeAfterAxios = Date.now();
+
+            actualResponseArray.push({
+              scenario_id: testData[j].scenario_id,
+              example_id: testData[j].examples[i]._id,
+              response_data: actualResult,
+              response_status: response.status,
+              pass:
+                response.status ===
+                Number(testData[j].examples[i].expected_status_code),
+              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+              request_time_length: timeAfterAxios - timeBeforeAxios,
+            });
+          })
+          .catch(function (error) {
+            let actualResult = error.response?.data;
+            // console.log('error in axios catch: ');
+            let timeAfterAxios = Date.now();
+
+            actualResponseArray.push({
+              scenario_id: testData[j].scenario_id,
+              example_id: testData[j].examples[i]._id,
+              response_data: actualResult,
+              response_status: error.response?.status,
+              pass:
+                error.response?.status ===
+                Number(testData[j].examples[i].expected_status_code),
+              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+              request_time_length: timeAfterAxios - timeBeforeAxios,
+            });
+          });
+      }
+      console.log('actualResponseArray in else: ', actualResponseArray);
+      return actualResponseArray;
+    }
+  } else if (httpMethod === 'GET' || httpMethod === 'DELETE') {
+    let actualResponseArray = [];
+    let timeBeforeAxios = Date.now();
+
+    for (let j = 0; j < testData.length; j++) {
+      for (let i = 0; i < testData[j].examples.length; i++) {
+        if (testData[j].examples[i].example.withCredentials) {
+          testConfig.withCredentials =
+            testData[j].examples[i].example.withCredentials;
+          testConfig.headers['connect.sid'] =
+            testData[j].examples[i].example.sid;
+          testConfig.params = {};
+
+          await axios(testConfig)
+            .then(function (response) {
+              let actualResult = response.data;
+              // console.log('response in axios: ', response);
+              let timeAfterAxios = Date.now();
+
+              actualResponseArray.push({
+                scenario_id: testData[j].scenarioId,
+                example_id: testData[j].examples[i]._id,
+                response_data: actualResult,
+                response_status: response.status,
+                pass:
+                  response.status ===
+                  Number(testData[j].examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              });
+              // console.log('actualResponseArray in axios then: ', actualResponseArray);
+            })
+            .catch(function (error) {
+              let actualResult = error.response?.data;
+              // console.log('error in axios: ', error);
+              let timeAfterAxios = Date.now();
+
+              actualResponseArray.push({
+                scenario_id: testData[j].scenarioId,
+                example_id: testData[j].examples[i]._id,
+                response_data: actualResult,
+                response_status: error.response?.status,
+                pass:
+                  error.response?.status ===
+                  Number(testData[j].examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              });
+            });
+        } else {
+          delete testData[j].examples[i].example.status;
+          testConfig.params = testData[j].examples[i].example;
+
+          await axios(testConfig)
+            .then(function (response) {
+              let actualResult = response.data;
+              // console.log('response in axios: ', response);
+              let timeAfterAxios = Date.now();
+
+              actualResponseArray.push({
+                scenario_id: testData[j].scenarioId,
+                example_id: testData[j].examples[i]._id,
+                response_data: actualResult,
+                response_status: response.status,
+                pass:
+                  response.status ===
+                  Number(testData[j].examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              });
+              // console.log('actualResponseArray in axios then: ', actualResponseArray);
+            })
+            .catch(function (error) {
+              let actualResult = error.response?.data;
+              // console.log('error in axios: ', error);
+              let timeAfterAxios = Date.now();
+
+              actualResponseArray.push({
+                scenario_id: testData[j].scenarioId,
+                example_id: testData[j].examples[i]._id,
+                response_data: actualResult,
+                response_status: error.response?.status,
+                pass:
+                  error.response?.status ===
+                  Number(testData[j].examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              });
+            });
+        }
+      }
+    }
     // TODO: error handler?
     return actualResponseArray;
   } else {

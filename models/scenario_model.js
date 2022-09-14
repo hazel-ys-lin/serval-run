@@ -142,12 +142,12 @@ const scenarioDeleteModel = async function (scenarioInfo) {
   }
 };
 
-const testCaseGetModel = async function (scenarioId) {
+const exampleGetModel = async function (scenarioId) {
   let [scenarioData] = await scenarioModel.find({
     _id: scenarioId,
   });
 
-  return scenarioData.examples;
+  return { scenarioId: scenarioId, examples: scenarioData.examples };
 };
 
 module.exports = {
@@ -155,5 +155,5 @@ module.exports = {
   scenarioGetModel,
   scenarioInsertModel,
   scenarioDeleteModel,
-  testCaseGetModel,
+  exampleGetModel,
 };

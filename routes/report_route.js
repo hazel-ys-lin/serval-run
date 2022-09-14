@@ -1,15 +1,20 @@
 const router = require('express').Router();
 const {
-  caseRunController,
+  scenarioRunController,
+  apiRunController,
+  collectionRunController,
   displayReport,
-  getCaseReport,
+  getExampleReport,
   getReportResponseController,
 } = require('../controllers/report_controller');
 const { wrapAsync } = require('../util/util');
 
-router.route('/testrun').post(wrapAsync(caseRunController));
+router.route('/scenariorun').post(wrapAsync(scenarioRunController));
+router.route('/apirun').post(wrapAsync(apiRunController));
+router.route('/collectionrun').post(wrapAsync(collectionRunController));
+
 router.route('/reports').get(wrapAsync(displayReport));
-router.route('/reports').post(wrapAsync(getCaseReport));
+router.route('/reports').post(wrapAsync(getExampleReport));
 router.route('/report').get(wrapAsync(getReportResponseController));
 
 module.exports = router;
