@@ -67,15 +67,14 @@ block content
                                         td #{userScenarios[i].scenario.title}
                                         td #{userScenarios[i].scenario.description}
                                         td 
-                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userScenarios[i].scenario._id}`) View More
+                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userScenarios[i].scenario._id}`) More
                                         td 
-                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userScenarios[i].scenario._id}`) View More
+                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userScenarios[i].scenario._id}`) More
                                         td 
-                                            button.btn.btn-primary.btn-modify(type='submit' id=`${userScenarios[i].scenario._id}`) Modify
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userScenarios[i].scenario._id}`) Delete
                                         td 
-                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target='#collapseExample' aria-expanded='false' aria-controls='collapseExample') Choose environment
-                                            #collapseExample.collapse
+                                            button.btn.btn-info.btn-runtest-single(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-single-${i}` aria-expanded='false' aria-controls=`#runtest-single-${i}`) Run the scenario
+                                            .collapse(id=`runtest-single-${i}`)
                                                 .card.card-body.p-0
                                                     table.table
                                                         thead
@@ -91,6 +90,23 @@ block content
                                                                     - j++
 
                                     - i++
+        .input-form
+            if envInfo && userScenarios[0].scenario
+                button.btn.btn-right.btn-secondary.btn-runtest-multi(type='submit' id=`${userScenarios[0].apiId}` data-bs-toggle='collapse' data-bs-target='#runtest-multi' aria-expanded='false' aria-controls='runtest-multi') Run all the scenarios
+                #runtest-multi.collapse
+                    .card.card-body.p-0
+                        table.table
+                            thead
+                            tbody
+                                if envInfo
+                                    - let k = 0
+                                    while k < envInfo.length
+                                        tr 
+                                            td #{envInfo[k].domain_name}
+                                            td #{envInfo[k].title}
+                                            td 
+                                                button.btn.btn-secondary.btn-runalltest-in-toggle(type='submit' id=`${userScenarios[0].apiId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Run 
+                                        - k++
     script.
         $('#exampleModal').on('shown.bs.modal', function() {
             // src: https://stackoverflow.com/questions/17086538/codemirror-content-not-visible-in-bootstrap-modal-until-it-is-clicked

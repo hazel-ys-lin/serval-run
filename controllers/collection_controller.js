@@ -1,5 +1,7 @@
+const { envInfoGetModel } = require('../models/project_model');
 const {
   collectionInsertModel,
+  collectionInfoGetModel,
   collectionGetModel,
   collectionDeleteModel,
   apiInsertModel,
@@ -11,6 +13,7 @@ const displayCollection = async function (req, res) {
   const projectId = req.query.projectid;
 
   let userCollections = await collectionGetModel(projectId);
+
   if (userCollections.length !== 0) {
     res.render('collections', { userCollections: userCollections });
   } else {
@@ -50,12 +53,16 @@ const displayApi = async function (req, res) {
   const collectionId = req.query.collectionid;
 
   let userApis = await apiGetModel(collectionId);
+  let projectId = await collectionInfoGetModel(collectionId);
+  let envInfo = await envInfoGetModel(projectId);
+  console.log('envInfo: ', envInfo);
+
   // console.log('userApis: ', userApis);
   if (userApis.length !== 0) {
-    res.render('apis', { userApis: userApis });
+    res.render('apis', { userApis: userApis, envInfo: envInfo });
   } else {
     userApis.push({ collectionId: collectionId });
-    res.render('apis', { userApis: userApis });
+    res.render('apis', { userApis: userApis, envInfo: envInfo });
   }
 };
 

@@ -74,7 +74,7 @@ block content
                                 th Run Test
                                 //- th(style='width: 40px') Label
                         tbody
-                            if userApis[0].api
+                            if userApis[0].api 
                                 - let i = 0
                                 while i < userApis.length
                                     tr 
@@ -84,13 +84,30 @@ block content
                                         td #{userApis[i].api.api_endpoint}
                                         td #{userApis[i].api.severity}
                                         td 
-                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userApis[i].api._id}`) View All
+                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userApis[i].api._id}`) View
                                         td 
-                                            button.btn.btn-primary.btn-modify(type='submit' id=`${userApis[i].api._id}`) Modify
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
                                         td 
                                             button.btn.btn-info.btn-runtest(type='submit' id=`${userApis[i].api._id}`) Run
                                     - i++
+        .input-form
+            if envInfo && userApis[0].api
+                button.btn.btn-right.btn-secondary.btn-runtest-multi(type='submit' id=`${userApis[0].collectionId}` data-bs-toggle='collapse' data-bs-target='#runtest-multi' aria-expanded='false' aria-controls='runtest-multi') Run all the APIs
+                #runtest-multi.collapse
+                    .card.card-body.p-0
+                        table.table
+                            thead
+                            tbody
+                                if envInfo && userApis[0].api
+                                    - let k = 0
+                                    while k < envInfo.length
+                                        tr 
+                                            td #{envInfo[k].domain_name}
+                                            td #{envInfo[k].title}
+                                            td 
+                                                button.btn.btn-secondary.btn-runalltest-in-toggle(type='submit' id=`${userApis[0].collectionId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Run 
+                                        - k++
+    
     script.
         $('.btn-create_api').on('click', function(event) {
             console.log('create_api clicked')
