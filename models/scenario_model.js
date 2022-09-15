@@ -147,7 +147,7 @@ const exampleGetModel = async function (scenarioId) {
     _id: scenarioId,
   });
 
-  return { scenarioId: scenarioId, examples: scenarioData.examples };
+  return { scenario_id: scenarioId, examples: scenarioData.examples };
 };
 
 module.exports = {

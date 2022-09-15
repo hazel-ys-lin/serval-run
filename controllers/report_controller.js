@@ -15,6 +15,7 @@ const {
 const {
   exampleResponseInsertModel,
   apiResponseInsertModel,
+  collectionResponseInsertModel,
   getExampleReportModel,
   getReportResponseModel,
 } = require('../models/report_model');
@@ -31,7 +32,7 @@ const scenarioRunController = async (req, res) => {
   );
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
   const testData = await exampleGetModel(scenarioId);
-  // const testData = [].push(exampleData);
+  testData.api_id = apiId;
   console.log('testData in scenarioRunController: ', testData);
 
   // TODO: refactor
@@ -59,7 +60,6 @@ const scenarioRunController = async (req, res) => {
     projectId,
     envId,
     collectionId,
-    apiId,
     reportInfo,
     httpRequestResult
   );
@@ -81,10 +81,7 @@ const apiRunController = async (req, res) => {
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
 
   let scenarios = await scenarioGetModel(apiId);
-  // console.log(
-  //   'scenarios[0].scenario.examples in apiRunController: ',
-  //   scenarios[0].scenario.examples
-  // );
+  console.log('scenarios in apiRunController: ', scenarios);
   let testData = [];
   for (let i = 0; i < scenarios.length; i++) {
     let exampleArray = [];
@@ -93,6 +90,7 @@ const apiRunController = async (req, res) => {
       exampleArray.push(scenarios[i].scenario.examples[j]);
     }
     testData.push({
+      api_id: scenarios[i].scenario.api_id,
       scenario_id: scenarios[i].scenario._id,
       examples: exampleArray,
     });
@@ -108,13 +106,12 @@ const apiRunController = async (req, res) => {
   };
 
   let httpRequestResult = await callHttpRequest(testConfig, testData);
-  console.log('httpRequestResult in apiRunController: ', httpRequestResult);
+  // console.log('httpRequestResult in apiRunController: ', httpRequestResult);
 
   let insertTestResult = await apiResponseInsertModel(
     projectId,
     envId,
     collectionId,
-    apiId,
     reportInfo,
     httpRequestResult
   );
@@ -139,49 +136,57 @@ const collectionRunController = async (req, res) => {
     temp.api_id = apiArray[i].api._id;
     apiInfoArray.push(temp);
   }
-  console.log('apiInfoArray in collectionRunController: ', apiInfoArray);
+  // console.log('apiInfoArray in collectionRunController: ', apiInfoArray);
 
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
   // console.log('projectId, envId: ', projectId, envId);
 
-  let scenarios = [];
-  for (let j = 0; j < apiInfoArray.length; j++) {
-    let temp = await scenarioGetModel(apiInfoArray[j].api_id);
+  // TODO: deal with different httpmethod and api endpoint
+  let httpRequestResult = [];
+
+  for (let l = 0; l < apiInfoArray.length; l++) {
+    let testConfig = {
+      method: `${apiInfoArray[l].httpMethod}`,
+      url: `${domainName}${apiInfoArray[l].apiEndpoint}`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    let scenarios = [];
+    let temp = await scenarioGetModel(apiInfoArray[l].api_id);
     for (let k = 0; k < temp.length; k++) {
       scenarios.push(temp[k]);
     }
-  }
-  console.log('scenarios in collectionRunController: ', scenarios);
 
-  let testData = [];
-  for (let i = 0; i < scenarios.length; i++) {
-    let exampleArray = [];
-    // console.log(scenarios[i].scenario.examples);
-    for (let j = 0; j < scenarios[i].scenario.examples.length; j++) {
-      exampleArray.push(scenarios[i].scenario.examples[j]);
+    let testData = [];
+    for (let i = 0; i < scenarios.length; i++) {
+      let exampleArray = [];
+      // console.log(scenarios[i].scenario.examples);
+      for (let j = 0; j < scenarios[i].scenario.examples.length; j++) {
+        exampleArray.push(scenarios[i].scenario.examples[j]);
+      }
+      testData.push({
+        api_id: scenarios[i].scenario.api_id,
+        scenario_id: scenarios[i].scenario._id,
+        examples: exampleArray,
+      });
     }
-    testData.push({
-      scenario_id: scenarios[i].scenario._id,
-      examples: exampleArray,
-    });
+
+    let apiRequestResult = await callHttpRequest(testConfig, testData);
+    for (let m = 0; m < apiRequestResult.length; m++) {
+      httpRequestResult.push(apiRequestResult[m]);
+    }
   }
-  console.log('testData after push: ', testData);
+  // console.log(
+  //   'httpRequestResult in collectionRunController: ',
+  //   httpRequestResult
+  // );
 
-  let testConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
-  // TODO: deal with different httpmethod and api endpoint
-  let httpRequestResult = await callHttpRequest(testConfig, testData);
-  console.log('httpRequestResult in apiRunController: ', httpRequestResult);
-
-  let insertTestResult = await apiResponseInsertModel(
+  let insertTestResult = await collectionResponseInsertModel(
     projectId,
     envId,
     collectionId,
-    apiId,
     reportInfo,
     httpRequestResult
   );
