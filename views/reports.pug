@@ -6,33 +6,19 @@ block content
   script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
 
   div.content-wrapper
-    div
+    .input-form
+      h1 Projects
       #accordionExample.accordion
         if userProjects[0].project_name
           - let i = 0
           while i < userProjects.length
             .accordion-item
               h2#headingOne.accordion-header
-                button.accordion-button(type='button' data-bs-toggle='collapse' data-bs-target='#collapseOne' aria-expanded='true' aria-controls='collapseOne')
-                  | #{userProjects[i].project_name}
-              #collapseOne.accordion-collapse.collapse.show(aria-labelledby='headingOne' data-bs-parent='#accordionExample')
+                button.accordion-button(type='button' data-bs-toggle='collapse' data-bs-target=`#collapseOne-${i}` aria-expanded='true' aria-controls='collapseOne')
+                  .display-6 #{userProjects[i].project_name}
+              .accordion-collapse.collapse.show(id=`collapseOne-${i}` aria-labelledby='headingOne' data-bs-parent='#accordionExample')
                 .accordion-body
                   p Project ID: #{userProjects[i]._id}
-                  if userProjects[i].environments.length > 0
-                    button.btn.btn-info.btn-runtest(type='submit' id=`${userProjects[i]._id}` data-bs-toggle='collapse' data-bs-target='#collapseExample' aria-expanded='false' aria-controls='collapseExample') Choose environment
-                    #collapseExample.collapse
-                        .card.card-body.p-0
-                            table.table
-                                thead
-                                tbody
-                                  - let j = 0
-                                  while j < userProjects[i].environments.length
-                                      tr 
-                                          td #{userProjects[i].environments[j].domain_name}
-                                          td #{userProjects[i].environments[j].title}
-                                          td 
-                                            button.btn.btn-info.btn-viewreport-in-toggle(type='submit' id=`${userProjects[i]._id}` domain=`${userProjects[i].environments[j].domain_name}` title=`${userProjects[i].environments[j].title}` envid=`${userProjects[i].environments[j].environment_id}`) View Report
-                                      - j++
             - i++
 
 
@@ -58,9 +44,9 @@ block content
         })
         .then((response) => {
             if (response.status === 200) {
-                alert('Found report successfully')
+                //- alert('Found report successfully')
                 let reportId = response.data.report_id;
-                console.log('reportId: ', reportId);
+                //- console.log('reportId: ', reportId);
                 window.location.assign(`./report?reportid=${reportId}`);
                 //- window.location.assign('/casereport');
                 //- window.location.reload();

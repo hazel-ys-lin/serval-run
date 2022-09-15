@@ -275,20 +275,31 @@ const collectionResponseInsertModel = async function (
   }
 };
 
-const getExampleReportModel = async function (projectId, envId) {
-  let [reportData] = await reportModel.find({
+const getReportModel = async function (projectId) {
+  let reportData = await reportModel.find({
     project_id: projectId,
-    environment_id: envId,
   });
+  // console.log('reportData: ', reportData);
 
-  return reportData._id;
+  return reportData;
 };
 
 const getReportResponseModel = async function (reportId) {
   let responseData = await responseModel.find({
     report_id: reportId,
   });
+
   return responseData;
+};
+
+// FIXME: cannot find the response data from response_id in report data responses arary
+// the result of "responseData" is always empty
+const getResponseByReportModel = async function (responseId) {
+  let [responseDetail] = await responseModel.find({
+    _id: responseId,
+  });
+
+  return responseDetail;
 };
 
 module.exports = {
@@ -297,6 +308,7 @@ module.exports = {
   exampleResponseInsertModel,
   apiResponseInsertModel,
   collectionResponseInsertModel,
-  getExampleReportModel,
+  getReportModel,
   getReportResponseModel,
+  getResponseByReportModel,
 };

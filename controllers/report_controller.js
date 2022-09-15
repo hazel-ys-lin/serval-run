@@ -16,10 +16,11 @@ const {
   exampleResponseInsertModel,
   apiResponseInsertModel,
   collectionResponseInsertModel,
-  getExampleReportModel,
+  getReportModel,
   getReportResponseModel,
 } = require('../models/report_model');
 const { callHttpRequest } = require('../service/httpRequest_service');
+const { calculateReport } = require('../service/reportStatistic_service');
 
 const scenarioRunController = async (req, res) => {
   const apiId = req.body.apiId;
@@ -204,12 +205,25 @@ const displayReport = async (req, res) => {
   const userEmail = req.session.userEmail; //req.session.email
 
   let userProjects = await projectGetModel(userEmail);
-  // console.log('userProjects: ', userProjects);
+  // console.log('userProjects: ', userProjects.length);
+
+  let reportsDetail = [];
+  for (let i = 0; i < userProjects.length; i++) {
+    let reportData = await getReportModel(userProjects[i]._id);
+    // console.log('reportData: ', reportData);
+    // for (let j = 0; j < reportData.length; j++) {
+    let reportCalculated = await calculateReport(reportData);
+    reportsDetail.push(reportCalculated);
+    // }
+  }
+
+  // console.log('reportsDetail: ', reportsDetail.length);
+
   if (userProjects.length !== 0) {
-    res.render('reports', { userProjects: userProjects });
+    res.render('reports', { reportsDetail: reportsDetail });
   } else {
     userProjects.push({ user_id: req.session.userId });
-    res.render('reports', { userProjects: userProjects });
+    res.render('reports', { reportsDetail: reportsDetail });
   }
 };
 
@@ -217,7 +231,7 @@ const getExampleReport = async (req, res) => {
   const projectId = req.body.projectId;
   const envId = req.body.envId;
 
-  let testCaseReport = await getExampleReportModel(projectId, envId);
+  let testCaseReport = await getReportModel(projectId);
   // console.log('testCaseReport: ', testCaseReport.toString());
   if (testCaseReport.toString()) {
     res.status(200).json({ report_id: testCaseReport.toString() });

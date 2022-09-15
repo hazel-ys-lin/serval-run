@@ -58,11 +58,11 @@ const collectionInsertModel = async function (collectionInfo) {
 
     if (uniqueCollection) {
       let inserted = await collectionModel({
-        project_id: projectData._id.toString(),
+        project_id: collectionInfo.projectId,
         collection_name: collectionInfo.collectionName,
       }).save(opts);
       await projectModel.updateOne(
-        { project_id: projectData._id.toString() },
+        { _id: collectionInfo.projectId },
         {
           $push: {
             collections: [
