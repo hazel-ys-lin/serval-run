@@ -63,16 +63,14 @@ block content
                     table.table
                         thead
                             tr
-                                //- th(style='width: 10px') #
-                                th ID
-                                th Name
-                                th HTTP Method
-                                th Endpoint
-                                th Severity
-                                th Scenarios
-                                th Operations
+                                th(style='width: 50px') ID
+                                th(style='width: 20px') Name
+                                th(style='width: 20px') HTTP Method
+                                th(style='width: 20px') Endpoint
+                                th(style='width: 20px') Severity
+                                th(style='width: 20px') Scenarios
+                                th(style='width: 20px') Operations
                                 th Run Test
-                                //- th(style='width: 40px') Label
                         tbody
                             if userApis[0].api 
                                 - let i = 0
