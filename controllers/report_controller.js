@@ -217,7 +217,7 @@ const displayReport = async (req, res) => {
     // }
   }
 
-  // console.log('reportsDetail: ', reportsDetail.length);
+  // console.log('reportsDetail: ', reportsDetail);
 
   if (userProjects.length !== 0) {
     res.render('reports', { reportsDetail: reportsDetail });

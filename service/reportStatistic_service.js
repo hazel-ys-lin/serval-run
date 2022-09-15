@@ -4,10 +4,15 @@ const {
 } = require('../models/report_model');
 
 const calculateReport = async function (reportDataArray) {
-  console.log('reportDataArray: ', reportDataArray);
+  //   console.log('reportDataArray: ', reportDataArray);
   let calculatedArray = [];
   for (let i = 0; i < reportDataArray.length; i++) {
     let reportTemp = {};
+
+    reportTemp.projectId = reportDataArray[i].project_id;
+    reportTemp.environmentId = reportDataArray[i].environment_id;
+    reportTemp.collectionId = reportDataArray[i].collection_id;
+
     reportTemp.testDate = reportDataArray[i].create_time;
     reportTemp.type = reportDataArray[i].report_info.report_type.toUpperCase();
     let responsesAmount = reportDataArray[i].responses.length;
@@ -22,6 +27,10 @@ const calculateReport = async function (reportDataArray) {
       let responseData = await getResponseByReportModel(
         reportDataArray[i].responses[j].response_id
       );
+      //   console.log('responseData: ', responseData);
+      reportTemp.apiId = responseData.api_id;
+      reportTemp.scenarioId = responseData.scenario_id;
+      reportTemp.reportId = responseData.report_id;
       //   console.log('responseData in calculateReport: ', responseData);
       if (responseData.pass === true) passAmount += 1;
       totalTimeLength += Number(responseData.request_time_length);
@@ -36,7 +45,7 @@ const calculateReport = async function (reportDataArray) {
     calculatedArray.push(reportTemp);
   }
 
-  //   console.log('calculatedArray', calculatedArray.length);
+  //   console.log('calculatedArray: ', calculatedArray);
   return calculatedArray;
 };
 

@@ -8,18 +8,32 @@ block content
   div.content-wrapper
     .input-form
       h1 Projects
-      #accordionExample.accordion
-        if userProjects[0].project_name
-          - let i = 0
-          while i < userProjects.length
-            .accordion-item
-              h2#headingOne.accordion-header
-                button.accordion-button(type='button' data-bs-toggle='collapse' data-bs-target=`#collapseOne-${i}` aria-expanded='true' aria-controls='collapseOne')
-                  .display-6 #{userProjects[i].project_name}
-              .accordion-collapse.collapse.show(id=`collapseOne-${i}` aria-labelledby='headingOne' data-bs-parent='#accordionExample')
-                .accordion-body
-                  p Project ID: #{userProjects[i]._id}
-            - i++
+      if reportsDetail[0][0].projectId
+        - let i = 0
+        while i < reportsDetail[0].length
+          table.table
+            thead
+              tr
+                th(scope='col') Report ID
+                th(scope='col') Test Date
+                th(scope='col') Type
+                th(scope='col') Title
+                th(scope='col') Pass Rate 
+                th(scope='col') Examples
+                th(scope='col') Average Time
+                th(scope='col') Operation 
+            tbody
+              tr
+                th(scope='row') #{reportsDetail[0][i].reportId}
+                td #{reportsDetail[0][i].testDate}
+                td #{reportsDetail[0][i].type}
+                td #{reportsDetail[0][i].testDate}
+                td #{reportsDetail[0][i].passRate}
+                td #{reportsDetail[0][i].passExamples}
+                td #{reportsDetail[0][i].averageTime}
+                td 
+                  button.btn.btn-primary.btn-detail(type='submit' id=`${reportsDetail[0][i].reportId}`) Detail
+          - i++
 
 
   script.

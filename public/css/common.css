@@ -22,7 +22,7 @@ body:not(.layout-fixed) .main-sidebar {
 }
 *, ::after, ::before {
   box-sizing: border-box;
-  font-family: 'Iunito', sans-serif;
+  font-family: 'iunito', sans-serif;
 }
 
 .container, .container-lg, .container-md, .container-sm, .container-xl {
