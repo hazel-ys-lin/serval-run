@@ -20,7 +20,7 @@ block content
 
         form.input-form
             h1 Scenarios
-            button.btn.btn-right.btn-success.btn-block.btn-create_scenario(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userScenarios[0].apiId}`) Create Scenario
+                button.btn.btn-right.btn-success.btn-block.btn-create_scenario(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userScenarios[0].apiId}`) Create Scenario
             #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
                 .modal-dialog.modal-lg
                     .modal-content
@@ -49,9 +49,9 @@ block content
                     table.table
                         thead
                             tr
-                                th(style='width: 50px') ID
+                                th(style='width: 50px') Scenario ID
                                 th(style='width: 80px') Title
-                                th(style='width: 150px') Description
+                                th(style='width: 200px') Description
                                 th(style='width: 20px') Steps
                                 th(style='width: 20px') Examples
                                 th(style='width: 20px') Operations
@@ -71,11 +71,15 @@ block content
                                         td 
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userScenarios[i].scenario._id}`) Delete
                                         td 
-                                            button.btn.btn-info.btn-runtest-single(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-single-${i}` aria-expanded='false' aria-controls=`#runtest-single-${i}`) Run Scenario
-                                            .collapse(id=`runtest-single-${i}`)
-                                                .card.card-body.p-0
+                                            button.btn.btn-info.btn-runtest-single(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-single-${i}` aria-expanded='false' aria-controls=`#runtest-single-${i}`) Run Scenario Test
+                                            .collapse.env-table(id=`runtest-single-${i}`)
+                                                .p-0
                                                     table.table
                                                         thead
+                                                            tr 
+                                                                th Domain
+                                                                th Title
+                                                                th Run Test
                                                         tbody
                                                             if envInfo
                                                                 - let j = 0
@@ -89,11 +93,15 @@ block content
                                     - i++
         .input-form
             if envInfo && userScenarios[0].scenario
-                button.btn.btn-right.btn-secondary.btn-runtest-api(type='submit' id=`${userScenarios[0].apiId}` data-bs-toggle='collapse' data-bs-target='#runtest-api' aria-expanded='false' aria-controls='runtest-api') Run API Test
+                button.btn.btn-secondary.btn-runtest-api(type='submit' id=`${userScenarios[0].apiId}` data-bs-toggle='collapse' data-bs-target='#runtest-api' aria-expanded='false' aria-controls='runtest-api') Run API Test
                 #runtest-api.collapse
                     .card.card-body.p-0
                         table.table
                             thead
+                                tr 
+                                    th Domain
+                                    th Title
+                                    th Run Test
                             tbody
                                 if envInfo
                                     - let k = 0
@@ -102,12 +110,16 @@ block content
                                             td #{envInfo[k].domain_name}
                                             td #{envInfo[k].title}
                                             td 
-                                                button.btn.btn-secondary.btn-apitest-in-toggle(type='submit' id=`${userScenarios[0].apiId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Send to Run List
+                                                button.btn.btn-secondary.btn-apitest-in-toggle(type='submit' id=`${userScenarios[0].apiId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Run
                                         - k++
     script.
         $('#exampleModal').on('shown.bs.modal', function() {
             // src: https://stackoverflow.com/questions/17086538/codemirror-content-not-visible-in-bootstrap-modal-until-it-is-clicked
             // initialize codemirror here
+            let editors = Array.from(document.getElementsByClassName("CodeMirror"))
+            editors.forEach((element)=>{
+                element.remove();
+            });
             let editor = CodeMirror.fromTextArea(document.getElementById("code"), {
                 lineNumbers: true,
                 matchBrackets: true,

@@ -1,6 +1,19 @@
 /* ================================= 
   Base Element Styles
 ==================================== */
+@import url('http://fonts.cdnfonts.com/css/iunito');
+/* @import url('http://fonts.cdnfonts.com/css/engender-mod-font'); */
+
+.modal {
+  z-index: 10000;
+}
+
+body:not(.layout-fixed) .main-header {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}
+
 body:not(.layout-fixed) .main-sidebar {
   height: inherit;
   min-height: 100%;
@@ -9,7 +22,22 @@ body:not(.layout-fixed) .main-sidebar {
 }
 *, ::after, ::before {
   box-sizing: border-box;
+  font-family: 'Iunito', sans-serif;
 }
+
+.container, .container-lg, .container-md, .container-sm, .container-xl {
+  max-width: 80%;
+  margin: 0 70px;
+}
+
+.domain-table-in-toggle {
+  width: 200px;
+}
+
+/* 
+.content-wrapper {
+  margin-left: 350px;
+} */
 
 img.brand-image {
     opacity: .8; 
@@ -24,21 +52,22 @@ img.brand-image {
 
 .input-form {
   width: 90%;
-  padding: 60px 120px;
+  padding: 30px 120px 30px 120px;
 }
 
 .cards {
-  /* display: block; */
-  display: flex;
-  flex-wrap: wrap;
-  max-width: auto;
-  margin: auto 150px 100px;
-  /* padding: 65px 0 164px; */
+  display: block;
+  /* display: flex;
+  flex-wrap: wrap; */
+  /* max-width: 100%; */
+  width: 90%;
+  margin: 0px;
+  padding: 30px 120px 30px 120px;
 }
 
 .card {
-  width: 85%;
-  margin: auto 25px 25px;
+  /* width: 95%; */
+  margin: auto 0px 25px;
   /* padding: 65px 0 164px; */
 }
 
@@ -55,4 +84,8 @@ img.brand-image {
 .btn-right {
   width: 180px;
   float: right;
+}
+
+.env-table {
+  width: 5%;
 }

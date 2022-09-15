@@ -16,7 +16,6 @@ block content
               div(class='card-tools')
                 span(class='badge badge-success') PASS
             div(class='card-body')
-              | Response Data: #{reportResponse[k].response_data}
               br
               | Request Time: #{reportResponse[k].request_time}
             div(class='card-footer')
@@ -28,7 +27,6 @@ block content
               div(class='card-tools')
                 span(class='badge badge-danger') FAIL
             div(class='card-body')
-              | Response Data: #{reportResponse[k].response_data}
               br
               | Request Time: #{reportResponse[k].request_time}
             div(class='card-footer')

@@ -15,7 +15,7 @@ block content
                 
         form.input-form
             h1 APIs
-            button.btn.btn-right.btn-success.btn-block.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userApis[0].collectionId}`) Create API
+                button.btn.btn-right.btn-success.btn-block.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userApis[0].collectionId}`) Create API
             #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
                 .modal-dialog
                     .modal-content
@@ -63,11 +63,11 @@ block content
                     table.table
                         thead
                             tr
-                                th(style='width: 50px') ID
+                                th(style='width: 50px') API ID
                                 th(style='width: 20px') Name
-                                th(style='width: 20px') HTTP Method
+                                th(style='width: 20px') Method
                                 th(style='width: 20px') Endpoint
-                                th(style='width: 20px') Severity
+                                th(style='width: 10px') Severity
                                 th(style='width: 20px') Scenarios
                                 th(style='width: 20px') Operations
                                 th Run Test
@@ -86,11 +86,15 @@ block content
                                         td 
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
                                         td 
-                                            button.btn.btn-info.btn-apitest(type='submit' id=`${userApis[i].api._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-api-${i}` aria-expanded='false' aria-controls=`#runtest-api-${i}`) Run API
+                                            button.btn.btn-info.btn-apitest(type='submit' id=`${userApis[i].api._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-api-${i}` aria-expanded='false' aria-controls=`#runtest-api-${i}`) Run API Test
                                             .collapse(id=`runtest-api-${i}`)
                                                 .card.card-body.p-0
                                                     table.table
                                                         thead
+                                                            tr 
+                                                                th Domain
+                                                                th Title
+                                                                th Run Test
                                                         tbody
                                                             if envInfo
                                                                 - let j = 0
@@ -104,11 +108,15 @@ block content
                                     - i++
         .input-form
             if envInfo && userApis[0].api
-                button.btn.btn-right.btn-secondary.btn-runtest-collection(type='submit' id=`${userApis[0].collectionId}` data-bs-toggle='collapse' data-bs-target='#runtest-multi' aria-expanded='false' aria-controls='runtest-multi') Run Collection Test
+                button.btn.btn-secondary.btn-runtest-collection(type='submit' id=`${userApis[0].collectionId}` data-bs-toggle='collapse' data-bs-target='#runtest-multi' aria-expanded='false' aria-controls='runtest-multi') Run Collection Test
                 #runtest-multi.collapse
                     .card.card-body.p-0
                         table.table
                             thead
+                                tr 
+                                    th Domain
+                                    th Title
+                                    th Run Test
                             tbody
                                 if envInfo && userApis[0].api
                                     - let k = 0
@@ -117,7 +125,7 @@ block content
                                             td #{envInfo[k].domain_name}
                                             td #{envInfo[k].title}
                                             td 
-                                                button.btn.btn-secondary.btn-collectiontest-in-toggle(type='submit' id=`${userApis[0].collectionId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Run 
+                                                button.btn.btn-secondary.btn-collectiontest-in-toggle(type='submit' id=`${userApis[0].collectionId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Run
                                         - k++
     
     script.

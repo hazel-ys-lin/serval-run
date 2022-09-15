@@ -204,7 +204,7 @@ const displayReport = async (req, res) => {
   const userEmail = req.session.userEmail; //req.session.email
 
   let userProjects = await projectGetModel(userEmail);
-  console.log('userProjects: ', userProjects);
+  // console.log('userProjects: ', userProjects);
   if (userProjects.length !== 0) {
     res.render('reports', { userProjects: userProjects });
   } else {
@@ -218,7 +218,7 @@ const getExampleReport = async (req, res) => {
   const envId = req.body.envId;
 
   let testCaseReport = await getExampleReportModel(projectId, envId);
-  console.log('testCaseReport: ', testCaseReport.toString());
+  // console.log('testCaseReport: ', testCaseReport.toString());
   if (testCaseReport.toString()) {
     res.status(200).json({ report_id: testCaseReport.toString() });
   } else {
@@ -227,7 +227,7 @@ const getExampleReport = async (req, res) => {
 };
 
 const getReportResponseController = async (req, res) => {
-  console.log('req.query.reportid: ', req.query.reportid);
+  // console.log('req.query.reportid: ', req.query.reportid);
   const reportId = req.query.reportid;
   let reportResponse = await getReportResponseModel(reportId);
   // console.log('reportResponse: ', reportResponse);
