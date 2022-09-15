@@ -13,12 +13,19 @@ const displayCollection = async function (req, res) {
   const projectId = req.query.projectid;
 
   let userCollections = await collectionGetModel(projectId);
+  let envInfo = await envInfoGetModel(projectId);
 
   if (userCollections.length !== 0) {
-    res.render('collections', { userCollections: userCollections });
+    res.render('collections', {
+      userCollections: userCollections,
+      envInfo: envInfo,
+    });
   } else {
     userCollections.push({ projectId: projectId });
-    res.render('collections', { userCollections: userCollections });
+    res.render('collections', {
+      userCollections: userCollections,
+      envInfo: envInfo,
+    });
   }
 };
 

@@ -60,7 +60,21 @@ block content
                                         td 
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userCollections[i].collection._id}`) Delete
                                         td 
-                                            button.btn.btn-info.btn-runtest(type='submit' id=`${userCollections[i].collection._id}`) Run
+                                            button.btn.btn-info.btn-collectiontest(type='submit' id=`${userCollections[i].collection._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-collection-${i}` aria-expanded='false' aria-controls=`#runtest-collection-${i}`) Run
+                                            .collapse(id=`runtest-collection-${i}`)
+                                                .card.card-body.p-0
+                                                    table.table
+                                                        thead
+                                                        tbody
+                                                            if envInfo
+                                                                - let j = 0
+                                                                while j < envInfo.length
+                                                                    tr 
+                                                                        td #{envInfo[j].domain_name}
+                                                                        td #{envInfo[j].title}
+                                                                        td 
+                                                                            button.btn.btn-info.btn-collectiontest-in-toggle(type='submit' id=`${userCollections[i].collection._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
+                                                                    - j++ 
                                     - i++
     script.
         $('.btn-create_collection').on('click', function(event) {
@@ -146,5 +160,38 @@ block content
                 console.log('in error');
                 console.log('catch: ', error)
                 alert('delete project error')
+            })
+        })
+
+        $('.btn-collectiontest-in-toggle').on('click', function(event) {
+            console.log('run collection test in toggle clicked');
+            event.preventDefault();
+            const collectionId = this.id;
+            const domainName = $('.btn-collectiontest-in-toggle').attr('domain');
+            const title = $('.btn-collectiontest-in-toggle').attr('title');
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/collectionrun',
+                data: {
+                    collectionId: collectionId,
+                    domainName: domainName,
+                    title: title,
+                    report_info: {
+                        report_level: 3,
+                        report_type: 'collection',
+                    }
+                }, 
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('Run collection test successfully')
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('catch: ', error)
+                alert('Run collection test error')
             })
         })
