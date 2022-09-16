@@ -20,13 +20,18 @@ body:not(.layout-fixed) .main-sidebar {
   position: fixed;
   top: 0;
 }
+
+.card-body.p-0 .table tbody>tr>td:first-of-type, .card-body.p-0 .table tbody>tr>th:first-of-type, .card-body.p-0 .table tfoot>tr>td:first-of-type, .card-body.p-0 .table tfoot>tr>th:first-of-type, .card-body.p-0 .table thead>tr>td:first-of-type, .card-body.p-0 .table thead>tr>th:first-of-type {
+  padding-left: 1rem;
+}
+
 *, ::after, ::before {
   box-sizing: border-box;
   font-family: 'iunito', sans-serif;
 }
 
 .container, .container-lg, .container-md, .container-sm, .container-xl {
-  max-width: 80%;
+  max-width:85%;
   margin: 0 70px;
 }
 
@@ -51,7 +56,7 @@ img.brand-image {
 }
 
 .input-form {
-  width: 90%;
+  width: 100%;
   padding: 30px 120px 30px 120px;
 }
 
@@ -60,7 +65,7 @@ img.brand-image {
   /* display: flex;
   flex-wrap: wrap; */
   /* max-width: 100%; */
-  width: 90%;
+  width: 100%;
   margin: 0px;
   padding: 30px 120px 30px 120px;
 }

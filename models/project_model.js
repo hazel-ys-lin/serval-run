@@ -11,6 +11,7 @@ const projectSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'user',
   },
+  user_email: String,
   project_name: String,
   environments: [
     {
@@ -62,6 +63,7 @@ const projectInsertModel = async function (projectInfo) {
     if (uniqueProject) {
       let inserted = await projectModel({
         user_id: userData._id.toString(),
+        user_email: projectInfo.userEmail,
         project_name: projectInfo.projectName,
       }).save(opts);
       await userModel.updateOne(
@@ -100,11 +102,13 @@ const projectGetModel = async function (userEmail) {
   });
 
   let userProjects = [];
+  let findProject = {};
   if (userData) {
     for (let i = 0; i < userData.projects.length; i++) {
-      let findProject = await projectModel.findOne({
+      findProject = await projectModel.findOne({
         _id: userData.projects[i].project_id,
       });
+      // console.log('findProject in projectgetmodel: ', findProject);
       if (findProject !== null) {
         userProjects.push(findProject);
       }
@@ -120,6 +124,14 @@ const projectInfoGetModel = async function (domainName, title) {
   });
 
   return { projectId: projectInfo.project_id, envId: projectInfo._id };
+};
+
+const projectNameGetModel = async function (projectId) {
+  let projectData = await projectModel.findOne({
+    _id: projectId,
+  });
+
+  return projectData.project_name;
 };
 
 const projectDeleteModel = async function (projectInfo) {
@@ -286,6 +298,7 @@ module.exports = {
   projectInsertModel,
   projectGetModel,
   projectInfoGetModel,
+  projectNameGetModel,
   projectDeleteModel,
   environmentInsertModel,
   environmentGetModel,

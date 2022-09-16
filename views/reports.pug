@@ -7,33 +7,33 @@ block content
 
   div.content-wrapper
     .input-form
-      h1 Projects
-      if reportsDetail[0][0].projectId
-        - let i = 0
-        while i < reportsDetail[0].length
-          table.table
-            thead
-              tr
-                th(scope='col') Report ID
-                th(scope='col') Test Date
-                th(scope='col') Type
-                th(scope='col') Title
-                th(scope='col') Pass Rate 
-                th(scope='col') Examples
-                th(scope='col') Average Time
-                th(scope='col') Operation 
-            tbody
-              tr
-                th(scope='row') #{reportsDetail[0][i].reportId}
-                td #{reportsDetail[0][i].testDate}
-                td #{reportsDetail[0][i].type}
-                td #{reportsDetail[0][i].testDate}
-                td #{reportsDetail[0][i].passRate}
-                td #{reportsDetail[0][i].passExamples}
-                td #{reportsDetail[0][i].averageTime}
-                td 
-                  button.btn.btn-primary.btn-detail(type='submit' id=`${reportsDetail[0][i].reportId}`) Detail
-          - i++
+      h1 #{reportsDetail[0].projectName}
+      if reportsDetail[0].projectName
+        table.table
+          thead
+            tr
+              th(scope='col') Report ID
+              th(scope='col') Test Date
+              th(scope='col') Type
+              th(scope='col') Title
+              th(scope='col') Pass Rate 
+              th(scope='col') Examples
+              th(scope='col') Average Time
+              th(scope='col') Operation
+          tbody
+          - let i = 0
+          while i < reportsDetail.length
+            tr
+              td #{reportsDetail[i].reportId}
+              td #{reportsDetail[i].testDate}
+              td #{reportsDetail[i].type}
+              td 
+              td #{reportsDetail[i].passRate}
+              td #{reportsDetail[i].passExamples}
+              td #{reportsDetail[i].averageTime}
+              td 
+                button.btn.btn-primary.btn-detail(type='submit' id=`${reportsDetail[i].reportId}`) Detail
+            - i++
 
 
   script.

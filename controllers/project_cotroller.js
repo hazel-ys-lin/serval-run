@@ -17,6 +17,10 @@ const displayProject = async (req, res) => {
   const userId = await userGetModel(userEmail);
 
   let userProjects = await projectGetModel(userEmail);
+  for (let i = 0; i < userProjects.length; i++) {
+    userProjects[i].user_email = userEmail;
+  }
+  // console.log('userProjects: ', userProjects);
   if (userProjects.length !== 0) {
     res.render('projects', { userProjects: userProjects });
   } else {

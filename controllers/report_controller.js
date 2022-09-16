@@ -9,6 +9,7 @@ const {
 } = require('../models/collection_model');
 const {
   projectGetModel,
+  projectNameGetModel,
   environmentGetModel,
   projectInfoGetModel,
 } = require('../models/project_model');
@@ -198,6 +199,24 @@ const collectionRunController = async (req, res) => {
   return res.status(200).json({ message: 'collection test response inserted' });
 };
 
+const displayAllReport = async (req, res) => {
+  const projectId = req.query.projectid;
+  let projectName = await projectNameGetModel(projectId);
+  let reportData = await getReportModel(projectId);
+  let reportCalculated = await calculateReport(reportData);
+  console.log('reportCalculated: ', reportCalculated);
+  for (let i = 0; i < reportCalculated.length; i++) {
+    reportCalculated[i].projectName = projectName;
+  }
+
+  if (reportCalculated.length !== 0) {
+    res.render('reports', { reportsDetail: reportCalculated });
+  } else {
+    reportCalculated.push({ project_name: projectName });
+    res.render('reports', { reportsDetail: reportCalculated });
+  }
+};
+
 const displayReport = async (req, res) => {
   if (!req.session.userId) {
     return res.status(400).json({ msg: 'Please sign in' });
@@ -210,19 +229,18 @@ const displayReport = async (req, res) => {
   let reportsDetail = [];
   for (let i = 0; i < userProjects.length; i++) {
     let reportData = await getReportModel(userProjects[i]._id);
-    // console.log('reportData: ', reportData);
-    // for (let j = 0; j < reportData.length; j++) {
     let reportCalculated = await calculateReport(reportData);
-    reportsDetail.push(reportCalculated);
-    // }
+    if (reportCalculated.length !== 0) {
+      reportsDetail.push(reportCalculated);
+    }
   }
 
-  // console.log('reportsDetail: ', reportsDetail);
+  console.log('reportsDetail: ', reportsDetail);
 
-  if (userProjects.length !== 0) {
+  if (reportsDetail.length !== 0) {
     res.render('reports', { reportsDetail: reportsDetail });
   } else {
-    userProjects.push({ user_id: req.session.userId });
+    reportsDetail.push({ user_id: req.session.userId });
     res.render('reports', { reportsDetail: reportsDetail });
   }
 };
@@ -257,6 +275,7 @@ module.exports = {
   scenarioRunController,
   apiRunController,
   collectionRunController,
+  displayAllReport,
   displayReport,
   getExampleReport,
   getReportResponseController,
