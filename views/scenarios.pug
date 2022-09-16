@@ -49,7 +49,6 @@ block content
                     table.table
                         thead
                             tr
-                                th(style='width: 50px') Scenario ID
                                 th(style='width: 80px') Title
                                 th(style='width: 200px') Description
                                 th(style='width: 20px') Steps
@@ -61,7 +60,6 @@ block content
                                 - let i = 0
                                 while i < userScenarios.length
                                     tr 
-                                        td #{userScenarios[i].scenario._id}
                                         td #{userScenarios[i].scenario.title}
                                         td #{userScenarios[i].scenario.description}
                                         td 

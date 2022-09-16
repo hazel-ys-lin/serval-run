@@ -4,70 +4,91 @@ block content
   link(rel='stylesheet', href='../../css/common.css')
   script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
   script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+  
+  // src: https://stackoverflow.com/questions/16922625/trying-to-format-a-date-on-jade-template
+  -function prettyDate(dateString){
+      //if it's already a date object and not a string you don't need this line:
+      -var date = new Date(dateString);
+      -var d = date.getDate();
+      -var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+      -var m = monthNames[date.getMonth()];
+      -var y = date.getFullYear();
+      -return d+' '+m+' '+y;
+  -}
+
 
   div.content-wrapper
     .input-form
-      h1 #{reportsDetail[0].projectName}
-      if reportsDetail[0].projectName
-        table.table
-          thead
-            tr
-              th(scope='col') Report ID
-              th(scope='col') Test Date
-              th(scope='col') Type
-              th(scope='col') Title
-              th(scope='col') Pass Rate 
-              th(scope='col') Examples
-              th(scope='col') Average Time
-              th(scope='col') Operation
-          tbody
-          - let i = 0
-          while i < reportsDetail.length
-            tr
-              td #{reportsDetail[i].reportId}
-              td #{reportsDetail[i].testDate}
-              td #{reportsDetail[i].type}
-              td 
-              td #{reportsDetail[i].passRate}
-              td #{reportsDetail[i].passExamples}
-              td #{reportsDetail[i].averageTime}
-              td 
-                button.btn.btn-primary.btn-detail(type='submit' id=`${reportsDetail[i].reportId}`) Detail
-            - i++
+    .cards
+      h1.display-4 Results
+      h1.display-6 #{reportsDetail[0].projectName.toUpperCase()}
+      .card
+        .card-body.p-0
+          if reportsDetail[0].projectName
+            table.table 
+              thead
+                tr
+                  th(scope='col' style='width: 200px') Test Date
+                  th(scope='col' style='width: 150px') Type
+                  th(scope='col' style='width: 600px') Title
+                  th(scope='col' style='width: 150px') Pass Rate 
+                  th(scope='col' style='width: 150px') Examples
+                  th(scope='col' style='width: 200px') Average Time
+                  th(scope='col') Operation
+              tbody
+              - let i = 0
+              while i < reportsDetail.length
+                tr
+                  td #{prettyDate(reportsDetail[i].testDate)}
+                  td #{reportsDetail[i].type}
+                  td 
+                  td #{reportsDetail[i].passRate}
+                  td #{reportsDetail[i].passExamples}
+                  td #{reportsDetail[i].averageTime}
+                  td 
+                    button.btn.btn-primary.btn-report-detail(type='submit' id=`${reportsDetail[i].reportId}`) Detail
+                - i++
 
 
   script.
-    $('.btn-viewreport-in-toggle').on('click', function(event) {
-        console.log('view report in toggle clicked');
+    $('.btn-report-detail').on('click', function(event) {
+        console.log('view report-detail clicked')
         event.preventDefault();
-        const projectId = $(this).attr('id');
-        const envId = $('.btn-viewreport-in-toggle').attr('envid');
-        const domainName = $('.btn-viewreport-in-toggle').attr('domain');
-        const title = $('.btn-viewreport-in-toggle').attr('title');
+        const reportId = this.id;
 
-        axios({
-            method: 'post',
-            url: 'http://localhost:3001/api/1.0/reports',
-            data: {
-                projectId: projectId,
-                envId: envId,
-                domainName: domainName,
-                title: title,
-            }, 
-            headers: {'Content-Type': 'application/json'}
-        })
-        .then((response) => {
-            if (response.status === 200) {
-                //- alert('Found report successfully')
-                let reportId = response.data.report_id;
-                //- console.log('reportId: ', reportId);
-                window.location.assign(`./report?reportid=${reportId}`);
-                //- window.location.assign('/casereport');
-                //- window.location.reload();
-            }
-        })
-        .catch((error) => {
-            console.log('catch: ', error)
-            alert('Found report error')
-        })
+        window.location.assign(`./reportdetail?reportid=${reportId}`);
     })
+    //- $('.btn-viewreport-in-toggle').on('click', function(event) {
+    //-     console.log('view report in toggle clicked');
+    //-     event.preventDefault();
+    //-     const projectId = $(this).attr('id');
+    //-     const envId = $('.btn-viewreport-in-toggle').attr('envid');
+    //-     const domainName = $('.btn-viewreport-in-toggle').attr('domain');
+    //-     const title = $('.btn-viewreport-in-toggle').attr('title');
+
+    //-     axios({
+    //-         method: 'post',
+    //-         url: 'http://localhost:3001/api/1.0/reports',
+    //-         data: {
+    //-             projectId: projectId,
+    //-             envId: envId,
+    //-             domainName: domainName,
+    //-             title: title,
+    //-         }, 
+    //-         headers: {'Content-Type': 'application/json'}
+    //-     })
+    //-     .then((response) => {
+    //-         if (response.status === 200) {
+    //-             //- alert('Found report successfully')
+    //-             let reportId = response.data.report_id;
+    //-             //- console.log('reportId: ', reportId);
+    //-             window.location.assign(`./report?reportid=${reportId}`);
+    //-             //- window.location.assign('/casereport');
+    //-             //- window.location.reload();
+    //-         }
+    //-     })
+    //-     .catch((error) => {
+    //-         console.log('catch: ', error)
+    //-         alert('Found report error')
+    //-     })
+    //- })

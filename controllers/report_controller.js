@@ -204,7 +204,7 @@ const displayAllReport = async (req, res) => {
   let projectName = await projectNameGetModel(projectId);
   let reportData = await getReportModel(projectId);
   let reportCalculated = await calculateReport(reportData);
-  console.log('reportCalculated: ', reportCalculated);
+  // console.log('reportCalculated: ', reportCalculated);
   for (let i = 0; i < reportCalculated.length; i++) {
     reportCalculated[i].projectName = projectName;
   }
@@ -214,34 +214,6 @@ const displayAllReport = async (req, res) => {
   } else {
     reportCalculated.push({ project_name: projectName });
     res.render('reports', { reportsDetail: reportCalculated });
-  }
-};
-
-const displayReport = async (req, res) => {
-  if (!req.session.userId) {
-    return res.status(400).json({ msg: 'Please sign in' });
-  }
-  const userEmail = req.session.userEmail; //req.session.email
-
-  let userProjects = await projectGetModel(userEmail);
-  // console.log('userProjects: ', userProjects.length);
-
-  let reportsDetail = [];
-  for (let i = 0; i < userProjects.length; i++) {
-    let reportData = await getReportModel(userProjects[i]._id);
-    let reportCalculated = await calculateReport(reportData);
-    if (reportCalculated.length !== 0) {
-      reportsDetail.push(reportCalculated);
-    }
-  }
-
-  console.log('reportsDetail: ', reportsDetail);
-
-  if (reportsDetail.length !== 0) {
-    res.render('reports', { reportsDetail: reportsDetail });
-  } else {
-    reportsDetail.push({ user_id: req.session.userId });
-    res.render('reports', { reportsDetail: reportsDetail });
   }
 };
 
@@ -259,15 +231,38 @@ const getExampleReport = async (req, res) => {
 };
 
 const getReportResponseController = async (req, res) => {
+  // const apiId = req.query.apiid;
+
+  // let { collectionId } = await apiInfoGetModel(apiId);
+  // let projectId = await collectionInfoGetModel(collectionId);
+  // let envInfo = await envInfoGetModel(projectId);
+
+  // const projectId = req.query.projectid;
+
+  // let projectName = await projectNameGetModel(projectId);
+  // let reportData = await getReportModel(projectId);
+  // let reportCalculated = await calculateReport(reportData);
+  // // console.log('reportCalculated: ', reportCalculated);
+  // for (let i = 0; i < reportCalculated.length; i++) {
+  //   reportCalculated[i].projectName = projectName;
+  // }
   // console.log('req.query.reportid: ', req.query.reportid);
   const reportId = req.query.reportid;
   let reportResponse = await getReportResponseModel(reportId);
-  // console.log('reportResponse: ', reportResponse);
+  // let reportCalculated = await calculateReport(reportResponse);
+  console.log('reportResponse: ', reportResponse);
+  // console.log('reportCalculated: ', reportCalculated);
   if (reportResponse) {
-    res.render('casereport', { reportResponse: reportResponse });
+    res.render('reportdetail', {
+      reportResponse: reportResponse,
+      // reportCalculated: reportCalculated,
+    });
   } else {
     reportResponse.push({ msg: 'no report found' });
-    res.render('casereport', { reportResponse: reportResponse });
+    res.render('reportdetail', {
+      reportResponse: reportResponse,
+      // reportCalculated: reportCalculated,
+    });
   }
 };
 
@@ -276,7 +271,6 @@ module.exports = {
   apiRunController,
   collectionRunController,
   displayAllReport,
-  displayReport,
   getExampleReport,
   getReportResponseController,
 };

@@ -2,7 +2,26 @@
   Base Element Styles
 ==================================== */
 @import url('http://fonts.cdnfonts.com/css/iunito');
-/* @import url('http://fonts.cdnfonts.com/css/engender-mod-font'); */
+@import url('http://fonts.cdnfonts.com/css/engender-mod-font');
+
+.basic-info {
+  display: flex;
+}
+
+.basic-text {
+  flex-grow: 1;
+}
+
+.pass-rate-pie {
+  flex-grow: 1;
+}
+
+.examples-histogram {
+  flex-grow: 1;
+}
+
+dt {clear: left;}
+dt, dd {min-height:0.5em;}
 
 .modal {
   z-index: 10000;
@@ -35,10 +54,6 @@ body:not(.layout-fixed) .main-sidebar {
   margin: 0 70px;
 }
 
-.domain-table-in-toggle {
-  width: 200px;
-}
-
 /* 
 .content-wrapper {
   margin-left: 350px;
@@ -57,7 +72,7 @@ img.brand-image {
 
 .input-form {
   width: 100%;
-  padding: 30px 120px 30px 120px;
+  padding: 30px 90px 30px 90px;
 }
 
 .cards {
@@ -67,7 +82,7 @@ img.brand-image {
   /* max-width: 100%; */
   width: 100%;
   margin: 0px;
-  padding: 30px 120px 30px 120px;
+  padding: 30px 90px 30px 90px;
 }
 
 .card {
@@ -105,4 +120,8 @@ img.brand-image {
   color: #748DA6;
   background-color: #C6DCE4;
   box-shadow: inset 0 -1px 0 rgb(0 0 0 / 13%);
+}
+
+.result-text {
+  font-family: 'Engender Mod', sans-serif;
 }

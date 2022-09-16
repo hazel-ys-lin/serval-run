@@ -41,17 +41,15 @@ block content
                     table.table
                         thead
                             tr
-                                th(style='width: 50px') Collection ID
-                                th(style='width: 50px') Name
-                                th(style='width: 50px') APIs
-                                th(style='width: 50px') Operations
-                                th Run Test
+                                th(style='width: 250px') Collection Name
+                                th APIs
+                                th Operations
+                                th(style='width: 600px') Run Test
                         tbody
                             if userCollections[0].collection
                                 - let i = 0
                                 while i < userCollections.length
                                     tr 
-                                        td #{userCollections[i].collection._id}
                                         td #{userCollections[i].collection.collection_name}
                                         td 
                                             button.btn.btn-warning.btn-apis(type='submit' id=`${userCollections[i].collection._id}`) View
@@ -59,7 +57,7 @@ block content
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userCollections[i].collection._id}`) Delete
                                         td 
                                             button.btn.btn-info.btn-collectiontest(type='submit' id=`${userCollections[i].collection._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-collection-${i}` aria-expanded='false' aria-controls=`#runtest-collection-${i}`) Run Collection Test
-                                            .collapse.domain-table-in-toggle(id=`runtest-collection-${i}`)
+                                            .collapse.env-table(id=`runtest-collection-${i}`)
                                                 .p-0
                                                     table.table
                                                         thead

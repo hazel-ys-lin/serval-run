@@ -63,20 +63,18 @@ block content
                     table.table
                         thead
                             tr
-                                th(style='width: 20px') API ID
-                                th(style='width: 10px') Name
-                                th(style='width: 10px') Method
-                                th(style='width: 10px') Endpoint
-                                th(style='width: 10px') Severity
-                                th(style='width: 10px') Scenarios
-                                th(style='width: 10px') Operations
-                                th Run Test
+                                th Name
+                                th Method
+                                th Endpoint
+                                th Severity
+                                th Scenarios
+                                th Operations
+                                th(style='width: 500px') Run Test
                         tbody
                             if userApis[0].api 
                                 - let i = 0
                                 while i < userApis.length
                                     tr 
-                                        td #{userApis[i].api._id}
                                         td #{userApis[i].api.api_name}
                                         td #{userApis[i].api.http_method}
                                         td #{userApis[i].api.api_endpoint}
@@ -87,8 +85,8 @@ block content
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
                                         td 
                                             button.btn.btn-info.btn-apitest(type='submit' id=`${userApis[i].api._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-api-${i}` aria-expanded='false' aria-controls=`#runtest-api-${i}`) Run API Test
-                                            .collapse(id=`runtest-api-${i}`)
-                                                .card.card-body.p-0
+                                            .collapse.env-table(id=`runtest-api-${i}`)
+                                                .p-0
                                                     table.table
                                                         thead
                                                             tr 
