@@ -40,8 +40,16 @@ block content
               while i < reportsDetail.length
                 tr
                   td #{prettyDate(reportsDetail[i].testDate)}
-                  td #{reportsDetail[i].type}
                   td 
+                    if reportsDetail[i].type === 'SCENARIO'
+                      h1.display-6.badge(style='font-size: 150%; background-color: #809A6F')= reportsDetail[i].type
+                    else if reportsDetail[i].type === 'API'
+                      h1.display-6.badge(style='font-size: 150%; background-color: #A25B5B')= reportsDetail[i].type
+                    else 
+                      h1.display-6.badge(style='font-size: 150%; background-color: #CC9C75')= reportsDetail[i].type
+                  td.report-title.list-inline
+                    each element in reportsDetail[i].reportTitle
+                      h1.list-inline-item.badge.bg-light(style='font-size: 125%;')= element
                   td #{reportsDetail[i].passRate}
                   td #{reportsDetail[i].passExamples}
                   td #{reportsDetail[i].averageTime}
@@ -58,37 +66,3 @@ block content
 
         window.location.assign(`./reportdetail?reportid=${reportId}`);
     })
-    //- $('.btn-viewreport-in-toggle').on('click', function(event) {
-    //-     console.log('view report in toggle clicked');
-    //-     event.preventDefault();
-    //-     const projectId = $(this).attr('id');
-    //-     const envId = $('.btn-viewreport-in-toggle').attr('envid');
-    //-     const domainName = $('.btn-viewreport-in-toggle').attr('domain');
-    //-     const title = $('.btn-viewreport-in-toggle').attr('title');
-
-    //-     axios({
-    //-         method: 'post',
-    //-         url: 'http://localhost:3001/api/1.0/reports',
-    //-         data: {
-    //-             projectId: projectId,
-    //-             envId: envId,
-    //-             domainName: domainName,
-    //-             title: title,
-    //-         }, 
-    //-         headers: {'Content-Type': 'application/json'}
-    //-     })
-    //-     .then((response) => {
-    //-         if (response.status === 200) {
-    //-             //- alert('Found report successfully')
-    //-             let reportId = response.data.report_id;
-    //-             //- console.log('reportId: ', reportId);
-    //-             window.location.assign(`./report?reportid=${reportId}`);
-    //-             //- window.location.assign('/casereport');
-    //-             //- window.location.reload();
-    //-         }
-    //-     })
-    //-     .catch((error) => {
-    //-         console.log('catch: ', error)
-    //-         alert('Found report error')
-    //-     })
-    //- })

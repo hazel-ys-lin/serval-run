@@ -284,6 +284,15 @@ const getReportModel = async function (projectId) {
   return reportData;
 };
 
+const getReportDetailModel = async function (reportId) {
+  let reportDetail = await reportModel.findOne({
+    _id: reportId,
+  });
+  // console.log('reportDetail: ', reportDetail);
+
+  return reportDetail;
+};
+
 const getReportResponseModel = async function (reportId) {
   let responseData = await responseModel.find({
     report_id: reportId,
@@ -309,6 +318,7 @@ module.exports = {
   apiResponseInsertModel,
   collectionResponseInsertModel,
   getReportModel,
+  getReportDetailModel,
   getReportResponseModel,
   getResponseByReportModel,
 };

@@ -142,6 +142,15 @@ const scenarioDeleteModel = async function (scenarioInfo) {
   }
 };
 
+const scenarioDetailModel = async function (scenarioId) {
+  let scenarioInfo = await scenarioModel.findOne({
+    _id: scenarioId,
+  });
+  // console.log('scenario info type: ', typeof scenarioInfo);
+
+  return { title: scenarioInfo.title, description: scenarioInfo.description };
+};
+
 const exampleGetModel = async function (scenarioId) {
   let [scenarioData] = await scenarioModel.find({
     _id: scenarioId,
@@ -150,10 +159,26 @@ const exampleGetModel = async function (scenarioId) {
   return { scenario_id: scenarioId, examples: scenarioData.examples };
 };
 
+const exampleDetailGetModel = async function (scenarioId, exampleId) {
+  // console.log('exampleId: ', exampleId);
+  let [exampleDetail] = await scenarioModel.find({
+    _id: scenarioId,
+  });
+  // console.log('exampleDetail.examples: ', exampleDetail.examples);
+
+  for (let i = 0; i < exampleDetail.examples.length; i++) {
+    if (exampleDetail.examples[i]._id.toString() === exampleId.toString()) {
+      return exampleDetail.examples[i].expected_status_code;
+    }
+  }
+};
+
 module.exports = {
   scenarioModel,
   scenarioGetModel,
   scenarioInsertModel,
   scenarioDeleteModel,
+  scenarioDetailModel,
   exampleGetModel,
+  exampleDetailGetModel,
 };

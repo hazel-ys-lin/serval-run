@@ -1,10 +1,15 @@
 const {
-  getReportResponseModel,
+  // getReportResponseModel,
   getResponseByReportModel,
 } = require('../models/report_model');
+const {
+  collectionNameModel,
+  apiNameModel,
+} = require('../models/collection_model');
+const { scenarioDetailModel } = require('../models/scenario_model');
 
 const calculateReport = async function (reportDataArray) {
-  //   console.log('reportDataArray: ', reportDataArray);
+  // console.log('reportDataArray: ', reportDataArray);
   let calculatedArray = [];
   for (let i = 0; i < reportDataArray.length; i++) {
     let reportTemp = {};
@@ -15,15 +20,12 @@ const calculateReport = async function (reportDataArray) {
 
     reportTemp.testDate = reportDataArray[i].create_time;
     reportTemp.type = reportDataArray[i].report_info.report_type.toUpperCase();
+    reportTemp.reportTitle = reportDataArray[i].report_title;
     let responsesAmount = reportDataArray[i].responses.length;
 
     let passAmount = 0;
     let totalTimeLength = 0;
     for (let j = 0; j < reportDataArray[i].responses.length; j++) {
-      //   console.log(
-      //     'reportDataArray[i].responses[j]: ',
-      //     reportDataArray[i].responses[j]
-      //   );
       let responseData = await getResponseByReportModel(
         reportDataArray[i].responses[j].response_id
       );
@@ -49,4 +51,38 @@ const calculateReport = async function (reportDataArray) {
   return calculatedArray;
 };
 
-module.exports = { calculateReport };
+const titleOfReport = async function (reportArray) {
+  // console.log('reportArray.length: ', reportArray.length);
+
+  let collectionName, apiName, scenarioName;
+  for (let i = 0; i < reportArray.length; i++) {
+    let reportTitle = [];
+    reportArray[i] = reportArray[i].toObject();
+
+    if (reportArray[i].report_info.report_level === 3) {
+      collectionName = await collectionNameModel(reportArray[i].collection_id);
+      reportTitle.push(collectionName);
+      reportArray[i].report_title = reportTitle;
+    } else if (reportArray[i].report_info.report_level === 2) {
+      collectionName = await collectionNameModel(reportArray[i].collection_id);
+      reportTitle.push(collectionName);
+      apiName = await apiNameModel(reportArray[i].responses[0].api_id);
+      reportTitle.push(apiName);
+      reportArray[i].report_title = reportTitle;
+    } else if (reportArray[i].report_info.report_level === 1) {
+      collectionName = await collectionNameModel(reportArray[i].collection_id);
+      reportTitle.push(collectionName);
+      apiName = await apiNameModel(reportArray[i].responses[0].api_id);
+      reportTitle.push(apiName);
+      scenarioName = await scenarioDetailModel(
+        reportArray[i].responses[0].scenario_id
+      );
+      reportTitle.push(scenarioName.title);
+      // console.log('reportTitle: ', reportTitle);
+      reportArray[i].report_title = reportTitle;
+    }
+  }
+  return reportArray;
+};
+
+module.exports = { calculateReport, titleOfReport };

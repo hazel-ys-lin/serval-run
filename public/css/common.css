@@ -9,7 +9,7 @@
 }
 
 .basic-text {
-  flex-grow: 1;
+  flex-grow: 0.4;
 }
 
 .pass-rate-pie {
@@ -50,7 +50,7 @@ body:not(.layout-fixed) .main-sidebar {
 }
 
 .container, .container-lg, .container-md, .container-sm, .container-xl {
-  max-width:85%;
+  max-width: 95%;
   margin: 0 70px;
 }
 
@@ -124,4 +124,8 @@ img.brand-image {
 
 .result-text {
   font-family: 'Engender Mod', sans-serif;
+}
+
+.table td, .table th {
+  vertical-align: initial;
 }

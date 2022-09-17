@@ -122,6 +122,14 @@ const collectionInfoGetModel = async function (collectionId) {
   return collectionInfo.project_id;
 };
 
+const collectionNameModel = async function (collectionId) {
+  let collectionName = await collectionModel.findOne({
+    _id: collectionId,
+  });
+
+  return collectionName.collection_name;
+};
+
 const collectionDeleteModel = async function (collectionInfo) {
   const session = await collectionModel.startSession();
   session.startTransaction();
@@ -254,6 +262,13 @@ const apiInfoGetModel = async function (apiId) {
   };
 };
 
+const apiNameModel = async function (apiId) {
+  let apiName = await apiModel.findOne({
+    _id: apiId,
+  });
+  return apiName.api_name;
+};
+
 const apiDeleteModel = async function (apiInfo) {
   const session = await apiModel.startSession();
   session.startTransaction();
@@ -304,8 +319,10 @@ module.exports = {
   collectionGetModel,
   collectionDeleteModel,
   collectionInfoGetModel,
+  collectionNameModel,
   apiInsertModel,
   apiGetModel,
   apiInfoGetModel,
+  apiNameModel,
   apiDeleteModel,
 };

@@ -2,8 +2,10 @@ extends layout.pug
 
 block content 
   link(rel='stylesheet', href='../../css/common.css')
+  link(rel='stylesheet', href='../../css/chart.css')
   script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
   //- script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+  script(src='/src/animation.js')
   script(src='/src/plugins/jquery.js')
   script(src='/src/plugins/jquery.flot.js')
   script(src='/src/plugins/jquery.flot.pie.js')
@@ -29,14 +31,17 @@ block content
             .card-body 
               #info-text(style='height: 300px; padding: 0px; position: relative;')
                 dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
-                  dt API ID
-                  dd #{reportResponse[0].api_id}
+                  dt Project ID
+                  dd #{reportDetail.project_id}
                 dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
-                  dt Scenario ID
-                  dd #{reportResponse[0].scenario_id}
+                  dt Environment ID
+                  dd #{reportDetail.environment_id}
                 dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
-                  dt Example ID
-                  dd #{reportResponse[0].example_id}
+                  dt Collection ID
+                  dd #{reportDetail.collection_id}
+                dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
+                  dt Report Type
+                  dd #{reportDetail.report_info.report_type.toUpperCase()}
 
         .pass-rate-pie 
           .card
@@ -47,19 +52,14 @@ block content
                 canvas.flot-overlay(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
                 span#pieLabel0.pieLabel(style='position: absolute; top: 69.5px; left: 440.203px;')
                   div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
-                    | Series2
+                    | Pass
                     br
-                    | 30%
+                    | 60%
                 span#pieLabel1.pieLabel(style='position: absolute; top: 209.5px; left: 418.203px;')
                   div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
-                    | Series3
+                    | Fail
                     br
-                    | 20%
-                span#pieLabel2.pieLabel(style='position: absolute; top: 128.5px; left: 259.203px;')
-                  div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
-                    | Series4
-                    br
-                    | 50%
+                    | 40%
 
         .examples-histogram
           .card
@@ -87,18 +87,19 @@ block content
         .card-header Progress
         .card-body
           .progress
-            .progress-bar.bg-success(role='progressbar' style='width: 15%' aria-valuenow='15' aria-valuemin='0' aria-valuemax='100') 15%
-            .progress-bar.bg-warning.text-dark(role='progressbar' style='width: 30%' aria-valuenow='30' aria-valuemin='0' aria-valuemax='100') 30%
-            .progress-bar.bg-danger(role='progressbar' style='width: 20%' aria-valuenow='20' aria-valuemin='0' aria-valuemax='100') 20%
+            .progress-bar(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #68B0AB') 15%
+            .progress-bar.text-dark(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #FFD36B') 30%
+            .progress-bar(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #EA907A') 20%
 
           .progress-bar-description
             div
-              br
-              .badge.bg-success(style='float: right;') Finished 15%
-              br
-              .badge.bg-warning.text-dark(style='float: right;') Pending 30%
-              br
-              .badge.bg-danger(style='float: right;') Failed 20%
+              h5
+                br
+                .badge(style='float: right; background-color: #68B0AB') Finished 15%
+                br
+                .badge.text-dark(style='float: right; background-color: #FFD36B') Pending 30%
+                br
+                .badge(style='float: right; background-color: #EA907A') Failed 20%
 
 
       .card
@@ -110,7 +111,7 @@ block content
                 tr
                   th(scope='col') Time
                   th(scope='col') Scenario Title
-                  th(scope='col') Example
+                  th(scope='col') Description
                   th(scope='col') Result 
                   th(scope='col') Expected Result
                   th(scope='col') Real Result
@@ -120,13 +121,13 @@ block content
               while i < reportResponse.length
                 tr
                   td #{prettyDate(reportResponse[i].request_time)}
-                  td #{reportResponse[i].scenario_id}
-                  td #{reportResponse[i].example_id}
+                  td #{reportResponse[i].scenario_title}
+                  td #{reportResponse[i].description}
                   if reportResponse[i].pass
-                    td.result-text(style='color: green;') #{reportResponse[i].pass.toString().toUpperCase()}
+                    td.result-text(style='color: green;') PASS
                   else 
-                    td.result-text(style='color: red;') #{reportResponse[i].pass.toString().toUpperCase()}
-                  td #{reportResponse[i].response_status}
+                    td.result-text(style='color: red;') FAIL
+                  td #{reportResponse[i].expected_status_code}
                   td #{reportResponse[i].response_status}
                   th #{reportResponse[i].request_time_length}
                 - i++
@@ -143,19 +144,14 @@ block content
 
       let donutData = [
         {
-          label: 'Series2',
-          data : 30,
-          color: '#3c8dbc'
+          label: 'Pass',
+          data : 60,
+          color: '#FA7070'
         },
         {
-          label: 'Series3',
-          data : 20,
-          color: '#0073b7'
-        },
-        {
-          label: 'Series4',
-          data : 50,
-          color: '#00c0ef'
+          label: 'Fail',
+          data : 40,
+          color: '#54BAB9'
         }
       ]
       $.plot('#donut-chart', donutData, {
@@ -183,7 +179,7 @@ block content
       * ---------
       */
       let bar_data = {
-        data : [[1,10], [2,8], [3,4], [4,13]],
+        data : [[1,5], [2,3], [3,2]],
         bars: { show: true }
       }
       $.plot('#bar-chart', [bar_data], {
@@ -197,9 +193,9 @@ block content
             show: true, barWidth: 0.5, align: 'center',
           },
         },
-        colors: ['#3c8dbc'],
+        colors: ['#6E85B7'],
         xaxis : {
-          ticks: [[1,'January'], [2,'February'], [3,'March'], [4,'April'], [5,'May'], [6,'June']]
+          ticks: [[1,'Total'], [2,'Pass'], [3,'Fail']]
         }
       })
       /* END BAR CHART */

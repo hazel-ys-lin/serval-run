@@ -1,6 +1,8 @@
 const {
   scenarioGetModel,
+  scenarioDetailModel,
   exampleGetModel,
+  exampleDetailGetModel,
 } = require('../models/scenario_model');
 const {
   collectionGetModel,
@@ -18,10 +20,14 @@ const {
   apiResponseInsertModel,
   collectionResponseInsertModel,
   getReportModel,
+  getReportDetailModel,
   getReportResponseModel,
 } = require('../models/report_model');
 const { callHttpRequest } = require('../service/httpRequest_service');
-const { calculateReport } = require('../service/reportStatistic_service');
+const {
+  calculateReport,
+  titleOfReport,
+} = require('../service/reportStatistic_service');
 
 const scenarioRunController = async (req, res) => {
   const apiId = req.body.apiId;
@@ -38,14 +44,6 @@ const scenarioRunController = async (req, res) => {
   console.log('testData in scenarioRunController: ', testData);
 
   // TODO: refactor
-
-  // let testInfo = {
-  //   apiId: apiId,
-  //   scenarioId: scenarioId,
-  //   collectionId: collectionId,
-  //   projectId: projectId,
-  //   envId: envId,
-  // };
 
   let testConfig = {
     method: `${httpMethod}`,
@@ -87,7 +85,6 @@ const apiRunController = async (req, res) => {
   let testData = [];
   for (let i = 0; i < scenarios.length; i++) {
     let exampleArray = [];
-    // console.log(scenarios[i].scenario.examples);
     for (let j = 0; j < scenarios[i].scenario.examples.length; j++) {
       exampleArray.push(scenarios[i].scenario.examples[j]);
     }
@@ -97,7 +94,6 @@ const apiRunController = async (req, res) => {
       examples: exampleArray,
     });
   }
-  // console.log('testData after push: ', testData);
 
   let testConfig = {
     method: `${httpMethod}`,
@@ -108,7 +104,6 @@ const apiRunController = async (req, res) => {
   };
 
   let httpRequestResult = await callHttpRequest(testConfig, testData);
-  // console.log('httpRequestResult in apiRunController: ', httpRequestResult);
 
   let insertTestResult = await apiResponseInsertModel(
     projectId,
@@ -129,7 +124,6 @@ const collectionRunController = async (req, res) => {
   const domainName = req.body.domainName;
   const title = req.body.title;
   const reportInfo = req.body.report_info;
-  // console.log('domainName, title: ', domainName, title);
 
   let apiArray = await apiGetModel(collectionId);
   let apiInfoArray = [];
@@ -138,10 +132,8 @@ const collectionRunController = async (req, res) => {
     temp.api_id = apiArray[i].api._id;
     apiInfoArray.push(temp);
   }
-  // console.log('apiInfoArray in collectionRunController: ', apiInfoArray);
 
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
-  // console.log('projectId, envId: ', projectId, envId);
 
   // TODO: deal with different httpmethod and api endpoint
   let httpRequestResult = [];
@@ -164,7 +156,7 @@ const collectionRunController = async (req, res) => {
     let testData = [];
     for (let i = 0; i < scenarios.length; i++) {
       let exampleArray = [];
-      // console.log(scenarios[i].scenario.examples);
+
       for (let j = 0; j < scenarios[i].scenario.examples.length; j++) {
         exampleArray.push(scenarios[i].scenario.examples[j]);
       }
@@ -180,10 +172,6 @@ const collectionRunController = async (req, res) => {
       httpRequestResult.push(apiRequestResult[m]);
     }
   }
-  // console.log(
-  //   'httpRequestResult in collectionRunController: ',
-  //   httpRequestResult
-  // );
 
   let insertTestResult = await collectionResponseInsertModel(
     projectId,
@@ -201,13 +189,17 @@ const collectionRunController = async (req, res) => {
 
 const displayAllReport = async (req, res) => {
   const projectId = req.query.projectid;
+
   let projectName = await projectNameGetModel(projectId);
   let reportData = await getReportModel(projectId);
-  let reportCalculated = await calculateReport(reportData);
-  // console.log('reportCalculated: ', reportCalculated);
+  let reportTitle = await titleOfReport(reportData);
+  let reportCalculated = await calculateReport(reportTitle);
+
   for (let i = 0; i < reportCalculated.length; i++) {
     reportCalculated[i].projectName = projectName;
   }
+
+  // console.log('reportCalculated: ', reportCalculated);
 
   if (reportCalculated.length !== 0) {
     res.render('reports', { reportsDetail: reportCalculated });
@@ -219,10 +211,8 @@ const displayAllReport = async (req, res) => {
 
 const getExampleReport = async (req, res) => {
   const projectId = req.body.projectId;
-  const envId = req.body.envId;
 
   let testCaseReport = await getReportModel(projectId);
-  // console.log('testCaseReport: ', testCaseReport.toString());
   if (testCaseReport.toString()) {
     res.status(200).json({ report_id: testCaseReport.toString() });
   } else {
@@ -231,37 +221,35 @@ const getExampleReport = async (req, res) => {
 };
 
 const getReportResponseController = async (req, res) => {
-  // const apiId = req.query.apiid;
-
-  // let { collectionId } = await apiInfoGetModel(apiId);
-  // let projectId = await collectionInfoGetModel(collectionId);
-  // let envInfo = await envInfoGetModel(projectId);
-
-  // const projectId = req.query.projectid;
-
-  // let projectName = await projectNameGetModel(projectId);
-  // let reportData = await getReportModel(projectId);
-  // let reportCalculated = await calculateReport(reportData);
-  // // console.log('reportCalculated: ', reportCalculated);
-  // for (let i = 0; i < reportCalculated.length; i++) {
-  //   reportCalculated[i].projectName = projectName;
-  // }
-  // console.log('req.query.reportid: ', req.query.reportid);
   const reportId = req.query.reportid;
+  let reportDetail = await getReportDetailModel(reportId);
+  let reportCalculated = await calculateReport([reportDetail]);
   let reportResponse = await getReportResponseModel(reportId);
-  // let reportCalculated = await calculateReport(reportResponse);
-  console.log('reportResponse: ', reportResponse);
-  // console.log('reportCalculated: ', reportCalculated);
+
+  for (let i = 0; i < reportResponse.length; i++) {
+    let exampleDetail = await exampleDetailGetModel(
+      reportResponse[i].scenario_id,
+      reportResponse[i].example_id
+    );
+    let scenarioInfo = await scenarioDetailModel(reportResponse[i].scenario_id);
+    reportResponse[i] = reportResponse[i].toObject();
+    reportResponse[i].expected_status_code = exampleDetail;
+    reportResponse[i].scenario_title = scenarioInfo.title;
+    reportResponse[i].description = scenarioInfo.description;
+  }
+
   if (reportResponse) {
     res.render('reportdetail', {
+      reportDetail: reportDetail,
       reportResponse: reportResponse,
-      // reportCalculated: reportCalculated,
+      reportCalculated: reportCalculated,
     });
   } else {
     reportResponse.push({ msg: 'no report found' });
     res.render('reportdetail', {
+      reportDetail: reportDetail,
       reportResponse: reportResponse,
-      // reportCalculated: reportCalculated,
+      reportCalculated: reportCalculated,
     });
   }
 };
