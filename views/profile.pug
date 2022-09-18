@@ -29,8 +29,13 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('Log Out Successfully!')
-                    window.location.assign('../../../');
+                    swal({
+                        text: "You have logged out",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.assign('../../../');
+                    }, 2000)
                 }
             })
             .catch((error) => {
