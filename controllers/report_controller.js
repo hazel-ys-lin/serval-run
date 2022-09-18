@@ -1,3 +1,5 @@
+const Cache = require('../util/cache');
+const CHANNEL_KEY = 'report-channel';
 const {
   scenarioGetModel,
   scenarioDetailModel,
@@ -22,6 +24,7 @@ const {
   calculateReport,
   titleOfReport,
 } = require('../service/reportStatistic_service');
+const { sendToQueue } = require('../service/queue_service');
 
 const scenarioRunController = async (req, res) => {
   const apiId = req.body.apiId;
@@ -36,6 +39,13 @@ const scenarioRunController = async (req, res) => {
   const testData = await exampleGetModel(scenarioId);
   testData.api_id = apiId;
 
+  let testInfo = {
+    projectId: projectId,
+    envId: envId,
+    collectionId: collectionId,
+    reportInfo: reportInfo,
+  };
+
   let testConfig = {
     method: `${httpMethod}`,
     url: `${domainName}${apiEndpoint}`,
@@ -44,21 +54,34 @@ const scenarioRunController = async (req, res) => {
     },
   };
 
+  let testAllData = {
+    testInfo: testInfo,
+    testConfig: testConfig,
+    testData: testData,
+  };
+
   // TODO: stringify object data, send httprequest job to redis queue
-  let httpRequestResult = await callHttpRequest(testConfig, testData);
+  let sendToQueueResult = await sendToQueue(testAllData);
+  // =========== START OF STUFFS SEND TO WORK QUEUE ===========
+  // let httpRequestResult = await callHttpRequest(testConfig, testData);
 
-  let insertTestResult = await exampleResponseInsertModel(
-    projectId,
-    envId,
-    collectionId,
-    reportInfo,
-    httpRequestResult
-  );
+  // let insertTestResult = await exampleResponseInsertModel(
+  //   projectId,
+  //   envId,
+  //   collectionId,
+  //   reportInfo,
+  //   httpRequestResult
+  // );
+  // =========== END OF STUFFS SEND TO WORK QUEUE ===========
 
-  if (!insertTestResult) {
-    return res.status(403).json({ message: 'run scenario test error' });
+  if (!sendToQueueResult) {
+    return res
+      .status(403)
+      .json({ message: 'Send scenario test to running list error' });
   }
-  return res.status(200).json({ message: 'scenario test response inserted' });
+  return res
+    .status(200)
+    .json({ message: 'Send scenario test to running list successfully' });
 };
 
 const apiRunController = async (req, res) => {
@@ -211,6 +234,24 @@ const getExampleReport = async (req, res) => {
 
 const getReportResponseController = async (req, res) => {
   // TODO: subscribe the channel which is watching worker
+  Cache.subscribe(CHANNEL_KEY, (error) => {
+    if (error) {
+      // Just like other commands, subscribe() can fail for some reasons,
+      // ex network issues.
+      console.error('Failed to subscribe: ', error.message);
+    } else {
+      // `count` represents the number of channels this client are currently subscribed to.
+      console.log(
+        `Subscribed successfully! This client is currently subscribed to channel.`
+      );
+    }
+  });
+  // TODO: the controller ? listening to channel
+  Cache.on(CHANNEL_KEY, (channel, status) => {
+    console.log(`Received ${message} from ${channel}`);
+  });
+
+  // TODO: if got status from channel, send status to render
   const reportId = req.query.reportid;
   let reportDetail = await getReportDetailModel(reportId);
   let reportCalculated = await calculateReport([reportDetail]);

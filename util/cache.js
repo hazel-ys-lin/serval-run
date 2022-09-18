@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Redis = require('ioredis');
 const { CACHE_HOST, CACHE_PORT, CACHE_USER, CACHE_PASSWORD } = process.env;
-const redisClinet = new Redis({
+const redis = new Redis({
   host: CACHE_HOST,
   port: CACHE_PORT,
   username: CACHE_USER,
@@ -16,4 +16,4 @@ const redisClinet = new Redis({
   maxRetriesPerRequest: 1,
 });
 
-module.exports = redisClinet;
+module.exports = redis;
