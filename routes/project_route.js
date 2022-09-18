@@ -10,17 +10,11 @@ const {
 } = require('../controllers/project_cotroller');
 
 router.route('/projects').get(wrapAsync(displayProject));
-router
-  .route('/editproject')
-  .post(authentication, wrapAsync(projectInsertController));
-router
-  .route('/editproject')
-  .delete(authentication, wrapAsync(projectDeleteController));
+router.route('/editproject').post(wrapAsync(projectInsertController));
+router.route('/editproject').delete(wrapAsync(projectDeleteController));
 
-router
-  .route('/environments')
-  .get(authentication, wrapAsync(displayEnvironment));
-router.route('/editenv').post(authentication, wrapAsync(envInsertController));
-router.route('/editenv').delete(authentication, wrapAsync(envDeleteController));
+router.route('/environments').get(wrapAsync(displayEnvironment));
+router.route('/editenv').post(wrapAsync(envInsertController));
+router.route('/editenv').delete(wrapAsync(envDeleteController));
 
 module.exports = router;

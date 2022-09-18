@@ -50,8 +50,8 @@ block content
                         thead
                             tr
                                 th(style='width: 80px') Title
-                                th(style='width: 200px') Description
-                                th(style='width: 20px') Steps
+                                th(style='width: 150px') Description
+                                th(style='width: 360px') Steps
                                 th(style='width: 20px') Examples
                                 th(style='width: 20px') Operations
                                 th Run Test
@@ -63,9 +63,25 @@ block content
                                         td #{userScenarios[i].scenario.title}
                                         td #{userScenarios[i].scenario.description}
                                         td 
-                                            button.btn.btn-primary.btn-steps(type='submit' id=`${userScenarios[i].scenario._id}`) More
+                                            button.btn.btn-primary.btn-steps(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#scenario-steps-${i}` aria-expanded='false' aria-controls=`#scenario-steps-${i}`) More
+                                            .collapse(id=`scenario-steps-${i}`)
+                                                .p-0
+                                                    table
+                                                        #info-text
+                                                            dl(style='padding-top: 5px; margin-bottom: 0px;')
+                                                                each element in userScenarios[i].scenario.steps
+                                                                    dt.badge.bg-light(style='font-size: 90%;')= element.keyword
+                                                                    dd.list-inline-item(style='font-size: 90%;')= element.text
+                                                                    br
                                         td 
-                                            button.btn.btn-warning.btn-examples(type='submit' id=`${userScenarios[i].scenario._id}`) More
+                                            button.btn.btn-warning.btn-examples(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#scenario-examples-${i}` aria-expanded='false' aria-controls=`#scenario-examples-${i}`) More
+                                            .collapse(id=`scenario-examples-${i}`)
+                                                .p-0 
+                                                    table 
+                                                        tbody 
+                                                            each element in userScenarios[i].scenario.examples
+                                                                tr=element.example.email
+                                                        
                                         td 
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userScenarios[i].scenario._id}`) Delete
                                         td 
@@ -265,5 +281,12 @@ block content
             .catch((error) => {
                 console.log('catch: ', error)
                 alert('Run api test error')
+            })
+        })
+
+        $(document).ready(() => {
+            let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+            let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl)
             })
         })

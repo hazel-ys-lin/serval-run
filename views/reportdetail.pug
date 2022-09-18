@@ -24,6 +24,15 @@ block content
   -}
 
   div.content-wrapper
+    nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
+        ol.breadcrumb
+            li.breadcrumb-item
+              a(href='') Project
+            li.breadcrumb-item
+              a(href='') Report Table
+            li.breadcrumb-item
+              a(href='') Report Detail
+
     .input-form
       h1.display-4 Report Details
 

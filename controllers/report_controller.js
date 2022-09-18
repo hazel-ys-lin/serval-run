@@ -234,22 +234,22 @@ const getExampleReport = async (req, res) => {
 
 const getReportResponseController = async (req, res) => {
   // TODO: subscribe the channel which is watching worker
-  Cache.subscribe(CHANNEL_KEY, (error) => {
-    if (error) {
-      // Just like other commands, subscribe() can fail for some reasons,
-      // ex network issues.
-      console.error('Failed to subscribe: ', error.message);
-    } else {
-      // `count` represents the number of channels this client are currently subscribed to.
-      console.log(
-        `Subscribed successfully! This client is currently subscribed to channel.`
-      );
-    }
-  });
-  // TODO: the controller ? listening to channel
-  Cache.on(CHANNEL_KEY, (channel, status) => {
-    console.log(`Received ${message} from ${channel}`);
-  });
+  // Cache.subscribe(CHANNEL_KEY, (error) => {
+  //   if (error) {
+  //     // Just like other commands, subscribe() can fail for some reasons,
+  //     // ex network issues.
+  //     console.error('Failed to subscribe: ', error.message);
+  //   } else {
+  //     // `count` represents the number of channels this client are currently subscribed to.
+  //     console.log(
+  //       `Subscribed successfully! This client is currently subscribed to channel.`
+  //     );
+  //   }
+  // });
+  // // TODO: the controller ? listening to channel
+  // Cache.on(CHANNEL_KEY, (channel, status) => {
+  //   console.log(`Received ${message} from ${channel}`);
+  // });
 
   // TODO: if got status from channel, send status to render
   const reportId = req.query.reportid;
