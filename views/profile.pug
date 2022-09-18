@@ -7,13 +7,16 @@ block content
     
     div.content-wrapper
         .cards
-            h1.display-3 Welcome Back!
-                br 
-                | Start your test journey with Serval now.
+            h1.display-3(style='text-align: center;') Welcome Back!
+                h1.display-5(style='text-align: center;')
+                    | Start your test journey with Serval now.
             .card
-                h1.display-5 #{userInfo.userName}
-                    h1.display-6 #{userInfo.userEmail}
+                .card-body
+                    img.rounded-circle.profile-image(src='../../css/icon/serval.png' alt='Profile' style='opacity: .8; width: 103px; height: 103px; border-bottom: 30px;')
+                    h1.display-5(style='text-align: center;') #{userInfo.userName}
+                    h1.display-6(style='text-align: center;') #{userInfo.userEmail}
             button.btn.btn-right.btn-outline-info.btn-log_out(type='submit') Log Out
+
     script.
         $('.btn-log_out').on('click', function(event) {
             console.log('log out clicked')

@@ -12,12 +12,15 @@ block content
 
   -function prettyDate(dateString){
       //if it's already a date object and not a string you don't need this line:
-      -var date = new Date(dateString);
-      -var d = date.getDate();
-      -var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-      -var m = monthNames[date.getMonth()];
-      -var y = date.getFullYear();
-      -return d+' '+m+' '+y;
+      -let date = new Date(dateString);
+      -let d = date.getDate();
+      -let monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+      -let m = monthNames[date.getMonth()];
+      -let y = date.getFullYear();
+      -let h = date.getHours();
+      -let min = date.getMinutes();
+      -let s = date.getSeconds();
+      -return d+' '+m+' '+y+'  '+h+':'+min+':'+s;
   -}
 
   div.content-wrapper
@@ -124,9 +127,13 @@ block content
                   td #{reportResponse[i].scenario_title}
                   td #{reportResponse[i].description}
                   if reportResponse[i].pass
-                    td.result-text(style='color: green;') PASS
+                    td
+                      h4  
+                        span.badge.result-text.bg-success PASS
                   else 
-                    td.result-text(style='color: red;') FAIL
+                    td
+                      h4
+                        span.badge.result-text.bg-danger FAIL
                   td #{reportResponse[i].expected_status_code}
                   td #{reportResponse[i].response_status}
                   th #{reportResponse[i].request_time_length}

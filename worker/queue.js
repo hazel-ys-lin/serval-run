@@ -1,13 +1,13 @@
 require('dotenv').config();
 const Redis = require('ioredis');
+const { CACHE_HOST, CACHE_PORT, CACHE_USER, CACHE_PASSWORD } = process.env;
 // TODO: create a channel and publish to shbscribers
 const redis = new Redis({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
-  //username: process.env.REDIS_USER,
-  password: process.env.REDIS_PWD,
+  host: CACHE_HOST,
+  port: CACHE_PORT,
+  username: CACHE_USER,
+  password: CACHE_PASSWORD,
   // tls: {},
-  // This is the default value of `retryStrategy`
   retryStrategy() {
     const delay = 5000;
     return delay;

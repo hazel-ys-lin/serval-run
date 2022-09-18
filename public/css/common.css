@@ -129,3 +129,10 @@ img.brand-image {
 .table td, .table th {
   vertical-align: initial;
 }
+
+.profile-image {
+  margin: auto;
+  display: block;
+  justify-content: center;
+  align-items: center;
+}
