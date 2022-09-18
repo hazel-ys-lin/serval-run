@@ -10,9 +10,6 @@ const {
 
 const displayProject = async (req, res) => {
   // get all the projects to array in database
-  if (!req.session.userId) {
-    return res.status(400).json({ msg: 'Please sign in' });
-  }
   const userEmail = req.session.userEmail; //req.session.email
   const userId = await userGetModel(userEmail);
 

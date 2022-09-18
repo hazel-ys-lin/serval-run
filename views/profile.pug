@@ -13,3 +13,25 @@ block content
             .card
                 h1.display-5 #{userInfo.userName}
                     h1.display-6 #{userInfo.userEmail}
+            button.btn.btn-right.btn-outline-info.btn-log_out(type='submit') Log Out
+    script.
+        $('.btn-log_out').on('click', function(event) {
+            console.log('log out clicked')
+            event.preventDefault();
+
+            axios({
+                method: 'post',
+                url: 'http://localhost:3001/api/1.0/user/logout',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    alert('Log Out Successfully!')
+                    window.location.assign('../../../');
+                }
+            })
+            .catch((error) => {
+                console.log('catch error: ', error)
+                window.location.reload();
+            })
+        })

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { wrapAsync } = require('../util/util');
+const { wrapAsync, authentication } = require('../util/util');
 const {
   displayProject,
   projectInsertController,
@@ -9,12 +9,18 @@ const {
   envDeleteController,
 } = require('../controllers/project_cotroller');
 
-router.route('/projects').get(wrapAsync(displayProject));
-router.route('/editproject').post(wrapAsync(projectInsertController));
-router.route('/editproject').delete(wrapAsync(projectDeleteController));
+router.route('/projects').get(authentication, wrapAsync(displayProject));
+router
+  .route('/editproject')
+  .post(authentication, wrapAsync(projectInsertController));
+router
+  .route('/editproject')
+  .delete(authentication, wrapAsync(projectDeleteController));
 
-router.route('/environments').get(wrapAsync(displayEnvironment));
-router.route('/editenv').post(wrapAsync(envInsertController));
-router.route('/editenv').delete(wrapAsync(envDeleteController));
+router
+  .route('/environments')
+  .get(authentication, wrapAsync(displayEnvironment));
+router.route('/editenv').post(authentication, wrapAsync(envInsertController));
+router.route('/editenv').delete(authentication, wrapAsync(envDeleteController));
 
 module.exports = router;

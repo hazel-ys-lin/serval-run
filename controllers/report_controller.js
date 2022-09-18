@@ -41,9 +41,6 @@ const scenarioRunController = async (req, res) => {
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
   const testData = await exampleGetModel(scenarioId);
   testData.api_id = apiId;
-  console.log('testData in scenarioRunController: ', testData);
-
-  // TODO: refactor
 
   let testConfig = {
     method: `${httpMethod}`,
@@ -53,8 +50,9 @@ const scenarioRunController = async (req, res) => {
     },
   };
 
+  // TODO: stringify object data, send httprequest job to redis queue
   let httpRequestResult = await callHttpRequest(testConfig, testData);
-  console.log('httpRequestResult in report controller: ', httpRequestResult);
+  // console.log('httpRequestResult in report controller: ', httpRequestResult);
 
   let insertTestResult = await exampleResponseInsertModel(
     projectId,
@@ -81,7 +79,7 @@ const apiRunController = async (req, res) => {
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
 
   let scenarios = await scenarioGetModel(apiId);
-  console.log('scenarios in apiRunController: ', scenarios);
+  // console.log('scenarios in apiRunController: ', scenarios);
   let testData = [];
   for (let i = 0; i < scenarios.length; i++) {
     let exampleArray = [];
@@ -103,6 +101,7 @@ const apiRunController = async (req, res) => {
     },
   };
 
+  // TODO: stringify object data, send httprequest job to redis queue
   let httpRequestResult = await callHttpRequest(testConfig, testData);
 
   let insertTestResult = await apiResponseInsertModel(
@@ -135,7 +134,6 @@ const collectionRunController = async (req, res) => {
 
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
 
-  // TODO: deal with different httpmethod and api endpoint
   let httpRequestResult = [];
 
   for (let l = 0; l < apiInfoArray.length; l++) {
@@ -167,6 +165,7 @@ const collectionRunController = async (req, res) => {
       });
     }
 
+    // TODO: stringify object data, send httprequest job to redis queue
     let apiRequestResult = await callHttpRequest(testConfig, testData);
     for (let m = 0; m < apiRequestResult.length; m++) {
       httpRequestResult.push(apiRequestResult[m]);
@@ -221,6 +220,7 @@ const getExampleReport = async (req, res) => {
 };
 
 const getReportResponseController = async (req, res) => {
+  // TODO: subscribe the channel which is watching worker
   const reportId = req.query.reportid;
   let reportDetail = await getReportDetailModel(reportId);
   let reportCalculated = await calculateReport([reportDetail]);
@@ -238,6 +238,7 @@ const getReportResponseController = async (req, res) => {
     reportResponse[i].description = scenarioInfo.description;
   }
 
+  // TODO: socket send data to frontend page?
   if (reportResponse) {
     res.render('reportdetail', {
       reportDetail: reportDetail,

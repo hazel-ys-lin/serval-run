@@ -7,17 +7,7 @@ const { userCheckService } = require('../service/dbUpdate_service');
 const bcrypt = require('bcryptjs');
 
 const userCheck = async (req, res) => {
-  if (!req.session.userId) {
-    return res.render('user');
-  }
-
-  const userInfo = {
-    userId: req.session.userId,
-    userName: req.session.userName,
-    userEmail: req.session.userEmail,
-  };
-
-  return res.render('profile', { userInfo: userInfo });
+  return res.render('user');
 };
 
 const userSignUpController = async (req, res) => {
@@ -46,6 +36,7 @@ const userSignUpController = async (req, res) => {
     req.session.userId = insertUserResult.userId;
     req.session.userName = insertUserResult.userName;
     req.session.userEmail = insertUserResult.userEmail;
+    req.session.isAuth = true;
     return res.status(200).json({ msg: 'create account successfully' });
   }
 };
@@ -64,6 +55,7 @@ const userSignInController = async (req, res) => {
       req.session.userId = userSignInResult._id;
       req.session.userName = userSignInResult.user_name;
       req.session.userEmail = userSignInResult.user_email;
+      req.session.isAuth = true;
 
       const userInfo = {
         userId: userSignInResult._id,
@@ -79,9 +71,14 @@ const userSignInController = async (req, res) => {
   }
 };
 
+const userLogOutController = async (req, res) => {
+  req.session.isAuth = false;
+  return res.status(200).json({ msg: 'Log out Successfully' });
+};
+
 const userDisplayController = async (req, res) => {
-  if (!req.session.userId) {
-    return res.status(403);
+  if (!req.session.isAuth) {
+    return res.status(203).json({ msg: 'please log in' });
   }
 
   const userInfo = {
@@ -97,5 +94,6 @@ module.exports = {
   userCheck,
   userSignUpController,
   userSignInController,
+  userLogOutController,
   userDisplayController,
 };

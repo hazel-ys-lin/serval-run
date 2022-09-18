@@ -31,7 +31,6 @@ app.use('/api/' + API_VERSION, [
 
 // Handle 404
 app.use(function (req, res, next) {
-  // console.log('req.query: ', req.query);
   console.log('404', req.url);
   return res.status(404).json({ error: 'error: 404' });
 });

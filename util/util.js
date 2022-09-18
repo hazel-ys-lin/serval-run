@@ -10,6 +10,14 @@ const wrapAsync = (fn) => {
   };
 };
 
+const authentication = (req, res, next) => {
+  if (!req.session.isAuth) {
+    return res.status(203).json({ msg: 'Please log in' });
+  }
+  return next;
+};
+
 module.exports = {
   wrapAsync,
+  authentication,
 };
