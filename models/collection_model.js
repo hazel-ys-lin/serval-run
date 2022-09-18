@@ -137,14 +137,11 @@ const collectionDeleteModel = async function (collectionInfo) {
     const projectData = await projectModel.findOne({
       _id: collectionInfo.projectId,
     });
-    // console.log('projectInfo: ', projectInfo);
-    console.log('projectData: ', projectData);
 
     let deleted = await collectionModel
       .deleteOne({
         _id: collectionInfo.collectionId,
       })
-
       .session(session);
     // .catch(function (err) {
     //   console.log(err);
@@ -253,7 +250,6 @@ const apiInfoGetModel = async function (apiId) {
   let [apiInfo] = await apiModel.find({
     _id: apiId,
   });
-  // console.log('apiInfo in testDataGetModel: ', apiInfo);
 
   return {
     collectionId: apiInfo.collection_id,
@@ -276,14 +272,11 @@ const apiDeleteModel = async function (apiInfo) {
     const collectionData = await collectionModel.findOne({
       _id: apiInfo.collectionId,
     });
-    // console.log('projectInfo: ', projectInfo);
-    console.log('collectionData: ', collectionData);
 
     let deleted = await apiModel
       .deleteOne({
         _id: apiInfo.apiId,
       })
-
       .session(session);
 
     await collectionModel

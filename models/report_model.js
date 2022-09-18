@@ -150,7 +150,6 @@ const apiResponseInsertModel = async function (
   session.startTransaction();
   try {
     const opts = { session };
-    // console.log(responseArray);
 
     let reportId = await reportModel({
       project_id: projectId,
@@ -218,7 +217,6 @@ const collectionResponseInsertModel = async function (
   session.startTransaction();
   try {
     const opts = { session };
-    // console.log('responseArray: ', responseArray);
 
     let reportId = await reportModel({
       project_id: projectId,
@@ -242,7 +240,6 @@ const collectionResponseInsertModel = async function (
       };
 
       let inserted = await responseModel(objectToInsert).save(opts);
-      // responseToInsert.push(inserted._id);
 
       // FIXME: in db the responses is empty
       await reportModel.updateOne(
@@ -279,7 +276,6 @@ const getReportModel = async function (projectId) {
   let reportData = await reportModel.find({
     project_id: projectId,
   });
-  // console.log('reportData: ', reportData);
 
   return reportData;
 };
@@ -288,7 +284,6 @@ const getReportDetailModel = async function (reportId) {
   let reportDetail = await reportModel.findOne({
     _id: reportId,
   });
-  // console.log('reportDetail: ', reportDetail);
 
   return reportDetail;
 };
@@ -301,8 +296,6 @@ const getReportResponseModel = async function (reportId) {
   return responseData;
 };
 
-// FIXME: cannot find the response data from response_id in report data responses arary
-// the result of "responseData" is always empty
 const getResponseByReportModel = async function (responseId) {
   let [responseDetail] = await responseModel.find({
     _id: responseId,

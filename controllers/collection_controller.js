@@ -63,7 +63,6 @@ const displayApi = async function (req, res) {
   let projectId = await collectionInfoGetModel(collectionId);
   let envInfo = await envInfoGetModel(projectId);
 
-  // console.log('userApis: ', userApis);
   if (userApis.length !== 0) {
     res.render('apis', { userApis: userApis, envInfo: envInfo });
   } else {

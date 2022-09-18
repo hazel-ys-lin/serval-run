@@ -108,7 +108,7 @@ const projectGetModel = async function (userEmail) {
       findProject = await projectModel.findOne({
         _id: userData.projects[i].project_id,
       });
-      // console.log('findProject in projectgetmodel: ', findProject);
+
       if (findProject !== null) {
         userProjects.push(findProject);
       }
@@ -241,7 +241,6 @@ const environmentGetModel = async function (projectId) {
       }
     }
   }
-  // console.log('environments: ', environments);
   return environments;
 };
 

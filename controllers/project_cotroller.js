@@ -10,32 +10,28 @@ const {
 
 const displayProject = async (req, res) => {
   // get all the projects to array in database
-  const userEmail = req.session.userEmail; //req.session.email
+  const userEmail = req.session.userEmail;
   const userId = await userGetModel(userEmail);
 
   let userProjects = await projectGetModel(userEmail);
   if (!req.session.isAuth) {
-    // console.log('req.session.isAuth: ', req.session.isAuth);
     return res.status(203).json({ msg: 'Please log in' });
   }
 
   for (let i = 0; i < userProjects.length; i++) {
     userProjects[i].user_email = userEmail;
   }
-  // console.log('userProjects: ', userProjects);
   if (userProjects.length !== 0) {
     return res.render('projects', { userProjects: userProjects });
-    // return res.status(200).json({ userProjects: userProjects });
   } else {
     userProjects.push({ user_id: userId });
     return res.render('projects', { userProjects: userProjects });
-    // return res.status(200).json({ userProjects: userProjects });
   }
 };
 
 const projectInsertController = async (req, res) => {
   const projectInfo = {
-    userEmail: req.session.userEmail, // req.body.userEmail
+    userEmail: req.session.userEmail,
     projectName: req.body.projectName,
   };
 
@@ -49,7 +45,7 @@ const projectInsertController = async (req, res) => {
 
 const projectDeleteController = async (req, res) => {
   const projectInfo = {
-    userEmail: req.session.userEmail, // req.body.userEmail
+    userEmail: req.session.userEmail,
     projectId: req.body.projectId,
   };
   let deleteProjectResult = await projectDeleteModel(projectInfo);

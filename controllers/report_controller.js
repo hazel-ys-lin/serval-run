@@ -4,15 +4,9 @@ const {
   exampleGetModel,
   exampleDetailGetModel,
 } = require('../models/scenario_model');
+const { apiGetModel, apiInfoGetModel } = require('../models/collection_model');
 const {
-  collectionGetModel,
-  apiGetModel,
-  apiInfoGetModel,
-} = require('../models/collection_model');
-const {
-  projectGetModel,
   projectNameGetModel,
-  environmentGetModel,
   projectInfoGetModel,
 } = require('../models/project_model');
 const {
@@ -52,7 +46,6 @@ const scenarioRunController = async (req, res) => {
 
   // TODO: stringify object data, send httprequest job to redis queue
   let httpRequestResult = await callHttpRequest(testConfig, testData);
-  // console.log('httpRequestResult in report controller: ', httpRequestResult);
 
   let insertTestResult = await exampleResponseInsertModel(
     projectId,
@@ -79,7 +72,6 @@ const apiRunController = async (req, res) => {
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
 
   let scenarios = await scenarioGetModel(apiId);
-  // console.log('scenarios in apiRunController: ', scenarios);
   let testData = [];
   for (let i = 0; i < scenarios.length; i++) {
     let exampleArray = [];
@@ -197,8 +189,6 @@ const displayAllReport = async (req, res) => {
   for (let i = 0; i < reportCalculated.length; i++) {
     reportCalculated[i].projectName = projectName;
   }
-
-  // console.log('reportCalculated: ', reportCalculated);
 
   if (reportCalculated.length !== 0) {
     res.render('reports', { reportsDetail: reportCalculated });

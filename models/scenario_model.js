@@ -65,7 +65,6 @@ const scenarioInsertModel = async function (scenarioInfo) {
     console.log();
 
     for (let i = 0; i < scenarioInfo.featureCode.testTableBody.length; i++) {
-      // let testData = JSON.stringify(scenarioInfo.featureCode.testTableBody[i]);
       exampleArray.push({
         example: scenarioInfo.featureCode.testTableBody[i],
         expected_response_body: {},
@@ -146,7 +145,6 @@ const scenarioDetailModel = async function (scenarioId) {
   let scenarioInfo = await scenarioModel.findOne({
     _id: scenarioId,
   });
-  // console.log('scenario info type: ', typeof scenarioInfo);
 
   return { title: scenarioInfo.title, description: scenarioInfo.description };
 };
@@ -160,11 +158,9 @@ const exampleGetModel = async function (scenarioId) {
 };
 
 const exampleDetailGetModel = async function (scenarioId, exampleId) {
-  // console.log('exampleId: ', exampleId);
   let [exampleDetail] = await scenarioModel.find({
     _id: scenarioId,
   });
-  // console.log('exampleDetail.examples: ', exampleDetail.examples);
 
   for (let i = 0; i < exampleDetail.examples.length; i++) {
     if (exampleDetail.examples[i]._id.toString() === exampleId.toString()) {
