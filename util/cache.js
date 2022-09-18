@@ -14,6 +14,7 @@ const redis = new Redis({
   },
   // By default, all pending commands will be flushed with an error every 20 retry attempts. That makes sure commands won't wait forever when the connection is down.Set maxRetriesPerRequest to null to disable this behavior, and every command will wait forever until the connection is alive again (which is the default behavior before ioredis v4).
   maxRetriesPerRequest: 1,
+  enableReadyCheck: false,
 });
 
 module.exports = redis;
