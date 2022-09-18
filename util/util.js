@@ -12,6 +12,7 @@ const wrapAsync = (fn) => {
 
 const authentication = (req, res, next) => {
   if (!req.session.isAuth) {
+    // console.log('req.session.isAuth: ', req.session.isAuth);
     return res.status(203).json({ msg: 'Please log in' });
   }
   return next;

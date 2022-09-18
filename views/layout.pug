@@ -118,9 +118,11 @@ html
       })
       .then((response) => {
         if (response.status === 200) {
+          console.log('status 200')
           window.location.assign('./projects');
         }
         if (response.status === 203) {
+          console.log('status 203')
           alert('Please log in first');
           window.location.assign('./api/1.0/user');
         }

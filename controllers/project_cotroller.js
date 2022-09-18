@@ -14,15 +14,22 @@ const displayProject = async (req, res) => {
   const userId = await userGetModel(userEmail);
 
   let userProjects = await projectGetModel(userEmail);
+  if (!req.session.isAuth) {
+    // console.log('req.session.isAuth: ', req.session.isAuth);
+    return res.status(203).json({ msg: 'Please log in' });
+  }
+
   for (let i = 0; i < userProjects.length; i++) {
     userProjects[i].user_email = userEmail;
   }
   // console.log('userProjects: ', userProjects);
   if (userProjects.length !== 0) {
-    res.render('projects', { userProjects: userProjects });
+    return res.render('projects', { userProjects: userProjects });
+    // return res.status(200).json({ userProjects: userProjects });
   } else {
     userProjects.push({ user_id: userId });
-    res.render('projects', { userProjects: userProjects });
+    return res.render('projects', { userProjects: userProjects });
+    // return res.status(200).json({ userProjects: userProjects });
   }
 };
 
