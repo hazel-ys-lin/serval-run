@@ -75,13 +75,12 @@ block content
                                                                     br
                                         td 
                                             button.btn.btn-warning.btn-examples(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#scenario-examples-${i}` aria-expanded='false' aria-controls=`#scenario-examples-${i}`) More
-                                            .collapse(id=`scenario-examples-${i}`)
-                                                .p-0 
-                                                    table 
-                                                        tbody 
-                                                            each element in userScenarios[i].scenario.examples
-                                                                tr=element.example.email
-                                                        
+                                            //- .collapse(id=`scenario-examples-${i}`)
+                                            //-     .p-0 
+                                            //-         table 
+                                            //-             tbody 
+                                            //-                 each element in userScenarios[i].scenario.examples
+                                            //-                     tr=element.example.email
                                         td 
                                             button.btn.btn-danger.btn-delete(type='submit' id=`${userScenarios[i].scenario._id}`) Delete
                                         td 
