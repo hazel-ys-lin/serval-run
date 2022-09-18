@@ -61,17 +61,17 @@ const scenarioRunController = async (req, res) => {
   };
 
   // TODO: stringify object data, send httprequest job to redis queue
-  let sendToQueueResult = await sendToQueue(testAllData);
+  // let sendToQueueResult = await sendToQueue(testAllData);
   // =========== START OF STUFFS SEND TO WORK QUEUE ===========
-  // let httpRequestResult = await callHttpRequest(testConfig, testData);
+  let httpRequestResult = await callHttpRequest(testConfig, testData);
 
-  // let insertTestResult = await exampleResponseInsertModel(
-  //   projectId,
-  //   envId,
-  //   collectionId,
-  //   reportInfo,
-  //   httpRequestResult
-  // );
+  let insertTestResult = await exampleResponseInsertModel(
+    projectId,
+    envId,
+    collectionId,
+    reportInfo,
+    httpRequestResult
+  );
   // =========== END OF STUFFS SEND TO WORK QUEUE ===========
 
   if (!sendToQueueResult) {
