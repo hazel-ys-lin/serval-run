@@ -7,124 +7,127 @@ block content
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
     script(src='../../src/gherkin.js')
-    div.content-wrapper
-        nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
-            ol.breadcrumb
-                li.breadcrumb-item
-                    a(href='') Project
-                li.breadcrumb-item
-                    a(href='') Collection
-                li.breadcrumb-item
-                    a(href='') API
-                li.breadcrumb-item.active(aria-current='page') Scenario
+    main.main-content(role='main')
+        .container-fluid
+            .row.justify-content-center
+                .col-12
+                    //- nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
+                    //-     ol.breadcrumb
+                    //-         li.breadcrumb-item
+                    //-             a(href='') Project
+                    //-         li.breadcrumb-item
+                    //-             a(href='') Collection
+                    //-         li.breadcrumb-item
+                    //-             a(href='') API
+                    //-         li.breadcrumb-item.active(aria-current='page') Scenario
 
-        form.input-form
-            h1 Scenarios
-                button.btn.btn-right.btn-success.btn-block.btn-create_scenario(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userScenarios[0].apiId}`) Create Scenario
-            #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
-                .modal-dialog.modal-lg
-                    .modal-content
-                        .modal-header
-                            h5#exampleModalLabel.modal-title Add Scenario
-                            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
-                        .modal-body
-                            form
-                                .mb-3 
-                                    label.col-form-label(for='api-id') API ID
-                                    input#api-id.form-control.input_apiid
-                                .mb-3
-                                    label.col-form-label(for='scenario') Test Document (Scenario)
-                                    textarea#code(name='code' placeholder='# Write your test document in gherkin language here! \n # The serval can only read gherkin now, meow.')
-                                        | # Write your test document scenario in gherkin language here! 
-                                        | # The serval can only read gherkin now, meow.
-                        .modal-footer
-                            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
-                            button.btn.btn-primary.btn-modal-create_scenario(type='submit') Create Scenario
-        .cards
-            .card
-                .card-header
-                    .card-title API ID: #{userScenarios[0].apiId}
-                    .card-tools
-                .card-body.p-0
-                    table.table
-                        thead
-                            tr
-                                th(style='width: 80px') Title
-                                th(style='width: 150px') Description
-                                th(style='width: 360px') Steps
-                                th(style='width: 20px') Examples
-                                th(style='width: 20px') Operations
-                                th Run Test
-                        tbody
-                            if userScenarios[0].scenario
-                                - let i = 0
-                                while i < userScenarios.length
-                                    tr 
-                                        td #{userScenarios[i].scenario.title}
-                                        td #{userScenarios[i].scenario.description}
-                                        td 
-                                            button.btn.btn-primary.btn-steps(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#scenario-steps-${i}` aria-expanded='false' aria-controls=`#scenario-steps-${i}`) More
-                                            .collapse(id=`scenario-steps-${i}`)
-                                                .p-0
-                                                    table
-                                                        #info-text
-                                                            dl(style='padding-top: 5px; margin-bottom: 0px;')
-                                                                each element in userScenarios[i].scenario.steps
-                                                                    dt.badge.bg-light(style='font-size: 90%;')= element.keyword
-                                                                    dd.list-inline-item(style='font-size: 90%;')= element.text
-                                                                    br
-                                        td 
-                                            button.btn.btn-warning.btn-examples(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#scenario-examples-${i}` aria-expanded='false' aria-controls=`#scenario-examples-${i}`) More
-                                            //- .collapse(id=`scenario-examples-${i}`)
-                                            //-     .p-0 
-                                            //-         table 
-                                            //-             tbody 
-                                            //-                 each element in userScenarios[i].scenario.examples
-                                            //-                     tr=element.example.email
-                                        td 
-                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userScenarios[i].scenario._id}`) Delete
-                                        td 
-                                            button.btn.btn-info.btn-runtest-single(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-single-${i}` aria-expanded='false' aria-controls=`#runtest-single-${i}`) Run Scenario Test
-                                            .collapse.env-table(id=`runtest-single-${i}`)
-                                                .p-0
-                                                    table.table
-                                                        thead
-                                                            tr 
-                                                                th Domain
-                                                                th Title
-                                                                th Run Test
-                                                        tbody
-                                                            if envInfo
-                                                                - let j = 0
-                                                                while j < envInfo.length
-                                                                    tr 
-                                                                        td #{envInfo[j].domain_name}
-                                                                        td #{envInfo[j].title}
-                                                                        td 
-                                                                            button.btn.btn-info.btn-scenariotest-in-toggle(type='submit' id=`${userScenarios[i].scenario._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
-                                                                    - j++
-                                    - i++
-        .input-form
-            if envInfo && userScenarios[0].scenario
-                button.btn.btn-secondary.btn-runtest-api(type='submit' id=`${userScenarios[0].apiId}` data-bs-toggle='collapse' data-bs-target='#runtest-api' aria-expanded='false' aria-controls='runtest-api') Run API Test
-                #runtest-api.collapse
-                    .card.card-body.p-0
-                        table.table
-                            thead
-                                tr 
-                                    th Domain
-                                    th Title
-                                    th Run Test
-                            tbody
-                                if envInfo
-                                    - let k = 0
-                                    while k < envInfo.length
-                                        tr 
-                                            td #{envInfo[k].domain_name}
-                                            td #{envInfo[k].title}
-                                            td 
-                                                button.btn.btn-secondary.btn-apitest-in-toggle(type='submit' id=`${userScenarios[0].apiId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Run
-                                        - k++
+                    form.input-form
+                        h1 Scenarios
+                            button.btn.btn-right.btn-success.btn-block.btn-create_scenario(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userScenarios[0].apiId}`) Create Scenario
+                        #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                            .modal-dialog.modal-lg
+                                .modal-content
+                                    .modal-header
+                                        h5#exampleModalLabel.modal-title Add Scenario
+                                        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                    .modal-body
+                                        form
+                                            .mb-3 
+                                                label.col-form-label(for='api-id') API ID
+                                                input#api-id.form-control.input_apiid
+                                            .mb-3
+                                                label.col-form-label(for='scenario') Test Document (Scenario)
+                                                textarea#code(name='code' placeholder='# Write your test document in gherkin language here! \n # The serval can only read gherkin now, meow.')
+                                                    | # Write your test document scenario in gherkin language here! 
+                                                    | # The serval can only read gherkin now, meow.
+                                    .modal-footer
+                                        button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                                        button.btn.btn-primary.btn-modal-create_scenario(type='submit') Create Scenario
+                    .cards
+                        .card
+                            .card-header
+                                .card-title API ID: #{userScenarios[0].apiId}
+                                .card-tools
+                            .card-body.p-0
+                                table.table
+                                    thead
+                                        tr
+                                            th(style='width: 80px') Title
+                                            th(style='width: 150px') Description
+                                            th(style='width: 360px') Steps
+                                            th(style='width: 20px') Examples
+                                            th(style='width: 20px') Operations
+                                            th Run Test
+                                    tbody
+                                        if userScenarios[0].scenario
+                                            - let i = 0
+                                            while i < userScenarios.length
+                                                tr 
+                                                    td #{userScenarios[i].scenario.title}
+                                                    td #{userScenarios[i].scenario.description}
+                                                    td 
+                                                        button.btn.btn-primary.btn-steps(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#scenario-steps-${i}` aria-expanded='false' aria-controls=`#scenario-steps-${i}`) More
+                                                        .collapse(id=`scenario-steps-${i}`)
+                                                            .p-0
+                                                                table
+                                                                    #info-text
+                                                                        dl(style='padding-top: 5px; margin-bottom: 0px;')
+                                                                            each element in userScenarios[i].scenario.steps
+                                                                                dt.badge.bg-light(style='font-size: 90%;')= element.keyword
+                                                                                dd.list-inline-item(style='font-size: 90%;')= element.text
+                                                                                br
+                                                    td 
+                                                        button.btn.btn-warning.btn-examples(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#scenario-examples-${i}` aria-expanded='false' aria-controls=`#scenario-examples-${i}`) More
+                                                        //- .collapse(id=`scenario-examples-${i}`)
+                                                        //-     .p-0 
+                                                        //-         table 
+                                                        //-             tbody 
+                                                        //-                 each element in userScenarios[i].scenario.examples
+                                                        //-                     tr=element.example.email
+                                                    td 
+                                                        button.btn.btn-danger.btn-delete(type='submit' id=`${userScenarios[i].scenario._id}`) Delete
+                                                    td 
+                                                        button.btn.btn-info.btn-runtest-single(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-single-${i}` aria-expanded='false' aria-controls=`#runtest-single-${i}`) Run Scenario Test
+                                                        .collapse.env-table(id=`runtest-single-${i}`)
+                                                            .p-0
+                                                                table.table
+                                                                    thead
+                                                                        tr 
+                                                                            th Domain
+                                                                            th Title
+                                                                            th Run Test
+                                                                    tbody
+                                                                        if envInfo
+                                                                            - let j = 0
+                                                                            while j < envInfo.length
+                                                                                tr 
+                                                                                    td #{envInfo[j].domain_name}
+                                                                                    td #{envInfo[j].title}
+                                                                                    td 
+                                                                                        button.btn.btn-info.btn-scenariotest-in-toggle(type='submit' id=`${userScenarios[i].scenario._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
+                                                                                - j++
+                                                - i++
+                    .input-form
+                        if envInfo && userScenarios[0].scenario
+                            button.btn.btn-secondary.btn-runtest-api(type='submit' id=`${userScenarios[0].apiId}` data-bs-toggle='collapse' data-bs-target='#runtest-api' aria-expanded='false' aria-controls='runtest-api') Run API Test
+                            #runtest-api.collapse
+                                .card.card-body.p-0
+                                    table.table
+                                        thead
+                                            tr 
+                                                th Domain
+                                                th Title
+                                                th Run Test
+                                        tbody
+                                            if envInfo
+                                                - let k = 0
+                                                while k < envInfo.length
+                                                    tr 
+                                                        td #{envInfo[k].domain_name}
+                                                        td #{envInfo[k].title}
+                                                        td 
+                                                            button.btn.btn-secondary.btn-apitest-in-toggle(type='submit' id=`${userScenarios[0].apiId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Run
+                                                    - k++
     script.
         $('#exampleModal').on('shown.bs.modal', function() {
             // src: https://stackoverflow.com/questions/17086538/codemirror-content-not-visible-in-bootstrap-modal-until-it-is-clicked

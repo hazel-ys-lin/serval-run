@@ -4,63 +4,67 @@ block content
     link(rel='stylesheet', href='../../css/common.css')
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
-    div.content-wrapper
-        nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
-            ol.breadcrumb
-                li.breadcrumb-item.active(aria-current='page') Project
+    
+    main.main-content(role='main')
+        .container-fluid
+            .row.justify-content-center
+                .col-12
+                    //- nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
+                    //-     ol.breadcrumb
+                    //-         li.breadcrumb-item.active(aria-current='page') Project
         
-        form.input-form
-            h1 Projects
-                button.btn.btn-right.btn-success.btn-block.btn-create_project(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever='') Create Project
-            #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
-                .modal-dialog
-                    .modal-content
-                        .modal-header
-                            h5#exampleModalLabel.modal-title Add Project
-                            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
-                        .modal-body
-                            form
-                                .mb-3
-                                    label.col-form-label(for='project-name') Project Name
-                                    input#project-name.form-control.input_project-name(type='string' placeholder='My Project')
-                        .modal-footer
-                            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
-                            button.btn.btn-primary.btn-modal-create_project(type='submit') Create Project
-        .cards
-            .card
-                .card-header
-                    .card-title
-                        .user-id User ID: #{userProjects[0].user_id}
-                        .user-email Email: #{userProjects[0].user_email}
-                    .card-tools
-                .card-body.p-0
-                    table.table
-                        thead
-                            tr
-                                //- th(style='width: 10px') #
-                                th Project ID
-                                th Name
-                                th Environments
-                                th Collections
-                                th Operations
-                                th Reports
-                                //- th(style='width: 40px') Label
-                        tbody
-                            if userProjects[0].project_name
-                                - let i = 0
-                                while i < userProjects.length
-                                    tr 
-                                        td #{userProjects[i]._id}
-                                        td #{userProjects[i].project_name}
-                                        td 
-                                            button.btn.btn-primary.btn-environments(type='submit' id=`${userProjects[i]._id}`) View
-                                        td 
-                                            button.btn.btn-warning.btn-collections(type='submit' id=`${userProjects[i]._id}`) View
-                                        td 
-                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userProjects[i]._id}`) Delete
-                                        td 
-                                            button.btn.btn-secondary.btn-report(type='submit' id=`${userProjects[i]._id}`) View
-                                    - i++
+                    form.input-form
+                        h1 Projects
+                            button.btn.btn-right.btn-success.btn-block.btn-create_project(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever='') Create Project
+                        #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                            .modal-dialog
+                                .modal-content
+                                    .modal-header
+                                        h5#exampleModalLabel.modal-title Add Project
+                                        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                    .modal-body
+                                        form
+                                            .mb-3
+                                                label.col-form-label(for='project-name') Project Name
+                                                input#project-name.form-control.input_project-name(type='string' placeholder='My Project')
+                                    .modal-footer
+                                        button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                                        button.btn.btn-primary.btn-modal-create_project(type='submit') Create Project
+                    .cards
+                        .card
+                            .card-header
+                                .card-title
+                                    .user-id User ID: #{userProjects[0].user_id}
+                                    .user-email Email: #{userProjects[0].user_email}
+                                .card-tools
+                            .card-body.p-0
+                                table.table
+                                    thead
+                                        tr
+                                            //- th(style='width: 10px') #
+                                            th Project ID
+                                            th Name
+                                            th Environments
+                                            th Collections
+                                            th Operations
+                                            th Reports
+                                            //- th(style='width: 40px') Label
+                                    tbody
+                                        if userProjects[0].project_name
+                                            - let i = 0
+                                            while i < userProjects.length
+                                                tr 
+                                                    td #{userProjects[i]._id}
+                                                    td #{userProjects[i].project_name}
+                                                    td 
+                                                        button.btn.btn-primary.btn-environments(type='submit' id=`${userProjects[i]._id}`) View
+                                                    td 
+                                                        button.btn.btn-warning.btn-collections(type='submit' id=`${userProjects[i]._id}`) View
+                                                    td 
+                                                        button.btn.btn-danger.btn-delete(type='submit' id=`${userProjects[i]._id}`) Delete
+                                                    td 
+                                                        button.btn.btn-secondary.btn-report(type='submit' id=`${userProjects[i]._id}`) View
+                                                - i++
 
     script.
         $('.btn-create_project').on('click', function(event) {

@@ -1,5 +1,39 @@
 extends layout.pug
 
 block content 
-    link(rel='stylesheet', href='css/common.css')
-    div.content-wrapper
+    main.main-content(role='main')
+        .container-fluid
+            .row.justify-content-center
+                .col-12
+                    .w-50.mx-auto.text-center.justify-content-center.py-5.my-5
+                        h1.page-title.mb-0 ServalRun®
+                        p.lead.text-muted.mb-4 Test Your Server as Rapid as Serval. 
+
+                        .row.my-4
+                            .col-md-6
+                                .card.shadow.bg-primary.text-center.mb-4
+                                    .card-body.p-5
+                                        span.circle.circle-md.bg-primary-light
+                                            i.fe.fe-navigation.fe-24.text-white
+                                        h3.h4.mt-4.mb-1.text-white Create an Account
+                                        p.text-white.mb-4 Start your test journey with serval
+                                        a.btn.btn-lg.bg-primary-light.text-white(href='#')
+                                            | Sign Up
+                                            i.fe.fe-arrow-right.fe-16.ml-2
+                                    // .card-body
+                                    // .card
+                                // .col-md
+                            .col-md-6
+                                .card.shadow.bg-success.text-center.mb-4
+                                    .card-body.p-5
+                                        span.circle.circle-md.bg-success-white
+                                            i.fe.fe-message-circle.fe-24.text-secondary
+                                        h3.h4.mt-4.mb-1.text-dark Already have an account?
+                                        p.text-dark.mb-4 Sign in to check your own reports
+                                        a.btn.btn-lg.bg-success-light.text-dark(href='#')
+                                            | Sign In
+                                            i.fe.fe-arrow-right.fe-16.ml-2
+                                    // .card-body
+                                    // .card
+                                // .col-md
+

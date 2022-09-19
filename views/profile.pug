@@ -5,17 +5,37 @@ block content
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
     
-    div.content-wrapper
-        .cards
-            h1.display-3(style='text-align: center;') Welcome Back!
-                h1.display-5(style='text-align: center;')
-                    | Start your test journey with Serval now.
-            .card
-                .card-body
-                    img.rounded-circle.profile-image(src='../../css/icon/serval.png' alt='Profile' style='opacity: .8; width: 103px; height: 103px; border-bottom: 30px;')
-                    h1.display-5(style='text-align: center;') #{userInfo.userName}
-                    h1.display-6(style='text-align: center;') #{userInfo.userEmail}
-            button.btn.btn-right.btn-outline-info.btn-log_out(type='submit') Log Out
+    main.main-content(role='main')
+        .container-fluid
+            .row.justify-content-center
+                .col-12
+                    h2.h3.mb-4.page-title Profile
+                    .row.mt-5.align-items-center 
+                        .col-md-3.text-center.mb-5
+                            .avatar.avatar-xl
+                                img.avatar-img.rounded-circle(src='../../css/icon/serval.png' style='background-color: white;')
+                        .col
+                            .row.align-items-center
+                                .col-md-7
+                                    h4.mb-1 #{userInfo.userName}
+                                    p.medium.mb-3
+                                        span.badge.badge-dark QA Engineer
+                            .row.mb-4
+                                .col-md-7
+                                    h3.text-muted
+                                    | Start your test journey with Serval now.
+                                button.btn.btn-lg.btn-right.btn-primary.btn-log_out(type='submit') Log Out
+    //- div.content-wrapper
+    //-     .cards
+    //-         h1.display-3(style='text-align: center;') Welcome Back!
+    //-             h1.display-5(style='text-align: center;')
+    //-                 | Start your test journey with Serval now.
+    //-         .card
+    //-             .card-body
+    //-                 img.rounded-circle.profile-image(src='../../css/icon/serval.png' alt='Profile' style='opacity: .8; width: 103px; height: 103px; border-bottom: 30px;')
+    //-                 h1.display-5(style='text-align: center;') #{userInfo.userName}
+    //-                 h1.display-6(style='text-align: center;') #{userInfo.userEmail}
+    //-         button.btn.btn-right.btn-outline-info.btn-log_out(type='submit') Log Out
 
     script.
         $('.btn-log_out').on('click', function(event) {

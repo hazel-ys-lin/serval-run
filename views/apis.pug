@@ -4,128 +4,131 @@ block content
     link(rel='stylesheet', href='../../css/common.css')
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
-    div.content-wrapper
-        nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
-            ol.breadcrumb
-                li.breadcrumb-item
-                    a(href='') Project
-                li.breadcrumb-item
-                    a(href='') Collection
-                li.breadcrumb-item.active(aria-current='page') API
+    main.main-content(role='main')
+        .container-fluid
+            .row.justify-content-center
+                .col-12
+                    //- nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
+                    //-     ol.breadcrumb
+                    //-         li.breadcrumb-item
+                    //-             a(href='') Project
+                    //-         li.breadcrumb-item
+                    //-             a(href='') Collection
+                    //-         li.breadcrumb-item.active(aria-current='page') API
                 
-        form.input-form
-            h1 APIs
-                button.btn.btn-right.btn-success.btn-block.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userApis[0].collectionId}`) Create API
-            #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
-                .modal-dialog
-                    .modal-content
-                        .modal-header
-                            h5#exampleModalLabel.modal-title Add API
-                            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
-                        .modal-body
-                            form
-                                .mb-3
-                                    label.col-form-label(for='collection-id') Collection ID
-                                    input#collection-id.form-control.input_collectionid
-                                .mb-3
-                                    label.col-form-label(for='api-name') API Name
-                                    input#api-name.form-control.input_api-name(type='string' placeholder='My API')
-                                .mb-3
-                                    label.col-form-label(for='http-method') HTTP Method
-                                    select#http-method.form-control.text-muted.input_http-method
-                                        option(value='' selected='' disabled='' hidden='') Please choose method to test
-                                        option GET 
-                                        option POST 
-                                        option PUT 
-                                        option PATCH 
-                                        option DELETE
-                                .mb-3
-                                    label.col-form-label(for='api-endpoint') API Endpoint
-                                    input#api-endpoint.form-control.input_api-endpoint(type='string' placeholder='api/1.0/signin')
-                                .mb-3
-                                    label.col-form-label(for='api-severity') Severity
-                                    select#api-severity.form-control.text-muted.input_api-severity
-                                        option(value='' selected='' disabled='' hidden='') Please value the severity
-                                            option 1 
-                                            option 2 
-                                            option 3 
-                                            option 4 
-                                            option 5
-                        .modal-footer
-                            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
-                            button.btn.btn-primary.btn-modal-create_api(type='submit') Create API
-        .cards
-            .card
-                .card-header
-                    .card-title Collection ID: #{userApis[0].collectionId}
-                    .card-tools
-                .card-body.p-0
-                    table.table
-                        thead
-                            tr
-                                th Name
-                                th Method
-                                th Endpoint
-                                th Severity
-                                th Scenarios
-                                th Operations
-                                th(style='width: 500px') Run Test
-                        tbody
-                            if userApis[0].api 
-                                - let i = 0
-                                while i < userApis.length
-                                    tr 
-                                        td #{userApis[i].api.api_name}
-                                        td #{userApis[i].api.http_method}
-                                        td #{userApis[i].api.api_endpoint}
-                                        td #{userApis[i].api.severity}
-                                        td 
-                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userApis[i].api._id}`) View
-                                        td 
-                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
-                                        td 
-                                            button.btn.btn-info.btn-apitest(type='submit' id=`${userApis[i].api._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-api-${i}` aria-expanded='false' aria-controls=`#runtest-api-${i}`) Run API Test
-                                            .collapse.env-table(id=`runtest-api-${i}`)
-                                                .p-0
-                                                    table.table
-                                                        thead
-                                                            tr 
-                                                                th Domain
-                                                                th Title
-                                                                th Run Test
-                                                        tbody
-                                                            if envInfo
-                                                                - let j = 0
-                                                                while j < envInfo.length
-                                                                    tr 
-                                                                        td #{envInfo[j].domain_name}
-                                                                        td #{envInfo[j].title}
-                                                                        td 
-                                                                            button.btn.btn-info.btn-apitest-in-toggle(type='submit' id=`${userApis[i].api._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
-                                                                    - j++
-                                    - i++
-        .input-form
-            if envInfo && userApis[0].api
-                button.btn.btn-secondary.btn-runtest-collection(type='submit' id=`${userApis[0].collectionId}` data-bs-toggle='collapse' data-bs-target='#runtest-multi' aria-expanded='false' aria-controls='runtest-multi') Run Collection Test
-                #runtest-multi.collapse
-                    .card.card-body.p-0
-                        table.table
-                            thead
-                                tr 
-                                    th Domain
-                                    th Title
-                                    th Run Test
-                            tbody
-                                if envInfo && userApis[0].api
-                                    - let k = 0
-                                    while k < envInfo.length
-                                        tr 
-                                            td #{envInfo[k].domain_name}
-                                            td #{envInfo[k].title}
-                                            td 
-                                                button.btn.btn-secondary.btn-collectiontest-in-toggle(type='submit' id=`${userApis[0].collectionId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Run
-                                        - k++
-    
+                    form.input-form
+                        h1 APIs
+                            button.btn.btn-right.btn-success.btn-block.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userApis[0].collectionId}`) Create API
+                        #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                            .modal-dialog
+                                .modal-content
+                                    .modal-header
+                                        h5#exampleModalLabel.modal-title Add API
+                                        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                    .modal-body
+                                        form
+                                            .mb-3
+                                                label.col-form-label(for='collection-id') Collection ID
+                                                input#collection-id.form-control.input_collectionid
+                                            .mb-3
+                                                label.col-form-label(for='api-name') API Name
+                                                input#api-name.form-control.input_api-name(type='string' placeholder='My API')
+                                            .mb-3
+                                                label.col-form-label(for='http-method') HTTP Method
+                                                select#http-method.form-control.text-muted.input_http-method
+                                                    option(value='' selected='' disabled='' hidden='') Please choose method to test
+                                                    option GET 
+                                                    option POST 
+                                                    option PUT 
+                                                    option PATCH 
+                                                    option DELETE
+                                            .mb-3
+                                                label.col-form-label(for='api-endpoint') API Endpoint
+                                                input#api-endpoint.form-control.input_api-endpoint(type='string' placeholder='api/1.0/signin')
+                                            .mb-3
+                                                label.col-form-label(for='api-severity') Severity
+                                                select#api-severity.form-control.text-muted.input_api-severity
+                                                    option(value='' selected='' disabled='' hidden='') Please value the severity
+                                                        option 1 
+                                                        option 2 
+                                                        option 3 
+                                                        option 4 
+                                                        option 5
+                                    .modal-footer
+                                        button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                                        button.btn.btn-primary.btn-modal-create_api(type='submit') Create API
+                    .cards
+                        .card
+                            .card-header
+                                .card-title Collection ID: #{userApis[0].collectionId}
+                                .card-tools
+                            .card-body.p-0
+                                table.table
+                                    thead
+                                        tr
+                                            th Name
+                                            th Method
+                                            th Endpoint
+                                            th Severity
+                                            th Scenarios
+                                            th Operations
+                                            th(style='width: 500px') Run Test
+                                    tbody
+                                        if userApis[0].api 
+                                            - let i = 0
+                                            while i < userApis.length
+                                                tr 
+                                                    td #{userApis[i].api.api_name}
+                                                    td #{userApis[i].api.http_method}
+                                                    td #{userApis[i].api.api_endpoint}
+                                                    td #{userApis[i].api.severity}
+                                                    td 
+                                                        button.btn.btn-warning.btn-scenarios(type='submit' id=`${userApis[i].api._id}`) View
+                                                    td 
+                                                        button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
+                                                    td 
+                                                        button.btn.btn-info.btn-apitest(type='submit' id=`${userApis[i].api._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-api-${i}` aria-expanded='false' aria-controls=`#runtest-api-${i}`) Run API Test
+                                                        .collapse.env-table(id=`runtest-api-${i}`)
+                                                            .p-0
+                                                                table.table
+                                                                    thead
+                                                                        tr 
+                                                                            th Domain
+                                                                            th Title
+                                                                            th Run Test
+                                                                    tbody
+                                                                        if envInfo
+                                                                            - let j = 0
+                                                                            while j < envInfo.length
+                                                                                tr 
+                                                                                    td #{envInfo[j].domain_name}
+                                                                                    td #{envInfo[j].title}
+                                                                                    td 
+                                                                                        button.btn.btn-info.btn-apitest-in-toggle(type='submit' id=`${userApis[i].api._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
+                                                                                - j++
+                                                - i++
+                    .input-form
+                        if envInfo && userApis[0].api
+                            button.btn.btn-secondary.btn-runtest-collection(type='submit' id=`${userApis[0].collectionId}` data-bs-toggle='collapse' data-bs-target='#runtest-multi' aria-expanded='false' aria-controls='runtest-multi') Run Collection Test
+                            #runtest-multi.collapse
+                                .card.card-body.p-0
+                                    table.table
+                                        thead
+                                            tr 
+                                                th Domain
+                                                th Title
+                                                th Run Test
+                                        tbody
+                                            if envInfo && userApis[0].api
+                                                - let k = 0
+                                                while k < envInfo.length
+                                                    tr 
+                                                        td #{envInfo[k].domain_name}
+                                                        td #{envInfo[k].title}
+                                                        td 
+                                                            button.btn.btn-secondary.btn-collectiontest-in-toggle(type='submit' id=`${userApis[0].collectionId}` domain=`${envInfo[k].domain_name}` title=`${envInfo[k].title}`) Run
+                                                    - k++
+                
     script.
         $('.btn-create_api').on('click', function(event) {
             console.log('create_api clicked')

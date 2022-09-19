@@ -8,82 +8,132 @@ html
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous')
     script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM' crossorigin='anonymous')
-    script(src='https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js')
     script(src='https://unpkg.com/sweetalert/dist/sweetalert.min.js')
     link(rel='icon' type='image/x-icon' href='../../css/icon/serval.png')
-    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css')
+    link(href='../../css/app-light.css' rel='stylesheet')
+    link(href='../../css/feather.css' rel='stylesheet')
+    link(href='../../css/simplebar.css' rel='stylesheet')
     link(href='http://fonts.cdnfonts.com/css/iunito' rel='stylesheet')
     link(href="http://fonts.cdnfonts.com/css/engender-mod-font" rel="stylesheet")
                 
 
   body
-    // Navbar
-    nav.main-header.navbar.navbar-expand.navbar-light.navbar-white
-      .container
-        a.navbar-brand(href='http://54.92.88.214/')
-          img.brand-image.img-square.elevation(src='../../css/icon/serval-run_logo-2.png' alt='ServalRun® Logo')
-          span.brand-text.font-weight-light ServalRun®
-        ul.navbar-nav
-          li.nav-item.d-none.d-sm-inline-block
-            a.nav-link(href='http://54.92.88.214/') Home
-          li.nav-item.d-none.d-sm-inline-block
-            a.btn.btn-outline-secondary.btn-profile(href='http://54.92.88.214/api/1.0/profile') Profile
+    .wrapper 
+      nav.topnav.navbar.navbar-light
+        button.navbar-toggler.text-muted.mt-2.p-0.mr-3.collapseSidebar(type='button')
+          i.fe.fe-menu.navbar-toggler-icon
+        ul.nav
+          li.nav-item
+            a#modeSwitcher.nav-link.text-muted.my-2(href='#' data-mode='light')
+              i.fe.fe-sun.fe-16
+      aside#leftSidebar.sidebar-left.border-right.bg-white.shadow(data-simplebar='init')
+        .simplebar-wrapper(style='margin: 0px;')
+          .simplebar-height-auto-observer-wrapper
+            .simplebar-height-auto-observer
+          .simplebar-mask
+            .simplebar-offset(style='right: 0px; bottom: 0px;')
+              .simplebar-content-wrapper(style='height: 100%; overflow: hidden;')
+                .simplebar-content(style='padding: 0px;')
+                  a.btn.collapseSidebar.toggle-btn.d-lg-none.text-muted.ml-2.mt-3(href='#' data-toggle='toggle')
+                    i.fe.fe-x
+                      span.sr-only
+                  nav.vertnav.navbar.navbar-light
+                    // nav bar
+                    .w-100.mb-4.d-flex
+                      a.navbar-brand.mx-auto.mt-2.flex-fill.text-center(href='http://localhost:3001/')
+                        img.img-circle.elevation-2(src='../../css/icon/serval-run_logo-2.png' style='    width: 214px; height: 75px;')
+                    ul.navbar-nav.flex-fill.w-100.mb-2
+                      li.nav-item
+                        a.btn.btn-lg.nav-link.pl-3(href='http://localhost:3001/')
+                          i.fe.fe-box.fe-16
+                          span.ml-3.item-text Home
+                      li.nav-item
+                        a.btn.btn-lg.nav-link.pl-3(href='http://localhost:3001/')
+                          i.fe.fe-home.fe-16
+                          span.ml-3.item-text Dashboard
+                      li.nav-item.w-100
+                        a.btn.btn-lg.nav-link.pl-3.btn-profile(href='http://localhost:3001/api/1.0/profile')
+                          i.fe.fe-layers.fe-16
+                          span.ml-3.item-text Profile
+                      li.nav-item
+                        a.btn.btn-lg.nav-link.pl-3.btn-my_project(href='http://localhost:3001/api/1.0/projects')
+                          i.fe.fe-grid.fe-16
+                          span.ml-3.item-text Project
+          .simplebar-placeholder(style='width: 255px; height: 977px;')
+        .simplebar-track.simplebar-horizontal(style='visibility: hidden;')
+          .simplebar-scrollbar(style='width: 0px; display: none;')
+        .simplebar-track.simplebar-vertical(style='visibility: hidden;')
+          .simplebar-scrollbar(style='height: 0px; transform: translate3d(0px, 0px, 0px); display: none;')
+      block content 
 
-    // Main Sidebar Container
+
+    // Navbar
+    //- nav.main-header.navbar.navbar-expand.navbar-light.navbar-white
+    //-   .container
+    //-     a.navbar-brand(href='http://54.92.88.214/')
+    //-       //- img.brand-image.img-square.elevation(src='../../css/icon/serval-run_logo-2.png' alt='ServalRun® Logo')
+    //-       span.brand-text.font-weight-light ServalRun®
+    //-     ul.navbar-nav
+    //-       li.nav-item.d-none.d-sm-inline-block
+    //-         a.nav-link(href='http://54.92.88.214/') Home
+    //-       li.nav-item.d-none.d-sm-inline-block
+    //-         a.btn.btn-outline-secondary.btn-profile(href='http://54.92.88.214/api/1.0/profile') Profile
+
+    //- // Main Sidebar Container
+    //- //- aside.main-sidebar.sidebar-dark-info.elevation-4
     //- aside.main-sidebar.sidebar-dark-info.elevation-4
-    aside.main-sidebar.sidebar-dark-info.elevation-4
-      // Brand Logo
-      .brand-link.d-flex.justify-content-between.align-items-center
-        a.brand-link(href='http://54.92.88.214/')
-          span.brand-text.font-weight-light ServalRun®
-      .sidebar
-        // Sidebar user panel (optional)
-        .user-panel.mt-3.pb-3.mb-3.d-flex
-          .image
-            img.img-circle.elevation-2(src='../../css/icon/serval.png' alt='User Image' style='background-color: azure;')
-          .info
-            a.d-block(href='http://54.92.88.214/') Hazel
-        // Sidebar Menu
-        nav.mt-2
-          ul.nav.nav-pills.nav-sidebar.flex-column(data-widget='treeview' role='menu')
-            // Add icons to the links using the .nav-icon class with font-awesome or any other icon font library
-            li.nav-item.menu-open
-              a.nav-link.active(href='http://54.92.88.214/')
-                i.nav-icon.fas.fa-tachometer-alt
-                p
-                  | Workspace
-                  i.right.fas.fa-angle-left
-              ul.nav.nav-treeview
-                li.nav-item.btn-my_project
-                  a.nav-link(href='http://54.92.88.214/api/1.0/projects')
-                    i.far.fa-circle.nav-icon
-                    p My Projects
-              //- li.nav-item.menu-open
-              //-   a.nav-link.active(href='http://localhost:3001/')
-              //-     i.nav-icon.fas.fa-tachometer-alt
-              //-     p
-              //-       | Reports
-              //-       i.right.fas.fa-angle-left
-              //-   ul.nav.nav-treeview
-              //-     li.nav-item
-              //-       a.nav-link(href='http://localhost:3001/api/1.0/reports')
-              //-         i.far.fa-circle.nav-icon
-              //-         p Statistics
-              //-     li.nav-item
-              //-       a.nav-link(href='http://localhost:3001/')
-              //-         i.far.fa-circle.nav-icon
-              //-         p Documents
-    block content
-    .layout-footer-fixed
-      footer.main-footer
-        .float-right.d-none.d-sm-block
-          b Version
-          |  1.0.0
-        strong
-          | Copyright &copy; 2022. 
-          a.text-info(href='#') ServalRun®
-          | .
-          |  All rights reserved.
+    //-   // Brand Logo
+    //-   .brand-link.d-flex.justify-content-between.align-items-center
+    //-     a.brand-link(href='http://54.92.88.214/')
+    //-       span.brand-text.font-weight-light ServalRun®
+    //-   .sidebar
+    //-     // Sidebar user panel (optional)
+    //-     .user-panel.mt-3.pb-3.mb-3.d-flex
+    //-       .image
+    //-         img.img-circle.elevation-2(src='../../css/icon/serval.png' alt='User Image' style='background-color: azure;')
+    //-       .info
+    //-         a.d-block(href='http://54.92.88.214/') Hazel
+    //-     // Sidebar Menu
+    //-     nav.mt-2
+    //-       ul.nav.nav-pills.nav-sidebar.flex-column(data-widget='treeview' role='menu')
+    //-         // Add icons to the links using the .nav-icon class with font-awesome or any other icon font library
+    //-         li.nav-item.menu-open
+    //-           a.nav-link.active(href='http://54.92.88.214/')
+    //-             i.nav-icon.fas.fa-tachometer-alt
+    //-             p
+    //-               | Workspace
+    //-               i.right.fas.fa-angle-left
+    //-           ul.nav.nav-treeview
+    //-             li.nav-item.btn-my_project
+    //-               a.nav-link(href='http://54.92.88.214/api/1.0/projects')
+    //-                 i.far.fa-circle.nav-icon
+    //-                 p My Projects
+    //-           //- li.nav-item.menu-open
+    //-           //-   a.nav-link.active(href='http://localhost:3001/')
+    //-           //-     i.nav-icon.fas.fa-tachometer-alt
+    //-           //-     p
+    //-           //-       | Reports
+    //-           //-       i.right.fas.fa-angle-left
+    //-           //-   ul.nav.nav-treeview
+    //-           //-     li.nav-item
+    //-           //-       a.nav-link(href='http://localhost:3001/api/1.0/reports')
+    //-           //-         i.far.fa-circle.nav-icon
+    //-           //-         p Statistics
+    //-           //-     li.nav-item
+    //-           //-       a.nav-link(href='http://localhost:3001/')
+    //-           //-         i.far.fa-circle.nav-icon
+    //-           //-         p Documents
+    //- block content
+    //- .layout-footer-fixed
+    //-   footer.main-footer
+    //-     .float-right.d-none.d-sm-block
+    //-       b Version
+    //-       |  1.0.0
+    //-     strong
+    //-       | Copyright &copy; 2022. 
+    //-       a.text-info(href='#') ServalRun®
+    //-       | .
+    //-       |  All rights reserved.
   script.
     $('.btn-profile').on('click', function(event) {
       console.log('my profile clicked')
