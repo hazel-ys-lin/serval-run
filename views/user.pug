@@ -37,7 +37,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/user/signup',
+                url: '/api/1.0/user/signup',
                 data: {
                     userName: userName,
                     userEmail: userEmail,
@@ -66,7 +66,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/user/signin',
+                url: '/api/1.0/user/signin',
                 data: {
                     userEmail: userEmail,
                     userPassword: userPassword,

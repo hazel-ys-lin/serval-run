@@ -112,7 +112,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/editcollection',
+                url: '/api/1.0/editcollection',
                 data: {
                     projectId: projectId,
                     collectionName: collectionName,
@@ -142,7 +142,7 @@ block content
 
             axios({
                 method: 'delete',
-                url: 'http://localhost:3001/api/1.0/editcollection',
+                url: '/api/1.0/editcollection',
                 data: {
                     projectId: projectId,
                     collectionId: collectionId,
@@ -172,7 +172,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/collectionrun',
+                url: '/api/1.0/collectionrun',
                 data: {
                     collectionId: collectionId,
                     domainName: domainName,

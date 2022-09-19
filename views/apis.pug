@@ -164,7 +164,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/editapi',
+                url: '/api/1.0/editapi',
                 data: {
                     collectionId: collectionId,
                     apiName: apiName,
@@ -197,7 +197,7 @@ block content
 
             axios({
                 method: 'delete',
-                url: 'http://localhost:3001/api/1.0/editapi',
+                url: '/api/1.0/editapi',
                 data: {
                     collectionId: collectionId,
                     apiId: apiId,
@@ -228,7 +228,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/apirun',
+                url: '/api/1.0/apirun',
                 data: {
                     collectionId: collectionId,
                     apiId: apiId,
@@ -262,7 +262,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/collectionrun',
+                url: '/api/1.0/collectionrun',
                 data: {
                     collectionId: collectionId,
                     domainName: domainName,

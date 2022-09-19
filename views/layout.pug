@@ -20,21 +20,21 @@ html
     // Navbar
     nav.main-header.navbar.navbar-expand.navbar-light.navbar-white
       .container
-        a.navbar-brand(href='http://localhost:3001/')
+        a.navbar-brand(href='http://54.92.88.214/')
           img.brand-image.img-square.elevation(src='../../css/icon/serval-run_logo-2.png' alt='ServalRun® Logo')
           span.brand-text.font-weight-light ServalRun®
         ul.navbar-nav
           li.nav-item.d-none.d-sm-inline-block
-            a.nav-link(href='http://localhost:3001/') Home
+            a.nav-link(href='http://54.92.88.214/') Home
           li.nav-item.d-none.d-sm-inline-block
-            a.btn.btn-outline-secondary.btn-profile(href='http://localhost:3001/api/1.0/profile') Profile
+            a.btn.btn-outline-secondary.btn-profile(href='http://54.92.88.214/api/1.0/profile') Profile
 
     // Main Sidebar Container
     //- aside.main-sidebar.sidebar-dark-info.elevation-4
     aside.main-sidebar.sidebar-dark-info.elevation-4
       // Brand Logo
       .brand-link.d-flex.justify-content-between.align-items-center
-        a.brand-link(href='http://localhost:3001/')
+        a.brand-link(href='http://54.92.88.214/')
           span.brand-text.font-weight-light ServalRun®
       .sidebar
         // Sidebar user panel (optional)
@@ -42,20 +42,20 @@ html
           .image
             img.img-circle.elevation-2(src='../../css/icon/serval.png' alt='User Image' style='background-color: azure;')
           .info
-            a.d-block(href='http://localhost:3001/') Hazel
+            a.d-block(href='http://54.92.88.214/') Hazel
         // Sidebar Menu
         nav.mt-2
           ul.nav.nav-pills.nav-sidebar.flex-column(data-widget='treeview' role='menu')
             // Add icons to the links using the .nav-icon class with font-awesome or any other icon font library
             li.nav-item.menu-open
-              a.nav-link.active(href='http://localhost:3001/')
+              a.nav-link.active(href='http://54.92.88.214/')
                 i.nav-icon.fas.fa-tachometer-alt
                 p
                   | Workspace
                   i.right.fas.fa-angle-left
               ul.nav.nav-treeview
                 li.nav-item.btn-my_project
-                  a.nav-link(href='http://localhost:3001/api/1.0/projects')
+                  a.nav-link(href='http://54.92.88.214/api/1.0/projects')
                     i.far.fa-circle.nav-icon
                     p My Projects
               //- li.nav-item.menu-open
@@ -91,7 +91,7 @@ html
 
       axios({
           method: 'get',
-          url: 'http://localhost:3001/api/1.0/profile',
+          url: '/api/1.0/profile',
           headers: {'Content-Type': 'application/json'}
       })
       .then((response) => {
@@ -115,7 +115,7 @@ html
 
       axios({
           method: 'get',
-          url: 'http://localhost:3001/api/1.0/projects',
+          url: '/api/1.0/projects',
           headers: {'Content-Type': 'application/json'}
       })
       .then((response) => {

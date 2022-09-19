@@ -90,7 +90,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/editenv',
+                url: '/api/1.0/editenv',
                 data: {
                     projectId: projectId,
                     domainName: domainName,
@@ -121,7 +121,7 @@ block content
 
             axios({
                 method: 'delete',
-                url: 'http://localhost:3001/api/1.0/editenv',
+                url: '/api/1.0/editenv',
                 data: {
                     projectId: projectId,
                     environmentId: environmentId,

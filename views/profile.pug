@@ -24,7 +24,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/user/logout',
+                url: '/api/1.0/user/logout',
                 headers: {'Content-Type': 'application/json'}
             })
             .then((response) => {

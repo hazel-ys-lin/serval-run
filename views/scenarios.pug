@@ -191,7 +191,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/scenariorun',
+                url: '/api/1.0/scenariorun',
                 data: {
                     apiId: apiId,
                     scenarioId: scenarioId,
@@ -227,7 +227,7 @@ block content
 
             axios({
                 method: 'delete',
-                url: 'http://localhost:3001/api/1.0/editscenario',
+                url: '/api/1.0/editscenario',
                 data: {
                     apiId: apiId,
                     scenarioId: scenarioId,
@@ -258,7 +258,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/apirun',
+                url: '/api/1.0/apirun',
                 data: {
                     apiId: apiId,
                     scenarioId: scenarioId,
