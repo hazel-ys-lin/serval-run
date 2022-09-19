@@ -95,7 +95,7 @@ block content
 
             axios({
                 method: 'post',
-                url: 'http://localhost:3001/api/1.0/editproject',
+                url: '/api/1.0/editproject',
                 data: {
                     projectName: projectName,
                 },
@@ -103,13 +103,29 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('Create project successfully')
-                    window.location.reload();
+                    swal({
+                        text: 'Create project successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('Create project successfully')
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('in error');
                 console.log('Catch project error')
+                swal({
+                        text: 'Create project error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
             })
         })
 
@@ -123,7 +139,7 @@ block content
 
             axios({
                 method: 'delete',
-                url: 'http://localhost:3001/api/1.0/editproject',
+                url: '/api/1.0/editproject',
                 data: {
                     projectId: projectId,
                 },
@@ -131,17 +147,33 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
+                    swal({
+                        text: 'Delete project successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
                     //- console.log('response.status: ', response.status);
-                    alert('delete project successfully')
-                    //- window.location.assign('./testresult');
-                    // TODO: settimeout and let page return to show all projects
-                    window.location.reload();
+                    //- alert('delete project successfully')
+                    //- //- window.location.assign('./testresult');
+                    //- // TODO: settimeout and let page return to show all projects
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('in error');
                 console.log('catch: ', error)
-                alert('delete project error')
+                swal({
+                        text: 'Delete project error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('delete project error')
             })
         })
 

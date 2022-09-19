@@ -40,23 +40,23 @@ html
                   nav.vertnav.navbar.navbar-light
                     // nav bar
                     .w-100.mb-4.d-flex
-                      a.navbar-brand.mx-auto.mt-2.flex-fill.text-center(href='http://localhost:3001/')
+                      a.navbar-brand.mx-auto.mt-2.flex-fill.text-center(href='http://54.92.88.214/')
                         img.img-circle.elevation-2(src='../../css/icon/serval-run_logo-2.png' style='    width: 285px; height: 100px;')
                     ul.navbar-nav.flex-fill.w-100.mb-2
                       li.nav-item.navbar-nav(style='text-align: left;')
-                        a.btn.btn-lg.nav-link.pl-3(style='text-align: left;' href='http://localhost:3001/')
+                        a.btn.btn-lg.nav-link.pl-3(style='text-align: left;' href='http://54.92.88.214/')
                           i.fe.fe-box.fe-16
                           span.ml-3.item-text Home
                       li.nav-item.navbar-nav(style='text-align: left;')
-                        a.btn.btn-lg.nav-link.pl-3(style='text-align: left;' href='http://localhost:3001/')
+                        a.btn.btn-lg.nav-link.pl-3(style='text-align: left;' href='http://54.92.88.214/')
                           i.fe.fe-home.fe-16
                           span.ml-3.item-text Dashboard
                       li.nav-item.navbar-nav(style='text-align: left;')
-                        a.btn.btn-lg.nav-link.pl-3.btn-profile(style='text-align: left;' href='http://localhost:3001/api/1.0/profile')
+                        a.btn.btn-lg.nav-link.pl-3.btn-profile(style='text-align: left;' href='http://54.92.88.214/api/1.0/profile')
                           i.fe.fe-layers.fe-16
                           span.ml-3.item-text Profile
                       li.nav-item.navbar-nav(style='text-align: left;')
-                        a.btn.btn-lg.nav-link.pl-3.btn-my_project(style='text-align: left;' href='http://localhost:3001/api/1.0/projects')
+                        a.btn.btn-lg.nav-link.pl-3.btn-my_project(style='text-align: left;' href='http://54.92.88.214/api/1.0/projects')
                           i.fe.fe-grid.fe-16
                           span.ml-3.item-text Project
           .simplebar-placeholder(style='width: 255px; height: 977px;')
@@ -149,8 +149,14 @@ html
           window.location.assign('/api/1.0/profile');
         }
         if (response.status === 203) {
-          alert('Please log in first');
-          window.location.assign('/api/1.0/user');
+          swal({
+            text: 'Please log in first',
+          })
+          setTimeout(()=> {
+            window.location.assign('./api/1.0/user');
+          }, 2000)
+          //- alert('Please log in first');
+          //- window.location.assign('/api/1.0/user');
         }
       })
       .catch((error) => {

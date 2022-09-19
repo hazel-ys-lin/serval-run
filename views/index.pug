@@ -17,7 +17,7 @@ block content
                                             i.fe.fe-navigation.fe-24.text-white
                                         h3.h4.mt-4.mb-1.text-white Create an Account
                                         p.text-white.mb-4 Start your test journey with serval
-                                        a.btn.btn-lg.bg-primary-light.text-white(href='#')
+                                        a.btn.btn-lg.bg-primary-light.text-white.btn-user(href='http://54.92.88.214/api/1.0/user')
                                             | Sign Up
                                             i.fe.fe-arrow-right.fe-16.ml-2
                                     // .card-body
@@ -30,10 +30,42 @@ block content
                                             i.fe.fe-message-circle.fe-24.text-secondary
                                         h3.h4.mt-4.mb-1.text-dark Already have an account?
                                         p.text-dark.mb-4 Sign in to check your own reports
-                                        a.btn.btn-lg.bg-success-light.text-dark(href='#')
+                                        a.btn.btn-lg.bg-success-light.text-dark.btn-user(href='#')
                                             | Sign In
                                             i.fe.fe-arrow-right.fe-16.ml-2
                                     // .card-body
                                     // .card
                                 // .col-md
 
+    script.
+        $('.btn-profile').on('click', function(event) {
+        console.log('my profile clicked')
+        event.preventDefault();
+
+        axios({
+            method: 'get',
+            url: '/api/1.0/profile',
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then((response) => {
+            if (response.status === 200) {
+                window.location.assign('/api/1.0/profile');
+            }
+            if (response.status === 203) {
+                swal({
+                    text: 'Please log in first',
+                    //- icon: "success",
+                    //- confirmButtonClass: "btn-success",
+                })
+                setTimeout(()=> {
+                    window.location.assign('/api/1.0/user');
+                }, 2000)
+                //- alert('Please log in first');
+                //- window.location.assign('/api/1.0/user');
+            }
+        })
+        .catch((error) => {
+            console.log('catch error: ', error)
+            window.location.assign('/');
+        })
+        })

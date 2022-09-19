@@ -2,17 +2,18 @@ extends layout.pug
 
 block content 
     link(rel='stylesheet', href='../../css/common.css')
-    .content-wrapper(style='min-height: 1604.44px;')
-      section.content-header
-      section.content
-        .error-page
-          h2.headline.text-danger 500
-          .error-content
-            h3
-              i.fas.fa-exclamation-triangle.text-danger
-              |  Serval Oops! Something went wrong.
-            p
-              | We will work on fixing that right away.
-              br
-              | Meanwhile, you may 
-              a(href='../') return to Home
+    
+    main.main-content(role='main')
+      .container-fluid
+          .row.justify-content-center
+              .col-12
+                h2.headline.text-danger 500
+                .error-content
+                  h3
+                    i.fas.fa-exclamation-triangle.text-danger
+                    |  Serval Oops! Something went wrong.
+                  p
+                    | We will work on fixing that right away.
+                    br
+                    | Meanwhile, you may 
+                    a(href='../') return to Home

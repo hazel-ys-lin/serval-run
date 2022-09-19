@@ -151,7 +151,7 @@ block content
 
                 axios({
                     method: 'post',
-                    url: 'http://localhost:3001/api/1.0/editscenario',
+                    url: '/api/1.0/editscenario',
                     data: {
                         apiId: apiId,
                         featureCode: featureCode,
@@ -160,14 +160,30 @@ block content
                 })
                 .then((response) => {
                     if (response.status === 200) {
-                        alert('create scenario successfully')
-                        window.location.reload();
+                        swal({
+                            text: 'Create scenario successfully',
+                            icon: "success",
+                            confirmButtonClass: "btn-success",
+                        })
+                        setTimeout(()=> {
+                            window.location.reload();
+                        }, 2000)
+                        //- alert('create scenario successfully')
+                        //- window.location.reload();
                     }
                 })
                 .catch((error) => {
                     console.log('in error');
                     console.log('catch: ', error)
-                    alert('create scenario error')
+                    swal({
+                        text: 'Create scenario error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('create scenario error')
                 })
             })
         })
@@ -209,13 +225,29 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('Run scenario test successfully')
-                    window.location.reload();
+                    swal({
+                        text: 'Run scenario test successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('Run scenario test successfully')
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('catch: ', error)
-                alert('Run scenario test error')
+                swal({
+                        text: 'Run scenario test error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('Run scenario test error')
             })
         })
 
@@ -239,14 +271,30 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('delete scenario successfully')
-                    window.location.reload();
+                    swal({
+                        text: 'Delete scenario successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('delete scenario successfully')
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('in error');
                 console.log('catch: ', error)
-                alert('delete scenario error')
+                swal({
+                        text: 'Delete scenario error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('delete scenario error')
             })
         })
 
@@ -276,13 +324,29 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('Run api test successfully')
-                    window.location.reload();
+                    swal({
+                        text: 'Run api test successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('Run api test successfully')
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('catch: ', error)
-                alert('Run api test error')
+                swal({
+                    text: 'Run api test error',
+                    icon: "error",
+                    confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('Run api test error')
             })
         })
 

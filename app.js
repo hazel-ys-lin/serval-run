@@ -32,13 +32,15 @@ app.use('/api/' + API_VERSION, [
 // Handle 404
 app.use(function (req, res, next) {
   console.log('404', req.url);
-  return res.status(404).json({ error: 'error: 404' });
+  return res.render('error').json({ msg: 'error: 404' });
+  // return res.status(404).json({ error: 'error: 404' });
 });
 
 //Handle 500
 app.use(function (err, req, res, next) {
   console.log('error handler: ', err);
-  return res.status(500).render('error', { msg: 'error: 500' });
+  return res.render('error').json({ msg: 'error: 500' });
+  // return res.status(500).render('error', { msg: 'error: 500' });
 });
 
 app.listen(port, () => {

@@ -70,14 +70,30 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('Welcome to servalRun!')
-                    window.location.assign('./profile');
+                    swal({
+                        text: 'Welcome to servalRun!',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.assign('./profile');
+                    }, 2000)
+                    //- alert('Welcome to servalRun!')
+                    //- window.location.assign('./profile');
                 }
             })
             .catch((error) => {
                 console.log('catch error: ', error)
-                alert('Create account error')
-                window.location.reload();
+                swal({
+                        text: Create account error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('Create account error')
+                //- window.location.reload();
             })
         })
 
@@ -113,9 +129,9 @@ block content
                 console.log('catch error: ', error)
                 //- alert('Sign in error')
                 swal({
-                        text: "Sign in error",
-                        icon: "error",
-                        confirmButtonClass: "btn-danger",
+                    text: "Sign in error",
+                    icon: "error",
+                    confirmButtonClass: "btn-danger",
                 })
                 setTimeout(()=> {
                     window.location.reload();

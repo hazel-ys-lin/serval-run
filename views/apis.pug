@@ -179,13 +179,29 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('create api successfully')
-                    window.location.reload();
+                    swal({
+                        text: 'Create api successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('create api successfully')
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('in error');
                 console.log('catch api error')
+                swal({
+                        text: 'Create API error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
             })
         })
 
@@ -209,15 +225,31 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('delete API successfully')
-                    //- window.location.assign('./testresult');
-                    window.location.reload();
+                    swal({
+                        text: 'Delete API successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('delete API successfully')
+                    //- //- window.location.assign('./testresult');
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('in error');
                 console.log('catch: ', error)
-                alert('delete API error')
+                swal({
+                        text: 'Delete API error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('delete API error')
             })
         })
 
@@ -246,13 +278,29 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('Run api test successfully')
-                    window.location.reload();
+                    swal({
+                        text: 'Run api test successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('Run api test successfully')
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('catch: ', error)
-                alert('Run api test error')
+                swal({
+                        text: 'Run api test error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('Run api test error')
             })
         })
 
@@ -279,12 +327,28 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('Run collection test successfully')
-                    window.location.reload();
+                    swal({
+                        text: 'Run collection test successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('Run collection test successfully')
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('catch: ', error)
-                alert('Run collection test error')
+                swal({
+                        text: 'Run collection test error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('Run collection test error')
             })
         })

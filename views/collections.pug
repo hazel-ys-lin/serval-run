@@ -124,13 +124,29 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('create collection successfully')
-                    window.location.reload();
+                    swal({
+                        text: 'Create collection successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('create collection successfully')
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('in error');
                 console.log('catch collection error')
+                swal({
+                        text: 'Create collection error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
             })
         })
 
@@ -154,15 +170,31 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('delete project successfully')
+                    swal({
+                        text: 'Delete project successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('delete project successfully')
                     //- window.location.assign('./testresult');
-                    window.location.reload();
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('in error');
                 console.log('catch: ', error)
-                alert('delete project error')
+                swal({
+                        text: 'Delete project error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('delete project error')
             })
         })
 
@@ -189,12 +221,28 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('Run collection test successfully')
-                    window.location.reload();
+                    swal({
+                        text: 'Run collection test successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('Run collection test successfully')
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('catch: ', error)
-                alert('Run collection test error')
+                swal({
+                        text: 'Run collection test error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('Run collection test error')
             })
         })

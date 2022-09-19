@@ -103,13 +103,29 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('create environment successfully')
-                    window.location.reload();
+                    swal({
+                        text: 'Create environment successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('create environment successfully')
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('in error');
                 console.log('create environment error')
+                swal({
+                        text: 'Create environment error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
             })
         })
 
@@ -133,14 +149,30 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('delete environment successfully')
-                    //- window.location.assign('./testresult');
-                    window.location.reload();
+                    swal({
+                        text: 'Delete environment successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('delete environment successfully')
+                    //- //- window.location.assign('./testresult');
+                    //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('in error');
                 console.log('catch: ', error)
-                alert('delete environment error')
+                swal({
+                        text: 'Delete environment error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('delete environment error')
             })
         })
