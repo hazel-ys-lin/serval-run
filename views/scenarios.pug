@@ -52,12 +52,12 @@ block content
                                 table.table
                                     thead
                                         tr
-                                            th(style='width: 80px') Title
-                                            th(style='width: 150px') Description
-                                            th(style='width: 360px') Steps
-                                            th(style='width: 20px') Examples
-                                            th(style='width: 20px') Operations
-                                            th Run Test
+                                            th.text-dark(style='width: 80px') Title
+                                            th.text-dark(style='width: 150px') Description
+                                            th.text-dark(style='width: 360px') Steps
+                                            th.text-dark(style='width: 20px') Examples
+                                            th.text-dark(style='width: 20px') Operations
+                                            th.text-dark Run Test
                                     tbody
                                         if userScenarios[0].scenario
                                             - let i = 0
@@ -73,7 +73,7 @@ block content
                                                                     #info-text
                                                                         dl(style='padding-top: 5px; margin-bottom: 0px;')
                                                                             each element in userScenarios[i].scenario.steps
-                                                                                dt.badge.bg-light(style='font-size: 90%;')= element.keyword
+                                                                                dt.badge.bg-light.text-dark(style='font-size: 90%;')= element.keyword
                                                                                 dd.list-inline-item(style='font-size: 90%;')= element.text
                                                                                 br
                                                     td 
@@ -93,9 +93,9 @@ block content
                                                                 table.table
                                                                     thead
                                                                         tr 
-                                                                            th Domain
-                                                                            th Title
-                                                                            th Run Test
+                                                                            th.text-dark Domain
+                                                                            th.text-dark Title
+                                                                            th.text-dark Run Test
                                                                     tbody
                                                                         if envInfo
                                                                             - let j = 0
@@ -115,9 +115,9 @@ block content
                                     table.table
                                         thead
                                             tr 
-                                                th Domain
-                                                th Title
-                                                th Run Test
+                                                th.text-dark Domain
+                                                th.text-dark Title
+                                                th.text-dark Run Test
                                         tbody
                                             if envInfo
                                                 - let k = 0

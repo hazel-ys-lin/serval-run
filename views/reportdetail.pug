@@ -124,13 +124,13 @@ block content
                           table.table 
                             thead
                               tr
-                                th(scope='col') Time
-                                th(scope='col') Scenario Title
-                                th(scope='col') Description
-                                th(scope='col') Result 
-                                th(scope='col') Expected Result
-                                th(scope='col') Real Result
-                                th(scope='col') Request Length
+                                th.text-dark(scope='col') Time
+                                th.text-dark(scope='col') Scenario Title
+                                th.text-dark(scope='col') Description
+                                th.text-dark(scope='col') Result 
+                                th.text-dark(scope='col') Expected Result
+                                th.text-dark(scope='col') Real Result
+                                th.text-dark(scope='col') Request Length
                             tbody
                             - let i = 0
                             while i < reportResponse.length

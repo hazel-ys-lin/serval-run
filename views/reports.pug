@@ -27,7 +27,6 @@ block content
                   //-       li.breadcrumb-item
                   //-           a(href='') Report
                   .input-form
-                  .cards
                     h1.display-4 Results
                     h1.display-6 #{reportsDetail[0].projectName.toUpperCase()}
                     .card
@@ -36,13 +35,13 @@ block content
                           table.table 
                             thead
                               tr
-                                th(scope='col' style='width: 200px') Test Date
-                                th(scope='col' style='width: 150px') Type
-                                th(scope='col' style='width: 600px') Title
-                                th(scope='col' style='width: 150px') Pass Rate 
-                                th(scope='col' style='width: 150px') Examples
-                                th(scope='col' style='width: 200px') Average Time
-                                th(scope='col') Operation
+                                th.text-dark(scope='col' style='width: 200px') Test Date
+                                th.text-dark(scope='col' style='width: 150px') Type
+                                th.text-dark(scope='col' style='width: 600px') Title
+                                th.text-dark(scope='col' style='width: 150px') Pass Rate 
+                                th.text-dark(scope='col' style='width: 150px') Examples
+                                th.text-dark(scope='col' style='width: 200px') Average Time
+                                th.text-dark(scope='col') Operation
                             tbody
                             - let i = 0
                             while i < reportsDetail.length
@@ -57,7 +56,7 @@ block content
                                     h1.display-6.badge(style='font-size: 150%; background-color: #CC9C75')= reportsDetail[i].type
                                 td.report-title.list-inline
                                   each element in reportsDetail[i].reportTitle
-                                    h1.list-inline-item.badge.bg-light(style='font-size: 125%;')= element
+                                    h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 125%;')= element
                                 td #{reportsDetail[i].passRate}
                                 td #{reportsDetail[i].passExamples}
                                 td #{reportsDetail[i].averageTime}

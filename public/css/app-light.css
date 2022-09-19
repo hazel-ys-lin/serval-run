@@ -14,7 +14,9 @@
  * Copyright 2011-2020 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
- :root {
+@import url('http://fonts.cdnfonts.com/css/iunito');
+
+:root {
   --blue: #1b68ff;
   --indigo: #6610f2;
   --purple: #6f42c1;
@@ -41,7 +43,7 @@
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
-  --font-family-sans-serif: "Overpass", sans-serif;
+  --font-family-sans-serif: 'Iunito', sans-serif;;
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
 
 *,
@@ -60,8 +62,8 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 body {
   margin: 0;
-  font-family: "Overpass", sans-serif;
-  font-size: 0.875rem;
+  font-family: 'Iunito', sans-serif;
+  font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
   color: #6c757d;
@@ -978,7 +980,7 @@ pre {
     max-width: 16.66667%; }
   .col-lg-3 {
     flex: 0 0 25%;
-    max-width: 25%; }
+    max-width: 45%; }
   .col-lg-4 {
     flex: 0 0 33.33333%;
     max-width: 33.33333%; }
@@ -4260,7 +4262,7 @@ a.close.disabled {
   z-index: 1070;
   display: block;
   margin: 0;
-  font-family: "Overpass", sans-serif;
+  font-family: 'Iunito', sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -4345,7 +4347,7 @@ a.close.disabled {
   z-index: 1060;
   display: block;
   max-width: 276px;
-  font-family: "Overpass", sans-serif;
+  font-family: 'Iunito', sans-serif;;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -7376,7 +7378,7 @@ button:focus {
 /* dropdown */
 .dropdown-toggle::after {
   display: inline-block;
-  font-family: "feather";
+  font-family: 'Iunito', sans-serif;
   content: "\e92e";
   font-size: 0.75rem; }
 
@@ -7423,7 +7425,7 @@ button:focus {
 .searchform {
   position: relative; }
   .searchform:before {
-    font-family: "feather";
+    font-family: 'Iunito', sans-serif;
     content: "\e9cc";
     position: absolute;
     left: 0; }
@@ -7478,7 +7480,7 @@ button:focus {
 .vertical.collapsed .main-content,
 .vertical.collapsed .topnav, .vertical.narrow .main-content,
 .vertical.narrow .topnav {
-  margin-left: 5rem; }
+  margin-left: 350px; }
 
 .horizontal .main-content {
   margin: 2rem 0; }
@@ -7547,7 +7549,7 @@ button:focus {
 .vertical .topnav,
 .vertical.hover .topnav,
 .narrow.open .topnav {
-  margin-left: 16rem;
+  margin-left: 350px;
   padding-left: 2.2rem;
   padding-right: 2.2rem; }
   .vertical .topnav .nav-notif,
@@ -7573,7 +7575,7 @@ button:focus {
 
 .vertical.narrow.hover .topnav,
 .vertical.narrow.hover .main-content {
-  margin-left: 5rem; }
+  margin-left: 350px; }
 
 .vertical.narrow.hover .wrapper {
   position: relative; }
@@ -7832,7 +7834,7 @@ select {
   stroke-width: 8;
   font-weight: 400;
   font-size: 1.2rem;
-  font-family: "Overpass", sans-serif; }
+  font-family: 'Iunito', sans-serif; }
 
 .gauge-container.g3 > .gauge .dial {
   stroke: transparent;
@@ -7954,7 +7956,7 @@ select {
   .vertical.collapsed .topnav,
   .vertical.collapsed .main-content, .vertical.narrow.open .topnav,
   .vertical.narrow.open .main-content {
-    margin-left: 16rem; }
+    margin-left: 350px; }
   .topnav .form-inline {
     display: none; }
   .horizontal .navbar-nav .dropdown-menu {
@@ -9203,7 +9205,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap4 .select2-select
 
 .uppy-Root {
   box-sizing: border-box;
-  font-family: "Overpass", sans-serif;
+  font-family: 'Iunito', sans-serif;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -10631,7 +10633,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap4 .select2-select
   height: 30px;
   background-color: transparent;
   outline: 0;
-  font-family: "Overpass", sans-serif;
+  font-family: 'Iunito', sans-serif;
   font-size: 12px;
   line-height: 1.4;
   border: 0;
@@ -12048,5 +12050,10 @@ a.uppy-Dashboard-poweredBy {
 
   .main-content {
     width:100%;
-    padding-left: 290px;
+    padding-left: 400px;
+    padding-right: 60px;
+  }
+
+  .collapse {
+    margin-top: 1rem;
   }

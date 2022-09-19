@@ -66,13 +66,13 @@ block content
                                 table.table
                                     thead
                                         tr
-                                            th Name
-                                            th Method
-                                            th Endpoint
-                                            th Severity
-                                            th Scenarios
-                                            th Operations
-                                            th(style='width: 500px') Run Test
+                                            th.text-dark Name
+                                            th.text-dark Method
+                                            th.text-dark Endpoint
+                                            th.text-dark Severity
+                                            th.text-dark Scenarios
+                                            th.text-dark Operations
+                                            th.text-dark(style='width: 500px') Run Test
                                     tbody
                                         if userApis[0].api 
                                             - let i = 0
@@ -93,9 +93,9 @@ block content
                                                                 table.table
                                                                     thead
                                                                         tr 
-                                                                            th Domain
-                                                                            th Title
-                                                                            th Run Test
+                                                                            th.text-dark Domain
+                                                                            th.text-dark Title
+                                                                            th.text-dark Run Test
                                                                     tbody
                                                                         if envInfo
                                                                             - let j = 0
@@ -115,9 +115,9 @@ block content
                                     table.table
                                         thead
                                             tr 
-                                                th Domain
-                                                th Title
-                                                th Run Test
+                                                th.text-dark Domain
+                                                th.text-dark Title
+                                                th.text-dark Run Test
                                         tbody
                                             if envInfo && userApis[0].api
                                                 - let k = 0

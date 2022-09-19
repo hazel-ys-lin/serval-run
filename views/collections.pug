@@ -44,10 +44,10 @@ block content
                                 table.table
                                     thead
                                         tr
-                                            th(style='width: 250px') Collection Name
-                                            th APIs
-                                            th Operations
-                                            th(style='width: 600px') Run Test
+                                            th.text-dark(style='width: 250px') Collection Name
+                                            th.text-dark APIs
+                                            th.text-dark Operations
+                                            th.text-dark(style='width: 600px') Run Test
                                     tbody
                                         if userCollections[0].collection
                                             - let i = 0
@@ -65,9 +65,9 @@ block content
                                                                 table.table
                                                                     thead
                                                                         tr 
-                                                                            th(style='width: 30px') Domain
-                                                                            th(style='width: 20px') Title
-                                                                            th Run Test
+                                                                            th.text-dark(style='width: 30px') Domain
+                                                                            th.text-dark(style='width: 20px') Title
+                                                                            th.text-dark Run Test
                                                                     tbody
                                                                         if envInfo
                                                                             - let j = 0

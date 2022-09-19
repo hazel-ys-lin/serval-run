@@ -26,7 +26,7 @@ html
           li.nav-item
             a#modeSwitcher.nav-link.text-muted.my-2(href='#' data-mode='light')
               i.fe.fe-sun.fe-16
-      aside#leftSidebar.sidebar-left.border-right.bg-white.shadow(data-simplebar='init')
+      aside#leftSidebar.sidebar-left.border-right.bg-white.shadow(data-simplebar='init' style='width: 350px;')
         .simplebar-wrapper(style='margin: 0px;')
           .simplebar-height-auto-observer-wrapper
             .simplebar-height-auto-observer
@@ -41,22 +41,22 @@ html
                     // nav bar
                     .w-100.mb-4.d-flex
                       a.navbar-brand.mx-auto.mt-2.flex-fill.text-center(href='http://localhost:3001/')
-                        img.img-circle.elevation-2(src='../../css/icon/serval-run_logo-2.png' style='    width: 214px; height: 75px;')
+                        img.img-circle.elevation-2(src='../../css/icon/serval-run_logo-2.png' style='    width: 285px; height: 100px;')
                     ul.navbar-nav.flex-fill.w-100.mb-2
-                      li.nav-item
-                        a.btn.btn-lg.nav-link.pl-3(href='http://localhost:3001/')
+                      li.nav-item.navbar-nav(style='text-align: left;')
+                        a.btn.btn-lg.nav-link.pl-3(style='text-align: left;' href='http://localhost:3001/')
                           i.fe.fe-box.fe-16
                           span.ml-3.item-text Home
-                      li.nav-item
-                        a.btn.btn-lg.nav-link.pl-3(href='http://localhost:3001/')
+                      li.nav-item.navbar-nav(style='text-align: left;')
+                        a.btn.btn-lg.nav-link.pl-3(style='text-align: left;' href='http://localhost:3001/')
                           i.fe.fe-home.fe-16
                           span.ml-3.item-text Dashboard
-                      li.nav-item.w-100
-                        a.btn.btn-lg.nav-link.pl-3.btn-profile(href='http://localhost:3001/api/1.0/profile')
+                      li.nav-item.navbar-nav(style='text-align: left;')
+                        a.btn.btn-lg.nav-link.pl-3.btn-profile(style='text-align: left;' href='http://localhost:3001/api/1.0/profile')
                           i.fe.fe-layers.fe-16
                           span.ml-3.item-text Profile
-                      li.nav-item
-                        a.btn.btn-lg.nav-link.pl-3.btn-my_project(href='http://localhost:3001/api/1.0/projects')
+                      li.nav-item.navbar-nav(style='text-align: left;')
+                        a.btn.btn-lg.nav-link.pl-3.btn-my_project(style='text-align: left;' href='http://localhost:3001/api/1.0/projects')
                           i.fe.fe-grid.fe-16
                           span.ml-3.item-text Project
           .simplebar-placeholder(style='width: 255px; height: 977px;')
