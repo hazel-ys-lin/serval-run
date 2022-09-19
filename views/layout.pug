@@ -146,7 +146,7 @@ html
       })
       .then((response) => {
         if (response.status === 200) {
-          window.location.assign('/api/1.0/profile');
+          window.location.assign('./api/1.0/profile');
         }
         if (response.status === 203) {
           swal({
@@ -177,7 +177,7 @@ html
       .then((response) => {
         if (response.status === 200) {
           console.log('status 200')
-          window.location.assign('./projects');
+          window.location.assign('./api/1.0/projects');
         }
         if (response.status === 203) {
           swal({
