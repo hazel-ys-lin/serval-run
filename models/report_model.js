@@ -83,7 +83,7 @@ const exampleResponseInsertModel = async function (
   session.startTransaction();
   try {
     const opts = { session };
-    console.log(responseArray);
+    // console.log(responseArray);
 
     let reportId = await reportModel({
       project_id: projectId,
@@ -272,6 +272,16 @@ const collectionResponseInsertModel = async function (
   }
 };
 
+// const createReportModel = async function(testInfo) {
+//   const {projectId, envId, collectionId, reportInfo} = testInfo;
+//   let reportId = await reportModel({
+//     project_id: projectId,
+//     environment_id: envId,
+//     collection_id: collectionId,
+//     report_info: reportInfo,
+//   }).save(opts);
+// }
+
 const getReportModel = async function (projectId) {
   let reportData = await reportModel.find({
     project_id: projectId,
@@ -310,6 +320,7 @@ module.exports = {
   exampleResponseInsertModel,
   apiResponseInsertModel,
   collectionResponseInsertModel,
+  // createReportModel,
   getReportModel,
   getReportDetailModel,
   getReportResponseModel,

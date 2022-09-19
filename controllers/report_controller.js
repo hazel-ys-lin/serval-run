@@ -15,6 +15,7 @@ const {
   exampleResponseInsertModel,
   apiResponseInsertModel,
   collectionResponseInsertModel,
+  createReportModel,
   getReportModel,
   getReportDetailModel,
   getReportResponseModel,
@@ -46,6 +47,8 @@ const scenarioRunController = async (req, res) => {
     reportInfo: reportInfo,
   };
 
+  // let newReport = await createReportModel(testInfo);
+
   let testConfig = {
     method: `${httpMethod}`,
     url: `${domainName}${apiEndpoint}`,
@@ -62,6 +65,8 @@ const scenarioRunController = async (req, res) => {
 
   // TODO: stringify object data, send httprequest job to redis queue
   // let sendToQueueResult = await sendToQueue(testAllData);
+  // TODO: create a report which the status is all pending
+
   // =========== START OF STUFFS SEND TO WORK QUEUE ===========
   let httpRequestResult = await callHttpRequest(testConfig, testData);
 
@@ -74,7 +79,7 @@ const scenarioRunController = async (req, res) => {
   );
   // =========== END OF STUFFS SEND TO WORK QUEUE ===========
 
-  if (!sendToQueueResult) {
+  if (!insertTestResult) {
     return res
       .status(403)
       .json({ message: 'Send scenario test to running list error' });
@@ -202,6 +207,7 @@ const collectionRunController = async (req, res) => {
 };
 
 const displayAllReport = async (req, res) => {
+  // TODO: if got status from channel, send status to render
   const projectId = req.query.projectid;
 
   let projectName = await projectNameGetModel(projectId);
@@ -253,9 +259,9 @@ const getReportResponseController = async (req, res) => {
 
   // TODO: if got status from channel, send status to render
   const reportId = req.query.reportid;
-  let reportDetail = await getReportDetailModel(reportId);
-  let reportCalculated = await calculateReport([reportDetail]);
-  let reportResponse = await getReportResponseModel(reportId);
+  let reportDetail = await getReportDetailModel(reportId); // TODO: won't change after running
+  let reportCalculated = await calculateReport([reportDetail]); //TODO: know after running
+  let reportResponse = await getReportResponseModel(reportId); //TODO: know after running
 
   for (let i = 0; i < reportResponse.length; i++) {
     let exampleDetail = await exampleDetailGetModel(
