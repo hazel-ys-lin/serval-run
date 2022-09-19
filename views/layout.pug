@@ -146,14 +146,14 @@ html
       })
       .then((response) => {
         if (response.status === 200) {
-          window.location.assign('./api/1.0/profile');
+          window.location.assign('http://54.92.88.214/api/1.0/profile');
         }
         if (response.status === 203) {
           swal({
             text: 'Please log in first',
           })
           setTimeout(()=> {
-            window.location.assign('./api/1.0/user');
+            window.location.assign('http://54.92.88.214/api/1.0/user');
           }, 2000)
           //- alert('Please log in first');
           //- window.location.assign('/api/1.0/user');
@@ -177,14 +177,14 @@ html
       .then((response) => {
         if (response.status === 200) {
           console.log('status 200')
-          window.location.assign('./api/1.0/projects');
+          window.location.assign('http://54.92.88.214/api/1.0/projects');
         }
         if (response.status === 203) {
           swal({
             text: 'Please log in first',
           })
           setTimeout(()=> {
-            window.location.assign('./api/1.0/user');
+            window.location.assign('http://54.92.88.214/api/1.0/user');
           }, 2000)
           //- console.log('status 203')
           //- alert('Please log in first');
