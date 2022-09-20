@@ -15,6 +15,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 @import url('http://fonts.cdnfonts.com/css/iunito');
+@import url('http://fonts.cdnfonts.com/css/pixeloid-sans');
 
 :root {
   --blue: #1b68ff;
