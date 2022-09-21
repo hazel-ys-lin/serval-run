@@ -1,8 +1,8 @@
-const Queue = require('./queue');
+const Queue = require('./workerCache');
 const QUEUE_KEY = 'requestList';
 const CHANNEL_KEY = 'report-channel';
-const { callHttpRequest } = require('../service/httpRequest_service');
-const { exampleResponseInsertModel } = require('../models/report_model');
+const { callHttpRequest } = require('./httpRequest');
+const { exampleResponseInsertModel } = require('./insertResult');
 
 // setTimeout(() => {
 //   if (Queue.status === 'ready') {
@@ -26,36 +26,34 @@ const { exampleResponseInsertModel } = require('../models/report_model');
 // );
 // =========== END OF STUFFS SEND TO WORK QUEUE ===========
 
-const getJob = async function () {
+const doJob = async function () {
   if (Queue.status !== 'ready') {
-    console.log('[worker] Queue connect fail or still connecting...');
+    console.log('[Worker] Queue connect fail or still connecting...');
   }
-  console.log('[worker] Queue connected on port 6379!');
+  console.log('[Worker] Queue connected on port 6379!');
   // TODO: parse object in job queue
   while (true) {
-    let data = Queue.brpop(QUEUE_KEY, 0);
-    let requestObject = JSON.parse(data);
+    let data = await Queue.brpop(QUEUE_KEY, 0);
+    // console.log('data: ', data);
+    let requestObject = JSON.parse(data[1]);
 
-    const { newReport, testConfig, testData } = requestObject;
+    const { testConfig, testData } = requestObject;
+    // console.log('testConfig, testData: ', testConfig, testData);
 
     // TODO: do the http request
     let httpRequestResult = await callHttpRequest(testConfig, testData);
+    // console.log('httpRequestResult: ', httpRequestResult);
 
     // TODO: save responses to response and report model
-    let insertTestResult = await exampleResponseInsertModel(
-      newReport,
-      httpRequestResult
-    );
+    let insertTestResult = await exampleResponseInsertModel(httpRequestResult);
+    // console.log('insertTestResult: ', insertTestResult);
 
     if (insertTestResult) {
-      // TODO: save hash table one row to redis hash
-      let hash = {};
-      // TODO: publish hash table to channel when done one job
-      // FIXME: need to get the response id (and report id) of the job which is done
-      await Queue.publish(CHANNEL_KEY, JSON.stringify(hash));
-      console.log('Published status to channel');
+      const reportStatus = { reportId: insertTestResult, status: 1 };
+      Queue.publish(CHANNEL_KEY, JSON.stringify(reportStatus));
+      console.log(`[Worker] Published report status to channel ${CHANNEL_KEY}`);
     }
   }
 };
 
-getJob();
+doJob();

@@ -12056,3 +12056,7 @@ a.uppy-Dashboard-poweredBy {
   .collapse {
     margin-top: 1rem;
   }
+
+  .sidebar-left {
+    height: 100vh;
+  }

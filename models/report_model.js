@@ -108,7 +108,14 @@ const exampleResponseInsertModel = async function (
       };
 
       // FIXME: change to update instead of create
-      let inserted = await responseModel(objectToInsert).save(opts);
+      let inserted = await responseModel.updateOne(
+        { _id: reportId._id },
+        {
+          $push: {},
+        }
+      );
+
+      // let inserted = await responseModel(objectToInsert).save(opts);
       // responseToInsert.push(inserted._id);
 
       // await reportModel.updateOne(

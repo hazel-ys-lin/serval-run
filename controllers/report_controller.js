@@ -47,6 +47,9 @@ const scenarioRunController = async (req, res) => {
 
   // create report
   let reportObj = await createReportModel(testInfo);
+  testData.reportId = reportObj._id;
+
+  console.log('testData: ', testData);
 
   // create response and update report
   // let responseObj = await createResponseModel(testData.apiId);
@@ -76,7 +79,6 @@ const scenarioRunController = async (req, res) => {
     testData: testData,
   };
 
-  let sendToQueueResult = await sendToQueue(testAllData);
   // =========== START OF STUFFS SEND TO WORK QUEUE ===========
   // let httpRequestResult = await callHttpRequest(testConfig, testData);
 
@@ -88,6 +90,10 @@ const scenarioRunController = async (req, res) => {
   //   httpRequestResult
   // );
   // =========== END OF STUFFS SEND TO WORK QUEUE ===========
+  let sendToQueueResult = await sendToQueue(testAllData);
+
+  // TODO: create a hash for the report
+  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
 
   if (!sendToQueueResult) {
     return res
@@ -124,9 +130,10 @@ const apiRunController = async (req, res) => {
   for (let i = 0; i < scenarios.length; i++) {
     let exampleArray = [];
     for (let j = 0; j < scenarios[i].scenario.examples.length; j++) {
-      exampleArray.push(scenarios[i].scenario.examples[j]);
+      exampleArray.push(scenarios[i].scenario.examples[j].toObject());
     }
     testData.push({
+      report_id: reportObj._id,
       api_id: scenarios[i].scenario.api_id,
       scenario_id: scenarios[i].scenario._id,
       examples: exampleArray,
@@ -159,6 +166,9 @@ const apiRunController = async (req, res) => {
   };
 
   let sendToQueueResult = await sendToQueue(testAllData);
+
+  // create a hash for the report
+  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
 
   if (!sendToQueueResult) {
     return res.status(403).json({ message: 'run api test error' });
@@ -211,9 +221,10 @@ const collectionRunController = async (req, res) => {
       let exampleArray = [];
 
       for (let j = 0; j < scenarios[i].scenario.examples.length; j++) {
-        exampleArray.push(scenarios[i].scenario.examples[j]);
+        exampleArray.push(scenarios[i].scenario.examples[j].toObject());
       }
       testData.push({
+        report_id: reportObj._id,
         api_id: scenarios[i].scenario.api_id,
         scenario_id: scenarios[i].scenario._id,
         examples: exampleArray,
@@ -236,6 +247,7 @@ const collectionRunController = async (req, res) => {
       testConfig: testConfig,
       testData,
     };
+    // console.log('testAllData in run collection controller: ', testAllData);
 
     let sendToQueueResult = await sendToQueue(testAllData);
     queueResultArray.push(sendToQueueResult);
@@ -247,6 +259,9 @@ const collectionRunController = async (req, res) => {
     //   httpRequestResult.push(apiRequestResult[m]);
     // }
   }
+
+  // create a hash for the report
+  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
 
   if (queueResultArray.length === 0) {
     return res.status(403).json({ message: 'run collection test error' });
@@ -288,22 +303,29 @@ const getExampleReport = async (req, res) => {
 
 const getReportResponseController = async (req, res) => {
   // TODO: subscribe the channel which is watching worker
-  // Cache.subscribe(CHANNEL_KEY, (error) => {
-  //   if (error) {
-  //     // Just like other commands, subscribe() can fail for some reasons,
-  //     // ex network issues.
-  //     console.error('Failed to subscribe: ', error.message);
-  //   } else {
-  //     // `count` represents the number of channels this client are currently subscribed to.
-  //     console.log(
-  //       `Subscribed successfully! This client is currently subscribed to channel.`
-  //     );
-  //   }
-  // });
-  // // TODO: the controller ? listening to channel
-  // Cache.on(CHANNEL_KEY, (channel, status) => {
-  //   console.log(`Received ${message} from ${channel}`);
-  // });
+  Cache.subscribe(CHANNEL_KEY, (err, count) => {
+    if (err) {
+      console.error('[Subscriber] Failed to subscribe: %s', err.message);
+    } else {
+      console.log(
+        `[Subscriber] Subscribed successfully! This client is currently subscribed to ${CHANNEL_KEY} channel.`
+      );
+    }
+  });
+
+  Cache.on('responseStatus', (channel, message) => {
+    let responseObject = JSON.parse(message);
+    console.log(
+      `[Subscriber] Received response ID ${responseObject.response_id} is finished`
+    );
+  });
+
+  Cache.on('reportStatus', (channel, message) => {
+    let reportObject = JSON.parse(message);
+    console.log(
+      `[Subscriber] Received report ID ${reportObject.reportId} is finished`
+    );
+  });
 
   // TODO: if got status from channel, send status to render
   const reportId = req.query.reportid;
