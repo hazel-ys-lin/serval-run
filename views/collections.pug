@@ -222,7 +222,7 @@ block content
             .then((response) => {
                 if (response.status === 200) {
                     swal({
-                        text: 'Run collection test successfully',
+                        text: 'Add collection test to running list successfully',
                         icon: "success",
                         confirmButtonClass: "btn-success",
                     })
@@ -236,7 +236,7 @@ block content
             .catch((error) => {
                 console.log('catch: ', error)
                 swal({
-                        text: 'Run collection test error',
+                        text: 'Add collection test to running list error',
                         icon: "error",
                         confirmButtonClass: "btn-danger",
                 })

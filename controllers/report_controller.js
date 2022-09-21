@@ -12,15 +12,12 @@ const {
   projectInfoGetModel,
 } = require('../models/project_model');
 const {
-  exampleResponseInsertModel,
-  apiResponseInsertModel,
-  collectionResponseInsertModel,
   createReportModel,
+  createResponseModel,
   getReportModel,
   getReportDetailModel,
   getReportResponseModel,
 } = require('../models/report_model');
-const { callHttpRequest } = require('../service/httpRequest_service');
 const {
   calculateReport,
   titleOfReport,
@@ -39,6 +36,7 @@ const scenarioRunController = async (req, res) => {
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
   const testData = await exampleGetModel(scenarioId);
   testData.api_id = apiId;
+  testData.usableExamples = [];
 
   let testInfo = {
     projectId: projectId,
@@ -47,7 +45,22 @@ const scenarioRunController = async (req, res) => {
     reportInfo: reportInfo,
   };
 
-  // let newReport = await createReportModel(testInfo);
+  // create report
+  let reportObj = await createReportModel(testInfo);
+
+  // create response and update report
+  // let responseObj = await createResponseModel(testData.apiId);
+  for (let i = 0; i < testData.examples.length; i++) {
+    let responseObj = await createResponseModel(
+      testData.api_id,
+      testData.scenario_id,
+      testData.examples[i]._id,
+      reportObj._id
+    );
+
+    testData.usableExamples.push(testData.examples[i].toObject());
+    testData.usableExamples[i].response_id = responseObj.responseId;
+  }
 
   let testConfig = {
     method: `${httpMethod}`,
@@ -57,29 +70,26 @@ const scenarioRunController = async (req, res) => {
     },
   };
 
+  // stringify object data, send scenario array to queue
   let testAllData = {
-    testInfo: testInfo,
     testConfig: testConfig,
     testData: testData,
   };
 
-  // TODO: stringify object data, send httprequest job to redis queue
-  // let sendToQueueResult = await sendToQueue(testAllData);
-  // TODO: create a report which the status is all pending
-
+  let sendToQueueResult = await sendToQueue(testAllData);
   // =========== START OF STUFFS SEND TO WORK QUEUE ===========
-  let httpRequestResult = await callHttpRequest(testConfig, testData);
+  // let httpRequestResult = await callHttpRequest(testConfig, testData);
 
-  let insertTestResult = await exampleResponseInsertModel(
-    projectId,
-    envId,
-    collectionId,
-    reportInfo,
-    httpRequestResult
-  );
+  // let insertTestResult = await exampleResponseInsertModel(
+  //   projectId,
+  //   envId,
+  //   collectionId,
+  //   reportInfo,
+  //   httpRequestResult
+  // );
   // =========== END OF STUFFS SEND TO WORK QUEUE ===========
 
-  if (!insertTestResult) {
+  if (!sendToQueueResult) {
     return res
       .status(403)
       .json({ message: 'Send scenario test to running list error' });
@@ -99,7 +109,17 @@ const apiRunController = async (req, res) => {
   );
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
 
+  let testInfo = {
+    projectId: projectId,
+    envId: envId,
+    collectionId: collectionId,
+    reportInfo: reportInfo,
+  };
+
+  let reportObj = await createReportModel(testInfo);
+
   let scenarios = await scenarioGetModel(apiId);
+  // console.log('scenarios: ', scenarios);
   let testData = [];
   for (let i = 0; i < scenarios.length; i++) {
     let exampleArray = [];
@@ -113,6 +133,18 @@ const apiRunController = async (req, res) => {
     });
   }
 
+  for (let j = 0; j < testData.length; j++) {
+    for (let i = 0; i < testData[j].examples.length; i++) {
+      let responseObj = await createResponseModel(
+        testData[j].api_id,
+        testData[j].scenario_id,
+        testData[j].examples[i]._id,
+        reportObj._id
+      );
+      testData[j].examples[i].response_id = responseObj.responseId;
+    }
+  }
+
   let testConfig = {
     method: `${httpMethod}`,
     url: `${domainName}${apiEndpoint}`,
@@ -121,18 +153,14 @@ const apiRunController = async (req, res) => {
     },
   };
 
-  // TODO: stringify object data, send httprequest job to redis queue
-  let httpRequestResult = await callHttpRequest(testConfig, testData);
+  let testAllData = {
+    testConfig: testConfig,
+    testData: testData,
+  };
 
-  let insertTestResult = await apiResponseInsertModel(
-    projectId,
-    envId,
-    collectionId,
-    reportInfo,
-    httpRequestResult
-  );
+  let sendToQueueResult = await sendToQueue(testAllData);
 
-  if (!insertTestResult) {
+  if (!sendToQueueResult) {
     return res.status(403).json({ message: 'run api test error' });
   }
   return res.status(200).json({ message: 'api test response inserted' });
@@ -153,9 +181,16 @@ const collectionRunController = async (req, res) => {
   }
 
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
+  let testInfo = {
+    projectId: projectId,
+    envId: envId,
+    collectionId: collectionId,
+    reportInfo: reportInfo,
+  };
 
-  let httpRequestResult = [];
+  let reportObj = await createReportModel(testInfo);
 
+  let queueResultArray = [];
   for (let l = 0; l < apiInfoArray.length; l++) {
     let testConfig = {
       method: `${apiInfoArray[l].httpMethod}`,
@@ -185,22 +220,35 @@ const collectionRunController = async (req, res) => {
       });
     }
 
-    // TODO: stringify object data, send httprequest job to redis queue
-    let apiRequestResult = await callHttpRequest(testConfig, testData);
-    for (let m = 0; m < apiRequestResult.length; m++) {
-      httpRequestResult.push(apiRequestResult[m]);
+    for (let j = 0; j < testData.length; j++) {
+      for (let i = 0; i < testData[j].examples.length; i++) {
+        let responseObj = await createResponseModel(
+          testData[j].api_id,
+          testData[j].scenario_id,
+          testData[j].examples[i]._id,
+          reportObj._id
+        );
+        testData[j].examples[i].response_id = responseObj.responseId;
+      }
     }
+
+    let testAllData = {
+      testConfig: testConfig,
+      testData,
+    };
+
+    let sendToQueueResult = await sendToQueue(testAllData);
+    queueResultArray.push(sendToQueueResult);
+
+    // let httpRequestResult = [];
+
+    // let apiRequestResult = await callHttpRequest(testConfig, testData);
+    // for (let m = 0; m < apiRequestResult.length; m++) {
+    //   httpRequestResult.push(apiRequestResult[m]);
+    // }
   }
 
-  let insertTestResult = await collectionResponseInsertModel(
-    projectId,
-    envId,
-    collectionId,
-    reportInfo,
-    httpRequestResult
-  );
-
-  if (!insertTestResult) {
+  if (queueResultArray.length === 0) {
     return res.status(403).json({ message: 'run collection test error' });
   }
   return res.status(200).json({ message: 'collection test response inserted' });

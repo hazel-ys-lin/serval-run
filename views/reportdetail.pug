@@ -14,13 +14,13 @@ block content
       //if it's already a date object and not a string you don't need this line:
       -let date = new Date(dateString);
       -let d = date.getDate();
-      -let monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+      -let monthNames = [ "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" ];
       -let m = monthNames[date.getMonth()];
       -let y = date.getFullYear();
       -let h = date.getHours();
       -let min = date.getMinutes();
       -let s = date.getSeconds();
-      -return d+' '+m+' '+y+'  '+h+':'+min+':'+s;
+      -return y+'/'+m+'/'+d+'  '+h+':'+min+':'+s;
   -}
 
     main.main-content(role='main')
@@ -124,31 +124,31 @@ block content
                           table.table 
                             thead
                               tr
-                                th.text-dark(scope='col') Time
-                                th.text-dark(scope='col') Scenario Title
+                                th.text-dark(scope='col' style='width: 30px;') Time
+                                th.text-dark(scope='col' style='text-align: center;') Scenario Title
                                 th.text-dark(scope='col') Description
                                 th.text-dark(scope='col') Result 
-                                th.text-dark(scope='col') Expected Result
-                                th.text-dark(scope='col') Real Result
-                                th.text-dark(scope='col') Request Length
+                                th.text-dark(scope='col' style='text-align: center;') Expected Result
+                                th.text-dark(scope='col' style='text-align: center;') Real Result
+                                th.text-dark(scope='col' style='text-align: center;') Request Length
                             tbody
                             - let i = 0
                             while i < reportResponse.length
                               tr
                                 td #{prettyDate(reportResponse[i].request_time)}
-                                td #{reportResponse[i].scenario_title}
+                                td(style='text-align: center;') #{reportResponse[i].scenario_title}
                                 td #{reportResponse[i].description}
                                 if reportResponse[i].pass
                                   td
                                     h4  
-                                      span.badge.result-text.bg-success PASS
+                                      .badge.bg-success.text-secondary.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PASS
                                 else 
                                   td
                                     h4
-                                      span.badge.result-text.bg-danger FAIL
-                                td #{reportResponse[i].expected_status_code}
-                                td #{reportResponse[i].response_status}
-                                th #{reportResponse[i].request_time_length}
+                                      .badge.bg-danger.result-badge(style='font-family: Pixeloid Sans, sans-serif;') FAIL
+                                td(style='text-align: center;') #{reportResponse[i].expected_status_code}
+                                td(style='text-align: center;') #{reportResponse[i].response_status}
+                                th(style='text-align: center;') #{reportResponse[i].request_time_length}
                               - i++
 
   script.

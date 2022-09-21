@@ -27,6 +27,7 @@ const responseSchema = new mongoose.Schema({
 });
 
 const reportSchema = new mongoose.Schema({
+  finished: Boolean,
   create_time: {
     type: Date,
     default: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
@@ -73,10 +74,10 @@ const responseModel = pool.model('response', responseSchema);
 const reportModel = pool.model('report', reportSchema);
 
 const exampleResponseInsertModel = async function (
-  projectId,
-  envId,
-  collectionId,
-  reportInfo,
+  // projectId,
+  // envId,
+  // collectionId,
+  // reportInfo,
   responseArray
 ) {
   const session = await responseModel.startSession();
@@ -85,20 +86,20 @@ const exampleResponseInsertModel = async function (
     const opts = { session };
     // console.log(responseArray);
 
-    let reportId = await reportModel({
-      project_id: projectId,
-      environment_id: envId,
-      collection_id: collectionId,
-      report_info: reportInfo,
-    }).save(opts);
+    // let reportId = await reportModel({
+    //   project_id: projectId,
+    //   environment_id: envId,
+    //   collection_id: collectionId,
+    //   report_info: reportInfo,
+    // }).save(opts);
 
     // let responseToInsert = [];
     for (let i = 0; i < responseArray.length; i++) {
       let objectToInsert = {
-        report_id: reportId._id,
-        api_id: responseArray[i].api_id,
-        scenario_id: responseArray[i].scenario_id,
-        example_id: responseArray[i].example_id,
+        // report_id: reportId._id,
+        // api_id: responseArray[i].api_id,
+        // scenario_id: responseArray[i].scenario_id,
+        // example_id: responseArray[i].example_id,
         response_data: responseArray[i].response_data,
         response_status: responseArray[i].response_status,
         pass: responseArray[i].pass,
@@ -106,25 +107,26 @@ const exampleResponseInsertModel = async function (
         request_time_length: responseArray[i].request_time_length,
       };
 
+      // FIXME: change to update instead of create
       let inserted = await responseModel(objectToInsert).save(opts);
       // responseToInsert.push(inserted._id);
 
-      await reportModel.updateOne(
-        { _id: reportId._id },
-        {
-          $push: {
-            responses: [
-              {
-                api_id: responseArray[i].api_id,
-                scenario_id: responseArray[i].scenario_id,
-                example_id: responseArray[i].example_id,
-                response_id: inserted._id,
-              },
-            ],
-          },
-        },
-        opts
-      );
+      // await reportModel.updateOne(
+      //   { _id: reportId._id },
+      //   {
+      //     $push: {
+      //       responses: [
+      //         {
+      //           api_id: responseArray[i].api_id,
+      //           scenario_id: responseArray[i].scenario_id,
+      //           example_id: responseArray[i].example_id,
+      //           response_id: inserted._id,
+      //         },
+      //       ],
+      //     },
+      //   },
+      //   opts
+      // );
     }
 
     await session.commitTransaction();
@@ -272,15 +274,72 @@ const collectionResponseInsertModel = async function (
   }
 };
 
-// const createReportModel = async function(testInfo) {
-//   const {projectId, envId, collectionId, reportInfo} = testInfo;
-//   let reportId = await reportModel({
-//     project_id: projectId,
-//     environment_id: envId,
-//     collection_id: collectionId,
-//     report_info: reportInfo,
-//   }).save(opts);
-// }
+const createReportModel = async function (testInfo) {
+  const { projectId, envId, collectionId, reportInfo } = testInfo;
+  let reportObj = await reportModel({
+    finished: false,
+    project_id: projectId,
+    environment_id: envId,
+    collection_id: collectionId,
+    report_info: reportInfo,
+  }).save();
+
+  if (!reportObj) {
+    return false;
+  }
+  return reportObj;
+};
+
+const createResponseModel = async function (
+  apiId,
+  scenarioId,
+  exampleId,
+  reportId
+) {
+  const session = await responseModel.startSession();
+  session.startTransaction();
+  try {
+    const opts = { session };
+
+    let responseObj = await responseModel({
+      api_id: apiId,
+      scenario_id: scenarioId,
+      example_id: exampleId,
+      report_id: reportId,
+    }).save(opts);
+
+    await reportModel.updateOne(
+      { _id: reportId },
+      {
+        $push: {
+          responses: [
+            {
+              api_id: apiId,
+              scenario_id: scenarioId,
+              example_id: exampleId,
+              response_id: responseObj._id,
+            },
+          ],
+        },
+      },
+      opts
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+    return {
+      responseId: responseObj._id,
+      exampleId: responseObj.example_id,
+      reportId: responseObj.report_id,
+    };
+  } catch (error) {
+    // If an error occurred, abort the whole transaction and
+    // undo any changes that might have happened
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
+};
 
 const getReportModel = async function (projectId) {
   let reportData = await reportModel.find({
@@ -320,7 +379,8 @@ module.exports = {
   exampleResponseInsertModel,
   apiResponseInsertModel,
   collectionResponseInsertModel,
-  // createReportModel,
+  createReportModel,
+  createResponseModel,
   getReportModel,
   getReportDetailModel,
   getReportResponseModel,

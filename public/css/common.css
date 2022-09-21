@@ -122,10 +122,6 @@ img.brand-image {
   box-shadow: inset 0 -1px 0 rgb(0 0 0 / 13%);
 }
 
-.result-text {
-  font-family: 'Engender Mod', sans-serif;
-}
-
 .table td, .table th {
   vertical-align: initial;
 }
