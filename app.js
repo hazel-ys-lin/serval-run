@@ -21,10 +21,6 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.get('error', (req, res) => {
-  res.render('error');
-});
-
 app.use('/api/' + API_VERSION, [
   require('./routes/scenario_route'),
   require('./routes/project_route'),
@@ -36,14 +32,14 @@ app.use('/api/' + API_VERSION, [
 // Handle 404
 app.use(function (req, res, next) {
   console.log('404', req.url);
-  return res.render('error');
+  return res.render('error404');
   // return res.status(404).json({ error: 'error: 404' });
 });
 
 //Handle 500
 app.use(function (err, req, res, next) {
   console.log('error handler: ', err);
-  return res.render('error');
+  return res.render('error500');
   // return res.status(500).render('error', { msg: 'error: 500' });
 });
 

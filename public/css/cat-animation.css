@@ -1,5 +1,5 @@
 :root {
-  --bg: #1a1e2d;
+  --bg: #f8f9fa;
   --green: #a5ea9b;
   --pink: #ff61d8;
   --blue: #569cfa;
@@ -11,17 +11,17 @@ body {
   height: 100vh;
   width: 100vw;
   background: var(--bg);
-  /* display: flex; */
+  display: flex;
   place-content: center;
   align-items: flex-end;
   overflow: hidden;
 }
 
-.container {
-  width: 80vw;
-  height: 80vh;
+.container-computercat {
+  width: 40vw;
+  height: 40vh;
 }
-.container svg {
+.container-computercat svg {
   height: 100%;
   width: 100%;
   overflow: visible;

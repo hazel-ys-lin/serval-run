@@ -1,26 +1,27 @@
 extends layout.pug
 
 block content 
-  link(rel='stylesheet', href='../../css/common.css')    
+  link(rel='stylesheet', href='../../css/common.css')   
+  link(rel='stylesheet', href='../../css/error.css') 
   link(href='../../css/cat-animation.css' rel='stylesheet')
-  script(src='../../src/cat-anime.js')
+  script(tyep='module' src='../../src/cat-anime.js')
   
   main.main-content(role='main')
     .container-fluid
         .row.justify-content-center
             .col-12
-              h2.headline.text-danger(style='font-family: Pixeloid Sans, sans-serif;') 500
+              h2.headline.text-danger(style='font-family: Pixeloid Sans, sans-serif;') 404
               .error-content
                 h3
                   i.fas.fa-exclamation-triangle.text-danger
-                  |  Serval Oops! Something went wrong.
+                  |  Meops! Something went wrong.
                 p
                   | We will work on fixing that right away.
                   br
                   | Meanwhile, you may 
-                  a(href='../') return to Home
+                  a(href='https://serval.run/') return to Home
 
-    .container
+    .container-computercat
       svg(xmlns='http://www.w3.org/2000/svg' viewbox='0 0 783.55 354.91')
         g#bongo-cat
           g.head

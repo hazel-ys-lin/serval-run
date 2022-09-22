@@ -1,0 +1,32 @@
+body
+  background-color: #eee
+.catWrapper
+ width:100vw
+ position:absolute
+ bottom:0
+ left:0
+ display:flex
+ justify-content:center
+.container
+  width: 400px
+  height: 200px
+  overflow: hidden
+  margin-top: 80px
+  animation: move 5s infinite linear
+  
+.cat
+  animation: walk 1s infinite steps(12)
+  
+  
+@keyframes move
+  0%
+    transform: translateX(1600px)
+  100%
+    transform: translateX(-600px)
+  
+@keyframes walk
+  0%
+    transform: translateY(0px)
+  100%
+    transform: translateY(-2400px)
+  
