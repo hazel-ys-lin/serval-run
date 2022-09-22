@@ -24,6 +24,7 @@ const doJob = async function () {
   while (true) {
     let data = await Queue.brpop(QUEUE_KEY, 0);
     let requestObject = JSON.parse(data[1]);
+    console.log('[Worker] Worker got job from queue!');
 
     const { testConfig, testData } = requestObject;
 

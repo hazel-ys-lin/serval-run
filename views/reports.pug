@@ -28,7 +28,8 @@ block content
                   //-           a(href='') Report
                   .input-form
                     h1(style='font-family: Pixeloid Sans, sans-serif;') Results
-                    h1.display-6 #{reportsDetail[0].projectName.toUpperCase()}
+                    if reportsDetail[0].projectName
+                      h1.display-6 #{reportsDetail[0].projectName.toUpperCase()}
                     .card
                       .card-body.p-0
                         if reportsDetail[0].projectName

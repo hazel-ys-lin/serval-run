@@ -24,6 +24,7 @@ const userGetModel = async function (userEmail) {
   let [userData] = await userModel.find({
     user_email: userEmail,
   });
+  // console.log('userData: ', userData);
   return userData._id;
 };
 

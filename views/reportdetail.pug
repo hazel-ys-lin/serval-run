@@ -125,9 +125,9 @@ block content
                             thead
                               tr
                                 th.text-dark(scope='col' style='width: 30px;') Time
-                                th.text-dark(scope='col' style='text-align: center;') Scenario Title
+                                th.text-dark(scope='col' style='text-align: center;') Title
                                 th.text-dark(scope='col') Description
-                                th.text-dark(scope='col') Result 
+                                th.text-dark(scope='col' style='text-align: center;') Result 
                                 th.text-dark(scope='col' style='text-align: center;') Expected Result
                                 th.text-dark(scope='col' style='text-align: center;') Real Result
                                 th.text-dark(scope='col' style='text-align: center;') Request Length
@@ -135,20 +135,36 @@ block content
                             - let i = 0
                             while i < reportResponse.length
                               tr
-                                td #{prettyDate(reportResponse[i].request_time)}
+                                td 
+                                  if !reportResponse[i].request_time
+                                    p.text-muted= 'Pending'
+                                  else 
+                                    p= prettyDate(reportResponse[i].request_time)
                                 td(style='text-align: center;') #{reportResponse[i].scenario_title}
                                 td #{reportResponse[i].description}
-                                if reportResponse[i].pass
-                                  td
+                                if reportResponse[i].pass === true
+                                  td(style='text-align: center;')
                                     h4  
                                       .badge.bg-success.text-secondary.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PASS
-                                else 
-                                  td
+                                else if reportResponse[i].pass === false
+                                  td(style='text-align: center;')
                                     h4
                                       .badge.bg-danger.result-badge(style='font-family: Pixeloid Sans, sans-serif;') FAIL
+                                else 
+                                  td(style='text-align: center;')
+                                    h4 
+                                      .badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
                                 td(style='text-align: center;') #{reportResponse[i].expected_status_code}
-                                td(style='text-align: center;') #{reportResponse[i].response_status}
-                                th(style='text-align: center;') #{reportResponse[i].request_time_length}
+                                td(style='text-align: center;') 
+                                  if !reportResponse[i].response_status
+                                    p.text-muted= 'Pending'
+                                  else 
+                                    p= reportResponse[i].response_status
+                                th(style='text-align: center;')
+                                  if !reportResponse[i].request_time_length
+                                    p.text-muted= 'Pending'
+                                  else 
+                                    p= reportResponse[i].request_time_length
                               - i++
 
   script.

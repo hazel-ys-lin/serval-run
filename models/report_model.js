@@ -340,6 +340,30 @@ const createResponseModel = async function (
   }
 };
 
+const setReportStatusModel = async function (reportId) {
+  let setStatusResult = await responseModel.findOneAndUpdate(
+    { _id: reportId },
+    {
+      finished: true,
+    }
+  );
+
+  if (setStatusResult) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const getReportStatusModel = async function (reportId) {
+  let getStatusResult = await responseModel.findOne({ _id: reportId });
+  if (getStatusResult === true) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 const getReportModel = async function (projectId) {
   let reportData = await reportModel.find({
     project_id: projectId,
@@ -380,6 +404,8 @@ module.exports = {
   collectionResponseInsertModel,
   createReportModel,
   createResponseModel,
+  setReportStatusModel,
+  getReportStatusModel,
   getReportModel,
   getReportDetailModel,
   getReportResponseModel,

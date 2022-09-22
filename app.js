@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const httpServer = require('http').createServer();
 
 const app = express();
 const port = process.env.PORT;
@@ -46,3 +47,5 @@ app.use(function (err, req, res, next) {
 app.listen(port, () => {
   console.log(`Server started on ${port}!`);
 });
+
+module.exports = { httpServer };

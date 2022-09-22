@@ -66,7 +66,7 @@ const titleOfReport = async function (reportArray) {
     } else if (reportArray[i].report_info.report_level === 2) {
       collectionName = await collectionNameModel(reportArray[i].collection_id);
       reportTitle.push(collectionName);
-      apiName = await apiNameModel(reportArray[i].responses[0].api_id);
+      apiName = await apiNameModel(reportArray[i].responses[0]?.api_id);
       reportTitle.push(apiName);
       reportArray[i].report_title = reportTitle;
     } else if (reportArray[i].report_info.report_level === 1) {

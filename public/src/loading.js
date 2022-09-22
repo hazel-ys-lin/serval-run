@@ -13,5 +13,5 @@ function setVisible(selector, visible) {
 
 onReady(function () {
   setVisible('.wrapper', true);
-  setVisible('.cat', true);
+  setVisible('.cat', false);
 });

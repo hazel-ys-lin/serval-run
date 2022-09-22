@@ -15,6 +15,8 @@ const {
 const {
   createReportModel,
   createResponseModel,
+  setReportStatusModel,
+  getReportStatusModel,
   getReportModel,
   getReportDetailModel,
   getReportResponseModel,
@@ -299,63 +301,73 @@ const getExampleReport = async (req, res) => {
 
 const getReportResponseController = async (req, res) => {
   // TODO: subscribe the channel which is watching worker
-  Cache.subscribe(CHANNEL_KEY, (err, count) => {
+  // TODO: if got report finish status from channel, do the _______
+  Cache.subscribe(CHANNEL_KEY, (err) => {
     if (err) {
       console.error('[Subscriber] Failed to subscribe: %s', err.message);
     } else {
-      console.log(
-        `[Subscriber] Subscribed successfully! This client is currently subscribed to ${CHANNEL_KEY} channel.`
-      );
+      console.log(`[Subscriber] Subscribed successfully!`);
     }
   });
 
-  Cache.on('responseStatus', (channel, message) => {
-    let responseObject = JSON.parse(message);
-    console.log(
-      `[Subscriber] Received response ID ${responseObject.response_id} is finished`
-    );
-  });
-
-  Cache.on('reportStatus', (channel, message) => {
+  Cache.on('reportStatus', async (message) => {
     let reportObject = JSON.parse(message);
     console.log(
       `[Subscriber] Received report ID ${reportObject.report_id} is finished`
     );
+    await setReportStatusModel(reportObject.report_id);
   });
 
-  // TODO: if got status from channel, send status to render
   const reportId = req.query.reportid;
-  let reportDetail = await getReportDetailModel(reportId); // TODO: won't change after running
-  let reportCalculated = await calculateReport([reportDetail]); //TODO: know after running
-  let reportResponse = await getReportResponseModel(reportId); //TODO: know after running
+  let reportStatus = await getReportStatusModel(reportId);
 
-  for (let i = 0; i < reportResponse.length; i++) {
-    let exampleDetail = await exampleDetailGetModel(
-      reportResponse[i].scenario_id,
-      reportResponse[i].example_id
-    );
-    let scenarioInfo = await scenarioDetailModel(reportResponse[i].scenario_id);
-    reportResponse[i] = reportResponse[i].toObject();
-    reportResponse[i].expected_status_code = exampleDetail;
-    reportResponse[i].scenario_title = scenarioInfo.title;
-    reportResponse[i].description = scenarioInfo.description;
-  }
+  if (reportStatus) {
+    let reportDetail = await getReportDetailModel(reportId); // TODO: won't change after running
+    let reportCalculated = await calculateReport([reportDetail]); //TODO: know after running
+    let reportResponse = await getReportResponseModel(reportId); //TODO: know after running
 
-  // TODO: socket send data to frontend page?
-  if (reportResponse) {
-    res.render('reportdetail', {
+    for (let i = 0; i < reportResponse.length; i++) {
+      let exampleDetail = await exampleDetailGetModel(
+        reportResponse[i].scenario_id,
+        reportResponse[i].example_id
+      );
+      let scenarioInfo = await scenarioDetailModel(
+        reportResponse[i].scenario_id
+      );
+      reportResponse[i] = reportResponse[i].toObject();
+      reportResponse[i].expected_status_code = exampleDetail;
+      reportResponse[i].scenario_title = scenarioInfo.title;
+      reportResponse[i].description = scenarioInfo.description;
+    }
+
+    return res.render('reportdetail', {
       reportDetail: reportDetail,
       reportResponse: reportResponse,
       reportCalculated: reportCalculated,
     });
   } else {
-    reportResponse.push({ msg: 'no report found' });
-    res.render('reportdetail', {
+    let reportDetail = await getReportDetailModel(reportId); // TODO: won't change after running
+    let reportResponse = await getReportResponseModel(reportId);
+    for (let i = 0; i < reportResponse.length; i++) {
+      let exampleDetail = await exampleDetailGetModel(
+        reportResponse[i].scenario_id,
+        reportResponse[i].example_id
+      );
+      let scenarioInfo = await scenarioDetailModel(
+        reportResponse[i].scenario_id
+      );
+      reportResponse[i].expected_status_code = exampleDetail;
+      reportResponse[i].scenario_title = scenarioInfo.title;
+      reportResponse[i].description = scenarioInfo.description;
+    }
+
+    return res.render('reportdetail', {
       reportDetail: reportDetail,
       reportResponse: reportResponse,
-      reportCalculated: reportCalculated,
     });
   }
+
+  // let reportCalculated = await calculateReport([reportDetail]); //TODO: know after running
 };
 
 module.exports = {

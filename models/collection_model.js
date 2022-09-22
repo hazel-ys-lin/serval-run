@@ -262,7 +262,7 @@ const apiNameModel = async function (apiId) {
   let apiName = await apiModel.findOne({
     _id: apiId,
   });
-  return apiName.api_name;
+  return apiName?.api_name;
 };
 
 const apiDeleteModel = async function (apiInfo) {

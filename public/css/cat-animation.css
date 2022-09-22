@@ -1,10 +1,10 @@
 :root {
   --bg: #f8f9fa;
-  --green: #a5ea9b;
-  --pink: #ff61d8;
-  --blue: #569cfa;
-  --orange: #ffcc81;
-  --cyan: #7ed1e2;
+  --green: #a1b79d;
+  --pink: #c390b6;
+  --blue: #5881b7;
+  --orange: #ad8f63;
+  --cyan: #6fa8b4;
 }
 
 body {
@@ -18,8 +18,8 @@ body {
 }
 
 .container-computercat {
-  width: 40vw;
-  height: 40vh;
+  width: 30vw;
+  height: 30vh;
 }
 .container-computercat svg {
   height: 100%;
