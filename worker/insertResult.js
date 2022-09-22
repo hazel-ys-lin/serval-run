@@ -28,6 +28,7 @@ const responseSchema = new mongoose.Schema({
 const responseModel = mongoose.model('response', responseSchema);
 
 const exampleResponseInsertModel = async function (responseArray) {
+  // console.log('responseArray: ', responseArray);
   try {
     for (let i = 0; i < responseArray.length; i++) {
       //   console.log('responseArray[i]: ', responseArray[i]);
@@ -42,9 +43,7 @@ const exampleResponseInsertModel = async function (responseArray) {
           request_time_length: responseArray[i].request_time_length,
         }
       );
-      //   console.log('responseArray[i]: ', responseArray[i]);
     }
-    // console.log('responseArray[0]: ', responseArray[0]);
     return responseArray[0].report_id;
   } catch (error) {
     console.log('error: ', error);

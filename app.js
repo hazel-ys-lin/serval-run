@@ -21,6 +21,10 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.get('error', (req, res) => {
+  res.render('error');
+});
+
 app.use('/api/' + API_VERSION, [
   require('./routes/scenario_route'),
   require('./routes/project_route'),

@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const Cache = require('../util/cache');
 const CHANNEL_KEY = 'report-channel';
 const {
@@ -34,7 +35,8 @@ const scenarioRunController = async (req, res) => {
     apiId
   );
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
-  const testData = await exampleGetModel(scenarioId);
+  const exampleData = await exampleGetModel(scenarioId);
+  let testData = _.cloneDeep(exampleData);
   testData.api_id = apiId;
   testData.usableExamples = [];
 
@@ -47,12 +49,12 @@ const scenarioRunController = async (req, res) => {
 
   // create report
   let reportObj = await createReportModel(testInfo);
-  testData.reportId = reportObj._id;
+  testData.report_id = reportObj._id;
 
-  console.log('testData: ', testData);
+  console.log('%%%%%%%%%%%%hmset');
+  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
 
   // create response and update report
-  // let responseObj = await createResponseModel(testData.apiId);
   for (let i = 0; i < testData.examples.length; i++) {
     let responseObj = await createResponseModel(
       testData.api_id,
@@ -65,6 +67,11 @@ const scenarioRunController = async (req, res) => {
     testData.usableExamples[i].response_id = responseObj.responseId;
   }
 
+  // src: https://stackoverflow.com/questions/8483425/change-property-name
+  delete testData.examples;
+  const { usableExamples, ...rest } = testData;
+  const newtestData = { examples: usableExamples, ...rest };
+
   let testConfig = {
     method: `${httpMethod}`,
     url: `${domainName}${apiEndpoint}`,
@@ -76,7 +83,7 @@ const scenarioRunController = async (req, res) => {
   // stringify object data, send scenario array to queue
   let testAllData = {
     testConfig: testConfig,
-    testData: testData,
+    testData: newtestData,
   };
 
   // =========== START OF STUFFS SEND TO WORK QUEUE ===========
@@ -91,9 +98,6 @@ const scenarioRunController = async (req, res) => {
   // );
   // =========== END OF STUFFS SEND TO WORK QUEUE ===========
   let sendToQueueResult = await sendToQueue(testAllData);
-
-  // TODO: create a hash for the report
-  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
 
   if (!sendToQueueResult) {
     return res
@@ -124,8 +128,11 @@ const apiRunController = async (req, res) => {
 
   let reportObj = await createReportModel(testInfo);
 
+  // create a hash for the report
+  console.log('&&&&&&&&&&&&hmset');
+  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
+
   let scenarios = await scenarioGetModel(apiId);
-  // console.log('scenarios: ', scenarios);
   let testData = [];
   for (let i = 0; i < scenarios.length; i++) {
     let exampleArray = [];
@@ -167,9 +174,6 @@ const apiRunController = async (req, res) => {
 
   let sendToQueueResult = await sendToQueue(testAllData);
 
-  // create a hash for the report
-  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
-
   if (!sendToQueueResult) {
     return res.status(403).json({ message: 'run api test error' });
   }
@@ -199,6 +203,9 @@ const collectionRunController = async (req, res) => {
   };
 
   let reportObj = await createReportModel(testInfo);
+  // create a hash for the report
+  console.log('*************hmset');
+  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
 
   let queueResultArray = [];
   for (let l = 0; l < apiInfoArray.length; l++) {
@@ -247,21 +254,10 @@ const collectionRunController = async (req, res) => {
       testConfig: testConfig,
       testData,
     };
-    // console.log('testAllData in run collection controller: ', testAllData);
 
     let sendToQueueResult = await sendToQueue(testAllData);
     queueResultArray.push(sendToQueueResult);
-
-    // let httpRequestResult = [];
-
-    // let apiRequestResult = await callHttpRequest(testConfig, testData);
-    // for (let m = 0; m < apiRequestResult.length; m++) {
-    //   httpRequestResult.push(apiRequestResult[m]);
-    // }
   }
-
-  // create a hash for the report
-  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
 
   if (queueResultArray.length === 0) {
     return res.status(403).json({ message: 'run collection test error' });
@@ -323,7 +319,7 @@ const getReportResponseController = async (req, res) => {
   Cache.on('reportStatus', (channel, message) => {
     let reportObject = JSON.parse(message);
     console.log(
-      `[Subscriber] Received report ID ${reportObject.reportId} is finished`
+      `[Subscriber] Received report ID ${reportObject.report_id} is finished`
     );
   });
 

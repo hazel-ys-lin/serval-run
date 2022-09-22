@@ -140,8 +140,6 @@ const exampleResponseInsertModel = async function (
     session.endSession();
     return true;
   } catch (error) {
-    // If an error occurred, abort the whole transaction and
-    // undo any changes that might have happened
     await session.abortTransaction();
     session.endSession();
     throw error;
@@ -167,7 +165,6 @@ const apiResponseInsertModel = async function (
       report_info: reportInfo,
     }).save(opts);
 
-    // let responseToInsert = [];
     for (let i = 0; i < responseArray.length; i++) {
       let objectToInsert = {
         report_id: reportId._id,
@@ -182,7 +179,6 @@ const apiResponseInsertModel = async function (
       };
 
       let inserted = await responseModel(objectToInsert).save(opts);
-      // responseToInsert.push(inserted._id);
 
       await reportModel.updateOne(
         { _id: reportId._id },
@@ -206,8 +202,6 @@ const apiResponseInsertModel = async function (
     session.endSession();
     return true;
   } catch (error) {
-    // If an error occurred, abort the whole transaction and
-    // undo any changes that might have happened
     await session.abortTransaction();
     session.endSession();
     throw error;
@@ -340,8 +334,6 @@ const createResponseModel = async function (
       reportId: responseObj.report_id,
     };
   } catch (error) {
-    // If an error occurred, abort the whole transaction and
-    // undo any changes that might have happened
     await session.abortTransaction();
     session.endSession();
     throw error;
