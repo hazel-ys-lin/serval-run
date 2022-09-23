@@ -27,15 +27,6 @@ block content
         .container-fluid
             .row.justify-content-center
                 .col-12
-                  //- nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
-                  //-     ol.breadcrumb
-                  //-         li.breadcrumb-item
-                  //-           a(href='') Project
-                  //-         li.breadcrumb-item
-                  //-           a(href='') Report Table
-                  //-         li.breadcrumb-item
-                  //-           a(href='') Report Detail
-
                   .input-form
                     h1(style='font-family: Pixeloid Sans, sans-serif;') Report Details
 
@@ -142,18 +133,18 @@ block content
                                     p= prettyDate(reportResponse[i].request_time)
                                 td(style='text-align: center;') #{reportResponse[i].scenario_title}
                                 td #{reportResponse[i].description}
-                                if reportResponse[i].pass === true
-                                  td(style='text-align: center;')
-                                    h4  
-                                      .badge.bg-success.text-secondary.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PASS
-                                else if reportResponse[i].pass === false
-                                  td(style='text-align: center;')
-                                    h4
-                                      .badge.bg-danger.result-badge(style='font-family: Pixeloid Sans, sans-serif;') FAIL
-                                else 
+                                if reportResponse[i].pass === undefined
                                   td(style='text-align: center;')
                                     h4 
                                       .badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
+                                else if reportResponse[i].expected_status_code === reportResponse[i].response_status
+                                  td(style='text-align: center;')
+                                    h4  
+                                      .badge.bg-success.text-secondary.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PASS
+                                else if reportResponse[i].expected_status_code !== reportResponse[i].response_status
+                                  td(style='text-align: center;')
+                                    h4
+                                      .badge.bg-danger.result-badge(style='font-family: Pixeloid Sans, sans-serif;') FAIL
                                 td(style='text-align: center;') #{reportResponse[i].expected_status_code}
                                 td(style='text-align: center;') 
                                   if !reportResponse[i].response_status
@@ -175,8 +166,8 @@ block content
         + Math.round(series.percent) + '%</div>'
     }
 
+    // TODO: socket on the message from socket handler in backend
     $(function () {
-
       let donutData = [
         {
           label: 'Pass',

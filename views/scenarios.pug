@@ -146,6 +146,16 @@ block content
                 console.log('create scenario in modal clicked')
                 event.preventDefault();
 
+                swal({
+                    title:"", 
+                    text:"Loading...",
+                    icon: "https://www.boasnotas.com/img/loading2.gif",
+                    buttons: false,      
+                    closeOnClickOutside: false,
+                    timer: 3000,
+                    //icon: "success"
+                });
+
                 const apiId = $('.input_apiid').val();
                 const featureCode = editor.getValue();
 
@@ -163,7 +173,7 @@ block content
                         swal({
                             text: 'Create scenario successfully',
                             icon: "success",
-                            confirmButtonClass: "btn-success",
+                            //- confirmButtonClass: "btn-success",
                         })
                         setTimeout(()=> {
                             window.location.reload();
@@ -203,6 +213,18 @@ block content
         $('.btn-scenariotest-in-toggle').on('click', function(event) {
             console.log('run scenario test in toggle clicked');
             event.preventDefault();
+
+            swal({
+                title:"Serval is running...", 
+                //- html: true,
+                //- icon: "https://i.gifer.com/2yqU.gif",
+                icon: "https://i.gifer.com/PYh.gif",
+                buttons: false,      
+                closeOnClickOutside: false,
+                timer: 5000,
+            });
+
+
             const apiId = $('.card-title').text().replace('API ID: ', '');
             const scenarioId = this.id;
             const domainName = $('.btn-scenariotest-in-toggle').attr('domain');

@@ -35,9 +35,15 @@ const callHttpRequest = async function (testConfig, testData) {
               'success',
               1
             );
+            let currentResult = await Cache.hgetall(
+              `reportStatus-${testData[j].report_id}`
+            );
+
             const responseStatus = {
               response_id: testData.examples[i].response_id,
+              result: currentResult,
             };
+
             Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
             console.log(
               `[Worker] Published response status to channel ${CHANNEL_KEY} -1 `
@@ -64,9 +70,15 @@ const callHttpRequest = async function (testConfig, testData) {
               'fail',
               1
             );
+            let currentResult = await Cache.hgetall(
+              `reportStatus-${testData.report_id}`
+            );
+
             const responseStatus = {
               response_id: testData.examples[i].response_id,
+              result: currentResult,
             };
+
             Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
             console.log(
               `[Worker] Published response status to channel ${CHANNEL_KEY} -2 `
@@ -104,9 +116,16 @@ const callHttpRequest = async function (testConfig, testData) {
             'success',
             1
           );
+
+          let currentResult = await Cache.hgetall(
+            `reportStatus-${testData[j].report_id}`
+          );
+
           const responseStatus = {
             response_id: testData[j].examples[i].response_id,
+            result: currentResult,
           };
+
           Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
           console.log(
             `[Worker] Published response status to channel ${CHANNEL_KEY} -3 `
@@ -117,9 +136,16 @@ const callHttpRequest = async function (testConfig, testData) {
             'fail',
             1
           );
+
+          let currentResult = await Cache.hgetall(
+            `reportStatus-${testData[j].report_id}`
+          );
+
           const responseStatus = {
             response_id: testData[j].examples[i].response_id,
+            result: currentResult,
           };
+
           Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
           console.log(
             `[Worker] Published response status to channel ${CHANNEL_KEY}  -4 `
@@ -181,9 +207,16 @@ const callHttpRequest = async function (testConfig, testData) {
                 'success',
                 1
               );
+
+              let currentResult = await Cache.hgetall(
+                `reportStatus-${testData[j].report_id}`
+              );
+
               const responseStatus = {
                 response_id: testData.examples[i].response_id,
+                result: currentResult,
               };
+
               Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
               console.log(
                 `[Worker] Published response status to channel ${CHANNEL_KEY}  -5 `
@@ -211,9 +244,16 @@ const callHttpRequest = async function (testConfig, testData) {
                 'fail',
                 1
               );
+
+              let currentResult = await Cache.hgetall(
+                `reportStatus-${testData[j].report_id}`
+              );
+
               const responseStatus = {
                 response_id: testData.examples[i].response_id,
+                result: currentResult,
               };
+
               Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
               console.log(
                 `[Worker] Published response status to channel ${CHANNEL_KEY}  -6 `
@@ -245,9 +285,16 @@ const callHttpRequest = async function (testConfig, testData) {
                 'success',
                 1
               );
+
+              let currentResult = await Cache.hgetall(
+                `reportStatus-${testData[j].report_id}`
+              );
+
               const responseStatus = {
                 response_id: testData.examples[i].response_id,
+                result: currentResult,
               };
+
               Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
               console.log(
                 `[Worker] Published response status to channel ${CHANNEL_KEY}  -7 `
@@ -274,9 +321,16 @@ const callHttpRequest = async function (testConfig, testData) {
                 'fail',
                 1
               );
+
+              let currentResult = await Cache.hgetall(
+                `reportStatus-${testData[j].report_id}`
+              );
+
               const responseStatus = {
                 response_id: testData.examples[i].response_id,
+                result: currentResult,
               };
+
               Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
               console.log(
                 `[Worker] Published response status to channel ${CHANNEL_KEY}  -8 `
@@ -318,9 +372,16 @@ const callHttpRequest = async function (testConfig, testData) {
                 'success',
                 1
               );
+
+              let currentResult = await Cache.hgetall(
+                `reportStatus-${testData[j].report_id}`
+              );
+
               const responseStatus = {
                 response_id: testData[j].examples[i].response_id,
+                result: currentResult,
               };
+
               Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
               console.log(
                 `[Worker] Published response status to channel ${CHANNEL_KEY}  -9 `
@@ -347,9 +408,15 @@ const callHttpRequest = async function (testConfig, testData) {
                 'fail',
                 1
               );
+              let currentResult = await Cache.hgetall(
+                `reportStatus-${testData[j].report_id}`
+              );
+
               const responseStatus = {
                 response_id: testData[j].examples[i].response_id,
+                result: currentResult,
               };
+
               Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
               console.log(
                 `[Worker] Published response status to channel ${CHANNEL_KEY}  -10 `
@@ -381,9 +448,16 @@ const callHttpRequest = async function (testConfig, testData) {
                 'success',
                 1
               );
+
+              let currentResult = await Cache.hgetall(
+                `reportStatus-${testData[j].report_id}`
+              );
+
               const responseStatus = {
                 response_id: testData[j].examples[i].response_id,
+                result: currentResult,
               };
+
               Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
               console.log(
                 `[Worker] Published response status to channel ${CHANNEL_KEY}  -11 `
@@ -405,14 +479,20 @@ const callHttpRequest = async function (testConfig, testData) {
                 request_time_length: timeAfterAxios - timeBeforeAxios,
               });
 
-              let r = await Cache.hincrby(
+              await Cache.hincrby(
                 `reportStatus-${testData[j].report_id}`,
                 'fail',
                 1
               );
+              let currentResult = await Cache.hgetall(
+                `reportStatus-${testData[j].report_id}`
+              );
+
               const responseStatus = {
                 response_id: testData[j].examples[i].response_id,
+                result: currentResult,
               };
+
               Cache.publish(CHANNEL_KEY, JSON.stringify(responseStatus));
               console.log(
                 `[Worker] Published response status to channel ${CHANNEL_KEY}  -12 `

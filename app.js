@@ -10,13 +10,13 @@ const API_VERSION = process.env.API_VERSION;
 app.use(express.static('public'));
 app.set('view engine', 'pug');
 app.use(express.json());
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
-); // save session id to auth
+
+const sessionMiddleware = session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+}); // save session id to auth
+app.use(sessionMiddleware);
 
 app.get('/', (req, res) => {
   res.render('index');
@@ -48,4 +48,4 @@ app.listen(port, () => {
   console.log(`Server started on ${port}!`);
 });
 
-module.exports = { httpServer };
+module.exports = { httpServer, sessionMiddleware };
