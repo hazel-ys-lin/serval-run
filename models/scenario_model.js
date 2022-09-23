@@ -146,7 +146,7 @@ const scenarioDetailModel = async function (scenarioId) {
     _id: scenarioId,
   });
 
-  return { title: scenarioInfo.title, description: scenarioInfo.description };
+  return { title: scenarioInfo?.title, description: scenarioInfo?.description };
 };
 
 const exampleGetModel = async function (scenarioId) {

@@ -1,5 +1,5 @@
 const {
-  // getReportResponseModel,
+  getReportDetailModel,
   getResponseByReportModel,
 } = require('../models/report_model');
 const {
@@ -52,9 +52,9 @@ const calculateReport = async function (reportDataArray) {
 };
 
 const titleOfReport = async function (reportArray) {
-  // console.log('reportArray.length: ', reportArray.length);
+  console.log('reportArray: ', reportArray);
 
-  let collectionName, apiName, scenarioName;
+  let collectionName, apiId, apiName, scenarioId, scenarioName;
   for (let i = 0; i < reportArray.length; i++) {
     let reportTitle = [];
     reportArray[i] = reportArray[i].toObject();
@@ -66,17 +66,24 @@ const titleOfReport = async function (reportArray) {
     } else if (reportArray[i].report_info.report_level === 2) {
       collectionName = await collectionNameModel(reportArray[i].collection_id);
       reportTitle.push(collectionName);
-      apiName = await apiNameModel(reportArray[i].responses[0]?.api_id);
-      reportTitle.push(apiName);
+      // FIXME: to get api id from report id, and get api name of api id
+      apiId = await getReportDetailModel(reportArray[i]._id);
+      apiName = await apiNameModel(apiId.responses[0]?.api_id);
+      reportTitle.push(apiName.api_name);
+
       reportArray[i].report_title = reportTitle;
     } else if (reportArray[i].report_info.report_level === 1) {
       collectionName = await collectionNameModel(reportArray[i].collection_id);
       reportTitle.push(collectionName);
-      apiName = await apiNameModel(reportArray[i].responses[0].api_id);
-      reportTitle.push(apiName);
-      scenarioName = await scenarioDetailModel(
-        reportArray[i].responses[0].scenario_id
-      );
+
+      // FIXME: to get api id from report id, and get api name from api id
+      apiId = await getReportDetailModel(reportArray[i]._id);
+      apiName = await apiNameModel(apiId.responses[0]?.api_id);
+      reportTitle.push(apiName.api_name);
+
+      // FIXME: to get scenario id from report id, and get scenario name from scenario id
+      scenarioId = apiId.responses[0]?.scenario_id;
+      scenarioName = await scenarioDetailModel(scenarioId);
       reportTitle.push(scenarioName.title);
       // console.log('reportTitle: ', reportTitle);
       reportArray[i].report_title = reportTitle;

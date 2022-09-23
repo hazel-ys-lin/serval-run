@@ -273,18 +273,28 @@ const displayAllReport = async (req, res) => {
 
   let projectName = await projectNameGetModel(projectId);
   let reportData = await getReportModel(projectId);
+  // console.log('reportData: ', reportData);
   let reportTitle = await titleOfReport(reportData);
+  // console.log('reportTitle: ', reportTitle);
   let reportCalculated = await calculateReport(reportTitle);
 
   for (let i = 0; i < reportCalculated.length; i++) {
     reportCalculated[i].projectName = projectName;
   }
 
+  // console.log('reportCalculated: ', reportCalculated);
+
   if (reportCalculated.length !== 0) {
-    res.render('reports', { reportsDetail: reportCalculated });
+    res.render('reports', {
+      reportData: reportData,
+      reportsDetail: reportCalculated,
+    });
   } else {
     reportCalculated.push({ project_name: projectName });
-    res.render('reports', { reportsDetail: reportCalculated });
+    res.render('reports', {
+      reportData: reportData,
+      reportsDetail: reportCalculated,
+    });
   }
 };
 
@@ -302,7 +312,8 @@ const getExampleReport = async (req, res) => {
 const getReportResponseController = async (req, res) => {
   // TODO: subscribe the channel which is watching worker
   // TODO: if got report finish status from channel, do the _______
-  Cache.subscribe(CHANNEL_KEY, (err) => {
+  const subClient = Cache.duplicate();
+  subClient.subscribe(CHANNEL_KEY, (err) => {
     if (err) {
       console.error('[Subscriber] Failed to subscribe: %s', err.message);
     } else {
@@ -310,7 +321,7 @@ const getReportResponseController = async (req, res) => {
     }
   });
 
-  Cache.on('reportStatus', async (message) => {
+  subClient.on('reportStatus', async (message) => {
     let reportObject = JSON.parse(message);
     console.log(
       `[Subscriber] Received report ID ${reportObject.report_id} is finished`

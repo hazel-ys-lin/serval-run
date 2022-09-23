@@ -181,7 +181,7 @@ const apiInsertModel = async function (apiInfo) {
     const collectionData = await collectionModel.findOne({
       _id: apiInfo.collectionId,
     });
-    console.log('collectionData in api insert model: ', collectionData);
+    // console.log('collectionData in api insert model: ', collectionData);
 
     const uniqueApi = await apiCheck(apiInfo.apiName, collectionData.apis);
 
@@ -262,7 +262,12 @@ const apiNameModel = async function (apiId) {
   let apiName = await apiModel.findOne({
     _id: apiId,
   });
-  return apiName?.api_name;
+  // console.log('apiName: ', apiName);
+
+  if (!apiName) {
+    return false;
+  }
+  return apiName.api_name;
 };
 
 const apiDeleteModel = async function (apiInfo) {

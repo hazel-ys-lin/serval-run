@@ -377,6 +377,7 @@ const getReportDetailModel = async function (reportId) {
     _id: reportId,
   });
 
+  // console.log('reportDetail: ', reportDetail);
   return reportDetail;
 };
 

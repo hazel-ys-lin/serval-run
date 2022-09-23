@@ -11,12 +11,12 @@ const {
 const displayProject = async (req, res) => {
   // get all the projects to array in database
   const userEmail = req.session.userEmail;
-  const userId = await userGetModel(userEmail);
-
   let userProjects = await projectGetModel(userEmail);
   if (!req.session.isAuth) {
     return res.status(203).json({ msg: 'Please log in' });
   }
+
+  const userId = await userGetModel(userEmail);
 
   for (let i = 0; i < userProjects.length; i++) {
     userProjects[i].user_email = userEmail;
