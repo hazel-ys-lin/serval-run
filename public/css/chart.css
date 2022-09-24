@@ -7,10 +7,22 @@
   color: #fff;
   font-weight: bold;
   text-align: right;
-  background: #63A25C;
-  width: 0px;
+  /* background: #63A25C; */
+  /* width: 0px; */
   padding: 0.8em;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 0px;
+}
+
+.progress-finished {
+  background-color: #68B0AB !important;
+}
+
+.progress-failed {
+  background-color: #EA907A !important;
+}
+
+.progress-pending {
+  background-color: #FFD36B !important;
 }

@@ -2,7 +2,6 @@ extends layout.pug
 
 block content 
   link(rel='stylesheet', href='../../css/common.css')
-  link(rel='stylesheet', href='../../css/chart.css')
   script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
   //- script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
   script(src='/src/animation.js')
@@ -10,6 +9,7 @@ block content
   script(src='/src/plugins/jquery.flot.js')
   script(src='/src/plugins/jquery.flot.pie.js')
   script(src='/src/reportDetail.js')
+  link(rel='stylesheet', href='../../css/chart.css')
 
   -function prettyDate(dateString){
       //if it's already a date object and not a string you don't need this line:
@@ -29,7 +29,7 @@ block content
             .row.justify-content-center
                 .col-12
                   .input-form
-                    h1(style='font-family: Pixeloid Sans, sans-serif;') Report Details
+                    h1.report-length(examples=`${reportResponse.length}` style='font-family: Pixeloid Sans, sans-serif;') Report Details
 
                     .basic-info 
                       .basic-text 
@@ -98,15 +98,37 @@ block content
                                     text.flot-tick-label.tickLabel(x='1' y='15' style='position: absolute; text-align: right;') 20
                                     text.flot-tick-label.tickLabel(x='1' y='142' style='position: absolute; text-align: right;') 10
                                     text.flot-tick-label.tickLabel(x='1' y='78.5' style='position: absolute; text-align: right;') 15
+                          else 
+                            #bar-chart(style='height: 300px; padding: 0px; position: relative;')
+                              canvas.flot-base(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
+                              canvas.flot-overlay(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
+                              .flot-svg(style='position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;')
+                                svg(style='width: 100%; height: 100%;')
+                                  g.flot-x-axis.flot-x1-axis.xAxis.x1Axis(style='position: absolute; inset: 0px;')
+                                    text.flot-tick-label.tickLabel(x='161.3224431818182' y='294' style='position: absolute; text-align: center;') Total
+                                    text.flot-tick-label.tickLabel(x='298.43039772727275' y='294' style='position: absolute; text-align: center;') Passed
+                                    text.flot-tick-label.tickLabel(x='430.94460227272725' y='294' style='position: absolute; text-align: center;') Failed
+                                    text.flot-tick-label.tickLabel(x='560.4822443181819' y='294' style='position: absolute; text-align: center;') Pending
+
+                                  g.flot-y-axis.flot-y1-axis.yAxis.y1Axis(style='position: absolute; inset: 0px;')
+                                    text.flot-tick-label.tickLabel(x='8.953125' y='269' style='position: absolute; text-align: right;') 0
+                                    text.flot-tick-label.tickLabel(x='8.953125' y='205.5' style='position: absolute; text-align: right;') 5
+                                    text.flot-tick-label.tickLabel(x='1' y='15' style='position: absolute; text-align: right;') 20
+                                    text.flot-tick-label.tickLabel(x='1' y='142' style='position: absolute; text-align: right;') 10
+                                    text.flot-tick-label.tickLabel(x='1' y='78.5' style='position: absolute; text-align: right;') 15
 
                     .card
                       .card-header Progress
                       .card-body
                         .progress
                           if reportStatus
-                            .progress-bar.progress-finished(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #68B0AB')= `${reportCalculated[0].passRate}%`
-                            //- .progress-bar.text-dark.progress-pending(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #FFD36B')
-                            .progress-bar.progress-failed(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #EA907A')= `${100-reportCalculated[0].passRate}%`
+                            .progress-bar.progress-finished(rate=`${reportCalculated[0].passRate}` role='progressbar' aria-valuemin='0' aria-valuemax='100')
+                            .progress-bar.progress-failed(rate=`${100-reportCalculated[0].passRate}` role='progressbar' aria-valuemin='0' aria-valuemax='100')
+                            //- = `${100-reportCalculated[0].passRate}%`
+                          else 
+                            .progress-bar.progress-finished(role='progressbar' aria-valuemin='0' aria-valuemax='100')
+                            .progress-bar.text-dark.progress-pending(role='progressbar' aria-valuemin='0' aria-valuemax='100')
+                            .progress-bar.progress-failed(role='progressbar' aria-valuemin='0' aria-valuemax='100')
 
                         .progress-bar-description
                           div
@@ -118,7 +140,6 @@ block content
                                 .badge.text-dark(style='float: right; background-color: #FFD36B') Pending 0%
                                 br
                                 .badge(style='float: right; background-color: #EA907A')= `Failed ${100-reportCalculated[0].passRate}%`
-
 
                     .card
                       .card-header Test Example Details
@@ -168,78 +189,3 @@ block content
                                 else 
                                   p= reportResponse[i].request_time_length
                             - i++
-  script.
-
-    $(function () {
-      if ($('.report-status').attr('status') === 'true') {
-        let passRate = Number($('.progress-finished').text().replace('%', ''));
-        let failRate = Number($('.progress-failed').text().replace('%', ''));
-        let donutData = [
-          {
-            label: 'Pass',
-            data: passRate,
-            color: '#54BAB9',
-          },
-          {
-            label: 'Fail',
-            data: failRate,
-            color: '#FA7070',
-          },
-        ];
-        $.plot('#donut-chart', donutData, {
-          series: {
-            pie: {
-              show: true,
-              radius: 1,
-              innerRadius: 0.5,
-              label: {
-                show: true,
-                radius: 2 / 3,
-                formatter: labelFormatter,
-                threshold: 0.1,
-              },
-            },
-          },
-          legend: {
-            show: false,
-          },
-        });
-
-        /*
-        * BAR CHART
-        * ---------
-        */
-        let totalExamples = $('#bar-chart').attr('examples').split('/');
-        let bar_data = {
-          data: [
-            [1, Number(totalExamples[0]) + Number(totalExamples[1])],
-            [2, Number(totalExamples[0])],
-            [3, Number(totalExamples[1])],
-          ],
-          bars: { show: true },
-        };
-        $.plot('#bar-chart', [bar_data], {
-          grid: {
-            borderWidth: 1,
-            borderColor: '#f3f3f3',
-            tickColor: '#f3f3f3',
-          },
-          series: {
-            bars: {
-              show: true,
-              barWidth: 0.5,
-              align: 'center',
-            },
-          },
-          colors: ['#6E85B7'],
-          xaxis: {
-            ticks: [
-              [1, 'Total'],
-              [2, 'Pass'],
-              [3, 'Fail'],
-            ],
-          },
-        });
-        /* END BAR CHART */
-      }
-    });

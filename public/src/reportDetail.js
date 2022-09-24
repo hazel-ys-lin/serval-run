@@ -20,27 +20,42 @@ socket.on('test', (message) => {
 });
 
 socket.on('progress', (message) => {
-  //   console.log('message from progress: ', message);
-  $('.progress-bar.progress-finished').css(
-    'width',
-    `${message.success / message.success + message.fail}%`
-  );
-  $('.progress-bar.progress-failed').css(
-    'width',
-    `${message.fail / message.success + message.fail}%`
-  );
+  console.log('message from progress: ', message);
+  let success = Number(message.success);
+  let failed = Number(message.fail);
+  let total = Number($('.report-length').attr('examples'));
+  let running = total - success - failed;
+  let successRate = (success / total) * 100;
+  let failRate = (failed / total) * 100;
+  let pendingRate = (running / total) * 100;
 
   $(function () {
-    if ($('.report-status').attr('status') !== true) {
+    if ($('.report-status').attr('status') !== 'true') {
+      /*
+       * PROGRESS BAR
+       * ---------
+       */
+      $('.progress-finished').css({ width: `${successRate}%` }, 600);
+      $('.progress-pending').css({ width: `${pendingRate}%` }, 600);
+      $('.progress-failed').css({ width: `${failRate}%` }, 600);
+      /*
+       * DONUT CHART
+       * ---------
+       */
       let donutData = [
         {
           label: 'Pass',
-          data: message.success / message.success + message.fail,
+          data: successRate,
           color: '#FA7070',
         },
         {
+          label: 'Running',
+          data: pendingRate,
+          color: '#FFD36B',
+        },
+        {
           label: 'Fail',
-          data: message.fail / message.success + message.fail,
+          data: failRate,
           color: '#54BAB9',
         },
       ];
@@ -69,9 +84,9 @@ socket.on('progress', (message) => {
        */
       let bar_data = {
         data: [
-          [1, message.success + message.fail],
-          [2, message.success],
-          [3, message.fail],
+          [1, Number(total)],
+          [2, Number(success)],
+          [3, Number(failed)],
         ],
         bars: { show: true },
       };
@@ -100,6 +115,90 @@ socket.on('progress', (message) => {
       /* END BAR CHART */
     }
   });
+});
+
+$(function () {
+  if ($('.report-status').attr('status') === 'true') {
+    //- let passRate = Number($('.progress-finished').text().replace('%', ''));
+    let passRate = Number($('.progress-finished').attr('rate'));
+    //- let failRate = Number($('.progress-failed').text().replace('%', ''));
+    let failRate = Number($('.progress-failed').attr('rate'));
+
+    // FIXME: can't render progress bar
+    $('.progress-finished').css({ width: `${passRate}%` }, 600);
+    //- $('.progress-finished').text() = passRate;
+    $('.progress-failed').css({ width: `${failRate}%` }, 600);
+    //- $('.progress-failed').text() = failRate;
+    //- $('.progress-bar.progress-failed').css('width', 0);
+
+    let donutData = [
+      {
+        label: 'Pass',
+        data: passRate,
+        color: '#54BAB9',
+      },
+      {
+        label: 'Fail',
+        data: failRate,
+        color: '#FA7070',
+      },
+    ];
+    $.plot('#donut-chart', donutData, {
+      series: {
+        pie: {
+          show: true,
+          radius: 1,
+          innerRadius: 0.5,
+          label: {
+            show: true,
+            radius: 2 / 3,
+            formatter: labelFormatter,
+            threshold: 0.1,
+          },
+        },
+      },
+      legend: {
+        show: false,
+      },
+    });
+
+    /*
+     * BAR CHART
+     * ---------
+     */
+    let totalExamples = $('#bar-chart').attr('examples').split('/');
+    let bar_data = {
+      data: [
+        [1, Number(totalExamples[0]) + Number(totalExamples[1])],
+        [2, Number(totalExamples[0])],
+        [3, Number(totalExamples[1])],
+      ],
+      bars: { show: true },
+    };
+    $.plot('#bar-chart', [bar_data], {
+      grid: {
+        borderWidth: 1,
+        borderColor: '#f3f3f3',
+        tickColor: '#f3f3f3',
+      },
+      series: {
+        bars: {
+          show: true,
+          barWidth: 0.5,
+          align: 'center',
+        },
+      },
+      colors: ['#6E85B7'],
+      xaxis: {
+        ticks: [
+          [1, 'Total'],
+          [2, 'Pass'],
+          [3, 'Fail'],
+        ],
+      },
+    });
+    /* END BAR CHART */
+  }
 });
 
 // $(function () {

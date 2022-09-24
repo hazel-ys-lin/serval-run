@@ -35,6 +35,7 @@ global.subscriber.subscribe(CHANNEL_KEY, (err) => {
 });
 
 global.subscriber.on('message', (channel, result) => {
+  // console.log('result in subscriber: ', result);
   let currentResult = JSON.parse(result);
   io.emit(
     'progress',
