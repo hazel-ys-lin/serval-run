@@ -52,7 +52,7 @@ const calculateReport = async function (reportDataArray) {
 };
 
 const titleOfReport = async function (reportArray) {
-  console.log('reportArray: ', reportArray);
+  // console.log('reportArray: ', reportArray);
 
   let collectionName, apiId, apiName, scenarioId, scenarioName;
   for (let i = 0; i < reportArray.length; i++) {

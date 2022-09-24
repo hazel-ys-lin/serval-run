@@ -9,6 +9,7 @@ block content
   script(src='/src/plugins/jquery.js')
   script(src='/src/plugins/jquery.flot.js')
   script(src='/src/plugins/jquery.flot.pie.js')
+  script(src='/src/reportDetail.js')
 
   -function prettyDate(dateString){
       //if it's already a date object and not a string you don't need this line:
@@ -93,9 +94,9 @@ block content
                       .card-header Progress
                       .card-body
                         .progress
-                          .progress-bar(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #68B0AB') 15%
-                          .progress-bar.text-dark(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #FFD36B') 30%
-                          .progress-bar(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #EA907A') 20%
+                          .progress-bar.progress-finished(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #68B0AB') 
+                          .progress-bar.text-dark.progress-pending(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #FFD36B') 
+                          .progress-bar.progress-failed(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #EA907A') 
 
                         .progress-bar-description
                           div
@@ -157,72 +158,3 @@ block content
                                   else 
                                     p= reportResponse[i].request_time_length
                               - i++
-
-  script.
-    function labelFormatter(label, series) {
-      return '<div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">'
-        + label
-        + '<br>'
-        + Math.round(series.percent) + '%</div>'
-    }
-
-    // TODO: socket on the message from socket handler in backend
-    $(function () {
-      let donutData = [
-        {
-          label: 'Pass',
-          data : 60,
-          color: '#FA7070'
-        },
-        {
-          label: 'Fail',
-          data : 40,
-          color: '#54BAB9'
-        }
-      ]
-      $.plot('#donut-chart', donutData, {
-        series: {
-          pie: {
-            show       : true,
-            radius     : 1,
-            innerRadius: 0.5,
-            label      : {
-              show     : true,
-              radius   : 2 / 3,
-              formatter: labelFormatter,
-              threshold: 0.1
-            }
-
-          }
-        },
-        legend: {
-          show: false
-        }
-      })
-
-      /*
-      * BAR CHART
-      * ---------
-      */
-      let bar_data = {
-        data : [[1,5], [2,3], [3,2]],
-        bars: { show: true }
-      }
-      $.plot('#bar-chart', [bar_data], {
-        grid  : {
-          borderWidth: 1,
-          borderColor: '#f3f3f3',
-          tickColor  : '#f3f3f3'
-        },
-        series: {
-          bars: {
-            show: true, barWidth: 0.5, align: 'center',
-          },
-        },
-        colors: ['#6E85B7'],
-        xaxis : {
-          ticks: [[1,'Total'], [2,'Pass'], [3,'Fail']]
-        }
-      })
-      /* END BAR CHART */
-    })

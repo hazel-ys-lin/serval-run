@@ -36,8 +36,9 @@ block content
                           table.table 
                             thead
                               tr
-                                th.text-dark(scope='col' style='width: 200px') Test Date
+                                th.text-dark(scope='col' style='width: 200px') Date
                                 th.text-dark(scope='col' style='width: 150px') Type
+                                th.text-dark(scope='col' style='width: 150px') Status
                                 th.text-dark(scope='col' style='width: 600px') Title
                                 th.text-dark(scope='col' style='width: 150px') Pass Rate 
                                 th.text-dark(scope='col' style='width: 150px') Examples
@@ -56,20 +57,25 @@ block content
                                   else 
                                     h1.display-6.badge(style='font-size: 120%; background-color: #CC9C75')= reportsDetail[i].type
                                 td.report-title.list-inline
+                                  if reportData[i].finished === true 
+                                    h1.badge.bg-success.text-dark.result-badge(style='font-family: Pixeloid Sans, sans-serif;') DONE
+                                  else 
+                                    h1.badge.bg-warning.text-dark.result-badge(style='font-family: Pixeloid Sans, sans-serif;') RUNNING
+                                td.report-title.list-inline
                                   each element in reportsDetail[i].reportTitle
                                     h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 110%;')= element
                                 td 
-                                  if reportsDetail[i].passRate
+                                  if reportData[i].finished && reportsDetail[i].passRate
                                     p= reportsDetail[i].passRate
                                   else 
                                     h4.badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
                                 td 
-                                  if reportsDetail[i].passExamples
+                                  if reportData[i].finished && reportsDetail[i].passExamples
                                     p= reportsDetail[i].passExamples
                                   else 
                                     h4.badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
                                 td 
-                                  if reportsDetail[i].averageTime
+                                  if reportData[i].finished && reportsDetail[i].averageTime
                                     p= reportsDetail[i].averageTime
                                   else 
                                     h4.badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING

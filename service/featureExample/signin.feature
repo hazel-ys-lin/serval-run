@@ -41,13 +41,3 @@ user system to make user sign in
       | native   | serval@gmail.com  | Serval123     |    200 |
       | native   | serval@gmail.com  | Serval123     |    200 |
       | native   | serval@gmail.com  | Serval123     |    200 |
-      | native   | serval@gmail.com  | Serval123     |    200 |
-      | native   | serval@gmail.com  | Serval123     |    200 |
-      | native   | serval@gmail.com  | Serval123     |    200 |
-      | native   | serval@gmail.com  | Serval123     |    200 |
-      | native   | serval@gmail.com  | Serval1234444 |    403 |
-      | native   | serval@gmail.com  | Serval1234444 |    404 |
-      | native   | admin@company.com | admin123      |    200 |
-      | native   | admin@company.com | admin1223     |    200 |
-      | native   | serval@gmail.com  | Serval123     |    200 |
-      | native   | serval@gmail.com  | Serval123     |    200 |

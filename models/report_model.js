@@ -73,207 +73,207 @@ const reportSchema = new mongoose.Schema({
 const responseModel = pool.model('response', responseSchema);
 const reportModel = pool.model('report', reportSchema);
 
-const exampleResponseInsertModel = async function (
-  // projectId,
-  // envId,
-  // collectionId,
-  // reportInfo,
-  responseArray
-) {
-  const session = await responseModel.startSession();
-  session.startTransaction();
-  try {
-    const opts = { session };
-    // console.log(responseArray);
+// const exampleResponseInsertModel = async function (
+//   // projectId,
+//   // envId,
+//   // collectionId,
+//   // reportInfo,
+//   responseArray
+// ) {
+//   const session = await responseModel.startSession();
+//   session.startTransaction();
+//   try {
+//     const opts = { session };
+//     // console.log(responseArray);
 
-    // let reportId = await reportModel({
-    //   project_id: projectId,
-    //   environment_id: envId,
-    //   collection_id: collectionId,
-    //   report_info: reportInfo,
-    // }).save(opts);
+//     // let reportId = await reportModel({
+//     //   project_id: projectId,
+//     //   environment_id: envId,
+//     //   collection_id: collectionId,
+//     //   report_info: reportInfo,
+//     // }).save(opts);
 
-    // let responseToInsert = [];
-    for (let i = 0; i < responseArray.length; i++) {
-      let objectToInsert = {
-        // report_id: reportId._id,
-        // api_id: responseArray[i].api_id,
-        // scenario_id: responseArray[i].scenario_id,
-        // example_id: responseArray[i].example_id,
-        response_data: responseArray[i].response_data,
-        response_status: responseArray[i].response_status,
-        pass: responseArray[i].pass,
-        request_time: responseArray[i].request_time,
-        request_time_length: responseArray[i].request_time_length,
-      };
+//     // let responseToInsert = [];
+//     for (let i = 0; i < responseArray.length; i++) {
+//       let objectToInsert = {
+//         // report_id: reportId._id,
+//         // api_id: responseArray[i].api_id,
+//         // scenario_id: responseArray[i].scenario_id,
+//         // example_id: responseArray[i].example_id,
+//         response_data: responseArray[i].response_data,
+//         response_status: responseArray[i].response_status,
+//         pass: responseArray[i].pass,
+//         request_time: responseArray[i].request_time,
+//         request_time_length: responseArray[i].request_time_length,
+//       };
 
-      // FIXME: change to update instead of create
-      let inserted = await responseModel.updateOne(
-        { _id: reportId._id },
-        {
-          $push: {},
-        }
-      );
+//       // FIXME: change to update instead of create
+//       let inserted = await responseModel.updateOne(
+//         { _id: reportId._id },
+//         {
+//           $push: {},
+//         }
+//       );
 
-      // let inserted = await responseModel(objectToInsert).save(opts);
-      // responseToInsert.push(inserted._id);
+//       // let inserted = await responseModel(objectToInsert).save(opts);
+//       // responseToInsert.push(inserted._id);
 
-      // await reportModel.updateOne(
-      //   { _id: reportId._id },
-      //   {
-      //     $push: {
-      //       responses: [
-      //         {
-      //           api_id: responseArray[i].api_id,
-      //           scenario_id: responseArray[i].scenario_id,
-      //           example_id: responseArray[i].example_id,
-      //           response_id: inserted._id,
-      //         },
-      //       ],
-      //     },
-      //   },
-      //   opts
-      // );
-    }
+//       // await reportModel.updateOne(
+//       //   { _id: reportId._id },
+//       //   {
+//       //     $push: {
+//       //       responses: [
+//       //         {
+//       //           api_id: responseArray[i].api_id,
+//       //           scenario_id: responseArray[i].scenario_id,
+//       //           example_id: responseArray[i].example_id,
+//       //           response_id: inserted._id,
+//       //         },
+//       //       ],
+//       //     },
+//       //   },
+//       //   opts
+//       // );
+//     }
 
-    await session.commitTransaction();
-    session.endSession();
-    return true;
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    throw error;
-  }
-};
+//     await session.commitTransaction();
+//     session.endSession();
+//     return true;
+//   } catch (error) {
+//     await session.abortTransaction();
+//     session.endSession();
+//     throw error;
+//   }
+// };
 
-const apiResponseInsertModel = async function (
-  projectId,
-  envId,
-  collectionId,
-  reportInfo,
-  responseArray
-) {
-  const session = await responseModel.startSession();
-  session.startTransaction();
-  try {
-    const opts = { session };
+// const apiResponseInsertModel = async function (
+//   projectId,
+//   envId,
+//   collectionId,
+//   reportInfo,
+//   responseArray
+// ) {
+//   const session = await responseModel.startSession();
+//   session.startTransaction();
+//   try {
+//     const opts = { session };
 
-    let reportId = await reportModel({
-      project_id: projectId,
-      environment_id: envId,
-      collection_id: collectionId,
-      report_info: reportInfo,
-    }).save(opts);
+//     let reportId = await reportModel({
+//       project_id: projectId,
+//       environment_id: envId,
+//       collection_id: collectionId,
+//       report_info: reportInfo,
+//     }).save(opts);
 
-    for (let i = 0; i < responseArray.length; i++) {
-      let objectToInsert = {
-        report_id: reportId._id,
-        api_id: responseArray[i].api_id,
-        scenario_id: responseArray[i].scenario_id,
-        example_id: responseArray[i].example_id,
-        response_data: responseArray[i].response_data,
-        response_status: responseArray[i].response_status,
-        pass: responseArray[i].pass,
-        request_time: responseArray[i].request_time,
-        request_time_length: responseArray[i].request_time_length,
-      };
+//     for (let i = 0; i < responseArray.length; i++) {
+//       let objectToInsert = {
+//         report_id: reportId._id,
+//         api_id: responseArray[i].api_id,
+//         scenario_id: responseArray[i].scenario_id,
+//         example_id: responseArray[i].example_id,
+//         response_data: responseArray[i].response_data,
+//         response_status: responseArray[i].response_status,
+//         pass: responseArray[i].pass,
+//         request_time: responseArray[i].request_time,
+//         request_time_length: responseArray[i].request_time_length,
+//       };
 
-      let inserted = await responseModel(objectToInsert).save(opts);
+//       let inserted = await responseModel(objectToInsert).save(opts);
 
-      await reportModel.updateOne(
-        { _id: reportId._id },
-        {
-          $push: {
-            responses: [
-              {
-                api_id: responseArray[i].api_id,
-                scenario_id: responseArray[i].scenario_id,
-                example_id: responseArray[i].example_id,
-                response_id: inserted._id,
-              },
-            ],
-          },
-        },
-        opts
-      );
-    }
+//       await reportModel.updateOne(
+//         { _id: reportId._id },
+//         {
+//           $push: {
+//             responses: [
+//               {
+//                 api_id: responseArray[i].api_id,
+//                 scenario_id: responseArray[i].scenario_id,
+//                 example_id: responseArray[i].example_id,
+//                 response_id: inserted._id,
+//               },
+//             ],
+//           },
+//         },
+//         opts
+//       );
+//     }
 
-    await session.commitTransaction();
-    session.endSession();
-    return true;
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    throw error;
-  }
-};
+//     await session.commitTransaction();
+//     session.endSession();
+//     return true;
+//   } catch (error) {
+//     await session.abortTransaction();
+//     session.endSession();
+//     throw error;
+//   }
+// };
 
-const collectionResponseInsertModel = async function (
-  projectId,
-  envId,
-  collectionId,
-  reportInfo,
-  responseArray
-) {
-  // TODO: collection response insert to response and report
-  const session = await responseModel.startSession();
-  session.startTransaction();
-  try {
-    const opts = { session };
+// const collectionResponseInsertModel = async function (
+//   projectId,
+//   envId,
+//   collectionId,
+//   reportInfo,
+//   responseArray
+// ) {
+//   // TODO: collection response insert to response and report
+//   const session = await responseModel.startSession();
+//   session.startTransaction();
+//   try {
+//     const opts = { session };
 
-    let reportId = await reportModel({
-      project_id: projectId,
-      environment_id: envId,
-      collection_id: collectionId,
-      report_info: reportInfo,
-    }).save(opts);
+//     let reportId = await reportModel({
+//       project_id: projectId,
+//       environment_id: envId,
+//       collection_id: collectionId,
+//       report_info: reportInfo,
+//     }).save(opts);
 
-    // let responseToInsert = [];
-    for (let i = 0; i < responseArray.length; i++) {
-      let objectToInsert = {
-        report_id: reportId._id,
-        api_id: responseArray[i].api_id,
-        scenario_id: responseArray[i].scenario_id,
-        example_id: responseArray[i].example_id,
-        response_data: responseArray[i].response_data,
-        response_status: responseArray[i].response_status,
-        pass: responseArray[i].pass,
-        request_time: responseArray[i].request_time,
-        request_time_length: responseArray[i].request_time_length,
-      };
+//     // let responseToInsert = [];
+//     for (let i = 0; i < responseArray.length; i++) {
+//       let objectToInsert = {
+//         report_id: reportId._id,
+//         api_id: responseArray[i].api_id,
+//         scenario_id: responseArray[i].scenario_id,
+//         example_id: responseArray[i].example_id,
+//         response_data: responseArray[i].response_data,
+//         response_status: responseArray[i].response_status,
+//         pass: responseArray[i].pass,
+//         request_time: responseArray[i].request_time,
+//         request_time_length: responseArray[i].request_time_length,
+//       };
 
-      let inserted = await responseModel(objectToInsert).save(opts);
+//       let inserted = await responseModel(objectToInsert).save(opts);
 
-      // FIXME: in db the responses is empty
-      await reportModel.updateOne(
-        { _id: reportId._id },
-        {
-          $push: {
-            responses: [
-              {
-                api_id: responseArray[i].api_id,
-                scenario_id: responseArray[i].scenario_id,
-                example_id: responseArray[i].example_id,
-                response_id: inserted._id,
-              },
-            ],
-          },
-        },
-        opts
-      );
-    }
+//       // FIXME: in db the responses is empty
+//       await reportModel.updateOne(
+//         { _id: reportId._id },
+//         {
+//           $push: {
+//             responses: [
+//               {
+//                 api_id: responseArray[i].api_id,
+//                 scenario_id: responseArray[i].scenario_id,
+//                 example_id: responseArray[i].example_id,
+//                 response_id: inserted._id,
+//               },
+//             ],
+//           },
+//         },
+//         opts
+//       );
+//     }
 
-    await session.commitTransaction();
-    session.endSession();
-    return true;
-  } catch (error) {
-    // If an error occurred, abort the whole transaction and
-    // undo any changes that might have happened
-    await session.abortTransaction();
-    session.endSession();
-    throw error;
-  }
-};
+//     await session.commitTransaction();
+//     session.endSession();
+//     return true;
+//   } catch (error) {
+//     // If an error occurred, abort the whole transaction and
+//     // undo any changes that might have happened
+//     await session.abortTransaction();
+//     session.endSession();
+//     throw error;
+//   }
+// };
 
 const createReportModel = async function (testInfo) {
   const { projectId, envId, collectionId, reportInfo } = testInfo;
@@ -341,7 +341,7 @@ const createResponseModel = async function (
 };
 
 const setReportStatusModel = async function (reportId) {
-  let setStatusResult = await responseModel.findOneAndUpdate(
+  let setStatusResult = await reportModel.findOneAndUpdate(
     { _id: reportId },
     {
       finished: true,
@@ -356,8 +356,9 @@ const setReportStatusModel = async function (reportId) {
 };
 
 const getReportStatusModel = async function (reportId) {
-  let getStatusResult = await responseModel.findOne({ _id: reportId });
-  if (getStatusResult === true) {
+  let getStatusResult = await reportModel.findOne({ _id: reportId });
+  // console.log('getStatusResult: ', getStatusResult);
+  if (getStatusResult.finished === true) {
     return true;
   } else {
     return false;
@@ -400,9 +401,9 @@ const getResponseByReportModel = async function (responseId) {
 module.exports = {
   responseModel,
   reportModel,
-  exampleResponseInsertModel,
-  apiResponseInsertModel,
-  collectionResponseInsertModel,
+  // exampleResponseInsertModel,
+  // apiResponseInsertModel,
+  // collectionResponseInsertModel,
   createReportModel,
   createResponseModel,
   setReportStatusModel,

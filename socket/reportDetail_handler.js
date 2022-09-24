@@ -1,52 +1,44 @@
-const Cache = require('../util/cache');
-const CHANNEL_KEY = 'report-channel';
+global.usersMap = {};
 
-// TODO: subscribe the channel which is watching worker
-Cache.subscribe(CHANNEL_KEY, (err, count) => {
-  if (err) {
-    console.error('[Subscriber] Failed to subscribe: %s', err.message);
-  } else {
-    console.log(
-      `[Subscriber] Subscribed successfully! This client is currently subscribed to ${CHANNEL_KEY} channel.`
-    );
-  }
-});
-
-Cache.on('responseStatus', (message) => {
-  let responseObject = JSON.parse(message);
-  console.log(
-    `[Subscriber] Received response ID ${responseObject.response_id} finished`,
-    'result: ',
-    `${responseObject.result}`
-  );
-});
-
-const usersMap = {};
-// TODO: socket send data to frontend page
-// TODO: if get responseStatus from channel, io.emit message to socket (with user id)
-const connectToPrivateHandler = function (io, socket) {
+const addToUserMapHandler = function (io, socket) {
   const userId = socket.request.session.userId;
-  const userInfo = { email: socket.request.session.userEmail, socket, socket };
 
-  if (user) {
-    usersMap[userId] = user;
+  if (userId) {
+    global.usersMap[userId] = socket.id;
 
     socket.on('disconnect', () => {
-      delete users[userId];
+      delete global.usersMap[userId];
       io.emit('message', 'A user disconnect');
     });
   }
 };
 
-const emitProgressHandler = function (io, socket) {};
+const emitProgressHandler = function (io, socket) {
+  // TODO: if get responses status, emit it to report details
+  // 收到worker publish的訊息之後，就emit到前端
+  // 前端只要有on到emit的事件，都可以收到要傳的資料，和在哪裡傳無關
+  global.subscriber.on('responseStatus', (message) => {
+    let responseObject = JSON.parse(message);
+    // console.log(
+    //   `[Subscriber] Received response ID ${responseObject.response_id} finished`,
+    //   'result: ',
+    //   `${responseObject.result}`
+    // );
+    console.log('responseObject: ', responseObject);
+    io.to(global.usersMap[userId].socket.id).emit('progress', {
+      responseId: responseObject.response_id,
+      responseResult: responseObject.result,
+    });
+  });
+};
 
-const emitSuccessHandler = function (io, socket) {};
+// const emitSuccessHandler = function (io, socket) {};
 
-const emitExampleHandler = function (io, socket) {};
+// const emitExampleHandler = function (io, socket) {};
 
 module.exports = {
-  connectToPrivateHandler,
+  addToUserMapHandler,
   emitProgressHandler,
-  emitSuccessHandler,
-  emitExampleHandler,
+  // emitSuccessHandler,
+  // emitExampleHandler,
 };

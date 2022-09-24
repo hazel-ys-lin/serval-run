@@ -1,10 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-const httpServer = require('http').createServer();
 
 const app = express();
-const port = process.env.PORT;
+const httpServer = require('http').createServer(app);
+
 const API_VERSION = process.env.API_VERSION;
 
 app.use(express.static('public'));
@@ -44,8 +44,8 @@ app.use(function (err, req, res, next) {
   // return res.status(500).render('error', { msg: 'error: 500' });
 });
 
-app.listen(port, () => {
-  console.log(`Server started on ${port}!`);
-});
+// app.listen(port, () => {
+//   console.log(`Server started on ${port}!`);
+// });
 
 module.exports = { httpServer, sessionMiddleware };
