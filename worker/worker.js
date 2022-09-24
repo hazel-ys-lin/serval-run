@@ -31,11 +31,11 @@ const doJob = async function () {
     let httpRequestResult = await callHttpRequest(testConfig, testData);
     let insertTestResult = await exampleResponseInsertModel(httpRequestResult);
 
-    if (insertTestResult) {
-      const reportStatus = { report_id: insertTestResult, status: 1 };
-      Queue.publish(CHANNEL_KEY, JSON.stringify(reportStatus));
-      console.log(`[Worker] Published report status to channel ${CHANNEL_KEY}`);
-    }
+    // if (insertTestResult) {
+    //   const reportStatus = { report_id: insertTestResult, status: 1 };
+    //   Queue.publish(CHANNEL_KEY, JSON.stringify(reportStatus));
+    //   console.log(`[Worker] Published report status to channel ${CHANNEL_KEY}`);
+    // }
   }
 };
 

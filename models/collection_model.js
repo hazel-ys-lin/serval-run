@@ -262,7 +262,6 @@ const apiNameModel = async function (apiId) {
   let apiName = await apiModel.findOne({
     _id: apiId,
   });
-  // console.log('apiName: ', apiName);
 
   if (!apiName) {
     return false;

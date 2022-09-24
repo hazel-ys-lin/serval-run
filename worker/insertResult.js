@@ -78,7 +78,6 @@ const exampleResponseInsertModel = async function (responseArray) {
   try {
     for (let i = 0; i < responseArray.length; i++) {
       //   console.log('responseArray[i]: ', responseArray[i]);
-      // FIXME: change to update instead of create
       let inserted = await responseModel.findOneAndUpdate(
         { _id: responseArray[i].response_id },
         {

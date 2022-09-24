@@ -324,6 +324,17 @@ block content
         $('.btn-apitest-in-toggle').on('click', function(event) {
             console.log('run api test in toggle clicked');
             event.preventDefault();
+
+            swal({
+                title:"Serval is running...", 
+                //- html: true,
+                //- icon: "https://i.gifer.com/2yqU.gif",
+                icon: "https://i.gifer.com/PYh.gif",
+                buttons: false,      
+                closeOnClickOutside: false,
+                //- timer: 5000,
+            });
+
             const apiId = $('.card-title').text().replace('API ID: ', '');
             const scenarioId = this.id;
             const domainName = $('.btn-apitest-in-toggle').attr('domain');

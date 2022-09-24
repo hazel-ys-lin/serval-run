@@ -201,6 +201,18 @@ block content
         $('.btn-collectiontest-in-toggle').on('click', function(event) {
             console.log('run collection test in toggle clicked');
             event.preventDefault();
+
+            swal({
+                title:"Serval is running...", 
+                //- html: true,
+                //- icon: "https://i.gifer.com/2yqU.gif",
+                icon: "https://i.gifer.com/PYh.gif",
+                buttons: false,      
+                closeOnClickOutside: false,
+                //- timer: 5000,
+            });
+
+
             const collectionId = this.id;
             const domainName = $('.btn-collectiontest-in-toggle').attr('domain');
             const title = $('.btn-collectiontest-in-toggle').attr('title');

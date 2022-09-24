@@ -49,6 +49,13 @@ block content
                               dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
                                 dt Report Type
                                 dd #{reportDetail.report_info.report_type.toUpperCase()}
+                              dl.report-status(status=`${reportStatus}` style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
+                                dt Status
+                                dd(style='font-size: 100%;')
+                                  if reportStatus
+                                    .badge.bg-success.result-badge(style='font-family: Pixeloid Sans, sans-serif;') DONE
+                                  else 
+                                    .badge.bg-warning.text-dark.result-badge(style='font-family: Pixeloid Sans, sans-serif;') RUNNING
 
                       .pass-rate-pie 
                         .card
@@ -57,22 +64,24 @@ block content
                             #donut-chart(style='height: 300px; padding: 0px; position: relative;')
                               canvas.flot-base(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
                               canvas.flot-overlay(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
-                              span#pieLabel0.pieLabel(style='position: absolute; top: 69.5px; left: 440.203px;')
-                                div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
-                                  | Pass
-                                  br
-                                  | 60%
-                              span#pieLabel1.pieLabel(style='position: absolute; top: 209.5px; left: 418.203px;')
-                                div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
-                                  | Fail
-                                  br
-                                  | 40%
+                              if reportStatus
+                                span#pieLabel0.pieLabel(style='position: absolute; top: 69.5px; left: 440.203px;')
+                                  div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
+                                    | Pass
+                                    br
+                                    p= reportCalculated[0].passRate
+                                span#pieLabel1.pieLabel(style='position: absolute; top: 209.5px; left: 418.203px;')
+                                  div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
+                                    | Fail
+                                    br
+                                    p= 100-reportCalculated[0].passRate
 
                       .examples-histogram
                         .card
                           .card-header  Examples
                           .card-body
-                            #bar-chart(style='height: 300px; padding: 0px; position: relative;')
+                          if reportCalculated
+                            #bar-chart(examples=`${reportCalculated[0].passExamples}` style='height: 300px; padding: 0px; position: relative;')
                               canvas.flot-base(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
                               canvas.flot-overlay(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
                               .flot-svg(style='position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;')
@@ -94,67 +103,143 @@ block content
                       .card-header Progress
                       .card-body
                         .progress
-                          .progress-bar.progress-finished(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #68B0AB') 
-                          .progress-bar.text-dark.progress-pending(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #FFD36B') 
-                          .progress-bar.progress-failed(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #EA907A') 
+                          if reportStatus
+                            .progress-bar.progress-finished(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #68B0AB')= `${reportCalculated[0].passRate}%`
+                            //- .progress-bar.text-dark.progress-pending(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #FFD36B')
+                            .progress-bar.progress-failed(role='progressbar' aria-valuemin='0' aria-valuemax='100' style='background-color: #EA907A')= `${100-reportCalculated[0].passRate}%`
 
                         .progress-bar-description
                           div
                             h5
-                              br
-                              .badge(style='float: right; background-color: #68B0AB') Finished 15%
-                              br
-                              .badge.text-dark(style='float: right; background-color: #FFD36B') Pending 30%
-                              br
-                              .badge(style='float: right; background-color: #EA907A') Failed 20%
+                              if reportStatus
+                                br
+                                .badge(style='float: right; background-color: #68B0AB')= `Passed ${reportCalculated[0].passRate}%`
+                                br
+                                .badge.text-dark(style='float: right; background-color: #FFD36B') Pending 0%
+                                br
+                                .badge(style='float: right; background-color: #EA907A')= `Failed ${100-reportCalculated[0].passRate}%`
 
 
                     .card
                       .card-header Test Example Details
                       .card-body.p-0
-                        if reportResponse[0]._id
-                          table.table 
-                            thead
-                              tr
-                                th.text-dark(scope='col' style='width: 30px;') Time
-                                th.text-dark(scope='col' style='text-align: center;') Title
-                                th.text-dark(scope='col') Description
-                                th.text-dark(scope='col' style='text-align: center;') Result 
-                                th.text-dark(scope='col' style='text-align: center;') Expected Result
-                                th.text-dark(scope='col' style='text-align: center;') Real Result
-                                th.text-dark(scope='col' style='text-align: center;') Request Length
-                            tbody
-                            - let i = 0
-                            while i < reportResponse.length
-                              tr
-                                td 
-                                  if !reportResponse[i].request_time
-                                    p.text-muted= 'Pending'
-                                  else 
-                                    p= prettyDate(reportResponse[i].request_time)
-                                td(style='text-align: center;') #{reportResponse[i].scenario_title}
-                                td #{reportResponse[i].description}
-                                if reportResponse[i].pass === undefined
-                                  td(style='text-align: center;')
-                                    h4 
-                                      .badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
-                                else if reportResponse[i].expected_status_code === reportResponse[i].response_status
-                                  td(style='text-align: center;')
-                                    h4  
-                                      .badge.bg-success.text-secondary.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PASS
-                                else if reportResponse[i].expected_status_code !== reportResponse[i].response_status
-                                  td(style='text-align: center;')
-                                    h4
-                                      .badge.bg-danger.result-badge(style='font-family: Pixeloid Sans, sans-serif;') FAIL
-                                td(style='text-align: center;') #{reportResponse[i].expected_status_code}
-                                td(style='text-align: center;') 
-                                  if !reportResponse[i].response_status
-                                    p.text-muted= 'Pending'
-                                  else 
-                                    p= reportResponse[i].response_status
-                                th(style='text-align: center;')
-                                  if !reportResponse[i].request_time_length
-                                    p.text-muted= 'Pending'
-                                  else 
-                                    p= reportResponse[i].request_time_length
-                              - i++
+                        table.table 
+                          thead
+                            tr
+                              th.text-dark(scope='col' style='width: 30px;') Time
+                              th.text-dark(scope='col' style='text-align: center;') Title
+                              th.text-dark(scope='col') Description
+                              th.text-dark(scope='col' style='text-align: center;') Result 
+                              th.text-dark(scope='col' style='text-align: center;') Expected Result
+                              th.text-dark(scope='col' style='text-align: center;') Real Result
+                              th.text-dark(scope='col' style='text-align: center;') Request Length
+                          tbody
+                          - let i = 0
+                          while i < reportResponse.length
+                            tr
+                              td 
+                                if !reportResponse[i].request_time
+                                  p.text-muted= 'Pending'
+                                else 
+                                  p= prettyDate(reportResponse[i].request_time)
+                              td(style='text-align: center;') #{reportResponse[i].scenario_title}
+                              td #{reportResponse[i].description}
+                              if reportResponse[i].pass === undefined
+                                td(style='text-align: center;')
+                                  h4 
+                                    .badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
+                              else if reportResponse[i].expected_status_code === reportResponse[i].response_status
+                                td(style='text-align: center;')
+                                  h4  
+                                    .badge.bg-success.text-secondary.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PASS
+                              else if reportResponse[i].expected_status_code !== reportResponse[i].response_status
+                                td(style='text-align: center;')
+                                  h4
+                                    .badge.bg-danger.result-badge(style='font-family: Pixeloid Sans, sans-serif;') FAIL
+                              td(style='text-align: center;') #{reportResponse[i].expected_status_code}
+                              td(style='text-align: center;') 
+                                if !reportResponse[i].response_status
+                                  p.text-muted= 'Pending'
+                                else 
+                                  p= reportResponse[i].response_status
+                              th(style='text-align: center;')
+                                if !reportResponse[i].request_time_length
+                                  p.text-muted= 'Pending'
+                                else 
+                                  p= reportResponse[i].request_time_length
+                            - i++
+  script.
+
+    $(function () {
+      if ($('.report-status').attr('status') === 'true') {
+        let passRate = Number($('.progress-finished').text().replace('%', ''));
+        let failRate = Number($('.progress-failed').text().replace('%', ''));
+        let donutData = [
+          {
+            label: 'Pass',
+            data: passRate,
+            color: '#54BAB9',
+          },
+          {
+            label: 'Fail',
+            data: failRate,
+            color: '#FA7070',
+          },
+        ];
+        $.plot('#donut-chart', donutData, {
+          series: {
+            pie: {
+              show: true,
+              radius: 1,
+              innerRadius: 0.5,
+              label: {
+                show: true,
+                radius: 2 / 3,
+                formatter: labelFormatter,
+                threshold: 0.1,
+              },
+            },
+          },
+          legend: {
+            show: false,
+          },
+        });
+
+        /*
+        * BAR CHART
+        * ---------
+        */
+        let totalExamples = $('#bar-chart').attr('examples').split('/');
+        let bar_data = {
+          data: [
+            [1, Number(totalExamples[0]) + Number(totalExamples[1])],
+            [2, Number(totalExamples[0])],
+            [3, Number(totalExamples[1])],
+          ],
+          bars: { show: true },
+        };
+        $.plot('#bar-chart', [bar_data], {
+          grid: {
+            borderWidth: 1,
+            borderColor: '#f3f3f3',
+            tickColor: '#f3f3f3',
+          },
+          series: {
+            bars: {
+              show: true,
+              barWidth: 0.5,
+              align: 'center',
+            },
+          },
+          colors: ['#6E85B7'],
+          xaxis: {
+            ticks: [
+              [1, 'Total'],
+              [2, 'Pass'],
+              [3, 'Fail'],
+            ],
+          },
+        });
+        /* END BAR CHART */
+      }
+    });

@@ -20,19 +20,13 @@ block content
         .container-fluid
             .row.justify-content-center
                 .col-12
-                  //- nav(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
-                  //-   ol.breadcrumb
-                  //-       li.breadcrumb-item
-                  //-           a(href='') Project
-                  //-       li.breadcrumb-item
-                  //-           a(href='') Report
                   .input-form
                     h1(style='font-family: Pixeloid Sans, sans-serif;') Results
-                    if reportsDetail[0].projectName
-                      h1.display-6 #{reportsDetail[0].projectName.toUpperCase()}
+                    if reportData[0].projectName
+                      h1.display-6 #{reportData[0].projectName.toUpperCase()}
                     .card
                       .card-body.p-0
-                        if reportsDetail[0].projectName
+                        if reportData[0].projectName
                           table.table 
                             thead
                               tr
@@ -40,45 +34,45 @@ block content
                                 th.text-dark(scope='col' style='width: 150px') Type
                                 th.text-dark(scope='col' style='width: 150px') Status
                                 th.text-dark(scope='col' style='width: 600px') Title
-                                th.text-dark(scope='col' style='width: 150px') Pass Rate 
-                                th.text-dark(scope='col' style='width: 150px') Examples
-                                th.text-dark(scope='col' style='width: 200px') Average Time
+                                //- th.text-dark(scope='col' style='width: 150px') Pass Rate 
+                                //- th.text-dark(scope='col' style='width: 150px') Examples
+                                //- th.text-dark(scope='col' style='width: 200px') Average Time
                                 th.text-dark(scope='col') Operation
                             tbody
                             - let i = 0
-                            while i < reportsDetail.length
+                            while i < reportData.length
                               tr
-                                td #{prettyDate(reportsDetail[i].testDate)}
+                                td #{prettyDate(reportData[i].create_time)}
                                 td 
-                                  if reportsDetail[i].type === 'SCENARIO'
-                                    h1.display-6.badge(style='font-size: 120%; background-color: #809A6F')= reportsDetail[i].type
-                                  else if reportsDetail[i].type === 'API'
-                                    h1.display-6.badge(style='font-size: 120%; background-color: #A25B5B')= reportsDetail[i].type
-                                  else 
-                                    h1.display-6.badge(style='font-size: 120%; background-color: #CC9C75')= reportsDetail[i].type
+                                  if reportData[i].report_info.report_type === 'scenario'
+                                    h1.display-6.badge(style='font-size: 120%; background-color: #809A6F') SCENARIO
+                                  else if reportData[i].report_info.report_type === 'api'
+                                    h1.display-6.badge(style='font-size: 120%; background-color: #A25B5B') API
+                                  else if reportData[i].report_info.report_type === 'collection'
+                                    h1.display-6.badge(style='font-size: 120%; background-color: #CC9C75') COLLECTION
                                 td.report-title.list-inline
                                   if reportData[i].finished === true 
                                     h1.badge.bg-success.text-dark.result-badge(style='font-family: Pixeloid Sans, sans-serif;') DONE
                                   else 
                                     h1.badge.bg-warning.text-dark.result-badge(style='font-family: Pixeloid Sans, sans-serif;') RUNNING
                                 td.report-title.list-inline
-                                  each element in reportsDetail[i].reportTitle
+                                  each element in reportData[i].report_title
                                     h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 110%;')= element
-                                td 
-                                  if reportData[i].finished && reportsDetail[i].passRate
-                                    p= reportsDetail[i].passRate
-                                  else 
-                                    h4.badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
-                                td 
-                                  if reportData[i].finished && reportsDetail[i].passExamples
-                                    p= reportsDetail[i].passExamples
-                                  else 
-                                    h4.badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
-                                td 
-                                  if reportData[i].finished && reportsDetail[i].averageTime
-                                    p= reportsDetail[i].averageTime
-                                  else 
-                                    h4.badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
+                                //- td 
+                                //-   if reportData[i].finished && reportsDetail[i].passRate
+                                //-     p= reportsDetail[i].passRate
+                                //-   else 
+                                //-     h4.badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
+                                //- td 
+                                //-   if reportData[i].finished && reportsDetail[i].passExamples
+                                //-     p= reportsDetail[i].passExamples
+                                //-   else 
+                                //-     h4.badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
+                                //- td 
+                                //-   if reportData[i].finished && reportsDetail[i].averageTime
+                                //-     p= reportsDetail[i].averageTime
+                                //-   else 
+                                //-     h4.badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
                                 td 
                                   button.btn.btn-primary.btn-report-detail(type='submit' id=`${reportData[i]._id}`) Detail
                               - i++
