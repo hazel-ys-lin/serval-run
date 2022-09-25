@@ -19,6 +19,7 @@ const displayScenario = async (req, res) => {
 
   let userScenarios = await scenarioGetModel(apiId);
   // console.log('userScenarios: ', userScenarios[0].scenario.examples);
+
   if (userScenarios.length !== 0) {
     res.render('scenarios', { userScenarios: userScenarios, envInfo: envInfo });
   } else {

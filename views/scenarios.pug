@@ -77,13 +77,25 @@ block content
                                                                                 dd.list-inline-item(style='font-size: 90%;')= element.text
                                                                                 br
                                                     td 
-                                                        button.btn.btn-warning.btn-examples(type='submit' id=`${userScenarios[i].scenario._id}` data-bs-toggle='collapse' data-bs-target=`#scenario-examples-${i}` aria-expanded='false' aria-controls=`#scenario-examples-${i}`) More
-                                                        //- .collapse(id=`scenario-examples-${i}`)
-                                                        //-     .p-0 
-                                                        //-         table 
-                                                        //-             tbody 
-                                                        //-                 each element in userScenarios[i].scenario.examples
-                                                        //-                     tr=element.example.email
+                                                        button.btn.btn-warning.btn-examples(type='button' id=`${userScenarios[i].scenario._id}` data-bs-toggle='modal' data-bs-target=`#examples-${userScenarios[i].scenario._id}` data-bs-whatever=`${userScenarios[i].scenario._id}`) More
+                                                        .modal.fade(id=`examples-${userScenarios[i].scenario._id}` tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                                                            .modal-dialog.modal-lg.modal-dialog-scrollable
+                                                                .modal-content
+                                                                    .modal-header
+                                                                        h5#exampleModalLabel.modal-title Examples
+                                                                        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                                                    .modal-body
+                                                                        table 
+                                                                            //- each item in userScenarios[0].scenario.examples
+                                                                            tr
+                                                                            each val, key in userScenarios[0].scenario.examples[0].example
+                                                                                th= key
+                                                                            each example in userScenarios[0].scenario.examples
+                                                                                tr
+                                                                                each val, key in example.example
+                                                                                    td= val
+                                                                    .modal-footer
+                                                                        button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
                                                     td 
                                                         button.btn.btn-danger.btn-delete(type='submit' id=`${userScenarios[i].scenario._id}`) Delete
                                                     td 
