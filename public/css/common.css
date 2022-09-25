@@ -1,8 +1,8 @@
 /* ================================= 
   Base Element Styles
 ==================================== */
-@import url('http://fonts.cdnfonts.com/css/iunito');
-@import url('http://fonts.cdnfonts.com/css/engender-mod-font');
+@import url('https://fonts.cdnfonts.com/css/iunito');
+@import url('https://fonts.cdnfonts.com/css/engender-mod-font');
 
 .basic-info {
   display: flex;
