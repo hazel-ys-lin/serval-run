@@ -21,7 +21,7 @@ block content
             .row.justify-content-center
                 .col-12
                   .input-form
-                    h1(style='font-family: Pixeloid Sans, sans-serif;') Results
+                    h1(style='font-family: Pixeloid Sans, sans-serif; font-size: 2rem;') Results
                     if reportData[0].projectName
                       h1.display-6 #{reportData[0].projectName.toUpperCase()}
                     .card
@@ -52,9 +52,9 @@ block content
                                     h1.display-6.badge(style='font-size: 120%; background-color: #CC9C75') COLLECTION
                                 td.report-title.list-inline
                                   if reportData[i].finished === true 
-                                    h1.badge.bg-success.text-dark.result-badge(style='font-family: Pixeloid Sans, sans-serif;') DONE
+                                    h1.badge.bg-success.text-dark.result-badge(style='font-family: Pixeloid Sans, sans-serif; font-size: 90%;') DONE
                                   else 
-                                    h1.badge.bg-warning.text-dark.result-badge(style='font-family: Pixeloid Sans, sans-serif;') RUNNING
+                                    h1.badge.bg-warning.text-dark.result-badge(style='font-family: Pixeloid Sans, sans-serif; font-size: 90%;') RUNNING
                                 td.report-title.list-inline
                                   each element in reportData[i].report_title
                                     h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 110%;')= element

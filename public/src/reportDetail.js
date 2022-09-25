@@ -2,7 +2,7 @@ const socket = io();
 
 function labelFormatter(label, series) {
   return (
-    '<div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">' +
+    '<div style="font-size:1.1rem; text-align:center; padding:2px; color: #fff; font-weight: 600;">' +
     label +
     '<br>' +
     Math.round(series.percent) +
@@ -46,7 +46,7 @@ socket.on('progress', (message) => {
         {
           label: 'Pass',
           data: successRate,
-          color: '#FA7070',
+          color: '#EA907A',
         },
         {
           label: 'Running',
@@ -56,7 +56,7 @@ socket.on('progress', (message) => {
         {
           label: 'Fail',
           data: failRate,
-          color: '#54BAB9',
+          color: '#68B0AB',
         },
       ];
       $.plot('#donut-chart', donutData, {
@@ -135,12 +135,12 @@ $(function () {
       {
         label: 'Pass',
         data: passRate,
-        color: '#54BAB9',
+        color: '#68B0AB',
       },
       {
         label: 'Fail',
         data: failRate,
-        color: '#FA7070',
+        color: '#EA907A',
       },
     ];
     $.plot('#donut-chart', donutData, {

@@ -65,6 +65,7 @@ const scenarioRunController = async (req, res) => {
     headers: {
       'Content-Type': 'application/json',
     },
+    timeout: 5000,
   };
 
   // stringify object data, send scenario array to queue
@@ -152,6 +153,7 @@ const apiRunController = async (req, res) => {
     headers: {
       'Content-Type': 'application/json',
     },
+    timeout: 5000,
   };
 
   let testAllData = {
@@ -202,6 +204,7 @@ const collectionRunController = async (req, res) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      timeout: 5000,
     };
 
     let scenarios = [];

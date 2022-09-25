@@ -91,7 +91,7 @@ const callHttpRequest = async function (testConfig, testData) {
             `reportStatus-${testData[j].report_id}`
           );
 
-          Cache.publish(CHANNEL_KEY, currentResult);
+          Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
           console.log(
             `[Worker] Published response status to channel ${CHANNEL_KEY} -3 `
           );
@@ -142,8 +142,8 @@ const callHttpRequest = async function (testConfig, testData) {
           });
         }
       }
-      return actualResponseArray;
     }
+    return actualResponseArray;
   } else if (httpMethod === 'GET' || httpMethod === 'DELETE') {
     let actualResponseArray = [];
     let timeBeforeAxios = Date.now();
@@ -166,7 +166,7 @@ const callHttpRequest = async function (testConfig, testData) {
             );
 
             let currentResult = await Cache.hgetall(
-              `reportStatus-${testData[j].report_id}`
+              `reportStatus-${testData.report_id}`
             );
 
             Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
@@ -196,7 +196,7 @@ const callHttpRequest = async function (testConfig, testData) {
             );
 
             let currentResult = await Cache.hgetall(
-              `reportStatus-${testData[j].report_id}`
+              `reportStatus-${testData.report_id}`
             );
 
             Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
@@ -233,7 +233,7 @@ const callHttpRequest = async function (testConfig, testData) {
             );
 
             let currentResult = await Cache.hgetall(
-              `reportStatus-${testData[j].report_id}`
+              `reportStatus-${testData.report_id}`
             );
 
             Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
@@ -263,7 +263,7 @@ const callHttpRequest = async function (testConfig, testData) {
             );
 
             let currentResult = await Cache.hgetall(
-              `reportStatus-${testData[j].report_id}`
+              `reportStatus-${testData.report_id}`
             );
 
             Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
@@ -430,9 +430,8 @@ const callHttpRequest = async function (testConfig, testData) {
           }
         }
       }
+      return actualResponseArray;
     }
-    // TODO: error handler?
-    return actualResponseArray;
   } else {
     console.log(`unknown http method: ${httpMethod}`);
     return false;

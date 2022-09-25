@@ -29,7 +29,7 @@ block content
             .row.justify-content-center
                 .col-12
                   .input-form
-                    h1.report-length(examples=`${reportResponse.length}` style='font-family: Pixeloid Sans, sans-serif;') Report Details
+                    h1.report-length(examples=`${reportResponse.length}` style='font-family: Pixeloid Sans, sans-serif; font-size: 2rem;') Report Details
 
                     .basic-info 
                       .basic-text 
@@ -48,14 +48,20 @@ block content
                                 dd #{reportDetail.collection_id}
                               dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
                                 dt Report Type
-                                dd #{reportDetail.report_info.report_type.toUpperCase()}
+                                dd 
+                                if reportDetail.report_info.report_type === 'scenario'
+                                  h1.display-6.badge(style='font-size: 120%; background-color: #809A6F') SCENARIO
+                                else if reportDetail.report_info.report_type === 'api'
+                                  h1.display-6.badge(style='font-size: 120%; background-color: #A25B5B') API
+                                else if reportDetail.report_info.report_type === 'collection'
+                                  h1.display-6.badge(style='font-size: 120%; background-color: #CC9C75') COLLECTION
                               dl.report-status(status=`${reportStatus}` style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
                                 dt Status
                                 dd(style='font-size: 100%;')
                                   if reportStatus
-                                    .badge.bg-success.result-badge(style='font-family: Pixeloid Sans, sans-serif;') DONE
+                                    .badge.bg-success.text-dark.result-badge(style='font-size: 100%') DONE
                                   else 
-                                    .badge.bg-warning.text-dark.result-badge(style='font-family: Pixeloid Sans, sans-serif;') RUNNING
+                                    .badge.bg-warning.text-dark.result-badge(style='font-size: 100%') RUNNING
 
                       .pass-rate-pie 
                         .card
@@ -127,8 +133,8 @@ block content
                             //- = `${100-reportCalculated[0].passRate}%`
                           else 
                             .progress-bar.progress-finished(role='progressbar' aria-valuemin='0' aria-valuemax='100')
-                            .progress-bar.text-dark.progress-pending(role='progressbar' aria-valuemin='0' aria-valuemax='100')
                             .progress-bar.progress-failed(role='progressbar' aria-valuemin='0' aria-valuemax='100')
+                            .progress-bar.text-dark.progress-pending(role='progressbar' aria-valuemin='0' aria-valuemax='100')
 
                         .progress-bar-description
                           div
@@ -137,9 +143,9 @@ block content
                                 br
                                 .badge(style='float: right; background-color: #68B0AB')= `Passed ${reportCalculated[0].passRate}%`
                                 br
-                                .badge.text-dark(style='float: right; background-color: #FFD36B') Pending 0%
-                                br
                                 .badge(style='float: right; background-color: #EA907A')= `Failed ${100-reportCalculated[0].passRate}%`
+                                br
+                                .badge.text-dark(style='float: right; background-color: #FFD36B') Pending 0%
 
                     .card
                       .card-header Test Example Details

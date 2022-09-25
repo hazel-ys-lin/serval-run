@@ -27,10 +27,10 @@
   --teal: #20c997;
   --cyan: #17a2b8;
   --white: #ffffff;
-  --gray: #6c757d;
+  --gray: #474d53;
   --gray-dark: #343a40;
   --primary: #1b68ff;
-  --secondary: #6c757d;
+  --secondary: #474b4f;
   --success: #3ad29f;
   --info: #17a2b8;
   --warning: #eea303;
@@ -62,10 +62,10 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 body {
   margin: 0;
   font-family: 'Iunito', sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
+  font-size: 1.1rem;
+  font-weight: 550;
   line-height: 1.5;
-  color: #6c757d;
+  color: #474d53;
   text-align: left;
   background-color: #f8f9fa; }
 
@@ -12060,3 +12060,17 @@ a.uppy-Dashboard-poweredBy {
   .sidebar-left {
     height: 100vh;
   }
+
+
+.swal-title {
+  font-size: 2rem !important;
+}
+
+.swal-text {
+  font-size: 1.3rem !important;
+}
+
+.swal-button {
+  background-color: #1b68ff !important;
+  font-size: 1.3rem !important;
+}

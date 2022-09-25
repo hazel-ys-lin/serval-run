@@ -17,7 +17,7 @@ block content
                     //-         li.breadcrumb-item.active(aria-current='page') API
                 
                     form.input-form
-                        h1(style='font-family: Pixeloid Sans, sans-serif;') APIs
+                        h1(style='font-family: Pixeloid Sans, sans-serif; font-size: 2rem;') APIs
                             button.btn.btn-right.btn-success.btn-block.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userApis[0].collectionId}`) Create API
                         #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
                             .modal-dialog
@@ -71,7 +71,7 @@ block content
                                             th.text-dark Endpoint
                                             th.text-dark Severity
                                             th.text-dark Scenarios
-                                            th.text-dark Operations
+                                            th.text-dark Edit
                                             th.text-dark(style='width: 500px') Run Test
                                     tbody
                                         if userApis[0].api 

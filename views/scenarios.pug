@@ -22,7 +22,7 @@ block content
                     //-         li.breadcrumb-item.active(aria-current='page') Scenario
 
                     form.input-form
-                        h1(style='font-family: Pixeloid Sans, sans-serif;') Scenarios
+                        h1(style='font-family: Pixeloid Sans, sans-serif; font-size: 2rem;') Scenarios
                             button.btn.btn-right.btn-success.btn-block.btn-create_scenario(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userScenarios[0].apiId}`) Create Scenario
                         #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
                             .modal-dialog.modal-lg
@@ -56,7 +56,7 @@ block content
                                             th.text-dark(style='width: 150px') Description
                                             th.text-dark(style='width: 360px') Steps
                                             th.text-dark(style='width: 20px') Examples
-                                            th.text-dark(style='width: 20px') Operations
+                                            th.text-dark(style='width: 20px') Edit
                                             th.text-dark Run Test
                                     tbody
                                         if userScenarios[0].scenario

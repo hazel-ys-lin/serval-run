@@ -9,7 +9,7 @@ block content
         .container-fluid
             .row.justify-content-center
                 .col-12
-                    h2.h3.mb-4.page-title(style='font-family: Pixeloid Sans, sans-serif;') Profile
+                    h2.h3.mb-4.page-title(style='font-family: Pixeloid Sans, sans-serif; font-size: 2rem;') Profile
                     .row.mt-5.align-items-center 
                         .col-md-3.text-center.mb-5
                             .avatar.avatar-xl
@@ -17,11 +17,11 @@ block content
                         .col
                             .row.align-items-center
                                 .col-md-7
-                                    h4.mb-1 #{userInfo.userName}
+                                    h4.mb-1(style='font-size: 2rem;') #{userInfo.userName}
                                     p.medium.mb-3
-                                        span.badge.badge-dark QA Engineer
+                                        span.badge.badge-dark(style='font-size: 100%;') Product Manager
                             .row.mb-4
-                                .col-md-7
+                                .col-md-7(style='font-size: 1.2rem;')
                                     h3.text-muted
                                     | Start your test journey with Serval now.
                                 button.btn.btn-lg.btn-right.btn-primary.btn-log_out(type='submit') Log Out
