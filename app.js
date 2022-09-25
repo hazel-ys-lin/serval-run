@@ -22,7 +22,9 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.use('/api/' + API_VERSION, [
+// app.use('/api/' + API_VERSION, // This is used by CSR
+
+app.use('/', [
   require('./routes/scenario_route'),
   require('./routes/project_route'),
   require('./routes/collection_route'),
@@ -34,14 +36,12 @@ app.use('/api/' + API_VERSION, [
 app.use(function (req, res, next) {
   console.log('404', req.url);
   return res.render('error404');
-  // return res.status(404).json({ error: 'error: 404' });
 });
 
 //Handle 500
 app.use(function (err, req, res, next) {
   console.log('error handler: ', err);
   return res.render('error500');
-  // return res.status(500).render('error', { msg: 'error: 500' });
 });
 
 // app.listen(port, () => {

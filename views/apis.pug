@@ -44,7 +44,7 @@ block content
                                                     option DELETE
                                             .mb-3
                                                 label.col-form-label(for='api-endpoint') API Endpoint
-                                                input#api-endpoint.form-control.input_api-endpoint(type='string' placeholder='api/1.0/signin')
+                                                input#api-endpoint.form-control.input_api-endpoint(type='string' placeholder='api/1.0/user/signin')
                                             .mb-3
                                                 label.col-form-label(for='api-severity') Severity
                                                 select#api-severity.form-control.text-muted.input_api-severity
@@ -167,7 +167,7 @@ block content
 
             axios({
                 method: 'post',
-                url: '/api/1.0/editapi',
+                url: '/editapi',
                 data: {
                     collectionId: collectionId,
                     apiName: apiName,
@@ -194,14 +194,25 @@ block content
             .catch((error) => {
                 console.log('in error');
                 console.log('catch api error')
-                swal({
-                        text: 'Create API error',
+                if (error.response.status === 401) {
+                    swal({
+                            text: 'Please log in first',
+                            icon: "error",
+                            confirmButtonClass: "btn-danger",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                } else {
+                    swal({
+                        text: 'Create API failed',
                         icon: "error",
                         confirmButtonClass: "btn-danger",
-                })
-                setTimeout(()=> {
-                    window.location.reload();
-                }, 2000)
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                }
             })
         })
 
@@ -216,7 +227,7 @@ block content
 
             axios({
                 method: 'delete',
-                url: '/api/1.0/editapi',
+                url: '/editapi',
                 data: {
                     collectionId: collectionId,
                     apiId: apiId,
@@ -241,15 +252,26 @@ block content
             .catch((error) => {
                 console.log('in error');
                 console.log('catch: ', error)
-                swal({
-                        text: 'Delete API error',
-                        icon: "error",
-                        confirmButtonClass: "btn-danger",
-                })
-                setTimeout(()=> {
-                    window.location.reload();
-                }, 2000)
-                //- alert('delete API error')
+                if (error.response.status === 401) {
+                    swal({
+                            text: 'Please log in first',
+                            icon: "error",
+                            confirmButtonClass: "btn-danger",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                } else {
+                    swal({
+                            text: 'Delete API failed',
+                            icon: "error",
+                            confirmButtonClass: "btn-danger",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('delete API error')
+                    }
             })
         })
 
@@ -275,7 +297,7 @@ block content
 
             axios({
                 method: 'post',
-                url: '/api/1.0/apirun',
+                url: '/apirun',
                 data: {
                     collectionId: collectionId,
                     apiId: apiId,
@@ -304,15 +326,26 @@ block content
             })
             .catch((error) => {
                 console.log('catch: ', error)
-                swal({
-                        text: 'Add api test to running list error',
+                if (error.response.status === 401) {
+                    swal({
+                            text: 'Please log in first',
+                            icon: "error",
+                            confirmButtonClass: "btn-danger",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                } else {
+                    swal({
+                        text: 'Add api test to running list failed',
                         icon: "error",
                         confirmButtonClass: "btn-danger",
-                })
-                setTimeout(()=> {
-                    window.location.reload();
-                }, 2000)
-                //- alert('Run api test error')
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('Run api test error')
+                }
             })
         })
 
@@ -337,7 +370,7 @@ block content
 
             axios({
                 method: 'post',
-                url: '/api/1.0/collectionrun',
+                url: '/collectionrun',
                 data: {
                     collectionId: collectionId,
                     domainName: domainName,
@@ -365,14 +398,25 @@ block content
             })
             .catch((error) => {
                 console.log('catch: ', error)
-                swal({
-                        text: 'Add collection test to running list error',
+                if (error.response.status === 401) {
+                    swal({
+                            text: 'Please log in first',
+                            icon: "error",
+                            confirmButtonClass: "btn-danger",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                } else {
+                    swal({
+                        text: 'Add collection test to running list failed',
                         icon: "error",
                         confirmButtonClass: "btn-danger",
-                })
-                setTimeout(()=> {
-                    window.location.reload();
-                }, 2000)
-                //- alert('Run collection test error')
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('Run collection test error')
+                }
             })
         })

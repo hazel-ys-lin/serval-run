@@ -131,7 +131,7 @@ const getReportResponseController = async (req, res) => {
     }
 
     // console.log(`*********8`, new Date().toISOString());
-    console.log('reportCalculated: ', reportCalculated);
+    // console.log('reportCalculated: ', reportCalculated);
 
     return res.render('reportdetail', {
       reportStatus: reportStatus,

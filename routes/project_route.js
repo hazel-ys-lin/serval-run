@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { wrapAsync, authentication } = require('../util/util');
+const { wrapAsync, sessionAuth } = require('../util/util');
 const {
   displayProject,
   projectInsertController,

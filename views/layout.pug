@@ -58,11 +58,11 @@ html
                           i.fe.fe-home.fe-16
                           span.ml-3.item-text(style="font-size: 1.3rem;") Dashboard
                       li.nav-item.navbar-nav(style='text-align: left;')
-                        a.btn.btn-lg.nav-link.pl-3.btn-profile(style='text-align: left;' href='https://serval.run/api/1.0/profile')
+                        a.btn.btn-lg.nav-link.pl-3.btn-profile(style='text-align: left;' href='https://serval.run/profile')
                           i.fe.fe-layers.fe-16
                           span.ml-3.item-text(style="font-size: 1.3rem;") Profile
                       li.nav-item.navbar-nav(style='text-align: left;')
-                        a.btn.btn-lg.nav-link.pl-3.btn-my_project(style='text-align: left;' href='https://serval.run/api/1.0/projects')
+                        a.btn.btn-lg.nav-link.pl-3.btn-my_project(style='text-align: left;' href='https://serval.run/projects')
                           i.fe.fe-grid.fe-16
                           span.ml-3.item-text(style="font-size: 1.3rem;") Project
           .simplebar-placeholder(style='width: 255px; height: 977px;')
@@ -87,7 +87,7 @@ html
     //-       li.nav-item.d-none.d-sm-inline-block
     //-         a.nav-link(href='https://serval.run/') Home
     //-       li.nav-item.d-none.d-sm-inline-block
-    //-         a.btn.btn-outline-secondary.btn-profile(href='https://serval.run/api/1.0/profile') Profile
+    //-         a.btn.btn-outline-secondary.btn-profile(href='https://serval.run/profile') Profile
 
     //- // Main Sidebar Container
     //- //- aside.main-sidebar.sidebar-dark-info.elevation-4
@@ -115,7 +115,7 @@ html
     //-               i.right.fas.fa-angle-left
     //-           ul.nav.nav-treeview
     //-             li.nav-item.btn-my_project
-    //-               a.nav-link(href='https://serval.run/api/1.0/projects')
+    //-               a.nav-link(href='https://serval.run/projects')
     //-                 i.far.fa-circle.nav-icon
     //-                 p My Projects
     //-           //- li.nav-item.menu-open
@@ -126,7 +126,7 @@ html
     //-           //-       i.right.fas.fa-angle-left
     //-           //-   ul.nav.nav-treeview
     //-           //-     li.nav-item
-    //-           //-       a.nav-link(href='https://serval.run/api/1.0/reports')
+    //-           //-       a.nav-link(href='https://serval.run/reports')
     //-           //-         i.far.fa-circle.nav-icon
     //-           //-         p Statistics
     //-           //-     li.nav-item
@@ -151,22 +151,22 @@ html
 
       axios({
           method: 'get',
-          url: '/api/1.0/profile',
+          url: '/profile',
           headers: {'Content-Type': 'application/json'}
       })
       .then((response) => {
         if (response.status === 200) {
-          window.location.assign('https://serval.run/api/1.0/profile');
+          window.location.assign('https://serval.run/profile');
         }
         if (response.status === 203) {
           swal({
             text: 'Please log in first',
           })
           setTimeout(()=> {
-            window.location.assign('https://serval.run/api/1.0/user');
+            window.location.assign('https://serval.run/user');
           }, 2000)
           //- alert('Please log in first');
-          //- window.location.assign('/api/1.0/user');
+          //- window.location.assign('/user');
         }
       })
       .catch((error) => {
@@ -181,24 +181,24 @@ html
 
       axios({
           method: 'get',
-          url: '/api/1.0/projects',
+          url: '/projects',
           headers: {'Content-Type': 'application/json'}
       })
       .then((response) => {
         if (response.status === 200) {
           console.log('status 200')
-          window.location.assign('https://serval.run/api/1.0/projects');
+          window.location.assign('https://serval.run/projects');
         }
         if (response.status === 203) {
           swal({
             text: 'Please log in first',
           })
           setTimeout(()=> {
-            window.location.assign('https://serval.run/api/1.0/user');
+            window.location.assign('https://serval.run/user');
           }, 2000)
           //- console.log('status 203')
           //- alert('Please log in first');
-          //- window.location.assign('./api/1.0/user');
+          //- window.location.assign('./user');
         }
       })
       .catch((error) => {

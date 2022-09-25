@@ -173,7 +173,7 @@ block content
 
                 axios({
                     method: 'post',
-                    url: '/api/1.0/editscenario',
+                    url: '/editscenario',
                     data: {
                         apiId: apiId,
                         featureCode: featureCode,
@@ -244,7 +244,7 @@ block content
 
             axios({
                 method: 'post',
-                url: '/api/1.0/scenariorun',
+                url: '/scenariorun',
                 data: {
                     apiId: apiId,
                     scenarioId: scenarioId,
@@ -296,7 +296,7 @@ block content
 
             axios({
                 method: 'delete',
-                url: '/api/1.0/editscenario',
+                url: '/editscenario',
                 data: {
                     apiId: apiId,
                     scenarioId: scenarioId,
@@ -354,7 +354,7 @@ block content
 
             axios({
                 method: 'post',
-                url: '/api/1.0/apirun',
+                url: '/apirun',
                 data: {
                     apiId: apiId,
                     scenarioId: scenarioId,

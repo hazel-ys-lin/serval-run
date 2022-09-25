@@ -3,6 +3,7 @@ const {
   userSignUpModel,
   userSignInModel,
 } = require('../models/user_model');
+const { validationResult } = require('express-validator');
 const { userCheckService } = require('../service/dbUpdate_service');
 const bcrypt = require('bcryptjs');
 
@@ -11,7 +12,14 @@ const userCheck = async (req, res) => {
 };
 
 const userSignUpController = async (req, res) => {
-  let userCheckResult = await userCheckService(req.body.userEmail);
+  const { userName, userEmail, userPassword } = req.body;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errorMessages: errors.array() });
+  }
+
+  let userCheckResult = await userCheckService(userEmail);
 
   if (!userCheckResult) {
     req.session.msg = 'Email already exists';
@@ -19,9 +27,9 @@ const userSignUpController = async (req, res) => {
   }
 
   const userInfo = {
-    userName: req.body.userName,
-    userEmail: req.body.userEmail,
-    userPassword: req.body.userPassword,
+    userName: userName,
+    userEmail: userEmail,
+    userPassword: userPassword,
     // userPicture: req.body.userPicture,
   };
 
@@ -42,29 +50,39 @@ const userSignUpController = async (req, res) => {
 };
 
 const userSignInController = async (req, res) => {
-  const userInfo = {
-    userEmail: req.body.userEmail,
-    userPassword: req.body.userPassword,
-  };
+  const { userEmail, userPassword } = req.body;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errorMessages: errors.array() });
+  }
+
   try {
+    let userInfo = {
+      userEmail: userEmail,
+      userPassword: userPassword,
+    };
+
     let userSignInResult = await userSignInModel(userInfo);
 
     if (!userSignInResult) {
-      return res.status(403).json({ msg: 'Sign in failed' });
-    } else {
-      req.session.userId = userSignInResult._id;
-      req.session.userName = userSignInResult.user_name;
-      req.session.userEmail = userSignInResult.user_email;
-      req.session.isAuth = true;
-
-      const userInfo = {
-        userId: userSignInResult._id,
-        userName: userSignInResult.user_name,
-        userEmail: userSignInResult.user_email,
-      };
-
-      return res.render('profile', { userInfo: userInfo });
+      return res.status(403).json({
+        errorMessages: 'Sign in failed. Please check your email or password',
+      });
     }
+
+    req.session.userId = userSignInResult._id;
+    req.session.userName = userSignInResult.user_name;
+    req.session.userEmail = userSignInResult.user_email;
+    req.session.isAuth = true;
+
+    userInfo = {
+      userId: userSignInResult._id,
+      userName: userSignInResult.user_name,
+      userEmail: userSignInResult.user_email,
+    };
+
+    return res.render('profile', { userInfo: userInfo });
   } catch (error) {
     console.log('error in user signin controller', error);
     return false;
@@ -77,9 +95,9 @@ const userLogOutController = async (req, res) => {
 };
 
 const userDisplayController = async (req, res) => {
-  if (!req.session.isAuth) {
-    return res.status(203).json({ msg: 'please log in' });
-  }
+  // if (!req.session.isAuth) {
+  //   return res.status(203).json({ msg: 'please log in' });
+  // }
 
   const userInfo = {
     userId: req.session.userId,
