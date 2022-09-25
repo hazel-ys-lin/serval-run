@@ -29,7 +29,7 @@ block content
             .row.justify-content-center
                 .col-12
                   .input-form
-                    h1.report-length(examples=`${reportResponse.length}` style='font-family: Pixeloid Sans, sans-serif; font-size: 2rem;') Report Details
+                    h1.report-length(examples=`${reportResponse.length}` style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem;') Report Details
 
                     .basic-info 
                       .basic-text 
@@ -174,15 +174,15 @@ block content
                               if reportResponse[i].pass === undefined
                                 td(style='text-align: center;')
                                   h4 
-                                    .badge.bg-warning.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PENDING
+                                    .badge.bg-warning.result-badge(style='font-family: PF Tempesta Seven Extended, sans-serif;') PENDING
                               else if reportResponse[i].expected_status_code === reportResponse[i].response_status
                                 td(style='text-align: center;')
                                   h4  
-                                    .badge.bg-success.text-secondary.result-badge(style='font-family: Pixeloid Sans, sans-serif;') PASS
+                                    .badge.bg-success.text-secondary.result-badge(style='font-family: PF Tempesta Seven Extended, sans-serif;') PASS
                               else if reportResponse[i].expected_status_code !== reportResponse[i].response_status
                                 td(style='text-align: center;')
                                   h4
-                                    .badge.bg-danger.result-badge(style='font-family: Pixeloid Sans, sans-serif;') FAIL
+                                    .badge.bg-danger.result-badge(style='font-family: PF Tempesta Seven Extended, sans-serif;') FAIL
                               td(style='text-align: center;') #{reportResponse[i].expected_status_code}
                               td(style='text-align: center;') 
                                 if !reportResponse[i].response_status
