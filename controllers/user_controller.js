@@ -95,9 +95,9 @@ const userLogOutController = async (req, res) => {
 };
 
 const userDisplayController = async (req, res) => {
-  // if (!req.session.isAuth) {
-  //   return res.status(203).json({ msg: 'please log in' });
-  // }
+  if (!req.session.isAuth) {
+    return res.status(203).json({ msg: 'please log in' });
+  }
 
   const userInfo = {
     userId: req.session.userId,
