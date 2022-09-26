@@ -49,24 +49,31 @@ block content
             headers: {'Content-Type': 'application/json'}
         })
         .then((response) => {
-            if (response.status === 200) {
-                window.location.assign('/profile');
-            }
-            if (response.status === 203) {
-                swal({
-                    text: 'Please log in first',
-                    //- icon: "success",
-                    //- confirmButtonClass: "btn-success",
-                })
-                setTimeout(()=> {
-                    window.location.assign('/user');
-                }, 2000)
-                //- alert('Please log in first');
-                //- window.location.assign('/user');
+                if (response.status === 200) {
+                    window.location.assign('/profile');
+                }
             }
         })
         .catch((error) => {
             console.log('catch error: ', error)
-            window.location.assign('/');
+            if (error.response.status === 403) {
+                swal({
+                    text: 'Please log in first',
+                    icon: "error",
+                    confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.assign('https://serval.run/user');
+                }, 3000)
+            } else {
+            swal({
+                text: 'Redirect failed',
+                icon: "error",
+                confirmButtonClass: "btn-danger",
+            });
+            setTimeout(()=> {
+                window.location.assign('https://serval.run/');
+            }, 3000);
+            }
         })
         })
