@@ -42,7 +42,7 @@ const urlValidation = function () {
 
 const sessionAuth = function () {
   return async function (req, res, next) {
-    console.log('in authentication');
+    // console.log('in authentication');
     // let accessToken = req.get('Authorization');
     if (!req.session.isAuth) {
       return res.status(403).send({ errorMessages: 'Unauthorized' });
@@ -51,7 +51,7 @@ const sessionAuth = function () {
     if (!req.session.isAuth === 'null') {
       return res.status(403).send({ errorMessages: 'Unauthorized' });
     }
-    console.log('next in sessionAuth');
+    // console.log('next in sessionAuth');
     return next();
   };
   // if (!req.session.isAuth) {

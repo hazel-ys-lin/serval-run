@@ -50,16 +50,19 @@ block content
                                 .card-tools
                             .card-body.p-0
                                 table.table
-                                    thead
-                                        tr
-                                            th.text-dark(style='width: 80px') Title
-                                            th.text-dark(style='width: 150px') Description
-                                            th.text-dark(style='width: 360px') Steps
-                                            th.text-dark(style='width: 20px') Examples
-                                            th.text-dark(style='width: 20px') Edit
-                                            th.text-dark Run Test
-                                    tbody
-                                        if userScenarios[0].scenario
+                                    if !userScenarios[0].scenario
+                                        div(style='display: flex; justify-content: center;')
+                                            .text-muted.display-6(style='padding-top: 20px') Create your first scenario!
+                                    else 
+                                        thead
+                                            tr
+                                                th.text-dark(style='width: 80px') Title
+                                                th.text-dark(style='width: 150px') Description
+                                                th.text-dark(style='width: 360px') Steps
+                                                th.text-dark(style='width: 20px') Examples
+                                                th.text-dark(style='width: 20px') Edit
+                                                th.text-dark Run Test
+                                        tbody
                                             - let i = 0
                                             while i < userScenarios.length
                                                 tr 

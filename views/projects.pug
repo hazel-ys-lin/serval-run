@@ -39,32 +39,35 @@ block content
                                 .card-tools
                             .card-body.p-0
                                 table.table
-                                    thead
-                                        tr
-                                            //- th(style='width: 10px') #
-                                            th.text-dark Project ID
-                                            th.text-dark Name
-                                            th.text-dark Environments
-                                            th.text-dark Collections
-                                            th.text-dark Edit
-                                            th.text-dark Reports
-                                            //- th(style='width: 40px') Label
-                                    tbody
-                                        if userProjects[0].project_name
-                                            - let i = 0
-                                            while i < userProjects.length
-                                                tr 
-                                                    td #{userProjects[i]._id}
-                                                    td #{userProjects[i].project_name}
-                                                    td 
-                                                        button.btn.btn-primary.btn-environments(type='submit' id=`${userProjects[i]._id}`) View
-                                                    td 
-                                                        button.btn.btn-warning.btn-collections(type='submit' id=`${userProjects[i]._id}`) View
-                                                    td 
-                                                        button.btn.btn-danger.btn-delete(type='submit' id=`${userProjects[i]._id}`) Delete
-                                                    td 
-                                                        button.btn.btn-secondary.btn-report(type='submit' id=`${userProjects[i]._id}`) View
-                                                - i++
+                                    if !userProjects[0].project_name
+                                        div(style='display: flex; justify-content: center;')
+                                            .text-muted.display-6(style='padding-top: 20px') Create your first project!
+                                    else 
+                                        thead
+                                            tr
+                                                //- th(style='width: 10px') #
+                                                th.text-dark Project ID
+                                                th.text-dark Name
+                                                th.text-dark Environments
+                                                th.text-dark Collections
+                                                th.text-dark Edit
+                                                th.text-dark Reports
+                                                //- th(style='width: 40px') Label
+                                        tbody
+                                                - let i = 0
+                                                while i < userProjects.length
+                                                    tr 
+                                                        td #{userProjects[i]._id}
+                                                        td #{userProjects[i].project_name}
+                                                        td 
+                                                            button.btn.btn-primary.btn-environments(type='submit' id=`${userProjects[i]._id}`) View
+                                                        td 
+                                                            button.btn.btn-warning.btn-collections(type='submit' id=`${userProjects[i]._id}`) View
+                                                        td 
+                                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userProjects[i]._id}`) Delete
+                                                        td 
+                                                            button.btn.btn-secondary.btn-report(type='submit' id=`${userProjects[i]._id}`) View
+                                                    - i++
 
     script.
         $('.btn-create_project').on('click', function(event) {

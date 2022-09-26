@@ -45,25 +45,29 @@ block content
                                 .card-tools
                             .card-body.p-0
                                 table.table
-                                    thead
-                                        tr
-                                            //- th(style='width: 10px') #
-                                            th.text-dark Environment ID
-                                            th.text-dark Domain Name (URL)
-                                            th.text-dark Title
-                                            th.text-dark Operations
-                                            //- th(style='width: 40px') Label
-                                    tbody
-                                        if environments[0].title
-                                            - let i = 0
-                                            while i < environments.length
-                                                tr 
-                                                    td #{environments[i]._id}
-                                                    td #{environments[i].domain_name}
-                                                    td #{environments[i].title}
-                                                    td 
-                                                        button.btn.btn-danger.btn-delete(type='submit' id=`${environments[i]._id}`) Delete
-                                                - i++
+                                    if !environments[0].title
+                                        div(style='display: flex; justify-content: center;')
+                                            .text-muted.display-6(style='padding-top: 20px') Create your environment to run test!
+                                    else 
+                                        thead
+                                            tr
+                                                //- th(style='width: 10px') #
+                                                th.text-dark Environment ID
+                                                th.text-dark Domain Name (URL)
+                                                th.text-dark Title
+                                                th.text-dark Operations
+                                                //- th(style='width: 40px') Label
+                                        tbody
+                                            if environments[0].title
+                                                - let i = 0
+                                                while i < environments.length
+                                                    tr 
+                                                        td #{environments[i]._id}
+                                                        td #{environments[i].domain_name}
+                                                        td #{environments[i].title}
+                                                        td 
+                                                            button.btn.btn-danger.btn-delete(type='submit' id=`${environments[i]._id}`) Delete
+                                                    - i++
     script.
         $('.btn-create_environment').on('click', function(event) {
             console.log('create_environment clicked')

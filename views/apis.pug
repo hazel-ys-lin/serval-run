@@ -64,49 +64,52 @@ block content
                                 .card-tools
                             .card-body.p-0
                                 table.table
-                                    thead
-                                        tr
-                                            th.text-dark Name
-                                            th.text-dark Method
-                                            th.text-dark Endpoint
-                                            th.text-dark Severity
-                                            th.text-dark Scenarios
-                                            th.text-dark Edit
-                                            th.text-dark(style='width: 500px') Run Test
-                                    tbody
-                                        if userApis[0].api 
-                                            - let i = 0
-                                            while i < userApis.length
-                                                tr 
-                                                    td #{userApis[i].api.api_name}
-                                                    td #{userApis[i].api.http_method}
-                                                    td #{userApis[i].api.api_endpoint}
-                                                    td #{userApis[i].api.severity}
-                                                    td 
-                                                        button.btn.btn-warning.btn-scenarios(type='submit' id=`${userApis[i].api._id}`) View
-                                                    td 
-                                                        button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
-                                                    td 
-                                                        button.btn.btn-info.btn-apitest(type='submit' id=`${userApis[i].api._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-api-${i}` aria-expanded='false' aria-controls=`#runtest-api-${i}`) Run API Test
-                                                        .collapse.env-table(id=`runtest-api-${i}`)
-                                                            .p-0
-                                                                table.table
-                                                                    thead
-                                                                        tr 
-                                                                            th.text-dark Domain
-                                                                            th.text-dark Title
-                                                                            th.text-dark Run Test
-                                                                    tbody
-                                                                        if envInfo
-                                                                            - let j = 0
-                                                                            while j < envInfo.length
-                                                                                tr 
-                                                                                    td #{envInfo[j].domain_name}
-                                                                                    td #{envInfo[j].title}
-                                                                                    td 
-                                                                                        button.btn.btn-info.btn-apitest-in-toggle(type='submit' id=`${userApis[i].api._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
-                                                                                - j++
-                                                - i++
+                                    if !userApis[0].api
+                                        div(style='display: flex; justify-content: center;')
+                                            .text-muted.display-6(style='padding-top: 20px') Create your first API!
+                                    else 
+                                        thead
+                                            tr
+                                                th.text-dark Name
+                                                th.text-dark Method
+                                                th.text-dark Endpoint
+                                                th.text-dark Severity
+                                                th.text-dark Scenarios
+                                                th.text-dark Edit
+                                                th.text-dark(style='width: 500px') Run Test
+                                        tbody
+                                                - let i = 0
+                                                while i < userApis.length
+                                                    tr 
+                                                        td #{userApis[i].api.api_name}
+                                                        td #{userApis[i].api.http_method}
+                                                        td #{userApis[i].api.api_endpoint}
+                                                        td #{userApis[i].api.severity}
+                                                        td 
+                                                            button.btn.btn-warning.btn-scenarios(type='submit' id=`${userApis[i].api._id}`) View
+                                                        td 
+                                                            button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
+                                                        td 
+                                                            button.btn.btn-info.btn-apitest(type='submit' id=`${userApis[i].api._id}` data-bs-toggle='collapse' data-bs-target=`#runtest-api-${i}` aria-expanded='false' aria-controls=`#runtest-api-${i}`) Run API Test
+                                                            .collapse.env-table(id=`runtest-api-${i}`)
+                                                                .p-0
+                                                                    table.table
+                                                                        thead
+                                                                            tr 
+                                                                                th.text-dark Domain
+                                                                                th.text-dark Title
+                                                                                th.text-dark Run Test
+                                                                        tbody
+                                                                            if envInfo
+                                                                                - let j = 0
+                                                                                while j < envInfo.length
+                                                                                    tr 
+                                                                                        td #{envInfo[j].domain_name}
+                                                                                        td #{envInfo[j].title}
+                                                                                        td 
+                                                                                            button.btn.btn-info.btn-apitest-in-toggle(type='submit' id=`${userApis[i].api._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
+                                                                                    - j++
+                                                    - i++
                     .input-form
                         if envInfo && userApis[0].api
                             button.btn.btn-secondary.btn-runtest-collection(type='submit' id=`${userApis[0].collectionId}` data-bs-toggle='collapse' data-bs-target='#runtest-multi' aria-expanded='false' aria-controls='runtest-multi') Run Collection Test
