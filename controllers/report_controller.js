@@ -52,6 +52,7 @@ const displayAllReport = async (req, res) => {
   //   reportCalculated[j].projectName = projectName;
   // };
   // console.log('*********6', new Date().toISOString());
+  console.log('reportTitle in displayAllReport: ', reportTitle);
 
   if (reportTitle.length !== 0) {
     res.render('reports', {
