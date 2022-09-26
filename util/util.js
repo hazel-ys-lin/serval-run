@@ -45,14 +45,12 @@ const sessionAuth = function () {
     console.log('in authentication');
     // let accessToken = req.get('Authorization');
     if (!req.session.isAuth) {
-      res.status(401).send({ errorMessages: 'Unauthorized' });
-      return;
+      return res.status(403).send({ errorMessages: 'Unauthorized' });
     }
 
     // accessToken = accessToken.replace('Bearer ', '');
     if (!req.session.isAuth === 'null') {
-      res.status(401).send({ errorMessages: 'Unauthorized' });
-      return;
+      return res.status(403).send({ errorMessages: 'Unauthorized' });
     }
   };
   // if (!req.session.isAuth) {

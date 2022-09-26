@@ -169,7 +169,7 @@ html
       })
       .catch((error) => {
         console.log('catch error: ', error)
-        if (error.response.status === 401) {
+        if (error.response.status === 403) {
             swal({
                 text: 'Please log in first',
                 icon: "error",
@@ -211,7 +211,7 @@ html
       })
       .catch((error) => {
         console.log('catch error: ', error)
-        if (error.response.status === 401) {
+        if (error.response.status === 403) {
             swal({
                 text: 'Please log in first',
                 icon: "error",
