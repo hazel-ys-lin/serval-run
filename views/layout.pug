@@ -176,7 +176,7 @@ html
                 confirmButtonClass: "btn-danger",
             })
             setTimeout(()=> {
-                window.location.reload();
+                window.location.assign('https://serval.run/user');
             }, 2000)
         }
         //- window.location.assign('/');
@@ -197,13 +197,13 @@ html
           console.log('status 200')
           window.location.assign('https://serval.run/projects');
         }
-        if (response.status === 203) {
-          swal({
-            text: 'Please log in first',
-          })
-          setTimeout(()=> {
-            window.location.assign('https://serval.run/user');
-          }, 2000)
+        //- if (response.status === 203) {
+        //-   swal({
+        //-     text: 'Please log in first',
+        //-   })
+        //-   setTimeout(()=> {
+        //-     window.location.assign('https://serval.run/user');
+        //-   }, 2000)
           //- console.log('status 203')
           //- alert('Please log in first');
           //- window.location.assign('./user');
@@ -211,6 +211,16 @@ html
       })
       .catch((error) => {
         console.log('catch error: ', error)
-        window.location.assign('/');
+        if (error.response.status === 401) {
+            swal({
+                text: 'Please log in first',
+                icon: "error",
+                confirmButtonClass: "btn-danger",
+            })
+            setTimeout(()=> {
+                window.location.assign('https://serval.run/user');
+            }, 2000)
+        }
+        //- window.location.assign('/');
       })
     })
