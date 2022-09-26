@@ -19,12 +19,14 @@ const displayAllReport = async (req, res) => {
 
   // console.log('*********1', new Date().toISOString());
   let projectName = await projectNameGetModel(projectId);
+  console.log('projectName in displayAllReport: ', projectName);
   // console.log('*********2', new Date().toISOString());
   let reportData = await getReportModel(projectId);
-  // console.log('reportData: ', reportData);
+  console.log('reportData in displayAllReport: ', reportData);
   // console.log('*********3', new Date().toISOString());
   // refactored "titleOfReport", it once took too long (5s)
   let reportTitle = await titleOfReport(reportData);
+  console.log('reportData in reportTitle: ', reportTitle);
   // console.log('*********4', new Date().toISOString());
 
   for (let i = 0; i < reportTitle.length; i++) {
