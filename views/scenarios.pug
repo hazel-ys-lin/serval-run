@@ -91,9 +91,9 @@ block content
                                                                         table 
                                                                             //- each item in userScenarios[0].scenario.examples
                                                                             tr
-                                                                            each val, key in userScenarios[0].scenario.examples[0].example
+                                                                            each val, key in userScenarios[i].scenario.examples[0].example
                                                                                 th= key
-                                                                            each example in userScenarios[0].scenario.examples
+                                                                            each example in userScenarios[i].scenario.examples
                                                                                 tr
                                                                                 each val, key in example.example
                                                                                     td= val
