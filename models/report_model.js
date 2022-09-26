@@ -369,6 +369,7 @@ const getReportModel = async function (projectId) {
   let reportData = await reportModel.find({
     project_id: projectId,
   });
+  console.log('reportData in getReportModel: ', reportData);
 
   return reportData;
 };
