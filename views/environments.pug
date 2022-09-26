@@ -122,15 +122,10 @@ block content
             .catch((error) => {
                 console.log('in error');
                 console.log('create environment error')
-                if (error.response.status === 422) {
-                    let errorArray = [];
-                    error.response.data.errorMessages.forEach((elem) => {
-                        errorArray.push(elem.msg);
-                    })
-                    let errorMsg = errorArray.join('\n');
+                if (error.response.status === 403) {
                     swal({
                         //- text: 'Please input your information properly',
-                        text: errorMsg,
+                        text: 'Please enter valid URL',
                         icon: "error",
                         confirmButtonClass: "btn-danger",
                     })

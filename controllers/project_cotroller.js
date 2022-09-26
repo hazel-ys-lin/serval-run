@@ -75,11 +75,12 @@ const envInsertController = async function (req, res) {
   //   return res.status(401).json({ msg: 'Cannot verify url' });
   // }
 
-  const errors = validationResult(req);
+  // const errors = validationResult(req);
+  // console.log('errors: ', errors);
 
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errorMessages: errors.array() });
-  }
+  // if (!errors.isEmpty()) {
+  //   return res.status(422).json({ errorMessages: errors.array() });
+  // }
 
   const { projectId, domainName, title } = req.body;
 

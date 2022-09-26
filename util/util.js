@@ -29,15 +29,33 @@ const userValidation = function () {
 
 // Check if a JavaScript string is a URL: https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
 const urlValidation = function () {
-  return [
-    check('domainName')
-      .custom((val) => {
-        val.match(
-          /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
-        );
-      })
-      .withMessage('Please input proper url'),
-  ];
+  return async function (req, res, next) {
+    const { domainName } = req.body;
+    let urlValidate = domainName.match(
+      /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/
+    );
+    console.log('urlValidate in middleware: ', urlValidate);
+    if (!urlValidate) {
+      return res.status(403).send({ errorMessages: 'Not an url' });
+    }
+    return next();
+  };
+  // let string = '123';
+  // console.log(
+  //   'hihi',
+  //   string.match(
+  //     /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/
+  //   )
+  // );
+  // return [
+  //   check('domainName')
+  //     .custom((regex) => {
+  //       regex.match(
+  //         /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/
+  //       );
+  //     })
+  //     .withMessage('Please input proper url'),
+  // ];
 };
 
 const sessionAuth = function () {
