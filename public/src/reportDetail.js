@@ -2,7 +2,7 @@ const socket = io();
 
 function labelFormatter(label, series) {
   return (
-    '<div style="font-size:1.1rem; text-align:center; padding:2px; color: #fff; font-weight: 600;">' +
+    '<div style="font-size:1.1rem; text-align:center; padding:2px; color: #001a4e; font-weight: 600;">' +
     label +
     '<br>' +
     Math.round(series.percent) +
@@ -167,11 +167,12 @@ $(function () {
      * ---------
      */
     let totalExamples = $('#bar-chart').attr('examples').split('/');
+    console.log('totalExamples: ', totalExamples);
     let bar_data = {
       data: [
-        [1, Number(totalExamples[0]) + Number(totalExamples[1])],
+        [1, Number(totalExamples[1])],
         [2, Number(totalExamples[0])],
-        [3, Number(totalExamples[1])],
+        [3, Number(totalExamples[1]) - Number(totalExamples[0])],
       ],
       bars: { show: true },
     };
