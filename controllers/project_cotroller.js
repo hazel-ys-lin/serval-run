@@ -13,9 +13,9 @@ const displayProject = async (req, res) => {
   // get all the projects to array in database
   const userEmail = req.session.userEmail;
   let userProjects = await projectGetModel(userEmail);
-  // if (!req.session.isAuth) {
-  //   return res.status(203).json({ msg: 'Please log in' });
-  // }
+  if (!req.session.isAuth) {
+    return res.status(403).json({ msg: 'Please log in' });
+  }
 
   const userId = await userGetModel(userEmail);
 
