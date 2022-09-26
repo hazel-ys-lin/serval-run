@@ -10,12 +10,13 @@ const {
 const { validationResult } = require('express-validator');
 
 const displayProject = async (req, res) => {
+  // if (!req.session.isAuth) {
+  //   return res.status(403).json({ msg: 'Please log in' });
+  // }
   // get all the projects to array in database
   const userEmail = req.session.userEmail;
+  // console.log('userEmail: ', userEmail);
   let userProjects = await projectGetModel(userEmail);
-  if (!req.session.isAuth) {
-    return res.status(403).json({ msg: 'Please log in' });
-  }
 
   const userId = await userGetModel(userEmail);
 

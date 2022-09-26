@@ -4,7 +4,10 @@ const {
   userSignInModel,
 } = require('../models/user_model');
 const { validationResult } = require('express-validator');
-const { userCheckService } = require('../service/dbUpdate_service');
+const {
+  userCheckService,
+  userInfoFind,
+} = require('../service/dbUpdate_service');
 const bcrypt = require('bcryptjs');
 
 const userCheck = async (req, res) => {
@@ -51,6 +54,7 @@ const userSignUpController = async (req, res) => {
 
 const userSignInController = async (req, res) => {
   const { userEmail, userPassword } = req.body;
+  // console.log(userEmail, userPassword);
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -95,9 +99,10 @@ const userLogOutController = async (req, res) => {
 };
 
 const userDisplayController = async (req, res) => {
-  if (!req.session.isAuth) {
-    return res.status(403).json({ msg: 'please log in' });
-  }
+  // if (!req.session.isAuth) {
+  //   return res.status(403).json({ msg: 'please log in' });
+  // }
+  // let userData = await userInfoFind(req.session.userId);
 
   const userInfo = {
     userId: req.session.userId,

@@ -9,9 +9,11 @@ const {
 } = require('../controllers/user_controller');
 
 router.route('/user').get(wrapAsync(userCheck));
-router.route('/user/signup').post(wrapAsync(userSignUpController));
+router
+  .route('/user/signup')
+  .post(userValidation(), wrapAsync(userSignUpController));
 router.route('/user/signin').post(wrapAsync(userSignInController));
 router.route('/user/logout').post(wrapAsync(userLogOutController));
-router.route('/profile').get(wrapAsync(userDisplayController));
+router.route('/profile').get(sessionAuth(), wrapAsync(userDisplayController));
 
 module.exports = router;

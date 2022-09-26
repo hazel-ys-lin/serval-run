@@ -48,16 +48,16 @@ const sessionAuth = function () {
       return res.status(403).send({ errorMessages: 'Unauthorized' });
     }
 
-    // accessToken = accessToken.replace('Bearer ', '');
     if (!req.session.isAuth === 'null') {
       return res.status(403).send({ errorMessages: 'Unauthorized' });
     }
+    console.log('next in sessionAuth');
+    return next();
   };
   // if (!req.session.isAuth) {
   //   // console.log('req.session.isAuth: ', req.session.isAuth);
   //   return res.status(401).json({ msg: 'Please log in' });
   // }
-  // return next;
 };
 
 module.exports = {

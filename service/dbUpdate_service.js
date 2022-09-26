@@ -60,10 +60,22 @@ const userCheckService = async function (userEmail) {
   }
 };
 
+const userInfoFind = async function (userId) {
+  let findUser = await userModel.findOne({
+    _id: userId,
+  });
+  if (!findUser) {
+    return false;
+  } else {
+    return findUser;
+  }
+};
+
 module.exports = {
   projectCheck,
   collectionCheck,
   apiCheck,
   environmentCheck,
   userCheckService,
+  userInfoFind,
 };
