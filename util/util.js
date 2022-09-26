@@ -50,7 +50,7 @@ const sessionAuth = function () {
     }
 
     // accessToken = accessToken.replace('Bearer ', '');
-    if (!req.session.isAuth == 'null') {
+    if (!req.session.isAuth === 'null') {
       res.status(401).send({ errorMessages: 'Unauthorized' });
       return;
     }
