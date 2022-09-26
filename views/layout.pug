@@ -158,14 +158,6 @@ html
         if (response.status === 200) {
           window.location.assign('https://serval.run/profile');
         }
-        //- if (response.status === 203) {
-        //-   swal({
-        //-     text: 'Please log in first',
-        //-   })
-        //-   setTimeout(()=> {
-        //-     window.location.assign('https://serval.run/user');
-        //-   }, 2000)
-        //- }
       })
       .catch((error) => {
         console.log('catch error: ', error)
@@ -178,8 +170,16 @@ html
             setTimeout(()=> {
                 window.location.assign('https://serval.run/user');
             }, 3000)
+        } else {
+          swal({
+              text: 'Redirect failed',
+              icon: "error",
+              confirmButtonClass: "btn-danger",
+          });
+          setTimeout(()=> {
+              window.location.assign('https://serval.run/');
+          }, 3000);
         }
-        //- window.location.assign('/');
       })
     })
 
@@ -194,33 +194,31 @@ html
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log('status 200')
+          console.log('status 200');
           window.location.assign('https://serval.run/projects');
         }
-        //- if (response.status === 203) {
-        //-   swal({
-        //-     text: 'Please log in first',
-        //-   })
-        //-   setTimeout(()=> {
-        //-     window.location.assign('https://serval.run/user');
-        //-   }, 2000)
-          //- console.log('status 203')
-          //- alert('Please log in first');
-          //- window.location.assign('./user');
         }
       })
       .catch((error) => {
         console.log('catch error: ', error)
         if (error.response.status === 403) {
-            swal({
-                text: 'Please log in first',
-                icon: "error",
-                confirmButtonClass: "btn-danger",
-            })
-            setTimeout(()=> {
-                window.location.assign('https://serval.run/user');
-            }, 3000)
+          swal({
+              text: 'Please log in first',
+              icon: "error",
+              confirmButtonClass: "btn-danger",
+          });
+          setTimeout(()=> {
+              window.location.assign('https://serval.run/user');
+          }, 3000);
+        } else {
+          swal({
+              text: 'Redirect failed',
+              icon: "error",
+              confirmButtonClass: "btn-danger",
+          });
+          setTimeout(()=> {
+              window.location.assign('https://serval.run/');
+          }, 3000);
         }
-        //- window.location.assign('/');
       })
     })
