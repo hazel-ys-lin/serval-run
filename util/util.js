@@ -25,23 +25,46 @@ const userValidation = function () {
       .isLength({ min: 4, max: 20 })
       .withMessage('Serval wishes you have a safer password'),
   ];
-  // if (!userName || !userEmail || !userPassword) {
-  //   return res
-  //     .status(401)
-  //     .json({ msg: 'Please input your information properly' });
-  // }
 };
 
-const sessionAuth = (req, res, next) => {
-  if (!req.session.isAuth) {
-    // console.log('req.session.isAuth: ', req.session.isAuth);
-    return res.status(401).json({ msg: 'Please log in' });
-  }
-  return next;
+// Check if a JavaScript string is a URL: https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
+const urlValidation = function () {
+  return [
+    check('domainName')
+      .custom((val) => {
+        val.match(
+          /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+        );
+      })
+      .withMessage('Please input proper url'),
+  ];
+};
+
+const sessionAuth = function () {
+  return async function (req, res, next) {
+    console.log('in authentication');
+    // let accessToken = req.get('Authorization');
+    if (!req.session.isAuth) {
+      res.status(401).send({ errorMessages: 'Unauthorized' });
+      return;
+    }
+
+    // accessToken = accessToken.replace('Bearer ', '');
+    if (!req.session.isAuth == 'null') {
+      res.status(401).send({ errorMessages: 'Unauthorized' });
+      return;
+    }
+  };
+  // if (!req.session.isAuth) {
+  //   // console.log('req.session.isAuth: ', req.session.isAuth);
+  //   return res.status(401).json({ msg: 'Please log in' });
+  // }
+  // return next;
 };
 
 module.exports = {
   wrapAsync,
+  urlValidation,
   sessionAuth,
   userValidation,
 };

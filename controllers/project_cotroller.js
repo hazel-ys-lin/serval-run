@@ -7,6 +7,7 @@ const {
   environmentGetModel,
   environmentDeleteModel,
 } = require('../models/project_model');
+const { validationResult } = require('express-validator');
 
 const displayProject = async (req, res) => {
   // get all the projects to array in database
@@ -69,10 +70,22 @@ const displayEnvironment = async (req, res) => {
 };
 
 const envInsertController = async function (req, res) {
+  // if (!req.body.domainName) {
+  //   return res.status(401).json({ msg: 'Cannot verify url' });
+  // }
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errorMessages: errors.array() });
+  }
+
+  const { projectId, domainName, title } = req.body;
+
   const environmentInfo = {
-    projectId: req.body.projectId,
-    domainName: req.body.domainName,
-    title: req.body.title,
+    projectId: projectId,
+    domainName: domainName,
+    title: title,
   };
   let saveEnvironmentResult = await environmentInsertModel(environmentInfo);
 

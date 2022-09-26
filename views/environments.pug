@@ -118,14 +118,32 @@ block content
             .catch((error) => {
                 console.log('in error');
                 console.log('create environment error')
-                swal({
+                if (error.response.status === 422) {
+                    let errorArray = [];
+                    error.response.data.errorMessages.forEach((elem) => {
+                        errorArray.push(elem.msg);
+                    })
+                    let errorMsg = errorArray.join('\n');
+                    swal({
+                        //- text: 'Please input your information properly',
+                        text: errorMsg,
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2500)
+                } else {
+                    swal({
                         text: 'Create environment error',
                         icon: "error",
                         confirmButtonClass: "btn-danger",
-                })
-                setTimeout(()=> {
-                    window.location.reload();
-                }, 2000)
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                }
+                
             })
         })
 
