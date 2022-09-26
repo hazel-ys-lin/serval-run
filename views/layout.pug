@@ -158,20 +158,28 @@ html
         if (response.status === 200) {
           window.location.assign('https://serval.run/profile');
         }
-        if (response.status === 203) {
-          swal({
-            text: 'Please log in first',
-          })
-          setTimeout(()=> {
-            window.location.assign('https://serval.run/user');
-          }, 2000)
-          //- alert('Please log in first');
-          //- window.location.assign('/user');
-        }
+        //- if (response.status === 203) {
+        //-   swal({
+        //-     text: 'Please log in first',
+        //-   })
+        //-   setTimeout(()=> {
+        //-     window.location.assign('https://serval.run/user');
+        //-   }, 2000)
+        //- }
       })
       .catch((error) => {
         console.log('catch error: ', error)
-        window.location.assign('/');
+        if (error.response.status === 401) {
+            swal({
+                text: 'Please log in first',
+                icon: "error",
+                confirmButtonClass: "btn-danger",
+            })
+            setTimeout(()=> {
+                window.location.reload();
+            }, 2000)
+        }
+        //- window.location.assign('/');
       })
     })
 
