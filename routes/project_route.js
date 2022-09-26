@@ -9,7 +9,7 @@ const {
   envDeleteController,
 } = require('../controllers/project_cotroller');
 
-router.route('/projects').get(sessionAuth(), wrapAsync(displayProject));
+router.route('/projects').get(wrapAsync(displayProject));
 router.route('/editproject').post(wrapAsync(projectInsertController));
 router.route('/editproject').delete(wrapAsync(projectDeleteController));
 
