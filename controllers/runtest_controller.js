@@ -12,6 +12,7 @@ const {
 } = require('../models/report_model');
 const { sendToQueue } = require('../service/queue_service');
 
+// FIXME: if examples is null, error would happen
 const scenarioRunController = async (req, res) => {
   const apiId = req.body.apiId;
   const scenarioId = req.body.scenarioId;
