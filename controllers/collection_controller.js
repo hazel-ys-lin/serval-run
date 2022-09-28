@@ -3,11 +3,13 @@ const {
   collectionInsertModel,
   collectionInfoGetModel,
   collectionGetModel,
-  collectionDeleteModel,
   apiInsertModel,
   apiGetModel,
-  apiDeleteModel,
 } = require('../models/collection_model');
+const {
+  collectionDeleteModel,
+  apiDeleteModel,
+} = require('../models/delete_model');
 
 const displayCollection = async function (req, res) {
   const projectId = req.query.projectid;

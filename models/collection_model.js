@@ -132,49 +132,6 @@ const collectionNameModel = async function (collectionId) {
   return collectionName.collection_name;
 };
 
-const collectionDeleteModel = async function (collectionInfo) {
-  const session = await collectionModel.startSession();
-  session.startTransaction();
-  try {
-    const projectData = await projectModel.findOne({
-      _id: collectionInfo.projectId,
-    });
-
-    let deleted = await collectionModel
-      .deleteOne({
-        _id: collectionInfo.collectionId,
-      })
-      .session(session);
-    // .catch(function (err) {
-    //   console.log(err);
-    // });
-
-    await projectModel
-      .findOneAndUpdate(
-        { _id: collectionInfo.projectId },
-        {
-          $pull: {
-            collections: {
-              collection_id: collectionInfo.collectionId,
-            },
-          },
-        }
-      )
-
-      .session(session);
-
-    await session.commitTransaction();
-    session.endSession();
-    return true;
-  } catch (error) {
-    // If an error occurred, abort the whole transaction and
-    // undo any changes that might have happened
-    await session.abortTransaction();
-    session.endSession();
-    throw error;
-  }
-};
-
 const apiInsertModel = async function (apiInfo) {
   const session = await apiModel.startSession();
   session.startTransaction();
@@ -271,57 +228,15 @@ const apiNameModel = async function (apiId) {
   return apiName.api_name;
 };
 
-const apiDeleteModel = async function (apiInfo) {
-  const session = await apiModel.startSession();
-  session.startTransaction();
-  try {
-    const collectionData = await collectionModel.findOne({
-      _id: apiInfo.collectionId,
-    });
-
-    let deleted = await apiModel
-      .deleteOne({
-        _id: apiInfo.apiId,
-      })
-      .session(session);
-
-    await collectionModel
-      .findOneAndUpdate(
-        { _id: apiInfo.collectionId },
-        {
-          $pull: {
-            apis: {
-              api_id: apiInfo.apiId,
-            },
-          },
-        }
-      )
-
-      .session(session);
-
-    await session.commitTransaction();
-    session.endSession();
-    return true;
-  } catch (error) {
-    // If an error occurred, abort the whole transaction and
-    // undo any changes that might have happened
-    await session.abortTransaction();
-    session.endSession();
-    throw error;
-  }
-};
-
 module.exports = {
   collectionModel,
   apiModel,
   collectionInsertModel,
   collectionGetModel,
-  collectionDeleteModel,
   collectionInfoGetModel,
   collectionNameModel,
   apiInsertModel,
   apiGetModel,
   apiInfoGetModel,
   apiNameModel,
-  apiDeleteModel,
 };

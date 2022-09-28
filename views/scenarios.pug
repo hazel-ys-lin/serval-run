@@ -200,15 +200,26 @@ block content
                 .catch((error) => {
                     console.log('in error');
                     console.log('catch: ', error)
-                    swal({
-                        text: 'Create scenario error',
-                        icon: "error",
-                        confirmButtonClass: "btn-danger",
-                    })
-                    setTimeout(()=> {
-                        window.location.reload();
-                    }, 2000)
-                    //- alert('create scenario error')
+                    if (error.response.status === 422) {
+                        swal({
+                            text: 'Compile gherkin script error',
+                            icon: "error",
+                            //- confirmButtonClass: "btn-success",
+                        })
+                        setTimeout(()=> {
+                            window.location.reload();
+                        }, 2000)
+                    } else {
+                        swal({
+                            text: 'Create scenario error',
+                            icon: "error",
+                            confirmButtonClass: "btn-danger",
+                        })
+                        setTimeout(()=> {
+                            window.location.reload();
+                        }, 2000)
+                        //- alert('create scenario error')
+                    }
                 })
             })
         })

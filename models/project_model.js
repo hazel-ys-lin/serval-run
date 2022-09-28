@@ -134,45 +134,6 @@ const projectNameGetModel = async function (projectId) {
   return projectData.project_name;
 };
 
-const projectDeleteModel = async function (projectInfo) {
-  const session = await projectModel.startSession();
-  session.startTransaction();
-  try {
-    const userData = await userModel.findOne({
-      user_email: projectInfo.userEmail,
-    });
-
-    let deletedProject = await projectModel
-      .deleteOne({
-        _id: projectInfo.projectId,
-      })
-      .session(session);
-
-    await userModel
-      .findOneAndUpdate(
-        { _id: userData._id.toString() },
-        {
-          $pull: {
-            projects: {
-              project_id: projectInfo.projectId,
-            },
-          },
-        }
-      )
-      .session(session);
-
-    await session.commitTransaction();
-    session.endSession();
-    return true;
-  } catch (error) {
-    // If an error occurred, abort the whole transaction and
-    // undo any changes that might have happened
-    await session.abortTransaction();
-    session.endSession();
-    throw error;
-  }
-};
-
 const environmentInsertModel = async function (environmentInfo) {
   const session = await environmentModel.startSession();
   session.startTransaction();
@@ -252,45 +213,6 @@ const envInfoGetModel = async function (projectId) {
   return envInfo;
 };
 
-const environmentDeleteModel = async function (environmentInfo) {
-  const session = await environmentModel.startSession();
-  session.startTransaction();
-  try {
-    const projectData = await projectModel.findOne({
-      _id: environmentInfo.projectId,
-    });
-
-    let deleted = await environmentModel
-      .deleteOne({
-        _id: environmentInfo.environmentId,
-      })
-      .session(session);
-
-    await projectModel
-      .findOneAndUpdate(
-        { _id: environmentInfo.projectId },
-        {
-          $pull: {
-            environments: {
-              environment_id: environmentInfo.environmentId,
-            },
-          },
-        }
-      )
-      .session(session);
-
-    await session.commitTransaction();
-    session.endSession();
-    return true;
-  } catch (error) {
-    // If an error occurred, abort the whole transaction and
-    // undo any changes that might have happened
-    await session.abortTransaction();
-    session.endSession();
-    throw error;
-  }
-};
-
 module.exports = {
   projectModel,
   environmentModel,
@@ -298,9 +220,7 @@ module.exports = {
   projectGetModel,
   projectInfoGetModel,
   projectNameGetModel,
-  projectDeleteModel,
   environmentInsertModel,
   environmentGetModel,
-  environmentDeleteModel,
   envInfoGetModel,
 };

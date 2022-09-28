@@ -2,12 +2,14 @@ const { userGetModel } = require('../models/user_model');
 const {
   projectInsertModel,
   projectGetModel,
-  projectDeleteModel,
   environmentInsertModel,
   environmentGetModel,
-  environmentDeleteModel,
 } = require('../models/project_model');
-const { validationResult } = require('express-validator');
+// const { validationResult } = require('express-validator');
+const {
+  projectDeleteModel,
+  environmentDeleteModel,
+} = require('../models/delete_model');
 
 const displayProject = async (req, res) => {
   // if (!req.session.isAuth) {

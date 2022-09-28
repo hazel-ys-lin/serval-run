@@ -20,6 +20,7 @@ const gherkinCompile = function (featureCode) {
   try {
     let parser = new Gherkin.Parser(builder, matcher);
     gherkinDocument = parser.parse(featureCode);
+    // console.log('gherkinDocument.feature: ', gherkinDocument.feature);
 
     if (!gherkinDocument.feature) {
       throw new Error();
@@ -42,12 +43,7 @@ const gherkinCompile = function (featureCode) {
       tag: testCaseInfo.tags[0]?.name, // the tag for the scenario, maybe will use it someday.  Minor now (optional)
     };
 
-    if (
-      !testCaseInfo.length ||
-      !tableHeader.length ||
-      !tableBody.length ||
-      !steps.length
-    ) {
+    if (!testCaseInfo || !tableHeader || !tableBody.length || !steps.length) {
       throw new Error();
     }
 

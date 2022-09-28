@@ -1,8 +1,4 @@
-const {
-  userModel,
-  userSignUpModel,
-  userSignInModel,
-} = require('../models/user_model');
+const { userSignUpModel, userSignInModel } = require('../models/user_model');
 const { validationResult } = require('express-validator');
 const {
   userCheckService,

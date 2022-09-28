@@ -62,8 +62,6 @@ const scenarioInsertModel = async function (scenarioInfo) {
 
     let exampleArray = [];
 
-    console.log();
-
     for (let i = 0; i < scenarioInfo.featureCode.testTableBody.length; i++) {
       exampleArray.push({
         example: scenarioInfo.featureCode.testTableBody[i],
@@ -89,41 +87,6 @@ const scenarioInsertModel = async function (scenarioInfo) {
             scenarios: [
               { scenario_id: inserted._id, scenario_title: inserted.title },
             ],
-          },
-        }
-      )
-      .session(session);
-
-    await session.commitTransaction();
-    session.endSession();
-    return true;
-  } catch (error) {
-    // If an error occurred, abort the whole transaction and
-    // undo any changes that might have happened
-    await session.abortTransaction();
-    session.endSession();
-    throw error;
-  }
-};
-
-const scenarioDeleteModel = async function (scenarioInfo) {
-  const session = await scenarioModel.startSession();
-  session.startTransaction();
-  try {
-    let deleted = await scenarioModel
-      .deleteOne({
-        _id: scenarioInfo.scenarioId,
-      })
-      .session(session);
-
-    await apiModel
-      .findOneAndUpdate(
-        { _id: scenarioInfo.apiId },
-        {
-          $pull: {
-            scenarios: {
-              scenario_id: scenarioInfo.scenarioId,
-            },
           },
         }
       )
@@ -173,7 +136,6 @@ module.exports = {
   scenarioModel,
   scenarioGetModel,
   scenarioInsertModel,
-  scenarioDeleteModel,
   scenarioDetailModel,
   exampleGetModel,
   exampleDetailGetModel,

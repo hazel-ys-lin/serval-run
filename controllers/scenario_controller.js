@@ -6,8 +6,8 @@ const {
 const {
   scenarioGetModel,
   scenarioInsertModel,
-  scenarioDeleteModel,
 } = require('../models/scenario_model');
+const { scenarioDeleteModel } = require('../models/delete_model');
 const { gherkinCompile } = require('../service/gherkinCompile_service');
 
 const displayScenario = async (req, res) => {
