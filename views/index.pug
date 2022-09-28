@@ -19,7 +19,7 @@ block content
                                             i.fe.fe-navigation.fe-24.text-white
                                         h3.h4.mt-4.mb-1.text-white(style='font-size: 1.5rem;') Create an Account
                                         p.text-white.mb-4(style='font-size: 1.2rem;') Start your test journey with serval
-                                        a.btn.btn-lg.bg-primary-light.text-white.btn-user(href='https://serval.run/user' style='font-size: 1.2rem;')
+                                        a.btn.btn-lg.bg-primary-light.text-white.btn-user(href='http://localhost:3001/user' style='font-size: 1.2rem;')
                                             | Sign Up
                                             i.fe.fe-arrow-right.fe-16.ml-2
                                     // .card-body
@@ -32,7 +32,7 @@ block content
                                             i.fe.fe-message-circle.fe-24.text-secondary
                                         h3.h4.mt-4.mb-1.text-dark(style='font-size: 1.5rem;')  Already have an account?
                                         p.text-dark.mb-4(style='font-size: 1.2rem;')  Sign in to check your own reports
-                                        a.btn.btn-lg.bg-success-light.text-dark.btn-user(href='https://serval.run/user' style='font-size: 1.2rem;')
+                                        a.btn.btn-lg.bg-success-light.text-dark.btn-user(href='http://localhost:3001/user' style='font-size: 1.2rem;')
                                             | Sign In
                                             i.fe.fe-arrow-right.fe-16.ml-2
                                     // .card-body
@@ -50,7 +50,7 @@ block content
             })
                 .then((response) => {
                 if (response.status === 200) {
-                    window.location.assign('https://serval.run/profile');
+                    window.location.assign('http://localhost:3001/profile');
                 }
                 })
                 .catch((error) => {
@@ -62,7 +62,7 @@ block content
                     confirmButtonClass: 'btn-danger',
                     });
                     setTimeout(() => {
-                    window.location.assign('https://serval.run/user');
+                    window.location.assign('http://localhost:3001/user');
                     }, 3000);
                 } else {
                     swal({
@@ -71,7 +71,7 @@ block content
                     confirmButtonClass: 'btn-danger',
                     });
                     setTimeout(() => {
-                    window.location.assign('https://serval.run/');
+                    window.location.assign('http://localhost:3001/');
                     }, 3000);
                 }
                 });

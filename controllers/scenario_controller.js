@@ -30,6 +30,9 @@ const displayScenario = async (req, res) => {
 
 const scenarioInsertController = async function (req, res) {
   let compiledFeature = gherkinCompile(req.body.featureCode);
+  if (!compiledFeature) {
+    return res.status(422).json({ msg: 'Compile gherkin script error' }); //FIXME: change the message and status
+  }
   const scenarioInfo = {
     apiId: req.body.apiId,
     featureCode: compiledFeature,

@@ -126,7 +126,9 @@ const collectionNameModel = async function (collectionId) {
   let collectionName = await collectionModel.findOne({
     _id: collectionId,
   });
-
+  if (!collectionName) {
+    return false;
+  }
   return collectionName.collection_name;
 };
 
