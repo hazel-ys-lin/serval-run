@@ -34,7 +34,7 @@ const urlValidation = function () {
     let urlValidate = domainName.match(
       /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/
     );
-    console.log('urlValidate in middleware: ', urlValidate);
+    // console.log('urlValidate in middleware: ', urlValidate);
     if (!urlValidate) {
       return res.status(403).send({ errorMessages: 'Not an url' });
     }
