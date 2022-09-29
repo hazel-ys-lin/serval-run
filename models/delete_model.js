@@ -107,7 +107,6 @@ const environmentDeleteModel = async function (environmentInfo) {
     const projectData = await projectModel.findOne({
       _id: environmentInfo.projectId,
     });
-    n;
     let deleted = await environmentModel
       .deleteOne({
         _id: environmentInfo.environmentId,

@@ -10,7 +10,7 @@ const publishStatus = async function (reportId, passResult) {
     console.log(
       `[Worker] Published response status to channel ${CHANNEL_KEY} - fail `
     );
-  } else {
+  } else if (passResult === true) {
     await Cache.hincrby(`reportStatus-${reportId}`, 'success', 1);
     let currentResult = await Cache.hgetall(`reportStatus-${reportId}`);
 
