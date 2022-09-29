@@ -40,12 +40,10 @@ const scenarioRunController = async (req, res) => {
   testData.report_id = reportObj._id;
 
   console.log('%%%%%%%%%%%%hmset');
-  await Cache.hmset(
-    `reportStatus-${reportObj._id}`,
-    { success: 0, fail: 0 },
-    'ex',
-    300
-  );
+  await Cache.multi()
+    .hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 })
+    .expire(`reportStatus-${reportObj._id}`, 300)
+    .exec();
 
   // create response and update report
   for (let i = 0; i < testData.examples.length; i++) {
@@ -124,12 +122,10 @@ const apiRunController = async (req, res) => {
 
   // create a hash for the report
   console.log('&&&&&&&&&&&&hmset');
-  await Cache.hmset(
-    `reportStatus-${reportObj._id}`,
-    { success: 0, fail: 0 },
-    'ex',
-    300
-  );
+  await Cache.multi()
+    .hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 })
+    .expire(`reportStatus-${reportObj._id}`, 300)
+    .exec();
 
   let scenarios = await scenarioGetModel(apiId);
   let testData = [];
@@ -205,12 +201,10 @@ const collectionRunController = async (req, res) => {
   let reportObj = await createReportModel(testInfo);
   // create a hash for the report
   console.log('*************hmset');
-  await Cache.hmset(
-    `reportStatus-${reportObj._id}`,
-    { success: 0, fail: 0 },
-    'ex',
-    300
-  );
+  await Cache.multi()
+    .hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 })
+    .expire(`reportStatus-${reportObj._id}`, 300)
+    .exec();
 
   let queueResultArray = [];
   for (let l = 0; l < apiInfoArray.length; l++) {
