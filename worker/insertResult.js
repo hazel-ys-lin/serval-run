@@ -105,7 +105,7 @@ const exampleResponseInsertModel = async function (responseArray) {
 
     // change the report status to finishied
     // FIXME: what if have two loops (example: collection test)
-    console.log('responseArray: ', responseArray);
+    // console.log('responseArray: ', responseArray);
     let reportStatusUpdate = await reportModel.findOneAndUpdate(
       { _id: responseArray[0].report_id },
       {
