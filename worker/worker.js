@@ -1,6 +1,5 @@
 const Queue = require('./workerCache');
 const QUEUE_KEY = 'requestList';
-const CHANNEL_KEY = 'report-channel';
 const { callHttpRequest } = require('./httpRequest');
 const { exampleResponseInsertModel } = require('./insertResult');
 
@@ -21,15 +20,23 @@ const doJob = async function () {
     console.log('[Worker] Queue connect fail or still connecting...');
   }
   console.log('[Worker] Queue connected on port 6379!');
+  // TODO: error handler
+
   while (true) {
-    let data = await Queue.brpop(QUEUE_KEY, 0);
-    let requestObject = JSON.parse(data[1]);
-    console.log('[Worker] Worker got job from queue!');
+    try {
+      let data = await Queue.brpop(QUEUE_KEY, 0);
+      let requestObject = JSON.parse(data[1]);
+      console.log('[Worker] Worker got job from queue!');
 
-    const { testConfig, testData } = requestObject;
+      const { testConfig, testData } = requestObject;
 
-    let httpRequestResult = await callHttpRequest(testConfig, testData);
-    let insertTestResult = await exampleResponseInsertModel(httpRequestResult);
+      let httpRequestResult = await callHttpRequest(testConfig, testData);
+      let insertTestResult = await exampleResponseInsertModel(
+        httpRequestResult
+      );
+    } catch (error) {
+      console.log('[Worker] Got job or do job error!');
+    }
 
     // if (insertTestResult) {
     //   const reportStatus = { report_id: insertTestResult, status: 1 };

@@ -2,7 +2,9 @@ const Cache = require('./workerCache');
 const CHANNEL_KEY = 'report-channel';
 const axios = require('axios');
 const momentTimezone = require('moment-timezone');
+const { publishStatus } = require('./publishStatus');
 
+// TODO: send report id to channel
 const callHttpRequest = async function (testConfig, testData) {
   //   console.log('callHttpRequest testData: ', testData);
   let httpMethod = testConfig.method;
@@ -15,24 +17,10 @@ const callHttpRequest = async function (testConfig, testData) {
         testConfig.data = testData.examples[i].example;
         try {
           let response = await axios(testConfig);
-
-          await Cache.hincrby(
-            `reportStatus-${testData.report_id}`,
-            'success',
-            1
-          );
-          let currentResult = await Cache.hgetall(
-            `reportStatus-${testData.report_id}`
-          );
-
-          Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
-          console.log(
-            `[Worker] Published response status to channel ${CHANNEL_KEY} -1 `
-          );
           let actualResult = response.data;
           let timeAfterAxios = Date.now();
 
-          actualResponseArray.push({
+          let resultToPush = {
             report_id: testData.report_id,
             response_id: testData.examples[i].response_id,
             response_data: actualResult,
@@ -42,32 +30,44 @@ const callHttpRequest = async function (testConfig, testData) {
               Number(testData.examples[i].expected_status_code),
             request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
             request_time_length: timeAfterAxios - timeBeforeAxios,
-          });
+          };
+
+          await publishStatus(resultToPush.report_id, resultToPush.pass);
+          actualResponseArray.push(resultToPush);
         } catch (error) {
-          await Cache.hincrby(`reportStatus-${testData.report_id}`, 'fail', 1);
-          let currentResult = await Cache.hgetall(
-            `reportStatus-${testData.report_id}`
-          );
+          if (!error.response) {
+            let timeAfterAxios = Date.now();
+            let resultToPush = {
+              report_id: testData.report_id,
+              response_id: testData.examples[i].response_id,
+              response_data: { code: error.code },
+              response_status: 408,
+              pass: 408 === Number(testData.examples[i].expected_status_code),
+              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+              request_time_length: timeAfterAxios - timeBeforeAxios,
+            };
 
-          Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
-          console.log(
-            `[Worker] Published response status to channel ${CHANNEL_KEY} -2 `
-          );
+            await publishStatus(resultToPush.report_id, resultToPush.pass);
+            actualResponseArray.push(resultToPush);
+          } else {
+            let actualResult = error.response.data;
+            // console.log('error.response: ', error.response);
+            let timeAfterAxios = Date.now();
+            let resultToPush = {
+              report_id: testData.report_id,
+              response_id: testData.examples[i].response_id,
+              response_data: actualResult,
+              response_status: error.response?.status,
+              pass:
+                error.response?.status ===
+                Number(testData.examples[i].expected_status_code),
+              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+              request_time_length: timeAfterAxios - timeBeforeAxios,
+            };
 
-          let actualResult = error.response?.data;
-          let timeAfterAxios = Date.now();
-
-          actualResponseArray.push({
-            report_id: testData.report_id,
-            response_id: testData.examples[i].response_id,
-            response_data: actualResult,
-            response_status: error.response?.status,
-            pass:
-              error.response?.status ===
-              Number(testData.examples[i].expected_status_code),
-            request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
-            request_time_length: timeAfterAxios - timeBeforeAxios,
-          });
+            await publishStatus(resultToPush.report_id, resultToPush.pass);
+            actualResponseArray.push(resultToPush);
+          }
         }
       }
       return actualResponseArray;
@@ -81,25 +81,9 @@ const callHttpRequest = async function (testConfig, testData) {
         try {
           let response = await axios(testConfig);
 
-          await Cache.hincrby(
-            `reportStatus-${testData[j].report_id}`,
-            'success',
-            1
-          );
-
-          let currentResult = await Cache.hgetall(
-            `reportStatus-${testData[j].report_id}`
-          );
-
-          Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
-          console.log(
-            `[Worker] Published response status to channel ${CHANNEL_KEY} -3 `
-          );
-
           let actualResult = response.data;
           let timeAfterAxios = Date.now();
-
-          actualResponseArray.push({
+          let resultToPush = {
             report_id: testData[j].report_id,
             response_id: testData[j].examples[i].response_id,
             response_data: actualResult,
@@ -109,37 +93,44 @@ const callHttpRequest = async function (testConfig, testData) {
               Number(testData[j].examples[i].expected_status_code),
             request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
             request_time_length: timeAfterAxios - timeBeforeAxios,
-          });
+          };
+
+          await publishStatus(resultToPush.report_id, resultToPush.pass);
+          actualResponseArray.push(resultToPush);
         } catch (error) {
-          await Cache.hincrby(
-            `reportStatus-${testData[j].report_id}`,
-            'fail',
-            1
-          );
+          if (!error.response) {
+            let timeAfterAxios = Date.now();
+            let resultToPush = {
+              report_id: testData[j].report_id,
+              response_id: testData[j].examples[i].response_id,
+              response_data: { code: error.code },
+              response_status: 408,
+              pass:
+                408 === Number(testData[j].examples[i].expected_status_code),
+              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+              request_time_length: timeAfterAxios - timeBeforeAxios,
+            };
 
-          let currentResult = await Cache.hgetall(
-            `reportStatus-${testData[j].report_id}`
-          );
+            await publishStatus(resultToPush.report_id, resultToPush.pass);
+            actualResponseArray.push(resultToPush);
+          } else {
+            let actualResult = error.response.data;
+            let timeAfterAxios = Date.now();
+            let resultToPush = {
+              report_id: testData[j].report_id,
+              response_id: testData[j].examples[i].response_id,
+              response_data: actualResult,
+              response_status: error.response?.status,
+              pass:
+                error.response?.status ===
+                Number(testData[j].examples[i].expected_status_code),
+              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+              request_time_length: timeAfterAxios - timeBeforeAxios,
+            };
 
-          Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
-          console.log(
-            `[Worker] Published response status to channel ${CHANNEL_KEY}  -4 `
-          );
-
-          let actualResult = error.response?.data;
-          let timeAfterAxios = Date.now();
-
-          actualResponseArray.push({
-            report_id: testData[j].report_id,
-            response_id: testData[j].examples[i].response_id,
-            response_data: actualResult,
-            response_status: error.response?.status,
-            pass:
-              error.response?.status ===
-              Number(testData[j].examples[i].expected_status_code),
-            request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
-            request_time_length: timeAfterAxios - timeBeforeAxios,
-          });
+            await publishStatus(resultToPush.report_id, resultToPush.pass);
+            actualResponseArray.push(resultToPush);
+          }
         }
       }
     }
@@ -177,7 +168,7 @@ const callHttpRequest = async function (testConfig, testData) {
             let actualResult = response.data;
             let timeAfterAxios = Date.now();
 
-            actualResponseArray.push({
+            let resultToPush = {
               report_id: testData.report_id,
               response_id: testData.examples[i].response_id,
               response_data: actualResult,
@@ -187,37 +178,43 @@ const callHttpRequest = async function (testConfig, testData) {
                 Number(testData.examples[i].expected_status_code),
               request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
               request_time_length: timeAfterAxios - timeBeforeAxios,
-            });
+            };
+
+            await publishStatus(resultToPush.report_id, resultToPush.pass);
+            actualResponseArray.push(resultToPush);
           } catch (error) {
-            await Cache.hincrby(
-              `reportStatus-${testData.report_id}`,
-              'fail',
-              1
-            );
+            if (!error.response) {
+              let timeAfterAxios = Date.now();
+              let resultToPush = {
+                report_id: testData.report_id,
+                response_id: testData.examples[i].response_id,
+                response_data: { code: error.code },
+                response_status: 408,
+                pass: 408 === Number(testData.examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              };
 
-            let currentResult = await Cache.hgetall(
-              `reportStatus-${testData.report_id}`
-            );
+              await publishStatus(resultToPush.report_id, resultToPush.pass);
+              actualResponseArray.push(resultToPush);
+            } else {
+              let actualResult = error.response.data;
+              let timeAfterAxios = Date.now();
+              let resultToPush = {
+                report_id: testData.report_id,
+                response_id: testData.examples[i].response_id,
+                response_data: actualResult,
+                response_status: error.response?.status,
+                pass:
+                  error.response.status ===
+                  Number(testData.examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              };
 
-            Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
-            console.log(
-              `[Worker] Published response status to channel ${CHANNEL_KEY}  -6 `
-            );
-
-            let actualResult = error.response?.data;
-            let timeAfterAxios = Date.now();
-
-            actualResponseArray.push({
-              report_id: testData.report_id,
-              response_id: testData.examples[i].response_id,
-              response_data: actualResult,
-              response_status: error.response?.status,
-              pass:
-                error.response?.status ===
-                Number(testData.examples[i].expected_status_code),
-              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
-              request_time_length: timeAfterAxios - timeBeforeAxios,
-            });
+              await publishStatus(resultToPush.report_id, resultToPush.pass);
+              actualResponseArray.push(resultToPush);
+            }
           }
         } else {
           delete testData.examples[i].example.status;
@@ -226,25 +223,9 @@ const callHttpRequest = async function (testConfig, testData) {
           try {
             let response = await axios(testConfig);
 
-            await Cache.hincrby(
-              `reportStatus-${testData.report_id}`,
-              'success',
-              1
-            );
-
-            let currentResult = await Cache.hgetall(
-              `reportStatus-${testData.report_id}`
-            );
-
-            Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
-            console.log(
-              `[Worker] Published response status to channel ${CHANNEL_KEY}  -7 `
-            );
-
             let actualResult = response.data;
             let timeAfterAxios = Date.now();
-
-            actualResponseArray.push({
+            let resultToPush = {
               report_id: testData.report_id,
               response_id: testData.examples[i].response_id,
               response_data: actualResult,
@@ -254,37 +235,43 @@ const callHttpRequest = async function (testConfig, testData) {
                 Number(testData.examples[i].expected_status_code),
               request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
               request_time_length: timeAfterAxios - timeBeforeAxios,
-            });
+            };
+
+            await publishStatus(resultToPush.report_id, resultToPush.pass);
+            actualResponseArray.push(resultToPush);
           } catch (error) {
-            await Cache.hincrby(
-              `reportStatus-${testData.report_id}`,
-              'fail',
-              1
-            );
+            if (!error.response) {
+              let timeAfterAxios = Date.now();
+              let resultToPush = {
+                report_id: testData.report_id,
+                response_id: testData.examples[i].response_id,
+                response_data: { code: error.code },
+                response_status: 408,
+                pass: 408 === Number(testData.examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              };
 
-            let currentResult = await Cache.hgetall(
-              `reportStatus-${testData.report_id}`
-            );
+              await publishStatus(resultToPush.report_id, resultToPush.pass);
+              actualResponseArray.push(resultToPush);
+            } else {
+              let actualResult = error.response.data;
+              let timeAfterAxios = Date.now();
+              let resultToPush = {
+                report_id: testData.report_id,
+                response_id: testData.examples[i].response_id,
+                response_data: actualResult,
+                response_status: error.response?.status,
+                pass:
+                  error.response.status ===
+                  Number(testData.examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              };
 
-            Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
-            console.log(
-              `[Worker] Published response status to channel ${CHANNEL_KEY}  -8 `
-            );
-
-            let actualResult = error.response?.data;
-            let timeAfterAxios = Date.now();
-
-            actualResponseArray.push({
-              report_id: testData.report_id,
-              response_id: testData.examples[i].response_id,
-              response_data: actualResult,
-              response_status: error.response?.status,
-              pass:
-                error.response?.status ===
-                Number(testData.examples[i].expected_status_code),
-              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
-              request_time_length: timeAfterAxios - timeBeforeAxios,
-            });
+              await publishStatus(resultToPush.report_id, resultToPush.pass);
+              actualResponseArray.push(resultToPush);
+            }
           }
         }
       }
@@ -303,25 +290,9 @@ const callHttpRequest = async function (testConfig, testData) {
           try {
             let response = await axios(testConfig);
 
-            await Cache.hincrby(
-              `reportStatus-${testData[j].report_id}`,
-              'success',
-              1
-            );
-
-            let currentResult = await Cache.hgetall(
-              `reportStatus-${testData[j].report_id}`
-            );
-
-            Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
-            console.log(
-              `[Worker] Published response status to channel ${CHANNEL_KEY}  -9 `
-            );
-
             let actualResult = response.data;
             let timeAfterAxios = Date.now();
-
-            actualResponseArray.push({
+            let resultToPush = {
               report_id: testData[j].report_id,
               response_id: testData[j].examples[i].response_id,
               response_data: actualResult,
@@ -331,36 +302,44 @@ const callHttpRequest = async function (testConfig, testData) {
                 Number(testData[j].examples[i].expected_status_code),
               request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
               request_time_length: timeAfterAxios - timeBeforeAxios,
-            });
+            };
+
+            await publishStatus(resultToPush.report_id, resultToPush.pass);
+            actualResponseArray.push(resultToPush);
           } catch (error) {
-            await Cache.hincrby(
-              `reportStatus-${testData[j].report_id}`,
-              'fail',
-              1
-            );
-            let currentResult = await Cache.hgetall(
-              `reportStatus-${testData[j].report_id}`
-            );
+            if (!error.response) {
+              let timeAfterAxios = Date.now();
+              let resultToPush = {
+                report_id: testData[j].report_id,
+                response_id: testData[j].examples[i].response_id,
+                response_data: { code: error.code },
+                response_status: 408,
+                pass:
+                  408 === Number(testData[j].examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              };
 
-            Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
-            console.log(
-              `[Worker] Published response status to channel ${CHANNEL_KEY}  -10 `
-            );
+              await publishStatus(resultToPush.report_id, resultToPush.pass);
+              actualResponseArray.push(resultToPush);
+            } else {
+              let actualResult = error.response.data;
+              let timeAfterAxios = Date.now();
+              let resultToPush = {
+                report_id: testData[j].report_id,
+                response_id: testData[j].examples[i].response_id,
+                response_data: actualResult,
+                response_status: error.response?.status,
+                pass:
+                  error.response.status ===
+                  Number(testData[j].examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              };
 
-            let actualResult = error.response?.data;
-            let timeAfterAxios = Date.now();
-
-            actualResponseArray.push({
-              report_id: testData[j].report_id,
-              response_id: testData[j].examples[i].response_id,
-              response_data: actualResult,
-              response_status: error.response?.status,
-              pass:
-                error.response?.status ===
-                Number(testData[j].examples[i].expected_status_code),
-              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
-              request_time_length: timeAfterAxios - timeBeforeAxios,
-            });
+              await publishStatus(resultToPush.report_id, resultToPush.pass);
+              actualResponseArray.push(resultToPush);
+            }
           }
         } else {
           delete testData[j].examples[i].example.status;
@@ -369,25 +348,9 @@ const callHttpRequest = async function (testConfig, testData) {
           try {
             let response = await axios(testConfig);
 
-            await Cache.hincrby(
-              `reportStatus-${testData[j].report_id}`,
-              'success',
-              1
-            );
-
-            let currentResult = await Cache.hgetall(
-              `reportStatus-${testData[j].report_id}`
-            );
-
-            Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
-            console.log(
-              `[Worker] Published response status to channel ${CHANNEL_KEY}  -11 `
-            );
-
             let actualResult = response.data;
             let timeAfterAxios = Date.now();
-
-            actualResponseArray.push({
+            let resultToPush = {
               report_id: testData[j].report_id,
               response_id: testData[j].examples[i].response_id,
               response_data: actualResult,
@@ -397,36 +360,44 @@ const callHttpRequest = async function (testConfig, testData) {
                 Number(testData[j].examples[i].expected_status_code),
               request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
               request_time_length: timeAfterAxios - timeBeforeAxios,
-            });
+            };
+
+            await publishStatus(resultToPush.report_id, resultToPush.pass);
+            actualResponseArray.push(resultToPush);
           } catch (error) {
-            await Cache.hincrby(
-              `reportStatus-${testData[j].report_id}`,
-              'fail',
-              1
-            );
-            let currentResult = await Cache.hgetall(
-              `reportStatus-${testData[j].report_id}`
-            );
+            if (!error.response) {
+              let timeAfterAxios = Date.now();
+              let resultToPush = {
+                report_id: testData[j].report_id,
+                response_id: testData[j].examples[i].response_id,
+                response_data: { code: error.code },
+                response_status: 408,
+                pass:
+                  408 === Number(testData[j].examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              };
 
-            Cache.publish(CHANNEL_KEY, JSON.stringify(currentResult));
-            console.log(
-              `[Worker] Published response status to channel ${CHANNEL_KEY}  -12 `
-            );
+              await publishStatus(resultToPush.report_id, resultToPush.pass);
+              actualResponseArray.push(resultToPush);
+            } else {
+              let actualResult = error.response.data;
+              let timeAfterAxios = Date.now();
+              let resultToPush = {
+                report_id: testData[j].report_id,
+                response_id: testData[j].examples[i].response_id,
+                response_data: actualResult,
+                response_status: error.response?.status,
+                pass:
+                  error.response.status ===
+                  Number(testData[j].examples[i].expected_status_code),
+                request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
+                request_time_length: timeAfterAxios - timeBeforeAxios,
+              };
 
-            let actualResult = error.response?.data;
-            let timeAfterAxios = Date.now();
-
-            actualResponseArray.push({
-              report_id: testData[j].report_id,
-              response_id: testData[j].examples[i].response_id,
-              response_data: actualResult,
-              response_status: error.response?.status,
-              pass:
-                error.response?.status ===
-                Number(testData[j].examples[i].expected_status_code),
-              request_time: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
-              request_time_length: timeAfterAxios - timeBeforeAxios,
-            });
+              await publishStatus(resultToPush.report_id, resultToPush.pass);
+              actualResponseArray.push(resultToPush);
+            }
           }
         }
       }

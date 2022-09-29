@@ -186,12 +186,12 @@ block content
                               td(style='text-align: center;') #{reportResponse[i].expected_status_code}
                               td(style='text-align: center;') 
                                 if !reportResponse[i].response_status
-                                  p.text-muted= 'Pending'
+                                  .text-muted= 'Pending'
                                 else 
-                                  p= reportResponse[i].response_status
+                                  = reportResponse[i].response_status
                               th(style='text-align: center;')
                                 if !reportResponse[i].request_time_length
-                                  p.text-muted= 'Pending'
+                                  .text-muted= 'Pending'
                                 else 
-                                  p= reportResponse[i].request_time_length
+                                  = reportResponse[i].request_time_length
                             - i++

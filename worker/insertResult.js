@@ -1,4 +1,3 @@
-const { mongodb } = require('./workerDb');
 const mongoose = require('mongoose');
 const momentTimezone = require('moment-timezone');
 
@@ -90,10 +89,6 @@ const exampleResponseInsertModel = async function (responseArray) {
       );
     }
 
-    // console.log(
-    //   'responseArray[0] in insertResult in worker: ',
-    //   responseArray[0]
-    // );
     // change the report status to finishied
     // FIXME: what if have two loops (example: collection test)
     let reportStatusUpdate = await reportModel.findOneAndUpdate(
@@ -107,7 +102,7 @@ const exampleResponseInsertModel = async function (responseArray) {
       return true;
     }
   } catch (error) {
-    console.log('error: ', error);
+    console.log('[Worker] example response insert error in model: ', error);
     return false;
   }
 };

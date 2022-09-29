@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Redis = require('ioredis');
 const { CACHE_HOST, CACHE_PORT, CACHE_USER, CACHE_PASSWORD } = process.env;
-// TODO: create a channel and publish to shbscribers
+
 const redis = new Redis({
   host: CACHE_HOST,
   port: CACHE_PORT,
