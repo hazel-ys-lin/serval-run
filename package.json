@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/01ccccccc/serval-run#readme",
   "dependencies": {
+    "@cucumber/gherkin": "^24.0.0",
     "@types/gsap": "^3.0.0",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
