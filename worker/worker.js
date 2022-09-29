@@ -35,7 +35,7 @@ const doJob = async function () {
         httpRequestResult
       );
     } catch (error) {
-      console.log('[Worker] Got job or do job error!');
+      console.log('[Worker] Got job or do job error...');
     }
 
     // if (insertTestResult) {

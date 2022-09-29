@@ -12,7 +12,7 @@ const {
 } = require('../models/report_model');
 const { sendToQueue } = require('../service/queue_service');
 
-// FIXME: if examples is null, error would happen
+// if examples is null, error would happen
 const scenarioRunController = async (req, res) => {
   const apiId = req.body.apiId;
   const scenarioId = req.body.scenarioId;
@@ -40,7 +40,12 @@ const scenarioRunController = async (req, res) => {
   testData.report_id = reportObj._id;
 
   console.log('%%%%%%%%%%%%hmset');
-  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
+  await Cache.hmset(
+    `reportStatus-${reportObj._id}`,
+    { success: 0, fail: 0 },
+    'ex',
+    300
+  );
 
   // create response and update report
   for (let i = 0; i < testData.examples.length; i++) {
@@ -119,7 +124,12 @@ const apiRunController = async (req, res) => {
 
   // create a hash for the report
   console.log('&&&&&&&&&&&&hmset');
-  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
+  await Cache.hmset(
+    `reportStatus-${reportObj._id}`,
+    { success: 0, fail: 0 },
+    'ex',
+    300
+  );
 
   let scenarios = await scenarioGetModel(apiId);
   let testData = [];
@@ -195,7 +205,12 @@ const collectionRunController = async (req, res) => {
   let reportObj = await createReportModel(testInfo);
   // create a hash for the report
   console.log('*************hmset');
-  await Cache.hmset(`reportStatus-${reportObj._id}`, { success: 0, fail: 0 });
+  await Cache.hmset(
+    `reportStatus-${reportObj._id}`,
+    { success: 0, fail: 0 },
+    'ex',
+    300
+  );
 
   let queueResultArray = [];
   for (let l = 0; l < apiInfoArray.length; l++) {

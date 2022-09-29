@@ -87,16 +87,15 @@ const getReportResponseController = async (req, res) => {
   // console.log('**********', reportId, reportStatus);
   if (reportStatus) {
     // console.log('*********1', new Date().toISOString());
-    let reportDetail = await getReportDetailModel(reportId); // TODO: won't change after running
+    let reportDetail = await getReportDetailModel(reportId); // won't change after running
     // console.log('*********2', new Date().toISOString());
 
     // 優化calculate的function（使用Promise.all）
-    let reportCalculated = await calculateReport([reportDetail]); //TODO: know after running
+    let reportCalculated = await calculateReport([reportDetail]); //know after running
     // console.log('*********3', new Date().toISOString());
-    let reportResponse = await getReportResponseModel(reportId); //TODO: know after running
+    let reportResponse = await getReportResponseModel(reportId); //know after running
     // console.log('*********4', new Date().toISOString());
 
-    // TODO: 搬上ec2試試看速度
     let exampleDetailResult = [];
     let scenarioInfoResult = [];
 
@@ -144,16 +143,15 @@ const getReportResponseController = async (req, res) => {
     });
   } else {
     // console.log('*********1', new Date().toISOString());
-    let reportDetail = await getReportDetailModel(reportId); // TODO: won't change after running
+    let reportDetail = await getReportDetailModel(reportId); // won't change after running
     // console.log('*********2', new Date().toISOString());
 
     // 優化calculate的function（使用Promise.all）
-    // let reportCalculated = await calculateReport([reportDetail]); //TODO: know after running
+    // let reportCalculated = await calculateReport([reportDetail]); //know after running
     // console.log('*********3', new Date().toISOString());
-    let reportResponse = await getReportResponseModel(reportId); //TODO: know after running
+    let reportResponse = await getReportResponseModel(reportId); //know after running
     // console.log('*********4', new Date().toISOString());
 
-    // // TODO: 搬上ec2試試看速度
     let exampleDetailResult = [];
     let scenarioInfoResult = [];
 
