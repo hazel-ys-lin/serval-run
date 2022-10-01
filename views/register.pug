@@ -1,0 +1,97 @@
+extends layout.pug
+
+block content
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+
+    main.main-content(role='main')
+        .container-fluid
+            .row.justify-content-center
+                .col-12
+                    h2.text-center(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem; padding-top: 7rem;') Register 🐈‍⬛
+                    form.col-lg-3.col-md-4.col-10.mx-auto.text-center(style='padding-top: 40px;')
+                        //- h1.h3.mb-3 Register
+                        .form-group
+                            label.sr-only(for='user-name') User Name 
+                            input#user-signup-name.form-control.form-control-lg.input_signup-username(type='text' placeholder='coolServal' required autofocus='')
+                        //- .form-group
+                        //-     label.sr-only(for='job-title') Job Title 
+                        //-     input#user-signup-name.form-control.form-control-lg.input_signup-username(type='text' placeholder='Backend Developer' required autofocus='')
+                        .form-group
+                            label.sr-only(for='user-email') Email address
+                            input#user-signup-email.form-control.form-control-lg.input_signup-email(type='email' placeholder='serval_meow@gmail.com' required autofocus='')
+                        .form-group
+                            label.sr-only(for='user-password') Password
+                            input#user-signup-password.form-control.form-control-lg.input_signup-password(type='password' placeholder='Password' required)
+                        button.btn.btn-lg.btn-primary.btn-block.btn-sign_up(type='submit') Start My Test ➜
+                    .text-center(style='padding: 2rem 0; ')
+                        a.create-account(href='./signin') Already have account
+                        p.mt-5.mb-3.text-muted &copy; 2022 ServalRun
+    
+    script. 
+        $('.btn-sign_up').on('click', function (event) {
+            console.log('sign up clicked');
+            event.preventDefault();
+            const userName = $('.input_signup-username').val();
+            const userEmail = $('.input_signup-email').val();
+            const userPassword = $('.input_signup-password').val();
+
+            axios({
+                method: 'post',
+                url: '/user/signup',
+                data: {
+                userName: userName,
+                userEmail: userEmail,
+                userPassword: userPassword,
+                },
+                headers: { 'Content-Type': 'application/json' },
+            })
+            .then((response) => {
+            if (response.status === 200) {
+                swal({
+                text: 'Welcome to servalRun!',
+                icon: 'success',
+                confirmButtonClass: 'btn-success',
+                });
+                setTimeout(() => {
+                window.location.assign('./profile');
+                }, 2000);
+            }
+            })
+            .catch((error) => {
+            if (error.response.status === 403) {
+                swal({
+                text: 'Email already exists. Please sign in.',
+                icon: 'error',
+                confirmButtonClass: 'btn-danger',
+                });
+                setTimeout(() => {
+                window.location.reload();
+                }, 2000);
+            } else if (error.response.status === 422) {
+                let errorArray = [];
+                error.response.data.errorMessages.forEach((elem) => {
+                errorArray.push(elem.msg);
+                });
+                let errorMsg = errorArray.join('\n');
+                swal({
+                //- text: 'Please input your information properly',
+                text: errorMsg,
+                icon: 'error',
+                confirmButtonClass: 'btn-danger',
+                });
+                setTimeout(() => {
+                window.location.reload();
+                }, 4000);
+            } else {
+                swal({
+                text: 'Create account error',
+                icon: 'error',
+                confirmButtonClass: 'btn-danger',
+                });
+                setTimeout(() => {
+                window.location.reload();
+                }, 2000);
+            }
+            });
+        });

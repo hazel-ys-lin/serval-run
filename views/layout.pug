@@ -5,6 +5,8 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     title ServalRun®
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css' integrity='sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==' crossorigin='anonymous' referrerpolicy='no-referrer')
+    link(href='../../css/font.css' rel='stylesheet')
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous')
     script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM' crossorigin='anonymous')
@@ -13,12 +15,12 @@ html
     script(src='https://cdn.socket.io/4.5.0/socket.io.min.js' integrity='sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k' crossorigin='anonymous')
     link(rel='icon' type='image/x-icon' href='../../css/icon/serval.png')
     link(href='../../css/app-light.css' rel='stylesheet')
-    link(href='../../css/feather.css' rel='stylesheet')
     link(href='../../css/simplebar.css' rel='stylesheet')
     link(href='https://fonts.cdnfonts.com/css/iunito' rel='stylesheet')
     link(href="https://fonts.cdnfonts.com/css/engender-mod-font" rel="stylesheet")
     link(href='https://fonts.cdnfonts.com/css/pixeloid-sans' rel='stylesheet')
     link(href="https://fonts.cdnfonts.com/css/pf-tempesta-seven-extended" rel="stylesheet")
+
     //- script(src='../../src/loading.js')
     //- link(href='../../css/loading-cat.css' rel='stylesheet')
                 
@@ -46,25 +48,39 @@ html
                   nav.vertnav.navbar.navbar-light
                     // nav bar
                     .w-100.mb-4.d-flex
-                      a.navbar-brand.mx-auto.mt-2.flex-fill.text-center(href='https://serval.run/')
+                      a.navbar-brand.mx-auto.mt-2.flex-fill.text-center(href='http://localhost:3001/')
                         img.img-circle.elevation-2(src='../../css/icon/serval-run_logo-1.png' style='width: 258px; height: 125px;')
                     ul.navbar-nav.flex-fill.w-100.mb-2
                       li.nav-item.navbar-nav(style='text-align: left;')
-                        a.btn.btn-lg.nav-link.pl-3(style='text-align: left;' href='https://serval.run/')
+                        a.btn.btn-lg.nav-link.pl-3(style='text-align: left;' href='http://localhost:3001/')
                           i.fe.fe-box.fe-16
                           span.ml-3.item-text(style="font-size: 1.3rem;") Home
                       //- li.nav-item.navbar-nav(style='text-align: left;')
-                      //-   a.btn.btn-lg.nav-link.pl-3(style='text-align: left;' href='https://serval.run/')
+                      //-   a.btn.btn-lg.nav-link.pl-3(style='text-align: left;' href='http://localhost:3001/')
                       //-     i.fe.fe-home.fe-16
                       //-     span.ml-3.item-text(style="font-size: 1.3rem;") Dashboard
                       li.nav-item.navbar-nav(style='text-align: left;')
-                        a.btn.btn-lg.nav-link.pl-3.btn-profile(style='text-align: left;' href='https://serval.run/profile')
+                        a.btn.btn-lg.nav-link.pl-3.btn-profile(style='text-align: left;' href='http://localhost:3001/profile')
                           i.fe.fe-layers.fe-16
                           span.ml-3.item-text(style="font-size: 1.3rem;") Profile
-                      li.nav-item.navbar-nav(style='text-align: left;')
-                        a.btn.btn-lg.nav-link.pl-3.btn-my_project(style='text-align: left;' href='https://serval.run/projects')
+                      li.nav-item.dropdown(style='text-align: left;')
+                        a.dropdown-toggle.nav-link(href='#tables' data-toggle='collapse' aria-expanded='true')
                           i.fe.fe-grid.fe-16
-                          span.ml-3.item-text(style="font-size: 1.3rem;") Project
+                          span.ml-3.item-text(style="font-size: 1.3rem;") Projects
+                        ul#tables.list-unstyled.pl-4.w-100.collapse.show(style='')
+                          li.nav-item
+                            a.nav-link.pl-3(href='./projects')
+                              span.ml-1.item-text STYLiSH
+                          li.nav-item
+                            a.nav-link.pl-3(href='./projects')
+                              span.ml-1.item-text Co-Work
+                          li.nav-item
+                            a.nav-link.pl-3(href='./projects')
+                              span.ml-1.item-text System Design
+                        //- a.btn.btn-lg.nav-link.pl-3.btn-my_project(style='text-align: left;' href='http://localhost:3001/projects')
+                        //-   i.fe.fe-grid.fe-16
+                        //-   span.ml-3.item-text(style="font-size: 1.3rem;") Project
+
           .simplebar-placeholder(style='width: 255px; height: 977px;')
         .simplebar-track.simplebar-horizontal(style='visibility: hidden;')
           .simplebar-scrollbar(style='width: 0px; display: none;')
@@ -80,21 +96,21 @@ html
     // Navbar
     //- nav.main-header.navbar.navbar-expand.navbar-light.navbar-white
     //-   .container
-    //-     a.navbar-brand(href='https://serval.run/')
+    //-     a.navbar-brand(href='http://localhost:3001/')
     //-       //- img.brand-image.img-square.elevation(src='../../css/icon/serval-run_logo-2.png' alt='ServalRun® Logo')
     //-       span.brand-text.font-weight-light ServalRun®
     //-     ul.navbar-nav
     //-       li.nav-item.d-none.d-sm-inline-block
-    //-         a.nav-link(href='https://serval.run/') Home
+    //-         a.nav-link(href='http://localhost:3001/') Home
     //-       li.nav-item.d-none.d-sm-inline-block
-    //-         a.btn.btn-outline-secondary.btn-profile(href='https://serval.run/profile') Profile
+    //-         a.btn.btn-outline-secondary.btn-profile(href='http://localhost:3001/profile') Profile
 
     //- // Main Sidebar Container
     //- //- aside.main-sidebar.sidebar-dark-info.elevation-4
     //- aside.main-sidebar.sidebar-dark-info.elevation-4
     //-   // Brand Logo
     //-   .brand-link.d-flex.justify-content-between.align-items-center
-    //-     a.brand-link(href='https://serval.run/')
+    //-     a.brand-link(href='http://localhost:3001/')
     //-       span.brand-text.font-weight-light ServalRun®
     //-   .sidebar
     //-     // Sidebar user panel (optional)
@@ -102,35 +118,35 @@ html
     //-       .image
     //-         img.img-circle.elevation-2(src='../../css/icon/serval.png' alt='User Image' style='background-color: azure;')
     //-       .info
-    //-         a.d-block(href='https://serval.run/') Hazel
+    //-         a.d-block(href='http://localhost:3001/') Hazel
     //-     // Sidebar Menu
     //-     nav.mt-2
     //-       ul.nav.nav-pills.nav-sidebar.flex-column(data-widget='treeview' role='menu')
     //-         // Add icons to the links using the .nav-icon class with font-awesome or any other icon font library
     //-         li.nav-item.menu-open
-    //-           a.nav-link.active(href='https://serval.run/')
+    //-           a.nav-link.active(href='http://localhost:3001/')
     //-             i.nav-icon.fas.fa-tachometer-alt
     //-             p
     //-               | Workspace
     //-               i.right.fas.fa-angle-left
     //-           ul.nav.nav-treeview
     //-             li.nav-item.btn-my_project
-    //-               a.nav-link(href='https://serval.run/projects')
+    //-               a.nav-link(href='http://localhost:3001/projects')
     //-                 i.far.fa-circle.nav-icon
     //-                 p My Projects
     //-           //- li.nav-item.menu-open
-    //-           //-   a.nav-link.active(href='https://serval.run/')
+    //-           //-   a.nav-link.active(href='http://localhost:3001/')
     //-           //-     i.nav-icon.fas.fa-tachometer-alt
     //-           //-     p
     //-           //-       | Reports
     //-           //-       i.right.fas.fa-angle-left
     //-           //-   ul.nav.nav-treeview
     //-           //-     li.nav-item
-    //-           //-       a.nav-link(href='https://serval.run/reports')
+    //-           //-       a.nav-link(href='http://localhost:3001/reports')
     //-           //-         i.far.fa-circle.nav-icon
     //-           //-         p Statistics
     //-           //-     li.nav-item
-    //-           //-       a.nav-link(href='https://serval.run/')
+    //-           //-       a.nav-link(href='http://localhost:3001/')
     //-           //-         i.far.fa-circle.nav-icon
     //-           //-         p Documents
     //- block content
@@ -154,33 +170,33 @@ html
         url: '/profile',
         headers: { 'Content-Type': 'application/json' },
       })
-        .then((response) => {
-          if (response.status === 200) {
-            window.location.assign('https://serval.run/profile');
-          }
-        })
-        .catch((error) => {
-          console.log('catch error: ', error);
-          if (error.response.status === 403) {
-            swal({
-              text: 'Please log in first',
-              icon: 'error',
-              confirmButtonClass: 'btn-danger',
-            });
-            setTimeout(() => {
-              window.location.assign('https://serval.run/user');
-            }, 3000);
-          } else {
-            swal({
-              text: 'Redirect failed',
-              icon: 'error',
-              confirmButtonClass: 'btn-danger',
-            });
-            setTimeout(() => {
-              window.location.assign('https://serval.run/');
-            }, 3000);
-          }
-        });
+      .then((response) => {
+        if (response.status === 200) {
+          window.location.assign('http://localhost:3001/profile');
+        }
+      })
+      .catch((error) => {
+        console.log('catch error: ', error);
+        if (error.response.status === 403) {
+          swal({
+            text: 'Please log in first',
+            icon: 'error',
+            confirmButtonClass: 'btn-danger',
+          });
+          setTimeout(() => {
+            window.location.assign('http://localhost:3001/signin');
+          }, 3000);
+        } else {
+          swal({
+            text: 'Redirect failed',
+            icon: 'error',
+            confirmButtonClass: 'btn-danger',
+          });
+          setTimeout(() => {
+            window.location.assign('http://localhost:3001/');
+          }, 3000);
+        }
+      });
     });
 
     $('.btn-my_project').on('click', function (event) {
@@ -192,32 +208,32 @@ html
         url: '/projects',
         headers: { 'Content-Type': 'application/json' },
       })
-        .then((response) => {
-          if (response.status === 200) {
-            console.log('status 200');
-            window.location.assign('https://serval.run/projects');
-          }
-        })
-        .catch((error) => {
-          console.log('catch error: ', error);
-          if (error.response.status === 403) {
-            swal({
-              text: 'Please log in first',
-              icon: 'error',
-              confirmButtonClass: 'btn-danger',
-            });
-            setTimeout(() => {
-              window.location.assign('https://serval.run/user');
-            }, 3000);
-          } else {
-            swal({
-              text: 'Redirect failed',
-              icon: 'error',
-              confirmButtonClass: 'btn-danger',
-            });
-            setTimeout(() => {
-              window.location.assign('https://serval.run/');
-            }, 3000);
-          }
-        });
+      .then((response) => {
+        if (response.status === 200) {
+          console.log('status 200');
+          window.location.assign('http://localhost:3001/projects');
+        }
+      })
+      .catch((error) => {
+        console.log('catch error: ', error);
+        if (error.response.status === 403) {
+          swal({
+            text: 'Please log in first',
+            icon: 'error',
+            confirmButtonClass: 'btn-danger',
+          });
+          setTimeout(() => {
+            window.location.assign('http://localhost:3001/signin');
+          }, 3000);
+        } else {
+          swal({
+            text: 'Redirect failed',
+            icon: 'error',
+            confirmButtonClass: 'btn-danger',
+          });
+          setTimeout(() => {
+            window.location.assign('http://localhost:3001/');
+          }, 3000);
+        }
+      });
     });

@@ -1,14 +1,16 @@
 const router = require('express').Router();
 const { wrapAsync, sessionAuth, userValidation } = require('../util/util');
 const {
-  userCheck,
+  userSignin,
+  userSignup,
   userSignUpController,
   userSignInController,
   userLogOutController,
   userDisplayController,
 } = require('../controllers/user_controller');
 
-router.route('/user').get(wrapAsync(userCheck));
+router.route('/signin').get(wrapAsync(userSignin));
+router.route('/register').get(wrapAsync(userSignup));
 router
   .route('/user/signup')
   .post(userValidation(), wrapAsync(userSignUpController));

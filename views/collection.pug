@@ -1,0 +1,44 @@
+extends layout.pug
+
+block content
+    link(rel='stylesheet', href='../../css/common.css')
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    
+    main.main-content(role='main')
+        .container-fluid
+            .row.justify-content-center
+                a.h5.text-secondary.mb-3(href='./test')  ← Project
+                .col-12.mb-0.align-items-center
+                    .title-bar.justify-content-between(style="display: flex")
+                        h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem;') Collection Name
+                        .edit-buttons
+                            button.btn.btn-warning RUN ALL APIS
+                            button.btn.btn-primary EDIT 
+                            button.btn.btn-danger.mr-0 DELETE
+                .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
+                .col-12.mb-0.align-items-center
+                    .title-bar.mb-4.justify-content-between.align-items-center(style="display: flex")
+                        h2.h3.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') APIs
+                        button.btn.btn-success.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever='') Create API
+                    .card.shadow
+                        .card-body
+                            table.table.mb-0
+                                thead 
+                                    tr 
+                                        th Name  
+                                        th Method 
+                                        th Endpoint 
+                                        th Severity 
+                                        th Operation 
+                                tbody
+                                    tr
+                                        td signin
+                                        td POST 
+                                        td api/1.0/user/signin 
+                                        td 5
+                                        td
+                                            button.btn.btn-success(type='submit') Run Test
+                                            button.btn.btn-info(type='submit') scenarios
+                                            button.btn.btn-secondary(type='submit') edit
+                                            button.btn.btn-secondary(type='submit') delete

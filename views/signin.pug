@@ -1,0 +1,92 @@
+extends layout.pug
+
+block content
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+
+    main.main-content(role='main')
+        .container-fluid
+            .row.justify-content-center
+                .col-12
+                    h2.text-center(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem; padding-top: 7rem;') Sign In 🐈‍⬛
+                    form.col-lg-3.col-md-4.col-10.mx-auto.text-center(style='padding-top: 40px;')
+                        //- h1.h3.mb-3 Sign in
+                        .form-group
+                            label.sr-only(for='user-email') Email address
+                            input#user-signin-email.form-control.form-control-lg.input_signin-email(type='email' placeholder='serval_meow@gmail.com' required autofocus='')
+                        .form-group
+                            label.sr-only(for='user-password') Password
+                            input#user-signin-password.form-control.form-control-lg.input_signin-password(type='password' placeholder='Password' required)
+                        button.btn.btn-lg.btn-primary.btn-block.btn-sign_in(type='submit') Back to Test ➜
+                    .text-center(style='padding: 2rem 0;')
+                        a.create-account(href='./register') Create account 
+                        // - https://css-tricks.com/css-link-hover-effects/
+                        p.mt-5.mb-3.text-muted &copy; 2022 ServalRun
+    script. 
+        $('.btn-sign_in').on('click', function (event) {
+            //- console.log('sign in clicked')
+            event.preventDefault();
+            const userEmail = $('.input_signin-email').val();
+            const userPassword = $('.input_signin-password').val();
+
+            axios({
+                method: 'post',
+                url: '/user/signin',
+                data: {
+                userEmail: userEmail,
+                userPassword: userPassword,
+                },
+                headers: { 'Content-Type': 'application/json' },
+            })
+            .then((response) => {
+            if (response.status === 200) {
+                console.log('sign in success');
+                //- alert("Welcome back to servalRun!");
+                swal({
+                text: 'Welcome back to servalRun!',
+                icon: 'success',
+                confirmButtonClass: 'btn-success',
+                });
+                setTimeout(() => {
+                window.location.assign('./profile');
+                }, 2000);
+            }
+            })
+            .catch((error) => {
+            //- console.log('catch error: ', error)
+            if (error.response.status === 403) {
+                swal({
+                text: 'Sign in failed\nPlease check your email or password',
+                icon: 'error',
+                confirmButtonClass: 'btn-danger',
+                });
+                setTimeout(() => {
+                window.location.reload();
+                }, 2000);
+            } else if (error.response.status === 422) {
+                let errorArray = [];
+                error.response.data.errorMessages.forEach((elem) => {
+                errorArray.push(elem.msg);
+                });
+                let errorMsg = errorArray.join('\n');
+                swal({
+                //- text: 'Please input your information properly',
+                text: errorMsg,
+                icon: 'error',
+                confirmButtonClass: 'btn-danger',
+                });
+                setTimeout(() => {
+                window.location.reload();
+                }, 4000);
+            } else {
+                swal({
+                text: 'Sign in error',
+                icon: 'error',
+                confirmButtonClass: 'btn-danger',
+                });
+                setTimeout(() => {
+                window.location.reload();
+                }, 2000);
+            }
+            });
+        });

@@ -48,7 +48,8 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 html {
   font-family: sans-serif;
@@ -146,7 +147,8 @@ a {
   background-color: transparent; }
   a:hover {
     color: #0045ce;
-    text-decoration: underline; }
+    text-decoration: underline; 
+  }
 
 a:not([href]) {
   color: inherit;
@@ -7378,24 +7380,30 @@ button:focus {
 .dropdown-toggle::after {
   display: inline-block;
   font-family: 'Iunito', sans-serif;
-  content: "\e92e";
+  /* content: "\e92e"; */
+  /* content: "🔽"; */
   font-size: 0.75rem; }
 
 .dropdown-toggle.more-vertical::after {
-  content: "\e9a5"; }
+  /* content: "\e9a5";  */
+}
 
 .dropdown-toggle.more-horizontal::after {
-  content: "\e9a4"; }
+  /* content: "\e9a4";  */
+}
 
 /* navbar */
 .navbar-nav .nav-link {
   padding: 0.5rem; }
 
 .navbar-nav .dropdown .dropdown-toggle:hover:after {
-  content: "\e930"; }
+  /* content: "\e930";  */
+  /* content: "🔽"; */
+}
 
 .navbar-nav .dropdown-menu .nav-item .dropdown-toggle::after {
-  content: "\e930";
+  /* content: "\e930"; */
+  /* content: "🔽"; */
   position: absolute;
   right: .5rem; }
 
@@ -7988,7 +7996,7 @@ select {
     .horizontal .navbar-slide .nav-item .dropdown-toggle::after {
       float: right;
       position: relative;
-      content: "\e92e";
+      content: "\f32d";
       right: 0; }
     .horizontal .navbar-slide .nav-item .nav-link {
       padding: .7rem 1rem .7rem 1.5rem; }
@@ -12073,4 +12081,20 @@ a.uppy-Dashboard-poweredBy {
 .swal-button {
   background-color: #1b68ff !important;
   font-size: 1.3rem !important;
+}
+
+a.create-account {
+  box-shadow: inset 0 0 0 0 #1b68ff; 
+  color: #1b68ff; 
+  padding: 0 .25rem; 
+  margin: 0 -.25rem; 
+  transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+  /* border-radius: 3px; */
+}
+
+a.create-account:hover {
+  color: #fff;
+  box-shadow: inset 200px 0 0 0 #1b68ff;
+  text-decoration: none; 
+  /* border-radius: 3px; */
 }

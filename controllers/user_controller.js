@@ -6,8 +6,12 @@ const {
 } = require('../service/dbUpdate_service');
 const bcrypt = require('bcryptjs');
 
-const userCheck = async (req, res) => {
-  return res.render('user');
+const userSignin = async (req, res) => {
+  return res.render('signin');
+};
+
+const userSignup = async (req, res) => {
+  return res.render('register');
 };
 
 const userSignUpController = async (req, res) => {
@@ -110,7 +114,8 @@ const userDisplayController = async (req, res) => {
 };
 
 module.exports = {
-  userCheck,
+  userSignin,
+  userSignup,
   userSignUpController,
   userSignInController,
   userLogOutController,

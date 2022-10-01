@@ -22,6 +22,18 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.get('/test', (req, res) => {
+  res.render('project');
+});
+
+app.get('/test2', (req, res) => {
+  res.render('collection');
+});
+
+app.get('/test3', (req, res) => {
+  res.render('scenario');
+});
+
 // app.use('/api/' + API_VERSION, // This is used by CSR
 
 app.use('/', [

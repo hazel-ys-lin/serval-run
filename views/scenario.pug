@@ -1,0 +1,133 @@
+extends layout.pug
+
+block content
+    link(rel='stylesheet', href='../../css/common.css')
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    script(src='../../src/js/bootstrap.min.js')
+    
+    main.main-content(role='main')
+        .container-fluid
+            .row.justify-content-center
+                a.h5.text-secondary.mb-3(href='./test')  ← APIs
+                .col-12.mb-0.align-items-center
+                    .title-bar.justify-content-between(style="display: flex")
+                        h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem;') API Name
+                        .edit-buttons
+                            button.btn.btn-warning RUN ALL SCENARIOS
+                            button.btn.btn-primary EDIT 
+                            button.btn.btn-danger.mr-0 DELETE
+                .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
+                .col-12.mb-0.align-items-center
+                    .title-bar.mb-4.justify-content-between.align-items-center(style="display: flex")
+                        h2.h3.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') Scenarios
+                        button.btn.btn-success.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever='') Create Scenario
+                .col-12
+                    .col-md-12.mb-4(style='padding: 0;')
+                        #accordion1.accordion.w-100
+                            .card.shadow
+                                #heading1.card-header(name='collapse1')
+                                    a(role='button' href='#collapse1' data-toggle='collapse' data-target='#collapse1' aria-expanded='true' aria-controls='collapse1')
+                                    .justify-content-between.align-items-center(style='display: flex;')
+                                        strong Scenario 1
+                                        
+                                #collapse1.collapse.show(aria-labelledby='heading1' data-parent='#accordion1' style='')
+                                    
+                                    .row
+                                        .col-md-6
+                                            .card.shadow.mb-4.ml-4
+                                                .card-body 
+                                                    h5.card-title Steps
+                                                    .table
+                                                        .list-group.list-group-flush.my-n3 
+                                                            .list-group-item(style='padding-left: 0;')
+                                                                .row.align-items-center 
+                                                                    .col 
+                                                                        p.small.mb-0 GIVEN 
+                                                                        small I am an existing user
+                                                            .list-group-item(style='padding-left: 0;')
+                                                                .row.align-items-center 
+                                                                    .col 
+                                                                        p.small.mb-0 GIVEN 
+                                                                        small I am an existing user
+                                                            .list-group-item(style='padding-left: 0;')
+                                                                .row.align-items-center 
+                                                                    .col 
+                                                                        p.small.mb-0 GIVEN 
+                                                                        small I am an existing user
+                                        .col-md-6
+                                            .card.shadow.mb-4.mr-4
+                                                .card-body 
+                                                    h5.card-title Examples
+                                                    table.table.table-bordered.table-hover.mb-0
+                                                        thead 
+                                                            tr 
+                                                                th.small provider 
+                                                                th.small email 
+                                                                th.small password 
+                                                                th.small status 
+                                                        tbody 
+                                                            tr
+                                                                th.small native 
+                                                                th.small serval123@gmail.com
+                                                                th.small serval123 
+                                                                th.small 200
+                                    .justify-content-end.mb-4(style='display: flex;')
+                                        .align-items-center.my-1.edit-buttons
+                                            button.btn.btn-info RUN TEST
+                                            button.btn.btn-danger DELETE
+
+                            .card.shadow
+                                #heading1.card-header(name='collapse2')
+                                    a(role='button' href='#collapse2' data-toggle='collapse' data-target='#collapse2' aria-expanded='true' aria-controls='collapse2')
+                                    .justify-content-between.align-items-center(style='display: flex;')
+                                        strong Scenario 2
+                                #collapse2.collapse(aria-labelledby='heading1' data-parent='#accordion1' style='')
+                                    .row
+                                        .col-md-6
+                                            .card.shadow.mb-4.ml-4
+                                                .card-body 
+                                                    h5.card-title Steps
+                                                    .table
+                                                        .list-group.list-group-flush.my-n3 
+                                                            .list-group-item(style='padding-left: 0;')
+                                                                .row.align-items-center 
+                                                                    .col 
+                                                                        p.small.mb-0 GIVEN 
+                                                                        small I am an existing user
+                                                            .list-group-item(style='padding-left: 0;')
+                                                                .row.align-items-center 
+                                                                    .col 
+                                                                        p.small.mb-0 GIVEN 
+                                                                        small I am an existing user
+                                                            .list-group-item(style='padding-left: 0;')
+                                                                .row.align-items-center 
+                                                                    .col 
+                                                                        p.small.mb-0 GIVEN 
+                                                                        small I am an existing user
+                                        .col-md-6
+                                            .card.shadow.mb-4.mr-4
+                                                .card-body 
+                                                    h5.card-title Examples
+                                                    table.table.table-bordered.table-hover.mb-0
+                                                        thead 
+                                                            tr 
+                                                                th.small provider 
+                                                                th.small email 
+                                                                th.small password 
+                                                                th.small status 
+                                                        tbody 
+                                                            tr
+                                                                th.small native 
+                                                                th.small serval123@gmail.com
+                                                                th.small serval123 
+                                                                th.small 200
+                                    .justify-content-end.mb-4(style='display: flex;')
+                                        .align-items-center.my-1.edit-buttons
+                                            button.btn.btn-info RUN TEST
+                                            button.btn.btn-danger DELETE
+    script. 
+        $('.card-header').on('click', function(){
+            let name = $(this).attr('name');
+            $(`#${name}`).toggle('show');
+        })
