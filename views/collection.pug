@@ -87,30 +87,30 @@ block content
                         p.text-secondary #{environments[i].domain_name}
                   - i++
                 .card.shadow.mb-4.mt-0
-                  .card-body(style='padding: 0.05rem 1.25rem;') 
-                    .my-4.col-md-6
-                      .align-items-center.justify-content-between(style='display: flex')
-                        button.btn.btn-create_environment(type='button' data-bs-toggle='modal' data-bs-target='#environmentModal' data-bs-whatever=`${environments[0].project_id}`) Add New Environment
-                      #environmentModal.modal.fade(tabindex='-1' aria-labelledby='environmentModalLabel' aria-hidden='true')
-                        .modal-dialog
-                          .modal-content
-                            .modal-header
-                              h5#environmentModalLabel.modal-title Add Environment
-                              button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
-                            .modal-body
-                              form
-                                .mb-3
-                                  label.col-form-label(for='project-id') Project ID
-                                  input#project-id.form-control.input_projectid
-                                .mb-3
-                                  label.col-form-label(for='domain-name') Domain Name (URL)
-                                  input#domain-name.form-control.input_domain-name(type='url' placeholder='https://www.example.com/')
-                                .mb-3
-                                  label.col-form-label(for='title') Title
-                                  input#title.form-control.input_title(type='string' placeholder='Staging')
-                            .modal-footer
-                              button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
-                              button.btn.btn-primary.btn-modal-create_environment(type='submit') Create Environment
+                  .card-body
+                    .row.align-items-center
+                      .my-4.col-md-6
+                      button.btn.text-uppercase.btn-create_environment(type='button' data-bs-toggle='modal' data-bs-target='#environmentModal' data-bs-whatever=`${environments[0].project_id}`) Add New Environment
+                    #environmentModal.modal.fade(tabindex='-1' aria-labelledby='environmentModalLabel' aria-hidden='true')
+                      .modal-dialog
+                        .modal-content
+                          .modal-header
+                            h5#environmentModalLabel.modal-title Add Environment
+                            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                          .modal-body
+                            form
+                              .mb-3
+                                label.col-form-label(for='project-id') Project ID
+                                input#project-id.form-control.input_projectid
+                              .mb-3
+                                label.col-form-label(for='domain-name') Domain Name (URL)
+                                input#domain-name.form-control.input_domain-name(type='url' placeholder='https://www.example.com/')
+                              .mb-3
+                                label.col-form-label(for='title') Title
+                                input#title.form-control.input_title(type='string' placeholder='Staging')
+                          .modal-footer
+                            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                            button.btn.btn-primary.btn-modal-create_environment(type='submit') Create Environment
         .title-divider(style='height: 0; margin: 0 0 1rem 0; overflow: hidden; border-top: 1px solid #e9ecef;')
         .col-12.align-items-center
           .title-bar.justify-content-between(style='display: flex')
