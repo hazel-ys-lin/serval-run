@@ -23,13 +23,13 @@ html
   link(href="https://fonts.cdnfonts.com/css/pf-tempesta-seven-extended" rel="stylesheet")
 
   body.vertical.light
-  .wrapper.error-wrapper
-    nav.topnav.navbar.navbar-light.justify-content-end(style='display: flex')
+  .wrapper.error-wrapper(style='position: relative;')
+    nav.topnav.navbar.navbar-light.justify-content-end(style='display: flex; position: absolute; right: 20px;')
       //- button.navbar-toggler.text-muted.mt-2.p-0.mr-3.collapseSidebar(type='button')
       //-   i.fa.fa-solid.fa-bars.navbar-toggler-icon
       ul.nav
         li.nav-item
-          button#modeSwitcher.btn.nav-link.text-muted.my-2.btn-log_out(data-mode='light')
+          button#modeSwitcher.btn.nav-link.text-muted.my-2.btn-log_out.mr-0.pr-0(data-mode='light')
             i.fa.fa-solid.fa-right-from-bracket
     aside#leftSidebar.vertical.collapsed.sidebar-left.border-right.bg-white.shadow(data-simplebar='init' style='height: 100vh')
       .simplebar-wrapper(style='margin: 0px;')

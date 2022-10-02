@@ -26,7 +26,7 @@ block content
   main.main-content(role='main')
     .container-fluid
       .row.justify-content-center
-        a.h5.text-secondary.mb-3(href='./profile')  ← Home
+        a.h5.text-secondary(href='./profile')  ← Home
         .col-12.mb-0.align-items-center
           .title-bar.align-items-center.justify-content-between(style="display: flex")
             .project-info.align-items-start.justify-content-center(style='display: flex; flex-direction: column;')
@@ -78,7 +78,7 @@ block content
                       .my-4
                         .info.align-items-center.justify-content-between(style='display: flex')
                           h3 #{environments[i].title}
-                          .icons.justify-content-between(style='width: 4rem;')
+                          .icons.justify-content-between(style='width: 2rem;')
                             //- button.btn(id=`${environments[i]._id}` style='padding: 0;')
                             //-   i.h4.fa.fa-solid.fa-gear.text-grey
                             button.btn.btn-delete_environment(id=`${environments[i]._id}` style='padding: 0;')
@@ -88,7 +88,7 @@ block content
                   - i++
                 .card.shadow.mb-4.mt-0
                   .card-body(style='padding: 0.05rem 1.25rem;') 
-                    .my-4
+                    .my-4.col-md-6
                       .align-items-center.justify-content-between(style='display: flex')
                         button.btn.btn-create_environment(type='button' data-bs-toggle='modal' data-bs-target='#environmentModal' data-bs-whatever=`${environments[0].project_id}`) Add New Environment
                       #environmentModal.modal.fade(tabindex='-1' aria-labelledby='environmentModalLabel' aria-hidden='true')
@@ -151,7 +151,7 @@ block content
                       .my-4
                         .info.align-items-center.justify-content-between(style='display: flex')
                           .mb-0.text-muted(style='font-weight: 400; font-size: 0.9rem;') #{userCollections[i].collection._id}
-                          .icons.justify-content-between.align-items-center(style='width: 8rem;')
+                          .icons.justify-content-between.align-items-center(style='width: 4rem;')
                             a.pr-2(href=`./apis?collectionid=${userCollections[i].collection._id}` style='padding: 0;')
                               i.h5.fa.fa-solid.fa-eye.text-grey
                             //- button.btn(id=`${userCollections[i].collection._id}` style='padding: 0;')

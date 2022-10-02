@@ -35,7 +35,7 @@ block content
     main.main-content(role='main')
         .container-fluid
             .row.justify-content-center
-                a.h5.text-secondary.mb-3(href=`./collections?projectid=${reportDetail.project_id}`)   ← Project
+                a.h5.text-secondary(href=`./collections?projectid=${reportDetail.project_id}`)   ← Project
                 .col-12
                   .input-form
                     h1.report-length(examples=`${reportResponse.length}` style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem;') Report Details
