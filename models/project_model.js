@@ -97,7 +97,7 @@ const projectInsertModel = async function (projectInfo) {
 };
 
 const projectGetModel = async function (userEmail) {
-  let [userData] = await userModel.find({
+  let userData = await userModel.findOne({
     user_email: userEmail,
   });
 
@@ -186,7 +186,7 @@ const environmentInsertModel = async function (environmentInfo) {
 };
 
 const environmentGetModel = async function (projectId) {
-  let [projectData] = await projectModel.find({
+  let projectData = await projectModel.findOne({
     _id: projectId,
   });
 

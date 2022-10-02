@@ -4,130 +4,366 @@ block content
     link(rel='stylesheet', href='../../css/common.css')
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js')
     script(src='../../src/js/bootstrap.min.js')
+    script(src='../../src/gherkin.js')
     
     main.main-content(role='main')
         .container-fluid
             .row.justify-content-center
                 a.h5.text-secondary.mb-3(href='./test')  ← APIs
                 .col-12.mb-0.align-items-center
-                    .title-bar.justify-content-between(style="display: flex")
-                        h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem;') API Name
+                    .title-bar.align-items-center.justify-content-between(style='display: flex')
+                        .api-info.align-items-start.justify-content-center(style='display: flex; flex-direction: column;')
+                            h2.h3.mb-2.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem; align-self: flex-start;') #{apiName}
+                            h5.text-secondary(style='align-self: flex-start; font-weight: 400;') #{userScenarios[0].apiId}
                         .edit-buttons
                             button.btn.btn-warning RUN ALL SCENARIOS
-                            button.btn.btn-primary EDIT 
-                            button.btn.btn-danger.mr-0 DELETE
                 .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
                 .col-12.mb-0.align-items-center
                     .title-bar.mb-4.justify-content-between.align-items-center(style="display: flex")
                         h2.h3.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') Scenarios
-                        button.btn.btn-success.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever='') Create Scenario
-                .col-12
-                    .col-md-12.mb-4(style='padding: 0;')
-                        #accordion1.accordion.w-100
-                            .card.shadow
-                                #heading1.card-header(name='collapse1')
-                                    a(role='button' href='#collapse1' data-toggle='collapse' data-target='#collapse1' aria-expanded='true' aria-controls='collapse1')
-                                    .justify-content-between.align-items-center(style='display: flex;')
-                                        strong Scenario 1
-                                        
-                                #collapse1.collapse.show(aria-labelledby='heading1' data-parent='#accordion1' style='')
-                                    
-                                    .row
-                                        .col-md-6
-                                            .card.shadow.mb-4.ml-4
-                                                .card-body 
-                                                    h5.card-title Steps
-                                                    .table
-                                                        .list-group.list-group-flush.my-n3 
-                                                            .list-group-item(style='padding-left: 0;')
-                                                                .row.align-items-center 
-                                                                    .col 
-                                                                        p.small.mb-0 GIVEN 
-                                                                        small I am an existing user
-                                                            .list-group-item(style='padding-left: 0;')
-                                                                .row.align-items-center 
-                                                                    .col 
-                                                                        p.small.mb-0 GIVEN 
-                                                                        small I am an existing user
-                                                            .list-group-item(style='padding-left: 0;')
-                                                                .row.align-items-center 
-                                                                    .col 
-                                                                        p.small.mb-0 GIVEN 
-                                                                        small I am an existing user
-                                        .col-md-6
-                                            .card.shadow.mb-4.mr-4
-                                                .card-body 
-                                                    h5.card-title Examples
-                                                    table.table.table-bordered.table-hover.mb-0
-                                                        thead 
-                                                            tr 
-                                                                th.small provider 
-                                                                th.small email 
-                                                                th.small password 
-                                                                th.small status 
-                                                        tbody 
-                                                            tr
-                                                                th.small native 
-                                                                th.small serval123@gmail.com
-                                                                th.small serval123 
-                                                                th.small 200
-                                    .justify-content-end.mb-4(style='display: flex;')
-                                        .align-items-center.my-1.edit-buttons
-                                            button.btn.btn-info RUN TEST
-                                            button.btn.btn-danger DELETE
-
-                            .card.shadow
-                                #heading1.card-header(name='collapse2')
-                                    a(role='button' href='#collapse2' data-toggle='collapse' data-target='#collapse2' aria-expanded='true' aria-controls='collapse2')
-                                    .justify-content-between.align-items-center(style='display: flex;')
-                                        strong Scenario 2
-                                #collapse2.collapse(aria-labelledby='heading1' data-parent='#accordion1' style='')
-                                    .row
-                                        .col-md-6
-                                            .card.shadow.mb-4.ml-4
-                                                .card-body 
-                                                    h5.card-title Steps
-                                                    .table
-                                                        .list-group.list-group-flush.my-n3 
-                                                            .list-group-item(style='padding-left: 0;')
-                                                                .row.align-items-center 
-                                                                    .col 
-                                                                        p.small.mb-0 GIVEN 
-                                                                        small I am an existing user
-                                                            .list-group-item(style='padding-left: 0;')
-                                                                .row.align-items-center 
-                                                                    .col 
-                                                                        p.small.mb-0 GIVEN 
-                                                                        small I am an existing user
-                                                            .list-group-item(style='padding-left: 0;')
-                                                                .row.align-items-center 
-                                                                    .col 
-                                                                        p.small.mb-0 GIVEN 
-                                                                        small I am an existing user
-                                        .col-md-6
-                                            .card.shadow.mb-4.mr-4
-                                                .card-body 
-                                                    h5.card-title Examples
-                                                    table.table.table-bordered.table-hover.mb-0
-                                                        thead 
-                                                            tr 
-                                                                th.small provider 
-                                                                th.small email 
-                                                                th.small password 
-                                                                th.small status 
-                                                        tbody 
-                                                            tr
-                                                                th.small native 
-                                                                th.small serval123@gmail.com
-                                                                th.small serval123 
-                                                                th.small 200
-                                    .justify-content-end.mb-4(style='display: flex;')
-                                        .align-items-center.my-1.edit-buttons
-                                            button.btn.btn-info RUN TEST
-                                            button.btn.btn-danger DELETE
+                        button.btn.btn-success.btn-create_scenario(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userScenarios[0].apiId}`) Create Scenario
+                        #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                            .modal-dialog.modal-lg
+                                .modal-content
+                                    .modal-header
+                                        h5#exampleModalLabel.modal-title Add Scenario
+                                        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                    .modal-body
+                                        form
+                                            .mb-3 
+                                                label.col-form-label(for='api-id') API ID
+                                                input#api-id.form-control.input_apiid
+                                            .mb-3
+                                                label.col-form-label(for='scenario') Test Document (Scenario)
+                                                textarea#code(name='code' placeholder='# Write your test document in gherkin language here! \n # The serval can only read gherkin now, meow.')
+                                                    | # Write your test document scenario in gherkin language here! 
+                                                    | # The serval can only read gherkin now, meow.
+                                    .modal-footer
+                                        button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                                        button.btn.btn-primary.btn-modal-create_scenario(type='submit') Create Scenario
+                    
+                    if !userScenarios[0].scenario
+                        .col-12(style='display: flex; justify-content: center;')
+                            .text-muted.display-6(style='padding-top: 20px') Create your first scenario!
+                    else
+                        - let i = 0
+                        while i < userScenarios.length
+                            .col-12.mb-4(style='padding: 0;')
+                                #accordion1.accordion.w-100
+                                    .card.shadow
+                                        #heading1.card-header(name=`${userScenarios[i].scenario._id}` style='cursor: pointer;')
+                                            a(role='button' href='#collapse1' data-toggle='collapse' data-target='#collapse1' aria-expanded='true' aria-controls='collapse1')
+                                            .justify-content-between.align-items-center(style='display: flex;')
+                                                .scenario-info.justify-content-start
+                                                    strong.align-items-center(style='font-size: 2rem; font-weight: 400; line-height: 1.2;') #{userScenarios[0].scenario.title}
+                                                    p.h4.text-muted #{userScenarios[i].scenario.description}
+                                                i.h2.fa.fa-solid.fa-caret-down.mr-3
+                                                
+                                        .collapse.show(aria-labelledby='heading1' data-parent='#accordion1' style='display: none;' id=`${userScenarios[i].scenario._id}`)
+                                            
+                                            .row
+                                                .col-md-6
+                                                    .card.shadow.mb-4.ml-4
+                                                        .card-body(style='height: 25rem; overflow-y: scroll;')
+                                                            h5.card-title Steps
+                                                            .table
+                                                                .list-group.list-group-flush.my-n3 
+                                                                    each element in userScenarios[i].scenario.steps
+                                                                        .list-group-item(style='padding-left: 0;')
+                                                                            .row.align-items-center 
+                                                                                .col 
+                                                                                    p.mb-0.badge.bg-light.text-dark(style='font-size: 90%;')= element.keyword 
+                                                                                    small.list-inline-item.pl-2(style='font-size: 90%;')= element.text
+                                                .col-md-6
+                                                    .card.shadow.mb-4.mr-4
+                                                        .card-body(style='height: 25rem; overflow-y: scroll;')
+                                                            h5.card-title Examples
+                                                            table.table.table-bordered.table-hover.mb-0
+                                                                tr
+                                                                each val, key in userScenarios[i].scenario.examples[0].example
+                                                                    th(style='font-size: 0.875rem; font-weight: 600;')= key
+                                                                each example in userScenarios[i].scenario.examples
+                                                                    tr
+                                                                    each val, key in example.example
+                                                                        td(style='font-size: 0.875rem;')= val
+                                            .justify-content-end.mb-4(style='display: flex;')
+                                                .align-items-center.my-1.edit-buttons
+                                                    button.btn.btn-info RUN TEST
+                                                    button.btn.btn-danger DELETE
+                            - i++
     script. 
         $('.card-header').on('click', function(){
             let name = $(this).attr('name');
             $(`#${name}`).toggle('show');
+        })
+
+        $('#exampleModal').on('shown.bs.modal', function() {
+            // src: https://stackoverflow.com/questions/17086538/codemirror-content-not-visible-in-bootstrap-modal-until-it-is-clicked
+            // initialize codemirror here
+            let editors = Array.from(document.getElementsByClassName("CodeMirror"))
+            editors.forEach((element)=>{
+                element.remove();
+            });
+            let editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                lineNumbers: true,
+                matchBrackets: true,
+                mode: 'text/x-feature'
+            });
+
+            $('.btn-modal-create_scenario').on('click', function(event) {
+                console.log('create scenario in modal clicked')
+                event.preventDefault();
+
+                swal({
+                    title:"", 
+                    text:"Loading...",
+                    icon: "https://www.boasnotas.com/img/loading2.gif",
+                    buttons: false,      
+                    closeOnClickOutside: false,
+                });
+
+                const apiId = $('.input_apiid').val();
+                const featureCode = editor.getValue();
+
+                axios({
+                    method: 'post',
+                    url: '/editscenario',
+                    data: {
+                        apiId: apiId,
+                        featureCode: featureCode,
+                    },
+                    headers: {'Content-Type': 'application/json'},
+                })
+                .then((response) => {
+                    if (response.status === 200) {
+                        swal({
+                            text: 'Create scenario successfully',
+                            icon: "success",
+                            //- confirmButtonClass: "btn-success",
+                        })
+                        setTimeout(()=> {
+                            window.location.reload();
+                        }, 2000)
+                    }
+                })
+                .catch((error) => {
+                    console.log('in error');
+                    console.log('catch: ', error)
+                    if (error.response.status === 422) {
+                        swal({
+                            text: 'Compile gherkin script error',
+                            icon: "error",
+                            //- confirmButtonClass: "btn-success",
+                        })
+                        setTimeout(()=> {
+                            window.location.reload();
+                        }, 2000)
+                    } else {
+                        swal({
+                            text: 'Create scenario error',
+                            icon: "error",
+                            confirmButtonClass: "btn-danger",
+                        })
+                        setTimeout(()=> {
+                            window.location.reload();
+                        }, 2000)
+                        //- alert('create scenario error')
+                    }
+                })
+            })
+        })
+
+
+        $('#exampleModal').on('show.bs.modal', function(event) {
+            let button = event.relatedTarget;
+            let apiId = $('.btn-create_scenario').attr('data-bs-whatever');
+            $('input#api-id').val(apiId).prop('readonly', true);
+        })
+
+        $('.btn-create_scenario').on('click', function(event) {
+            console.log('create_scenario clicked')
+            event.preventDefault();
+        })
+
+        $('.btn-scenariotest-in-toggle').on('click', function(event) {
+            console.log('run scenario test in toggle clicked');
+            event.preventDefault();
+
+            swal({
+                title:"Serval is running...", 
+                //- html: true,
+                //- icon: "https://i.gifer.com/2yqU.gif",
+                icon: "https://i.gifer.com/PYh.gif",
+                buttons: false,      
+                closeOnClickOutside: false,
+                //- timer: 5000,
+            });
+
+
+            const apiId = $('.card-title').text().replace('API ID: ', '');
+            const scenarioId = this.id;
+            const domainName = $('.btn-scenariotest-in-toggle').attr('domain');
+            const title = $('.btn-scenariotest-in-toggle').attr('title');
+
+            axios({
+                method: 'post',
+                url: '/scenariorun',
+                data: {
+                    apiId: apiId,
+                    scenarioId: scenarioId,
+                    domainName: domainName,
+                    title: title,
+                    report_info: {
+                        report_level: 1,
+                        report_type: 'scenario',
+                    }
+                }, 
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    swal({
+                        text: 'Add acenario test to running list successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('Run scenario test successfully')
+                    //- window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('catch: ', error)
+                swal({
+                        text: 'Add acenario test to running list error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('Run scenario test error')
+            })
+        })
+
+
+        $('.btn-delete').on('click', function(event) {
+            console.log('delete_scenario clicked')
+            event.preventDefault();
+
+            const apiId = $('.card-title').text().replace('API ID: ', '');
+            const scenarioId = this.id;
+            console.log('scenarioId: ', scenarioId)
+
+            axios({
+                method: 'delete',
+                url: '/editscenario',
+                data: {
+                    apiId: apiId,
+                    scenarioId: scenarioId,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    swal({
+                        text: 'Delete scenario successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('delete scenario successfully')
+                    //- window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch: ', error)
+                swal({
+                        text: 'Delete scenario error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('delete scenario error')
+            })
+        })
+
+
+        $('.btn-apitest-in-toggle').on('click', function(event) {
+            console.log('run api test in toggle clicked');
+            event.preventDefault();
+
+            swal({
+                title:"Serval is running...", 
+                //- html: true,
+                //- icon: "https://i.gifer.com/2yqU.gif",
+                icon: "https://i.gifer.com/PYh.gif",
+                buttons: false,      
+                closeOnClickOutside: false,
+                //- timer: 5000,
+            });
+
+            const apiId = $('.card-title').text().replace('API ID: ', '');
+            const scenarioId = this.id;
+            const domainName = $('.btn-apitest-in-toggle').attr('domain');
+            const title = $('.btn-apitest-in-toggle').attr('title');
+
+            axios({
+                method: 'post',
+                url: '/apirun',
+                data: {
+                    apiId: apiId,
+                    scenarioId: scenarioId,
+                    domainName: domainName,
+                    title: title,
+                    report_info: {
+                        report_level: 2,
+                        report_type: 'api',
+                    }
+                }, 
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    swal({
+                        text: 'Add api test to running list successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('Run api test successfully')
+                    //- window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('catch: ', error)
+                swal({
+                    text: 'Run api test error',
+                    icon: "error",
+                    confirmButtonClass: "btn-danger",
+                })
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2000)
+                //- alert('Run api test error')
+            })
+        })
+
+        $(document).ready(() => {
+            let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+            let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl)
+            })
         })

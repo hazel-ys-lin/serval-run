@@ -1,3 +1,4 @@
+const { projectGetModel } = require('../models/project_model');
 const { userSignUpModel, userSignInModel } = require('../models/user_model');
 const { validationResult } = require('express-validator');
 const {
@@ -94,8 +95,11 @@ const userSignInController = async (req, res) => {
 };
 
 const userLogOutController = async (req, res) => {
-  req.session.isAuth = false;
-  return res.status(200).json({ msg: 'Log out Successfully' });
+  if (req.session.isAuth === true) {
+    req.session.isAuth = false;
+    return res.status(200).json({ msg: 'Log out Successfully' });
+  }
+  return res.status(201).json({ msg: 'Redirect to top' });
 };
 
 const userDisplayController = async (req, res) => {
@@ -110,7 +114,24 @@ const userDisplayController = async (req, res) => {
     userEmail: req.session.userEmail,
   };
 
-  return res.render('profile', { userInfo: userInfo });
+  const userEmail = req.session.userEmail;
+
+  // get project info
+  let userProjects = await projectGetModel(userEmail);
+  let projectList = [];
+  for (let i = 0; i < userProjects.length; i++) {
+    // userProjects[i].user_email = userEmail;
+    projectList.push({
+      projectId: userProjects[i]._id,
+      projectName: userProjects[i].project_name,
+    });
+  }
+  // console.log('projectList in userDisplayController: ', projectList);
+
+  return res.render('profile', {
+    userInfo: userInfo,
+    userProjects: projectList,
+  });
 };
 
 module.exports = {

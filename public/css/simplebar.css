@@ -1,7 +1,5 @@
 [data-simplebar] {
-  /* position: relative; */
-  position: fixed;
-  top: 0;
+  position: relative;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -210,10 +208,4 @@
   overflow-y: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
-}
-
-.topnav {
-  margin-left: 350px;
-  padding-left: 2.2rem;
-  padding-right: 2.2rem;
 }

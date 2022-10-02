@@ -1,41 +1,37 @@
-extends layout.pug
+extends layout_user.pug
 
 block content 
-
-    main.main-content(role='main')
+    main.main-content(role='main' style='margin-left: 0px;  padding-left: 2.2rem; padding-right: 2.2rem;')
         .container-fluid
             .row.justify-content-center
                 .col-12
-                    .mx-auto.text-center.justify-content-center.py-5.my-5
+                    .mx-auto.text-center.justify-content-center
                         img.avatar-img(src='../../css/icon/serval.png' style='width: 90px; height: 90px; margin-bottom: 15px;')
                         h1.page-title.mb-0(style='font-size: 3rem;') ServalRun®
                         p.lead.text-dark.mb-4(style='font-size: 2rem;') Test Your Server as Rapid as Serval. 
 
-                        .row.my-4
-                            .col-md-6
+                        .row.align-items-center.justify-content-center(style='display: flex;     margin-top: 5rem;')
+                            .col-md-5
                                 .card.shadow.bg-primary.text-center.mb-4
                                     .card-body.p-5
-                                        span.circle.circle-md.bg-primary-light
-                                            i.fe.fe-navigation.fe-24.text-white
+                                        span.circle.circle-md.bg-primary-light.align-items-center.justify-content-center
+                                            i.h5.fa.fa-solid.fa-jet-fighter.text-white.mb-0
                                         h3.h4.mt-4.mb-1.text-white(style='font-size: 1.5rem;') Create Account
                                         p.text-white.mb-4(style='font-size: 1.2rem;') Start your test journey with Serval
                                         a.btn.btn-lg.bg-primary-light.text-white.btn-user(href='http://localhost:3001/register' style='font-size: 1.2rem;')
                                             | Register
-                                            i.fe.fe-arrow-right.fe-16.ml-2
-                                    // .card-body
-                                    // .card
-                                // .col-md
-                            .col-md-6
+                                            i.fa.fa-solid.fa-forward.pl-2
+                            .col-md-5
                                 .card.shadow.bg-success.text-center.mb-4
                                     .card-body.p-5
-                                        span.circle.circle-md.bg-success-light
-                                            i.fe.fe-message-circle.fe-24.text-secondary
+                                        span.circle.circle-md.bg-success-light.align-items-center.justify-content-center
+                                            i.h4.fa.fa-solid.fa-burger.mb-0
                                         h3.h4.mt-4.mb-1.text-dark(style='font-size: 1.5rem;')  Already have account?
                                         p.text-dark.mb-4(style='font-size: 1.2rem;')  Sign in to check your reports
                                         a.btn.btn-lg.bg-success-light.text-dark.btn-user(href='http://localhost:3001/signin' style='font-size: 1.2rem;')
                                             | Sign In
-                                            i.fe.fe-arrow-right.fe-16.ml-2
-                            .text-center(style='padding: 2rem 0; ')
+                                            i.fa.fa-solid.fa-forward.pl-2
+                            .text-center
                                 p.mt-5.mb-3.text-muted &copy; 2022 ServalRun
     script. 
         $('.btn-profile').on('click', function (event) {

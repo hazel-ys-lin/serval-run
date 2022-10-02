@@ -92,7 +92,7 @@ const collectionInsertModel = async function (collectionInfo) {
 };
 
 const collectionGetModel = async function (projectId) {
-  let [projectData] = await projectModel.find({
+  let projectData = await projectModel.findOne({
     _id: projectId,
   });
 
@@ -115,11 +115,15 @@ const collectionGetModel = async function (projectId) {
 };
 
 const collectionInfoGetModel = async function (collectionId) {
-  let [collectionInfo] = await collectionModel.find({
+  let collectionInfo = await collectionModel.findOne({
     _id: collectionId,
   });
+  console.log('collectionInfo: ', collectionInfo);
 
-  return collectionInfo.project_id;
+  return {
+    projectId: collectionInfo.project_id,
+    collectionName: collectionInfo.collection_name,
+  };
 };
 
 const collectionNameModel = async function (collectionId) {
@@ -206,11 +210,12 @@ const apiGetModel = async function (collectionId) {
 };
 
 const apiInfoGetModel = async function (apiId) {
-  let [apiInfo] = await apiModel.find({
+  let apiInfo = await apiModel.findOne({
     _id: apiId,
   });
 
   return {
+    apiName: apiInfo.api_name,
     collectionId: apiInfo.collection_id,
     httpMethod: apiInfo.http_method,
     apiEndpoint: apiInfo.api_endpoint,

@@ -1,0 +1,372 @@
+extends layout.pug
+
+block content
+    link(rel='stylesheet', href='../../css/common.css')
+    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    
+    main.main-content(role='main')
+        .container-fluid
+            .row.justify-content-center
+                a.h5.text-secondary.mb-3(href='./test')  ← Project
+                .col-12.mb-0.align-items-center
+                    .title-bar.align-items-center.justify-content-between(style="display: flex")
+                        .collection-info.align-items-start.justify-content-center(style='display: flex; flex-direction: column;')
+                            h2.h3.mb-2.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem; align-self: flex-start;') #{collectionName}
+                            h5.text-secondary(style='align-self: flex-start; font-weight: 400;') #{userApis[0].collectionId}
+                        .edit-buttons
+                            button.btn.btn-warning RUN ALL APIS
+                .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
+                .col-12.mb-0.align-items-center
+                    .title-bar.mb-4.justify-content-between.align-items-center(style="display: flex")
+                        h2.h3.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') APIs
+                        button.btn.btn-success.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userApis[0].collectionId}`) Create API
+                        #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                            .modal-dialog
+                                .modal-content
+                                    .modal-header
+                                        h5#exampleModalLabel.modal-title Add API
+                                        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                    .modal-body
+                                        form
+                                            .mb-3
+                                                label.col-form-label(for='collection-id') Collection ID
+                                                input#collection-id.form-control.input_collectionid
+                                            .mb-3
+                                                label.col-form-label(for='api-name') API Name
+                                                input#api-name.form-control.input_api-name(type='string' placeholder='My API')
+                                            .mb-3
+                                                label.col-form-label(for='http-method') HTTP Method
+                                                select#http-method.form-control.text-muted.input_http-method
+                                                    option(value='' selected='' disabled='' hidden='') Please choose method to test
+                                                    option GET 
+                                                    option POST 
+                                                    option PUT 
+                                                    option PATCH 
+                                                    option DELETE
+                                            .mb-3
+                                                label.col-form-label(for='api-endpoint') API Endpoint
+                                                input#api-endpoint.form-control.input_api-endpoint(type='string' placeholder='api/1.0/user/signin')
+                                            .mb-3
+                                                label.col-form-label(for='api-severity') Severity
+                                                select#api-severity.form-control.text-muted.input_api-severity
+                                                    option(value='' selected='' disabled='' hidden='') Please value the severity
+                                                        option 1 
+                                                        option 2 
+                                                        option 3 
+                                                        option 4 
+                                                        option 5
+                                    .modal-footer
+                                        button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                                        button.btn.btn-primary.btn-modal-create_api(type='submit') Create API
+                    if !userApis[0].api
+                        div(style='display: flex; justify-content: center;')
+                            .text-muted.display-6(style='padding-top: 20px') Create your first API!
+                    .card.shadow
+                        .card-body
+                            table.table.mb-0
+                                thead 
+                                    tr 
+                                        th Name  
+                                        th Method 
+                                        th Endpoint 
+                                        th Severity 
+                                        th Operation 
+                                tbody
+                                    - let i = 0
+                                    while i < userApis.length
+                                        tr
+                                            td #{userApis[i].api.api_name}
+                                            td #{userApis[i].api.http_method}
+                                            td #{userApis[i].api.api_endpoint}
+                                            td #{userApis[i].api.severity}
+                                            td
+                                                button.btn.btn-success(type='submit') Run Test
+                                                button.btn.btn-info.btn-scenarios(type='submit' id=`${userApis[i].api._id}`) scenarios
+                                                button.btn.btn-secondary(type='submit') edit
+                                                button.btn.btn-secondary(type='submit') delete
+                                        - i++
+    script. 
+        $('.btn-create_api').on('click', function(event) {
+            console.log('create_api clicked')
+            event.preventDefault();
+        })
+
+        $('.btn-scenarios').on('click', function(event) {
+            console.log('view scenario clicked')
+            event.preventDefault();
+            const apiId = this.id;
+            window.location.assign(`./scenarios?apiid=${apiId}`);
+        })
+
+        $('#exampleModal').on('show.bs.modal', function(event) {
+            let button = event.relatedTarget;
+            let collectionId = $('.btn-create_api').attr('data-bs-whatever');
+
+            $('input#collection-id').val(collectionId).prop('readonly', true);
+        })
+
+        $('.btn-modal-create_api').on('click', function(event) {
+            console.log('create_api in modal clicked')
+            event.preventDefault();
+            const collectionId = $('.input_collectionid').val();
+            const apiName = $('.input_api-name').val();
+            const httpMethod = $('.input_http-method').val();
+            const apiEndpoint = $('.input_api-endpoint').val();
+            const apiSeverity = $('.input_api-severity').val();
+
+            axios({
+                method: 'post',
+                url: '/editapi',
+                data: {
+                    collectionId: collectionId,
+                    apiName: apiName,
+                    httpMethod: httpMethod,
+                    apiEndpoint: apiEndpoint,
+                    apiSeverity: apiSeverity,
+                },
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    swal({
+                        text: 'Create api successfully',
+                        icon: "success",
+                        confirmButtonClass: "btn-success",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('create api successfully')
+                    //- window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log('in error');
+                console.log('catch api error')
+                if (error.response.status === 401) {
+                    swal({
+                            text: 'Please log in first',
+                            icon: "error",
+                            confirmButtonClass: "btn-danger",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                } else {
+                    swal({
+                        text: 'Create API failed',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                }
+            })
+        })
+
+
+        //- $('.btn-delete').on('click', function(event) {
+        //-     console.log('delete_api clicked')
+        //-     event.preventDefault();
+
+        //-     const collectionId = $('.card-title').text().replace('Collection ID: ', '');
+        //-     const apiId = this.id;
+        //-     console.log('apiId: ', apiId)
+
+        //-     axios({
+        //-         method: 'delete',
+        //-         url: '/editapi',
+        //-         data: {
+        //-             collectionId: collectionId,
+        //-             apiId: apiId,
+        //-         },
+        //-         headers: {'Content-Type': 'application/json'}
+        //-     })
+        //-     .then((response) => {
+        //-         if (response.status === 200) {
+        //-             swal({
+        //-                 text: 'Delete API successfully',
+        //-                 icon: "success",
+        //-                 confirmButtonClass: "btn-success",
+        //-             })
+        //-             setTimeout(()=> {
+        //-                 window.location.reload();
+        //-             }, 2000)
+        //-             //- alert('delete API successfully')
+        //-             //- //- window.location.assign('./testresult');
+        //-             //- window.location.reload();
+        //-         }
+        //-     })
+        //-     .catch((error) => {
+        //-         console.log('in error');
+        //-         console.log('catch: ', error)
+        //-         if (error.response.status === 401) {
+        //-             swal({
+        //-                     text: 'Please log in first',
+        //-                     icon: "error",
+        //-                     confirmButtonClass: "btn-danger",
+        //-             })
+        //-             setTimeout(()=> {
+        //-                 window.location.reload();
+        //-             }, 2000)
+        //-         } else {
+        //-             swal({
+        //-                     text: 'Delete API failed',
+        //-                     icon: "error",
+        //-                     confirmButtonClass: "btn-danger",
+        //-             })
+        //-             setTimeout(()=> {
+        //-                 window.location.reload();
+        //-             }, 2000)
+        //-             //- alert('delete API error')
+        //-             }
+        //-     })
+        //- })
+
+        //- $('.btn-apitest-in-toggle').on('click', function(event) {
+        //-     console.log('run api test in toggle clicked');
+        //-     event.preventDefault();
+
+        //-     swal({
+        //-         title:"Serval is running...", 
+        //-         //- html: true,
+        //-         //- icon: "https://i.gifer.com/2yqU.gif",
+        //-         icon: "https://i.gifer.com/PYh.gif",
+        //-         buttons: false,      
+        //-         closeOnClickOutside: false,
+        //-         //- timer: 5000,
+        //-     });
+
+
+        //-     const collectionId = $('.card-title').text().replace('Collection ID: ', '');
+        //-     const apiId = this.id;
+        //-     const domainName = $('.btn-apitest-in-toggle').attr('domain');
+        //-     const title = $('.btn-apitest-in-toggle').attr('title');
+
+        //-     axios({
+        //-         method: 'post',
+        //-         url: '/apirun',
+        //-         data: {
+        //-             collectionId: collectionId,
+        //-             apiId: apiId,
+        //-             domainName: domainName,
+        //-             title: title,
+        //-             report_info: {
+        //-                 report_level: 2,
+        //-                 report_type: 'api',
+        //-             }
+        //-         }, 
+        //-         headers: {'Content-Type': 'application/json'}
+        //-     })
+        //-     .then((response) => {
+        //-         if (response.status === 200) {
+        //-             swal({
+        //-                 text: 'Add api test to running list successfully',
+        //-                 icon: "success",
+        //-                 confirmButtonClass: "btn-success",
+        //-             })
+        //-             setTimeout(()=> {
+        //-                 window.location.reload();
+        //-             }, 2000)
+        //-             //- alert('Run api test successfully')
+        //-             //- window.location.reload();
+        //-         }
+        //-     })
+        //-     .catch((error) => {
+        //-         console.log('catch: ', error)
+        //-         if (error.response.status === 401) {
+        //-             swal({
+        //-                     text: 'Please log in first',
+        //-                     icon: "error",
+        //-                     confirmButtonClass: "btn-danger",
+        //-             })
+        //-             setTimeout(()=> {
+        //-                 window.location.reload();
+        //-             }, 2000)
+        //-         } else {
+        //-             swal({
+        //-                 text: 'Add api test to running list failed',
+        //-                 icon: "error",
+        //-                 confirmButtonClass: "btn-danger",
+        //-             })
+        //-             setTimeout(()=> {
+        //-                 window.location.reload();
+        //-             }, 2000)
+        //-             //- alert('Run api test error')
+        //-         }
+        //-     })
+        //- })
+
+        //- $('.btn-collectiontest-in-toggle').on('click', function(event) {
+        //-     console.log('run collection test in toggle clicked');
+        //-     event.preventDefault();
+
+        //-     swal({
+        //-         title:"Serval is running...", 
+        //-         //- html: true,
+        //-         //- icon: "https://i.gifer.com/2yqU.gif",
+        //-         icon: "https://i.gifer.com/PYh.gif",
+        //-         buttons: false,      
+        //-         closeOnClickOutside: false,
+        //-         //- timer: 5000,
+        //-     });
+
+
+        //-     const collectionId = this.id;
+        //-     const domainName = $('.btn-collectiontest-in-toggle').attr('domain');
+        //-     const title = $('.btn-collectiontest-in-toggle').attr('title');
+
+        //-     axios({
+        //-         method: 'post',
+        //-         url: '/collectionrun',
+        //-         data: {
+        //-             collectionId: collectionId,
+        //-             domainName: domainName,
+        //-             title: title,
+        //-             report_info: {
+        //-                 report_level: 3,
+        //-                 report_type: 'collection',
+        //-             }
+        //-         }, 
+        //-         headers: {'Content-Type': 'application/json'}
+        //-     })
+        //-     .then((response) => {
+        //-         if (response.status === 200) {
+        //-             swal({
+        //-                 text: 'Add collection test to running list successfully',
+        //-                 icon: "success",
+        //-                 confirmButtonClass: "btn-success",
+        //-             })
+        //-             setTimeout(()=> {
+        //-                 window.location.reload();
+        //-             }, 2000)
+        //-             //- alert('Run collection test successfully')
+        //-             //- window.location.reload();
+        //-         }
+        //-     })
+        //-     .catch((error) => {
+        //-         console.log('catch: ', error)
+        //-         if (error.response.status === 401) {
+        //-             swal({
+        //-                     text: 'Please log in first',
+        //-                     icon: "error",
+        //-                     confirmButtonClass: "btn-danger",
+        //-             })
+        //-             setTimeout(()=> {
+        //-                 window.location.reload();
+        //-             }, 2000)
+        //-         } else {
+        //-             swal({
+        //-                 text: 'Add collection test to running list failed',
+        //-                 icon: "error",
+        //-                 confirmButtonClass: "btn-danger",
+        //-             })
+        //-             setTimeout(()=> {
+        //-                 window.location.reload();
+        //-             }, 2000)
+        //-             //- alert('Run collection test error')
+        //-         }
+        //-     })
+        //- })

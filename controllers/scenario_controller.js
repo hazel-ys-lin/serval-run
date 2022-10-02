@@ -13,18 +13,26 @@ const { gherkinCompile } = require('../service/gherkinCompile_service');
 const displayScenario = async (req, res) => {
   const apiId = req.query.apiid;
 
-  let { collectionId } = await apiInfoGetModel(apiId);
+  let { apiName, collectionId } = await apiInfoGetModel(apiId);
   let projectId = await collectionInfoGetModel(collectionId);
-  let envInfo = await envInfoGetModel(projectId);
+  // let envInfo = await envInfoGetModel(projectId);
 
   let userScenarios = await scenarioGetModel(apiId);
-  // console.log('userScenarios: ', userScenarios[3].scenario.examples);
+  // console.log('userScenarios: ', userScenarios[0]);
 
   if (userScenarios.length !== 0) {
-    res.render('scenarios', { userScenarios: userScenarios, envInfo: envInfo });
+    res.render('scenario', {
+      apiName: apiName,
+      userScenarios: userScenarios,
+      // envInfo: envInfo,
+    });
   } else {
     userScenarios.push({ apiId: apiId });
-    res.render('scenarios', { userScenarios: userScenarios, envInfo: envInfo });
+    res.render('scenario', {
+      apiName: apiName,
+      userScenarios: userScenarios,
+      // envInfo: envInfo,
+    });
   }
 };
 

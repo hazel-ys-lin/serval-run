@@ -1,44 +1,159 @@
 extends layout.pug
 
+block sidebar 
+    each element in userProjects
+        li.nav-item 
+            a.nav-link.pl-3(href=`./collections?projectid=${element.projectId}` style='padding: 0.5rem 0.5rem 0.5rem 1rem;')
+                i.fa.fa-solid.fa-paw                      
+                span.ml-3.item-text= element.projectName
+
 block content
     link(rel='stylesheet', href='../../css/common.css')
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
     
+    // src: https://stackoverflow.com/questions/16922625/trying-to-format-a-date-on-jade-template
+    -function prettyDate(dateString){
+        //if it's already a date object and not a string you don't need this line:
+        -var date = new Date(dateString);
+        -var d = date.getDate();
+        -var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+        -var m = monthNames[date.getMonth()];
+        -var y = date.getFullYear();
+        -return d+' '+m+' '+y;
+    -}
+
     main.main-content(role='main')
         .container-fluid
             .row.justify-content-center
-                a.h5.text-secondary.mb-3(href='./test')  ← Project
+                a.h5.text-secondary.mb-3(href='./profile')  ← Home
                 .col-12.mb-0.align-items-center
-                    .title-bar.justify-content-between(style="display: flex")
-                        h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem;') Collection Name
+                    .title-bar.align-items-center.justify-content-between(style="display: flex")
+                        .project-info.align-items-start.justify-content-center(style='display: flex; flex-direction: column;')
+                            h1.h1.mb-2.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem; align-self: flex-start;') #{projectName}
+                            h5.text-secondary(style='align-self: flex-start; font-weight: 400;') #{projectId}
                         .edit-buttons
-                            button.btn.btn-warning RUN ALL APIS
                             button.btn.btn-primary EDIT 
                             button.btn.btn-danger.mr-0 DELETE
                 .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
-                .col-12.mb-0.align-items-center
-                    .title-bar.mb-4.justify-content-between.align-items-center(style="display: flex")
-                        h2.h3.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') APIs
-                        button.btn.btn-success.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever='') Create API
-                    .card.shadow
-                        .card-body
-                            table.table.mb-0
-                                thead 
-                                    tr 
-                                        th Name  
-                                        th Method 
-                                        th Endpoint 
-                                        th Severity 
-                                        th Operation 
-                                tbody
-                                    tr
-                                        td signin
-                                        td POST 
-                                        td api/1.0/user/signin 
-                                        td 5
-                                        td
-                                            button.btn.btn-success(type='submit') Run Test
-                                            button.btn.btn-info(type='submit') scenarios
-                                            button.btn.btn-secondary(type='submit') edit
-                                            button.btn.btn-secondary(type='submit') delete
+                .col-12.align-items-center
+                    .title-bar.justify-content-between(style='display: flex')
+                        h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') Environments
+                    .row.mt-1.align-items-center
+                        if !environments[0].title
+                            .card-columns(style='display: flex')
+                                .card.shadow.mb-4.mt-0
+                                    .card-body(style='padding: 0.05rem 1.25rem;') 
+                                        .my-4
+                                            .align-items-center.justify-content-between(style='display: flex')
+                                                .display-6.text-muted Create your first environment to run test!
+                                                a.pr-2(href='./')
+                                                    i.h1.fa.fa-solid.fa-plus.text-secondary.mb-0
+                        else
+                            .card-columns(style='display: flex;')
+                                - let i = 0
+                                while i < environments.length
+                                    .card.shadow.mb-4.mt-0
+                                        .card-body(style='padding: 0.05rem 1.25rem;')
+                                            .my-4
+                                                .info.align-items-center.justify-content-between(style='display: flex')
+                                                    h3 #{environments[i].title}
+                                                    .icons.justify-content-between(style='width: 3rem;')
+                                                        a.pr-2(href='#')
+                                                            i.h4.fa.fa-solid.fa-gear.text-grey
+                                                        a.pr-0(href='#')
+                                                            i.h4.fa.fa-solid.fa-trash.text-grey
+                                                .mb-0.text-muted(style='font-weight: 300; font-size: 0.7rem;') #{environments[i]._id}
+                                                p.text-secondary #{environments[i].domain_name}
+                                    - i++
+                                .card.shadow.mb-4.mt-0
+                                    .card-body(style='padding: 0.05rem 1.25rem;') 
+                                        .my-4
+                                            .align-items-center.justify-content-between(style='display: flex')
+                                                button.btn Add New Environment
+                .title-divider(style='height: 0; margin: 0 0 1rem 0; overflow: hidden; border-top: 1px solid #e9ecef;')
+                .col-12.align-items-center
+                    .title-bar.justify-content-between(style='display: flex')
+                        h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') Collections
+                    .row.mt-1.align-items-center
+                        if !userCollections[0].collection
+                            .card-columns(style='display: flex')
+                                .card.shadow.mb-4.mt-0
+                                    .card-body(style='padding: 0.05rem 1.25rem;') 
+                                        .my-4
+                                            .align-items-center.justify-content-between(style='display: flex')
+                                                .display-6.text-muted Create your first API collection!
+                                                a.pr-2(href='./')
+                                                    i.h1.fa.fa-solid.fa-plus.text-secondary.mb-0
+                        else
+                            .card-columns(style="display: flex")
+                                - let i = 0
+                                while i < userCollections.length
+                                    .card.shadow.mb-4.mt-0
+                                        .card-body 
+                                            .my-4
+                                                .info.align-items-center.justify-content-between(style='display: flex')
+                                                    .mb-0.text-muted(style='font-weight: 400; font-size: 0.9rem;') #{userCollections[i].collection._id}
+                                                    .icons.justify-content-between(style='width: 3rem;')
+                                                        a.pr-2(href='#')
+                                                            i.h4.fa.fa-solid.fa-gear.text-grey
+                                                        a.pr-0(href='#')
+                                                            i.h4.fa.fa-solid.fa-trash.text-grey
+                                                h3 #{userCollections[i].collection.collection_name}
+                                    - i++
+                                .card.shadow.mb-4.mt-0
+                                    .card-body 
+                                        .row.align-items-center 
+                                            .col-md-6.my-4
+                                            button.btn.text-uppercase Add New Collection
+                .title-divider(style='height: 0; margin: 0 0 1rem 0; overflow: hidden; border-top: 1px solid #e9ecef;')
+                .col-12
+                    h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') Reports
+                    .row.mt-1.align-items-center
+                        //- if !reportData
+                        //-     .card-columns(style='display: flex')
+                        //-         .card.shadow.mb-4.mt-0
+                        //-             .card-body(style='padding: 0.05rem 1.25rem;') 
+                        //-                 .my-4
+                        //-                     .align-items-center.justify-content-between(style='display: flex')
+                        //-                         .display-6.text-muted No reports yet. Run your first test with serval!
+                        //-                         a.pr-2(href='./')
+                        //-                             i.h1.fa.fa-solid.fa-plus.text-secondary.mb-0
+                        //- else
+                        //-     .card-columns(style="display: flex")
+                        //-         - let i = 0
+                        //-         while i < reportData.length
+                        //-         .card.shadow.mb-4.mt-0
+                        //-             .card-body 
+                        //-                 .row.align-items-start(style="flex-direction: column;") 
+                        //-                     .col-md-6.my-4
+                        //-                         a(href='#')
+                        //-                             i.h4.fa.fa-solid.fa-chart-pie.text-grey
+                        //-                         p.mb-0
+                        //-                             h5.mb-0.text-uppercase.text-muted #{prettyDate(reportData[i].create_time)}
+                        //-                         .mb-0
+                        //-                             if reportData[i].report_info.report_type === 'scenario'
+                        //-                                 h1.display-6.badge(style='font-size: 120%; background-color: #809A6F') SCENARIO
+                        //-                             else if reportData[i].report_info.report_type === 'api'
+                        //-                                 h1.display-6.badge(style='font-size: 120%; background-color: #A25B5B') API
+                        //-                             else if reportData[i].report_info.report_type === 'collection'
+                        //-                                 h1.display-6.badge(style='font-size: 120%; background-color: #CC9C75') COLLECTION
+                        //-                         .mb-0
+                        //-                             if reportData[i].finished === true 
+                        //-                                 h1.badge.bg-success.text-dark.result-badge(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 90%;') DONE
+                        //-                             else 
+                        //-                                 h1.badge.bg-warning.text-dark.result-badge(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 90%;') RUNNING
+                        //-                     .col-md-6.border-top.pt-3
+                        //-                         p.mb-1 Collection / API / Scenario
+                        //-                         .report-title.list-inline
+                        //-                             each element in reportData[i].report_title
+                        //-                                 h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 110%;')= element
+                        //-                         //- h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 90%;') user
+                        //-                         //- h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 90%;') signin 
+                        //-                         //- h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 90%;') Sign in
+                                                
+                        //-         .card.shadow.mb-4.mt-0
+                        //-             .card-body 
+                        //-                 .row.align-items-center 
+                        //-                     .col-md-6.my-4
+                        //-                     button.btn.text-uppercase Run New Test

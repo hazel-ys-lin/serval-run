@@ -1,10 +1,18 @@
 extends layout.pug
 
+block sidebar 
+    if userProjects
+        each element in userProjects
+            li.nav-item 
+                a.nav-link.pl-3(href=`./collections?projectid=${element.projectId}` style='padding: 0.5rem 0.5rem 0.5rem 1rem;')
+                    i.fa.fa-solid.fa-paw                      
+                    span.ml-3.item-text= element.projectName
+
 block content
     link(rel='stylesheet', href='../../css/common.css')
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
     script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
-    
+
     main.main-content(role='main')
         .container-fluid
             .row.justify-content-center
