@@ -76,20 +76,20 @@ block content
                                                 textarea#code(name='code' placeholder='# Write your test document in gherkin language here! \n # The serval can only read gherkin now, meow.')
                                                     | # Write your test document scenario in gherkin language here! 
                                                     | # The serval can only read gherkin now, meow.
-                                                    //- | Feature: Sign in
-                                                    //- | user system to make user sign in
-                                                    //- |   @signin
-                                                    //- |  Scenario Outline: user sign in
-                                                    //- |    Given I am an existing <provider> user
-                                                    //- |    And I have entered <email> in the form
-                                                    //- |    And I have entered <password> into the form
-                                                    //- |    When I press signin
-                                                    //- |    Then the result should be <status> on the screen
-                                                    //- |
-                                                    //- |    Examples: 
-                                                    //- |      | provider | email             | password      | status |
-                                                    //- |      | native   | serval@gmail.com  | Serval123     |    200 |
-                                                    //- |      | native   | serval@gmail.com  | Serval1234444 |    403 |
+                                                    | Feature: Sign in
+                                                    | user system to make user sign in
+                                                    |   @signin
+                                                    |  Scenario Outline: user sign in
+                                                    |    Given I am an existing <provider> user
+                                                    |    And I have entered <email> in the form
+                                                    |    And I have entered <password> into the form
+                                                    |    When I press signin
+                                                    |    Then the result should be <status> on the screen
+                                                    |
+                                                    |    Examples: 
+                                                    |      | provider | email             | password      | status |
+                                                    |      | native   | serval@gmail.com  | Serval123     |    200 |
+                                                    |      | native   | serval@gmail.com  | Serval1234444 |    403 |
                                     .modal-footer
                                         button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
                                         button.btn.btn-primary.btn-modal-create_scenario(type='submit') Create Scenario
