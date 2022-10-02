@@ -1,159 +1,519 @@
 extends layout.pug
 
 block sidebar 
-    each element in userProjects
-        li.nav-item 
-            a.nav-link.pl-3(href=`./collections?projectid=${element.projectId}` style='padding: 0.5rem 0.5rem 0.5rem 1rem;')
-                i.fa.fa-solid.fa-paw                      
-                span.ml-3.item-text= element.projectName
+  each element in userProjects
+    li.nav-item 
+      a.nav-link.pl-3(href=`./collections?projectid=${element.projectId}` style='padding: 0.5rem 0.5rem 0.5rem 1rem;')
+        i.fa.fa-solid.fa-paw            
+        span.ml-3.item-text= element.projectName
 
 block content
-    link(rel='stylesheet', href='../../css/common.css')
-    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
-    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
-    
-    // src: https://stackoverflow.com/questions/16922625/trying-to-format-a-date-on-jade-template
-    -function prettyDate(dateString){
-        //if it's already a date object and not a string you don't need this line:
-        -var date = new Date(dateString);
-        -var d = date.getDate();
-        -var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-        -var m = monthNames[date.getMonth()];
-        -var y = date.getFullYear();
-        -return d+' '+m+' '+y;
-    -}
+  link(rel='stylesheet', href='../../css/common.css')
+  script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+  script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+  
+  // src: https://stackoverflow.com/questions/16922625/trying-to-format-a-date-on-jade-template
+  -function prettyDate(dateString){
+    //if it's already a date object and not a string you don't need this line:
+    -var date = new Date(dateString);
+    -var d = date.getDate();
+    -var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+    -var m = monthNames[date.getMonth()];
+    -var y = date.getFullYear();
+    -return d+' '+m+' '+y;
+  -}
 
-    main.main-content(role='main')
-        .container-fluid
-            .row.justify-content-center
-                a.h5.text-secondary.mb-3(href='./profile')  ← Home
-                .col-12.mb-0.align-items-center
-                    .title-bar.align-items-center.justify-content-between(style="display: flex")
-                        .project-info.align-items-start.justify-content-center(style='display: flex; flex-direction: column;')
-                            h1.h1.mb-2.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem; align-self: flex-start;') #{projectName}
-                            h5.text-secondary(style='align-self: flex-start; font-weight: 400;') #{projectId}
-                        .edit-buttons
-                            button.btn.btn-primary EDIT 
-                            button.btn.btn-danger.mr-0 DELETE
-                .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
-                .col-12.align-items-center
-                    .title-bar.justify-content-between(style='display: flex')
-                        h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') Environments
-                    .row.mt-1.align-items-center
-                        if !environments[0].title
-                            .card-columns(style='display: flex')
-                                .card.shadow.mb-4.mt-0
-                                    .card-body(style='padding: 0.05rem 1.25rem;') 
-                                        .my-4
-                                            .align-items-center.justify-content-between(style='display: flex')
-                                                .display-6.text-muted Create your first environment to run test!
-                                                a.pr-2(href='./')
-                                                    i.h1.fa.fa-solid.fa-plus.text-secondary.mb-0
-                        else
-                            .card-columns(style='display: flex;')
-                                - let i = 0
-                                while i < environments.length
-                                    .card.shadow.mb-4.mt-0
-                                        .card-body(style='padding: 0.05rem 1.25rem;')
-                                            .my-4
-                                                .info.align-items-center.justify-content-between(style='display: flex')
-                                                    h3 #{environments[i].title}
-                                                    .icons.justify-content-between(style='width: 3rem;')
-                                                        a.pr-2(href='#')
-                                                            i.h4.fa.fa-solid.fa-gear.text-grey
-                                                        a.pr-0(href='#')
-                                                            i.h4.fa.fa-solid.fa-trash.text-grey
-                                                .mb-0.text-muted(style='font-weight: 300; font-size: 0.7rem;') #{environments[i]._id}
-                                                p.text-secondary #{environments[i].domain_name}
-                                    - i++
-                                .card.shadow.mb-4.mt-0
-                                    .card-body(style='padding: 0.05rem 1.25rem;') 
-                                        .my-4
-                                            .align-items-center.justify-content-between(style='display: flex')
-                                                button.btn Add New Environment
-                .title-divider(style='height: 0; margin: 0 0 1rem 0; overflow: hidden; border-top: 1px solid #e9ecef;')
-                .col-12.align-items-center
-                    .title-bar.justify-content-between(style='display: flex')
-                        h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') Collections
-                    .row.mt-1.align-items-center
-                        if !userCollections[0].collection
-                            .card-columns(style='display: flex')
-                                .card.shadow.mb-4.mt-0
-                                    .card-body(style='padding: 0.05rem 1.25rem;') 
-                                        .my-4
-                                            .align-items-center.justify-content-between(style='display: flex')
-                                                .display-6.text-muted Create your first API collection!
-                                                a.pr-2(href='./')
-                                                    i.h1.fa.fa-solid.fa-plus.text-secondary.mb-0
-                        else
-                            .card-columns(style="display: flex")
-                                - let i = 0
-                                while i < userCollections.length
-                                    .card.shadow.mb-4.mt-0
-                                        .card-body 
-                                            .my-4
-                                                .info.align-items-center.justify-content-between(style='display: flex')
-                                                    .mb-0.text-muted(style='font-weight: 400; font-size: 0.9rem;') #{userCollections[i].collection._id}
-                                                    .icons.justify-content-between(style='width: 3rem;')
-                                                        a.pr-2(href='#')
-                                                            i.h4.fa.fa-solid.fa-gear.text-grey
-                                                        a.pr-0(href='#')
-                                                            i.h4.fa.fa-solid.fa-trash.text-grey
-                                                h3 #{userCollections[i].collection.collection_name}
-                                    - i++
-                                .card.shadow.mb-4.mt-0
-                                    .card-body 
-                                        .row.align-items-center 
-                                            .col-md-6.my-4
-                                            button.btn.text-uppercase Add New Collection
-                .title-divider(style='height: 0; margin: 0 0 1rem 0; overflow: hidden; border-top: 1px solid #e9ecef;')
-                .col-12
-                    h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') Reports
-                    .row.mt-1.align-items-center
-                        //- if !reportData
-                        //-     .card-columns(style='display: flex')
-                        //-         .card.shadow.mb-4.mt-0
-                        //-             .card-body(style='padding: 0.05rem 1.25rem;') 
-                        //-                 .my-4
-                        //-                     .align-items-center.justify-content-between(style='display: flex')
-                        //-                         .display-6.text-muted No reports yet. Run your first test with serval!
-                        //-                         a.pr-2(href='./')
-                        //-                             i.h1.fa.fa-solid.fa-plus.text-secondary.mb-0
-                        //- else
-                        //-     .card-columns(style="display: flex")
-                        //-         - let i = 0
-                        //-         while i < reportData.length
-                        //-         .card.shadow.mb-4.mt-0
-                        //-             .card-body 
-                        //-                 .row.align-items-start(style="flex-direction: column;") 
-                        //-                     .col-md-6.my-4
-                        //-                         a(href='#')
-                        //-                             i.h4.fa.fa-solid.fa-chart-pie.text-grey
-                        //-                         p.mb-0
-                        //-                             h5.mb-0.text-uppercase.text-muted #{prettyDate(reportData[i].create_time)}
-                        //-                         .mb-0
-                        //-                             if reportData[i].report_info.report_type === 'scenario'
-                        //-                                 h1.display-6.badge(style='font-size: 120%; background-color: #809A6F') SCENARIO
-                        //-                             else if reportData[i].report_info.report_type === 'api'
-                        //-                                 h1.display-6.badge(style='font-size: 120%; background-color: #A25B5B') API
-                        //-                             else if reportData[i].report_info.report_type === 'collection'
-                        //-                                 h1.display-6.badge(style='font-size: 120%; background-color: #CC9C75') COLLECTION
-                        //-                         .mb-0
-                        //-                             if reportData[i].finished === true 
-                        //-                                 h1.badge.bg-success.text-dark.result-badge(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 90%;') DONE
-                        //-                             else 
-                        //-                                 h1.badge.bg-warning.text-dark.result-badge(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 90%;') RUNNING
-                        //-                     .col-md-6.border-top.pt-3
-                        //-                         p.mb-1 Collection / API / Scenario
-                        //-                         .report-title.list-inline
-                        //-                             each element in reportData[i].report_title
-                        //-                                 h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 110%;')= element
-                        //-                         //- h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 90%;') user
-                        //-                         //- h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 90%;') signin 
-                        //-                         //- h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 90%;') Sign in
-                                                
-                        //-         .card.shadow.mb-4.mt-0
-                        //-             .card-body 
-                        //-                 .row.align-items-center 
-                        //-                     .col-md-6.my-4
-                        //-                     button.btn.text-uppercase Run New Test
+  main.main-content(role='main')
+    .container-fluid
+      .row.justify-content-center
+        a.h5.text-secondary.mb-3(href='./profile')  ← Home
+        .col-12.mb-0.align-items-center
+          .title-bar.align-items-center.justify-content-between(style="display: flex")
+            .project-info.align-items-start.justify-content-center(style='display: flex; flex-direction: column;')
+              h1.h1.mb-2.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem; align-self: flex-start;') #{projectName}
+              h5.text-secondary.project-id(style='align-self: flex-start; font-weight: 400;') #{projectId}
+            .edit-buttons
+              //- button.btn.btn-primary.btn-edit_peoject(id=`${projectId}`) EDIT 
+              button.btn.btn-danger.btn-delete_project.mr-0(id=`${projectId}`) DELETE
+        .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
+        .col-12.align-items-center
+          .title-bar.justify-content-between(style='display: flex')
+            h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') Environments
+          .row.mt-1.align-items-center
+            if environments.length === 0
+              .card-columns(style='display: flex')
+                .card.shadow.mb-4.mt-0
+                  .card-body(style='padding: 0.05rem 1.25rem;') 
+                    .my-4
+                      .align-items-center.justify-content-between(style='display: flex')
+                        .display-6.text-muted Create your first environment to run test!
+                        button.btn.pr-2.btn-create_environment(type='button' data-bs-toggle='modal' data-bs-target='#environmentModal' data-bs-whatever=`${projectId}`)
+                          i.h1.fa.fa-solid.fa-plus.text-secondary.mb-0
+                      #environmentModal.modal.fade(tabindex='-1' aria-labelledby='environmentModalLabel' aria-hidden='true')
+                        .modal-dialog
+                          .modal-content
+                            .modal-header
+                              h5#environmentModalLabel.modal-title Add Environment
+                              button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                            .modal-body
+                              form
+                                .mb-3
+                                  label.col-form-label(for='project-id') Project ID
+                                  input#project-id.form-control.input_projectid
+                                .mb-3
+                                  label.col-form-label(for='domain-name') Domain Name (URL)
+                                  input#domain-name.form-control.input_domain-name(type='url' placeholder='https://www.example.com/')
+                                .mb-3
+                                  label.col-form-label(for='title') Title
+                                  input#title.form-control.input_title(type='string' placeholder='Staging')
+                            .modal-footer
+                              button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                              button.btn.btn-primary.btn-modal-create_environment(type='submit') Create Environment
+            else
+              .card-columns(style='display: flex;')
+                - let i = 0
+                while i < environments.length
+                  .card.shadow.mb-4.mt-0
+                    .card-body(style='padding: 0.05rem 1.25rem;')
+                      .my-4
+                        .info.align-items-center.justify-content-between(style='display: flex')
+                          h3 #{environments[i].title}
+                          .icons.justify-content-between(style='width: 4rem;')
+                            //- button.btn(id=`${environments[i]._id}` style='padding: 0;')
+                            //-   i.h4.fa.fa-solid.fa-gear.text-grey
+                            button.btn.btn-delete_environment(id=`${environments[i]._id}` style='padding: 0;')
+                              i.h4.fa.fa-solid.fa-trash.text-grey
+                        .mb-0.text-muted(style='font-weight: 300; font-size: 0.7rem;') #{environments[i]._id}
+                        p.text-secondary #{environments[i].domain_name}
+                  - i++
+                .card.shadow.mb-4.mt-0
+                  .card-body(style='padding: 0.05rem 1.25rem;') 
+                    .my-4
+                      .align-items-center.justify-content-between(style='display: flex')
+                        button.btn.btn-create_environment(type='button' data-bs-toggle='modal' data-bs-target='#environmentModal' data-bs-whatever=`${environments[0].project_id}`) Add New Environment
+                      #environmentModal.modal.fade(tabindex='-1' aria-labelledby='environmentModalLabel' aria-hidden='true')
+                        .modal-dialog
+                          .modal-content
+                            .modal-header
+                              h5#environmentModalLabel.modal-title Add Environment
+                              button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                            .modal-body
+                              form
+                                .mb-3
+                                  label.col-form-label(for='project-id') Project ID
+                                  input#project-id.form-control.input_projectid
+                                .mb-3
+                                  label.col-form-label(for='domain-name') Domain Name (URL)
+                                  input#domain-name.form-control.input_domain-name(type='url' placeholder='https://www.example.com/')
+                                .mb-3
+                                  label.col-form-label(for='title') Title
+                                  input#title.form-control.input_title(type='string' placeholder='Staging')
+                            .modal-footer
+                              button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                              button.btn.btn-primary.btn-modal-create_environment(type='submit') Create Environment
+        .title-divider(style='height: 0; margin: 0 0 1rem 0; overflow: hidden; border-top: 1px solid #e9ecef;')
+        .col-12.align-items-center
+          .title-bar.justify-content-between(style='display: flex')
+            h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') Collections
+          .row.mt-1.align-items-center
+            if userCollections.length === 0
+              .card-columns(style='display: flex')
+                .card.shadow.mb-4.mt-0
+                  .card-body(style='padding: 0.05rem 1.25rem;') 
+                    .my-4
+                      .align-items-center.justify-content-between(style='display: flex')
+                        .display-6.text-muted Create your first API collection!
+                        button.btn.pr-2.btn-create_collection(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${projectId}`)
+                          i.h1.fa.fa-solid.fa-plus.text-secondary.mb-0
+                        #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                          .modal-dialog
+                            .modal-content
+                              .modal-header
+                                h5#exampleModalLabel.modal-title Add Collection
+                                button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                              .modal-body
+                                form
+                                  .mb-3
+                                    label.col-form-label(for='project-id') Project ID
+                                    input#project-id.form-control.input_projectid
+                                  .mb-3
+                                    label.col-form-label(for='collection-name') Collection Name
+                                    input#collection-name.form-control.input_collection(type='string' placeholder='My Collection')
+                              .modal-footer
+                                button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                                button.btn.btn-primary.btn-modal-create_collection(type='submit') Create Collection
+            else
+              .card-columns(style="display: flex")
+                - let i = 0
+                while i < userCollections.length
+                  .card.shadow.mb-4.mt-0
+                    .card-body 
+                      .my-4
+                        .info.align-items-center.justify-content-between(style='display: flex')
+                          .mb-0.text-muted(style='font-weight: 400; font-size: 0.9rem;') #{userCollections[i].collection._id}
+                          .icons.justify-content-between.align-items-center(style='width: 8rem;')
+                            a.pr-2(href=`./apis?collectionid=${userCollections[i].collection._id}` style='padding: 0;')
+                              i.h5.fa.fa-solid.fa-eye.text-grey
+                            //- button.btn(id=`${userCollections[i].collection._id}` style='padding: 0;')
+                            //-   i.h5.fa.fa-solid.fa-gear.text-grey
+                            button.btn.btn-delete_collection(id=`${userCollections[i].collection._id}` style='padding: 0;')
+                              i.h5.fa.fa-solid.fa-trash.text-grey
+                        h3 #{userCollections[i].collection.collection_name}
+                  - i++
+                .card.shadow.mb-4.mt-0
+                  .card-body 
+                    .row.align-items-center 
+                      .col-md-6.my-4
+                      button.btn.text-uppercase.btn-create_collection(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${projectId}`) Add New Collection
+                    #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                      .modal-dialog
+                        .modal-content
+                          .modal-header
+                            h5#exampleModalLabel.modal-title Add Collection
+                            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                          .modal-body
+                            form
+                              .mb-3
+                                label.col-form-label(for='project-id') Project ID
+                                input#project-id.form-control.input_projectid
+                              .mb-3
+                                label.col-form-label(for='collection-name') Collection Name
+                                input#collection-name.form-control.input_collection(type='string' placeholder='My Collection')
+                          .modal-footer
+                            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                            button.btn.btn-primary.btn-modal-create_collection(type='submit') Create Collection
+        .title-divider(style='height: 0; margin: 0 0 1rem 0; overflow: hidden; border-top: 1px solid #e9ecef;')
+        .col-12
+          h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') Reports
+          .row.mt-1.align-items-center
+            if !reportData
+              .card-columns(style='display: flex')
+                .card.shadow.mb-4.mt-0
+                  .card-body(style='padding: 0.05rem 1.25rem;') 
+                    .my-4
+                      .align-items-center.justify-content-between(style='display: flex')
+                        .display-6.text-muted No reports yet. Run your first test with serval!
+                        //- a.pr-2(href='./')
+                        //-   i.h1.fa.fa-solid.fa-plus.text-secondary.mb-0
+            else
+              .card-columns(style="display: flex")
+                - let i = 0
+                while i < reportData.length
+                  .card.shadow.mb-4.mt-0
+                    .card-body 
+                      .row.align-items-start(style="flex-direction: column;") 
+                        .my-4
+                          .info.align-items-center.justify-content-between.mb-4(style='display: flex')
+                            h5.mb-0.text-uppercase.text-muted #{prettyDate(reportData[i].create_time)}
+                            button.btn.btn-report-detail(id=`${reportData[i]._id}`)
+                              i.h4.fa.fa-solid.fa-chart-pie.text-grey.mb-0
+                          .mb-0
+                            if reportData[i].report_info.report_type === 'scenario'
+                              h1.display-6.badge(style='font-size: 120%; background-color: #809A6F') SCENARIO
+                            else if reportData[i].report_info.report_type === 'api'
+                              h1.display-6.badge(style='font-size: 120%; background-color: #A25B5B') API
+                            else if reportData[i].report_info.report_type === 'collection'
+                              h1.display-6.badge(style='font-size: 120%; background-color: #CC9C75') COLLECTION
+                          .mb-0
+                            if reportData[i].finished === true 
+                              h1.badge.bg-success.text-dark.result-badge(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 90%;') DONE
+                            else 
+                              h1.badge.bg-warning.text-dark.result-badge(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 90%;') RUNNING
+                        .col-md-6.border-top.pt-3
+                          p.mb-1 Collection / API / Scenario
+                          .report-title.list-inline
+                            each element in reportData[i].report_title
+                              h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 110%;')= element
+                  -i++      
+                //- .card.shadow.mb-4.mt-0
+                //-   .card-body 
+                //-     .row.align-items-center 
+                //-       .col-md-6.my-4
+                //-       button.btn.text-uppercase Run New Test
+  script. 
+    $('.btn-create_environment').on('click', function(event) {
+      console.log('create_environment clicked')
+      event.preventDefault();
+      //- window.location.assign('./editcollection');
+    })
+
+
+    $('#environmentModal').on('show.bs.modal', function(event) {
+      console.log('#environmentModal')
+      // Button that triggered the modal
+      let button = event.relatedTarget;
+      //- // Extract info from data-bs-* attributes
+      let projectId = $('.btn-create_environment').attr('data-bs-whatever');
+      //- // If necessary, you could initiate an AJAX request here
+      //- // and then do the updating in a callback.
+
+      //- // Update the modal's content.
+      $('input#project-id').val(projectId).prop('readonly', true);
+    })
+
+    $('.btn-modal-create_environment').on('click', function(event) {
+      console.log('create_environment in modal clicked')
+      event.preventDefault();
+      const projectId = $('.input_projectid').val();
+      const domainName = $('.input_domain-name').val();
+      const title = $('.input_title').val();
+
+      axios({
+        method: 'post',
+        url: '/editenv',
+        data: {
+          projectId: projectId,
+          domainName: domainName,
+          title: title
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          swal({
+            text: 'Create environment successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+          //- alert('create environment successfully')
+          //- window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log('in error');
+        console.log('create environment error')
+        if (error.response.status === 403) {
+          swal({
+            //- text: 'Please input your information properly',
+            text: 'Please enter valid URL',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2500)
+        } else {
+          swal({
+            text: 'Create environment error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+        }
+        
+      })
+    })
+
+
+    $('.btn-delete_environment').on('click', function(event) {
+      console.log('delete_environment clicked')
+      event.preventDefault();
+
+      const projectId = $('.project-id').text();
+      const environmentId = this.id;
+      console.log('projectId: ', projectId)
+
+      axios({
+        method: 'delete',
+        url: '/editenv',
+        data: {
+          projectId: projectId,
+          environmentId: environmentId,
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          swal({
+            text: 'Delete environment successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+          //- alert('delete environment successfully')
+          //- //- window.location.assign('./testresult');
+          //- window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log('in error');
+        console.log('catch: ', error)
+        swal({
+            text: 'Delete environment error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+        })
+        setTimeout(()=> {
+          window.location.reload();
+        }, 2000)
+        //- alert('delete environment error')
+      })
+    })
+
+
+    $('.btn-create_collection').on('click', function(event) {
+      console.log('create_collection clicked')
+      event.preventDefault();
+    })
+
+
+    $('#exampleModal').on('show.bs.modal', function(event) {
+      console.log('#exampleModal')
+      // Button that triggered the modal
+      let button = event.relatedTarget;
+      //- // Extract info from data-bs-* attributes
+      let projectId = $('.btn-create_collection').attr('data-bs-whatever');
+      //- // If necessary, you could initiate an AJAX request here
+      //- // and then do the updating in a callback.
+
+      //- // Update the modal's content.
+      $('input#project-id').val(projectId).prop('readonly', true);
+    })
+
+    $('.btn-modal-create_collection').on('click', function(event) {
+      console.log('create_collection in modal clicked')
+      event.preventDefault();
+      const projectId = $('.input_projectid').val();
+      const collectionName = $('.input_collection').val();
+
+      axios({
+        method: 'post',
+        url: '/editcollection',
+        data: {
+          projectId: projectId,
+          collectionName: collectionName,
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          swal({
+            text: 'Create collection successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+          //- alert('create collection successfully')
+          //- window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log('in error');
+        console.log('catch collection error')
+        swal({
+            text: 'Create collection error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+        })
+        setTimeout(()=> {
+          window.location.reload();
+        }, 2000)
+      })
+    })
+
+
+    $('.btn-delete_collection').on('click', function(event) {
+      console.log('delete_collection clicked')
+      event.preventDefault();
+
+      const projectId = $('.project-id').text();
+      const collectionId = this.id;
+      console.log('projectId: ', projectId)
+
+      axios({
+        method: 'delete',
+        url: '/editcollection',
+        data: {
+          projectId: projectId,
+          collectionId: collectionId,
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          swal({
+            text: 'Delete collection successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+          //- alert('delete project successfully')
+          //- window.location.assign('./testresult');
+          //- window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log('in error');
+        console.log('catch: ', error)
+        swal({
+            text: 'Delete collection error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+        })
+        setTimeout(()=> {
+          window.location.reload();
+        }, 2000)
+        //- alert('delete project error')
+      })
+    })
+
+
+    $('.btn-delete_project').on('click', function(event) {
+      console.log('delete_project clicked')
+      event.preventDefault();
+
+      console.log('this.id: ', this.id)
+      const projectId = this.id;
+
+      axios({
+        method: 'delete',
+        url: '/editproject',
+        data: {
+          projectId: projectId,
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          swal({
+            text: 'Delete project successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+        }
+      })
+      .catch((error) => {
+        console.log('in error');
+        console.log('catch: ', error)
+        swal({
+            text: 'Delete project error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+        })
+        setTimeout(()=> {
+          window.location.reload();
+        }, 2000)
+      })
+    })
+
+    $('.btn-report-detail').on('click', function(event) {
+        console.log('view report-detail clicked')
+        event.preventDefault();
+        const reportId = this.id;
+
+        window.location.assign(`./reportdetail?reportid=${reportId}`);
+    })

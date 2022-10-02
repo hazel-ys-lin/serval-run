@@ -2,6 +2,7 @@ const {
   projectGetModel,
   environmentGetModel,
   projectNameGetModel,
+  envInfoGetModel,
 } = require('../models/project_model');
 const {
   collectionInsertModel,
@@ -110,26 +111,42 @@ const collectionDeleteController = async function (req, res) {
 
 const displayApi = async function (req, res) {
   const collectionId = req.query.collectionid;
+  const userEmail = req.session.userEmail;
+
+  // get project info
+  let userProjects = await projectGetModel(userEmail);
+  let projectList = [];
+  for (let i = 0; i < userProjects.length; i++) {
+    // userProjects[i].user_email = userEmail;
+    projectList.push({
+      projectId: userProjects[i]._id,
+      projectName: userProjects[i].project_name,
+    });
+  }
 
   let userApis = await apiGetModel(collectionId);
   let { projectId, collectionName } = await collectionInfoGetModel(
     collectionId
   );
   let envInfo = await envInfoGetModel(projectId);
-  // console.log('userApis: ', userApis);
+  console.log('userApis: ', userApis);
 
   if (userApis.length !== 0) {
     res.render('api', {
       collectionName: collectionName,
+      projectId: projectId,
       userApis: userApis,
       envInfo: envInfo,
+      userProjects: projectList,
     });
   } else {
     userApis.push({ collectionId: collectionId });
     res.render('api', {
       collectionName: collectionName,
+      projectId: projectId,
       userApis: userApis,
       envInfo: envInfo,
+      userProjects: projectList,
     });
   }
 };

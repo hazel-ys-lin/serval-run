@@ -1,4 +1,4 @@
-const { envInfoGetModel } = require('../models/project_model');
+const { envInfoGetModel, projectGetModel } = require('../models/project_model');
 const {
   collectionInfoGetModel,
   apiInfoGetModel,
@@ -12,10 +12,22 @@ const { gherkinCompile } = require('../service/gherkinCompile_service');
 
 const displayScenario = async (req, res) => {
   const apiId = req.query.apiid;
+  const userEmail = req.session.userEmail;
+
+  // get project info
+  let userProjects = await projectGetModel(userEmail);
+  let projectList = [];
+  for (let i = 0; i < userProjects.length; i++) {
+    // userProjects[i].user_email = userEmail;
+    projectList.push({
+      projectId: userProjects[i]._id,
+      projectName: userProjects[i].project_name,
+    });
+  }
 
   let { apiName, collectionId } = await apiInfoGetModel(apiId);
-  let projectId = await collectionInfoGetModel(collectionId);
-  // let envInfo = await envInfoGetModel(projectId);
+  let { projectId } = await collectionInfoGetModel(collectionId);
+  let envInfo = await envInfoGetModel(projectId);
 
   let userScenarios = await scenarioGetModel(apiId);
   // console.log('userScenarios: ', userScenarios[0]);
@@ -23,15 +35,19 @@ const displayScenario = async (req, res) => {
   if (userScenarios.length !== 0) {
     res.render('scenario', {
       apiName: apiName,
+      collectionId: collectionId,
       userScenarios: userScenarios,
-      // envInfo: envInfo,
+      envInfo: envInfo,
+      userProjects: projectList,
     });
   } else {
     userScenarios.push({ apiId: apiId });
     res.render('scenario', {
       apiName: apiName,
+      collectionId: collectionId,
       userScenarios: userScenarios,
-      // envInfo: envInfo,
+      envInfo: envInfo,
+      userProjects: projectList,
     });
   }
 };

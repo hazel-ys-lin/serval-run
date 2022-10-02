@@ -2,7 +2,10 @@ const {
   scenarioDetailModel,
   exampleDetailGetModel,
 } = require('../models/scenario_model');
-const { projectNameGetModel } = require('../models/project_model');
+const {
+  projectNameGetModel,
+  projectGetModel,
+} = require('../models/project_model');
 const {
   getReportStatusModel,
   getReportModel,
@@ -82,6 +85,19 @@ const getExampleReport = async (req, res) => {
 
 const getReportResponseController = async (req, res) => {
   const reportId = req.query.reportid;
+  const userEmail = req.session.userEmail;
+
+  // get project info
+  let userProjects = await projectGetModel(userEmail);
+  let projectList = [];
+  for (let i = 0; i < userProjects.length; i++) {
+    // userProjects[i].user_email = userEmail;
+    projectList.push({
+      projectId: userProjects[i]._id,
+      projectName: userProjects[i].project_name,
+    });
+  }
+
   let reportStatus = await getReportStatusModel(reportId);
   // console.log('reportStatus: ', reportStatus);
   // console.log('**********', reportId, reportStatus);
@@ -140,6 +156,7 @@ const getReportResponseController = async (req, res) => {
       reportDetail: reportDetail,
       reportResponse: reportResponse,
       reportCalculated: reportCalculated,
+      userProjects: projectList,
     });
   } else {
     // console.log('*********1', new Date().toISOString());
@@ -184,6 +201,7 @@ const getReportResponseController = async (req, res) => {
       reportDetail: reportDetail,
       reportResponse: reportResponse,
       // reportCalculated: reportCalculated,
+      userProjects: projectList,
     });
   }
 };

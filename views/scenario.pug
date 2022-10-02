@@ -1,5 +1,13 @@
 extends layout.pug
 
+block sidebar 
+    if userProjects
+        each element in userProjects
+            li.nav-item 
+                a.nav-link.pl-3(href=`./collections?projectid=${element.projectId}` style='padding: 0.5rem 0.5rem 0.5rem 1rem;')
+                    i.fa.fa-solid.fa-paw            
+                    span.ml-3.item-text= element.projectName
+
 block content
     link(rel='stylesheet', href='../../css/common.css')
     script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
@@ -12,14 +20,17 @@ block content
     main.main-content(role='main')
         .container-fluid
             .row.justify-content-center
-                a.h5.text-secondary.mb-3(href='./test')  ← APIs
+                a.h5.text-secondary.mb-3(href=`./apis?collectionid=${collectionId}`)  ← APIs
                 .col-12.mb-0.align-items-center
                     .title-bar.align-items-center.justify-content-between(style='display: flex')
                         .api-info.align-items-start.justify-content-center(style='display: flex; flex-direction: column;')
                             h2.h3.mb-2.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem; align-self: flex-start;') #{apiName}
-                            h5.text-secondary(style='align-self: flex-start; font-weight: 400;') #{userScenarios[0].apiId}
+                            h5.text-secondary.api-id(style='align-self: flex-start; font-weight: 400;') #{userScenarios[0].apiId}
                         .edit-buttons
-                            button.btn.btn-warning RUN ALL SCENARIOS
+                            if !userScenarios[0].scenario
+                                button.btn.btn-warning(type='button' disabled='') RUN API TEST
+                            else
+                                button.btn.btn-warning RUN API TEST
                 .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
                 .col-12.mb-0.align-items-center
                     .title-bar.mb-4.justify-content-between.align-items-center(style="display: flex")
@@ -47,7 +58,7 @@ block content
                     
                     if !userScenarios[0].scenario
                         .col-12(style='display: flex; justify-content: center;')
-                            .text-muted.display-6(style='padding-top: 20px') Create your first scenario!
+                            .text-muted.display-6(style='padding-top: 20px') Create your scenario in this API!
                     else
                         - let i = 0
                         while i < userScenarios.length
@@ -90,9 +101,36 @@ block content
                                                                     each val, key in example.example
                                                                         td(style='font-size: 0.875rem;')= val
                                             .justify-content-end.mb-4(style='display: flex;')
-                                                .align-items-center.my-1.edit-buttons
-                                                    button.btn.btn-info RUN TEST
-                                                    button.btn.btn-danger DELETE
+                                                .align-items-center.my-1.edit-buttons.pr-3
+                                                    button.btn.btn-warning(type='button' data-bs-toggle='modal' data-bs-target='#runScenarioModal' data-bs-whatever=`${userScenarios[i].scenario._id}`) RUN SCENARIO TEST
+                                                    #runScenarioModal.modal.fade(tabindex='-1' aria-labelledby='runScenarioModalLabel' aria-hidden='true')
+                                                        .modal-dialog.modal-lg
+                                                            .modal-content
+                                                                .modal-header
+                                                                    h5#runScenarioModalLabel.modal-title Run Scenario Test
+                                                                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                                                .modal-body 
+                                                                    .p-0
+                                                                    table.table
+                                                                        thead
+                                                                            tr 
+                                                                                th.text-dark Domain
+                                                                                th.text-dark Title
+                                                                                th.text-dark Run Test
+                                                                        tbody
+                                                                            if envInfo
+                                                                                - let j = 0
+                                                                                while j < envInfo.length
+                                                                                    tr 
+                                                                                        td #{envInfo[j].domain_name}
+                                                                                        td #{envInfo[j].title}
+                                                                                        td 
+                                                                                            button.btn.btn-info.btn-scenariotest-in-toggle(type='submit' id=`${userScenarios[i].scenario._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
+                                                                                    - j++
+                                                            //- .modal-footer
+                                                            //-     button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                                                            //-     button.btn.btn-primary.btn-scenariotest-in-modal(type='submit' id=`${userScenarios[i].scenario._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Send Scenario Test to List
+                                                    button.btn.btn-danger.btn-delete(id=`${userScenarios[i].scenario._id}`) DELETE
                             - i++
     script. 
         $('.card-header').on('click', function(){
@@ -188,7 +226,7 @@ block content
             event.preventDefault();
         })
 
-        $('.btn-scenariotest-in-toggle').on('click', function(event) {
+        $('.btn-scenariotest-in-modal').on('click', function(event) {
             console.log('run scenario test in toggle clicked');
             event.preventDefault();
 
@@ -256,7 +294,7 @@ block content
             console.log('delete_scenario clicked')
             event.preventDefault();
 
-            const apiId = $('.card-title').text().replace('API ID: ', '');
+            const apiId = $('.api-id').text();
             const scenarioId = this.id;
             console.log('scenarioId: ', scenarioId)
 
@@ -298,9 +336,29 @@ block content
             })
         })
 
+        $(document).ready(() => {
+            let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+            let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl)
+            })
+        })
 
-        $('.btn-apitest-in-toggle').on('click', function(event) {
-            console.log('run api test in toggle clicked');
+        $('#runScenarioModal').on('show.bs.modal', function(event) {
+            console.log('#runScenarioModal')
+            // Button that triggered the modal
+            let button = event.relatedTarget;
+            // Extract info from data-bs-* attributes
+            //- let collectionId = $('.btn-create_api').attr('data-bs-whatever');
+            // If necessary, you could initiate an AJAX request here
+            // and then do the updating in a callback.
+
+            // Update the modal's content.
+            //- $('input#collection-id').val(collectionId).prop('readonly', true);
+        })
+
+
+        $('.btn-scenariotest-in-toggle').on('click', function(event) {
+            console.log('run scenario test in toggle clicked');
             event.preventDefault();
 
             swal({
@@ -313,22 +371,23 @@ block content
                 //- timer: 5000,
             });
 
-            const apiId = $('.card-title').text().replace('API ID: ', '');
+
+            const apiId = $('.api-id').text();
             const scenarioId = this.id;
-            const domainName = $('.btn-apitest-in-toggle').attr('domain');
-            const title = $('.btn-apitest-in-toggle').attr('title');
+            const domainName = $('.btn-scenariotest-in-toggle').attr('domain');
+            const title = $('.btn-scenariotest-in-toggle').attr('title');
 
             axios({
                 method: 'post',
-                url: '/apirun',
+                url: '/scenariorun',
                 data: {
                     apiId: apiId,
                     scenarioId: scenarioId,
                     domainName: domainName,
                     title: title,
                     report_info: {
-                        report_level: 2,
-                        report_type: 'api',
+                        report_level: 1,
+                        report_type: 'scenario',
                     }
                 }, 
                 headers: {'Content-Type': 'application/json'}
@@ -336,34 +395,27 @@ block content
             .then((response) => {
                 if (response.status === 200) {
                     swal({
-                        text: 'Add api test to running list successfully',
+                        text: 'Add acenario test to running list successfully',
                         icon: "success",
                         confirmButtonClass: "btn-success",
                     })
                     setTimeout(()=> {
                         window.location.reload();
                     }, 2000)
-                    //- alert('Run api test successfully')
+                    //- alert('Run scenario test successfully')
                     //- window.location.reload();
                 }
             })
             .catch((error) => {
                 console.log('catch: ', error)
                 swal({
-                    text: 'Run api test error',
-                    icon: "error",
-                    confirmButtonClass: "btn-danger",
+                        text: 'Add acenario test to running list error',
+                        icon: "error",
+                        confirmButtonClass: "btn-danger",
                 })
                 setTimeout(()=> {
                     window.location.reload();
                 }, 2000)
-                //- alert('Run api test error')
-            })
-        })
-
-        $(document).ready(() => {
-            let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-            let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-                return new bootstrap.Popover(popoverTriggerEl)
+                //- alert('Run scenario test error')
             })
         })

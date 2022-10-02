@@ -1,78 +1,141 @@
 extends layout.pug
 
 block sidebar 
-    if userProjects
-        each element in userProjects
-            li.nav-item 
-                a.nav-link.pl-3(href=`./collections?projectid=${element.projectId}` style='padding: 0.5rem 0.5rem 0.5rem 1rem;')
-                    i.fa.fa-solid.fa-paw                      
-                    span.ml-3.item-text= element.projectName
+  if userProjects
+    each element in userProjects
+      li.nav-item 
+        a.nav-link.pl-3(href=`./collections?projectid=${element.projectId}` style='padding: 0.5rem 0.5rem 0.5rem 1rem;')
+          i.fa.fa-solid.fa-paw            
+          span.ml-3.item-text= element.projectName
 
 block content
-    link(rel='stylesheet', href='../../css/common.css')
-    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
-    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+  link(rel='stylesheet', href='../../css/common.css')
+  script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+  script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
 
-    main.main-content(role='main')
-        .container-fluid
-            .row.justify-content-center
-                .col-12
-                    h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem;') Profile
-                    .row.mt-5.align-items-center 
-                        .col-md-3.text-center.mb-5
-                            .avatar.avatar-xl
-                                img.avatar-img.rounded-circle(src='../../css/icon/serval.png' style='background-color: white;')
-                        .col
-                            .row.align-items-center
-                                .col-md-7
-                                    h4.mb-1(style='font-size: 2rem;') #{userInfo.userName}
-                                    p.medium.mb-3
-                                        span.badge.badge-dark(style='font-size: 100%;') Product Manager
-                            .row.mb-4
-                                .col-md-7(style='font-size: 1.2rem;')
-                                    h3.text-muted
-                                    | Start your test journey with Serval now.
-                                button.btn.btn-lg.btn-right.btn-primary.btn-log_out(type='submit') Log Out
-                .col-12
-                    h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; padding: 5rem 0 0 0; font-size: 2rem;') Dashboard
-                    .input-form
-                        .basic-info
-                            .user-reports-amount
-                                .card 
-                                    .card-header
-                                    .card-body
-                            .user-line-chart
-                                .card 
-                                    .card-header
-                                    .card-body
-                            .user-pie-chart
-                                .card 
-                                    .card-header
-                                    .card-body
+  main.main-content(role='main')
+    .container-fluid
+      .row.justify-content-center
+        .col-12
+          h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem;') Profile
+          .row.mt-5.align-items-center 
+            .col-md-3.text-center.mb-5
+              .avatar.avatar-xl
+                img.avatar-img.rounded-circle(src='../../css/icon/serval.png' style='background-color: white;')
+            .col
+              .row.align-items-center
+                .col-md-7
+                  h4.mb-1(style='font-size: 2rem;') #{userInfo.userName}
+                  p.medium.mb-3
+                    span.badge.badge-dark(style='font-size: 100%;') Product Manager
+              .row.mb-4
+                .col-md-7(style='font-size: 1.2rem;')
+                  h3.text-muted
+                  | Start your test journey with Serval now.
+                button.btn.btn-lg.btn-right.btn-primary.btn-create_project(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever='') Create Project
+                #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                  .modal-dialog
+                    .modal-content
+                      .modal-header
+                        h5#exampleModalLabel.modal-title Add Project
+                        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                      .modal-body
+                        form
+                          .mb-3
+                            label.col-form-label(for='project-name') Project Name
+                            input#project-name.form-control.input_project-name(type='string' placeholder='My Project')
+                      .modal-footer
+                        button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                        button.btn.btn-primary.btn-modal-create_project(type='submit') Create Project
 
-    script.
-        $('.btn-log_out').on('click', function(event) {
-            console.log('log out clicked')
-            event.preventDefault();
+        .col-12
+          h2.h3.mb-4.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; padding: 5rem 0 0 0; font-size: 2rem;') Dashboard
+          .input-form
+            .basic-info
+              .user-reports-amount
+                .card 
+                  .card-header
+                  .card-body
+              .user-line-chart
+                .card 
+                  .card-header
+                  .card-body
+              .user-pie-chart
+                .card 
+                  .card-header
+                  .card-body
 
-            axios({
-                method: 'post',
-                url: '/user/logout',
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then((response) => {
-                if (response.status === 200) {
-                    swal({
-                        text: "You have logged out",
-                        confirmButtonClass: "btn-success",
-                    })
-                    setTimeout(()=> {
-                        window.location.assign('../../../');
-                    }, 2000)
-                }
-            })
-            .catch((error) => {
-                console.log('catch error: ', error)
-                window.location.reload();
-            })
+  script.
+    //- $('.btn-log_out').on('click', function(event) {
+    //-   console.log('log out clicked')
+    //-   event.preventDefault();
+
+    //-   axios({
+    //-     method: 'post',
+    //-     url: '/user/logout',
+    //-     headers: {'Content-Type': 'application/json'}
+    //-   })
+    //-   .then((response) => {
+    //-     if (response.status === 200) {
+    //-       swal({
+    //-         text: "You have logged out",
+    //-         confirmButtonClass: "btn-success",
+    //-       })
+    //-       setTimeout(()=> {
+    //-         window.location.assign('../../../');
+    //-       }, 2000)
+    //-     }
+    //-   })
+    //-   .catch((error) => {
+    //-     console.log('catch error: ', error)
+    //-     window.location.reload();
+    //-   })
+    //- })
+
+    $('.btn-create_project').on('click', function(event) {
+      console.log('create_project clicked')
+      event.preventDefault();
+      //- window.location.assign('./editproject');
+    })
+
+
+    $('.btn-modal-create_project').on('click', function(event) {
+      console.log('create_project in modal clicked')
+      event.preventDefault();
+      const projectName = $('.input_project-name').val();
+
+      axios({
+        method: 'post',
+        url: '/editproject',
+        data: {
+          projectName: projectName,
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          swal({
+            text: 'Create project successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+          //- alert('Create project successfully')
+          //- window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log('in error');
+        console.log('Catch project error')
+        swal({
+            text: 'Create project error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
         })
+        setTimeout(()=> {
+          window.location.reload();
+        }, 2000)
+      })
+    })

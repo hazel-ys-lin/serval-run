@@ -1,5 +1,13 @@
 extends layout.pug
 
+block sidebar 
+    if userProjects
+        each element in userProjects
+            li.nav-item 
+                a.nav-link.pl-3(href=`./collections?projectid=${element.projectId}` style='padding: 0.5rem 0.5rem 0.5rem 1rem;')
+                    i.fa.fa-solid.fa-paw            
+                    span.ml-3.item-text= element.projectName
+
 block content 
   link(rel='stylesheet', href='../../css/common.css')
   script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
@@ -27,6 +35,7 @@ block content
     main.main-content(role='main')
         .container-fluid
             .row.justify-content-center
+                a.h5.text-secondary.mb-3(href=`./collections?projectid=${reportDetail.project_id}`)   ← Project
                 .col-12
                   .input-form
                     h1.report-length(examples=`${reportResponse.length}` style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem;') Report Details

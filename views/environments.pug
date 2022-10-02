@@ -1,189 +1,189 @@
 extends layout.pug
 
 block content
-    link(rel='stylesheet', href='../../css/common.css')
-    script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
-    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
-    main.main-content(role='main')
-        .container-fluid
-            .row.justify-content-center
-                .col-12
-                    form.input-form
-                        h1(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem;') Environments
-                            button.btn.btn-right.btn-success.btn-block.btn-create_environment(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${environments[0].project_id}`) Create Environment
-                        #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
-                            .modal-dialog
-                                .modal-content
-                                    .modal-header
-                                        h5#exampleModalLabel.modal-title Add Environment
-                                        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
-                                    .modal-body
-                                        form
-                                            .mb-3
-                                                label.col-form-label(for='project-id') Project ID
-                                                input#project-id.form-control.input_projectid
-                                            .mb-3
-                                                label.col-form-label(for='domain-name') Domain Name (URL)
-                                                input#domain-name.form-control.input_domain-name(type='url' placeholder='https://www.example.com/')
-                                            .mb-3
-                                                label.col-form-label(for='title') Title
-                                                input#title.form-control.input_title(type='string' placeholder='Staging')
-                                    .modal-footer
-                                        button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
-                                        button.btn.btn-primary.btn-modal-create_environment(type='submit') Create Environment
+  link(rel='stylesheet', href='../../css/common.css')
+  script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+  script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+  main.main-content(role='main')
+    .container-fluid
+      .row.justify-content-center
+        .col-12
+          form.input-form
+            h1(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem;') Environments
+              button.btn.btn-right.btn-success.btn-block.btn-create_environment(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${environments[0].project_id}`) Create Environment
+            #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+              .modal-dialog
+                .modal-content
+                  .modal-header
+                    h5#exampleModalLabel.modal-title Add Environment
+                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                  .modal-body
+                    form
+                      .mb-3
+                        label.col-form-label(for='project-id') Project ID
+                        input#project-id.form-control.input_projectid
+                      .mb-3
+                        label.col-form-label(for='domain-name') Domain Name (URL)
+                        input#domain-name.form-control.input_domain-name(type='url' placeholder='https://www.example.com/')
+                      .mb-3
+                        label.col-form-label(for='title') Title
+                        input#title.form-control.input_title(type='string' placeholder='Staging')
+                  .modal-footer
+                    button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                    button.btn.btn-primary.btn-modal-create_environment(type='submit') Create Environment
 
-                    .cards
-                        .card
-                            .card-header
-                                .card-title Project ID: #{environments[0].project_id}
-                                .card-tools
-                            .card-body.p-0
-                                table.table
-                                    if !environments[0].title
-                                        div(style='display: flex; justify-content: center;')
-                                            .text-muted.display-6(style='padding-top: 20px') Create your environment to run test!
-                                    else 
-                                        thead
-                                            tr
-                                                //- th(style='width: 10px') #
-                                                th.text-dark Environment ID
-                                                th.text-dark Domain Name (URL)
-                                                th.text-dark Title
-                                                th.text-dark Operations
-                                                //- th(style='width: 40px') Label
-                                        tbody
-                                            if environments[0].title
-                                                - let i = 0
-                                                while i < environments.length
-                                                    tr 
-                                                        td #{environments[i]._id}
-                                                        td #{environments[i].domain_name}
-                                                        td #{environments[i].title}
-                                                        td 
-                                                            button.btn.btn-danger.btn-delete(type='submit' id=`${environments[i]._id}`) Delete
-                                                    - i++
-    script.
-        $('.btn-create_environment').on('click', function(event) {
-            console.log('create_environment clicked')
-            event.preventDefault();
-            //- window.location.assign('./editcollection');
+          .cards
+            .card
+              .card-header
+                .card-title Project ID: #{environments[0].project_id}
+                .card-tools
+              .card-body.p-0
+                table.table
+                  if !environments[0].title
+                    div(style='display: flex; justify-content: center;')
+                      .text-muted.display-6(style='padding-top: 20px') Create your environment to run test!
+                  else 
+                    thead
+                      tr
+                        //- th(style='width: 10px') #
+                        th.text-dark Environment ID
+                        th.text-dark Domain Name (URL)
+                        th.text-dark Title
+                        th.text-dark Operations
+                        //- th(style='width: 40px') Label
+                    tbody
+                      if environments[0].title
+                        - let i = 0
+                        while i < environments.length
+                          tr 
+                            td #{environments[i]._id}
+                            td #{environments[i].domain_name}
+                            td #{environments[i].title}
+                            td 
+                              button.btn.btn-danger.btn-delete(type='submit' id=`${environments[i]._id}`) Delete
+                          - i++
+  script.
+    $('.btn-create_environment').on('click', function(event) {
+      console.log('create_environment clicked')
+      event.preventDefault();
+      //- window.location.assign('./editcollection');
+    })
+
+    $('#exampleModal').on('show.bs.modal', function(event) {
+      console.log('#exampleModal')
+      // Button that triggered the modal
+      let button = event.relatedTarget;
+      //- // Extract info from data-bs-* attributes
+      let projectId = $('.btn-create_environment').attr('data-bs-whatever');
+      //- // If necessary, you could initiate an AJAX request here
+      //- // and then do the updating in a callback.
+
+      //- // Update the modal's content.
+      $('input#project-id').val(projectId).prop('readonly', true);
+    })
+
+    $('.btn-modal-create_environment').on('click', function(event) {
+      console.log('create_environment in modal clicked')
+      event.preventDefault();
+      const projectId = $('.input_projectid').val();
+      const domainName = $('.input_domain-name').val();
+      const title = $('.input_title').val();
+
+      axios({
+        method: 'post',
+        url: '/editenv',
+        data: {
+          projectId: projectId,
+          domainName: domainName,
+          title: title
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          swal({
+            text: 'Create environment successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+          //- alert('create environment successfully')
+          //- window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log('in error');
+        console.log('create environment error')
+        if (error.response.status === 403) {
+          swal({
+            //- text: 'Please input your information properly',
+            text: 'Please enter valid URL',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2500)
+        } else {
+          swal({
+            text: 'Create environment error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+        }
+        
+      })
+    })
+
+
+    $('.btn-delete').on('click', function(event) {
+      console.log('delete_environment clicked')
+      event.preventDefault();
+
+      const projectId = $('.card-title').text().replace('Project ID: ', '');
+      const environmentId = this.id;
+      console.log('projectId: ', projectId)
+
+      axios({
+        method: 'delete',
+        url: '/editenv',
+        data: {
+          projectId: projectId,
+          environmentId: environmentId,
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          swal({
+            text: 'Delete environment successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+          //- alert('delete environment successfully')
+          //- //- window.location.assign('./testresult');
+          //- window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log('in error');
+        console.log('catch: ', error)
+        swal({
+            text: 'Delete environment error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
         })
-
-        $('#exampleModal').on('show.bs.modal', function(event) {
-            console.log('#exampleModal')
-            // Button that triggered the modal
-            let button = event.relatedTarget;
-            //- // Extract info from data-bs-* attributes
-            let projectId = $('.btn-create_environment').attr('data-bs-whatever');
-            //- // If necessary, you could initiate an AJAX request here
-            //- // and then do the updating in a callback.
-
-            //- // Update the modal's content.
-            $('input#project-id').val(projectId).prop('readonly', true);
-        })
-
-        $('.btn-modal-create_environment').on('click', function(event) {
-            console.log('create_environment in modal clicked')
-            event.preventDefault();
-            const projectId = $('.input_projectid').val();
-            const domainName = $('.input_domain-name').val();
-            const title = $('.input_title').val();
-
-            axios({
-                method: 'post',
-                url: '/editenv',
-                data: {
-                    projectId: projectId,
-                    domainName: domainName,
-                    title: title
-                },
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then((response) => {
-                if (response.status === 200) {
-                    swal({
-                        text: 'Create environment successfully',
-                        icon: "success",
-                        confirmButtonClass: "btn-success",
-                    })
-                    setTimeout(()=> {
-                        window.location.reload();
-                    }, 2000)
-                    //- alert('create environment successfully')
-                    //- window.location.reload();
-                }
-            })
-            .catch((error) => {
-                console.log('in error');
-                console.log('create environment error')
-                if (error.response.status === 403) {
-                    swal({
-                        //- text: 'Please input your information properly',
-                        text: 'Please enter valid URL',
-                        icon: "error",
-                        confirmButtonClass: "btn-danger",
-                    })
-                    setTimeout(()=> {
-                        window.location.reload();
-                    }, 2500)
-                } else {
-                    swal({
-                        text: 'Create environment error',
-                        icon: "error",
-                        confirmButtonClass: "btn-danger",
-                    })
-                    setTimeout(()=> {
-                        window.location.reload();
-                    }, 2000)
-                }
-                
-            })
-        })
-
-
-        $('.btn-delete').on('click', function(event) {
-            console.log('delete_environment clicked')
-            event.preventDefault();
-
-            const projectId = $('.card-title').text().replace('Project ID: ', '');
-            const environmentId = this.id;
-            console.log('projectId: ', projectId)
-
-            axios({
-                method: 'delete',
-                url: '/editenv',
-                data: {
-                    projectId: projectId,
-                    environmentId: environmentId,
-                },
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then((response) => {
-                if (response.status === 200) {
-                    swal({
-                        text: 'Delete environment successfully',
-                        icon: "success",
-                        confirmButtonClass: "btn-success",
-                    })
-                    setTimeout(()=> {
-                        window.location.reload();
-                    }, 2000)
-                    //- alert('delete environment successfully')
-                    //- //- window.location.assign('./testresult');
-                    //- window.location.reload();
-                }
-            })
-            .catch((error) => {
-                console.log('in error');
-                console.log('catch: ', error)
-                swal({
-                        text: 'Delete environment error',
-                        icon: "error",
-                        confirmButtonClass: "btn-danger",
-                })
-                setTimeout(()=> {
-                    window.location.reload();
-                }, 2000)
-                //- alert('delete environment error')
-            })
-        })
+        setTimeout(()=> {
+          window.location.reload();
+        }, 2000)
+        //- alert('delete environment error')
+      })
+    })
