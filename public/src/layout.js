@@ -14,10 +14,10 @@
 //           confirmButtonClass: 'btn-success',
 //         });
 //         setTimeout(() => {
-//           window.location.assign('http://localhost:3001/');
+//           window.location.assign('https://serval.run/');
 //         }, 2000);
 //       } else if (response.status === 201) {
-//         window.location.assign('http://localhost:3001/');
+//         window.location.assign('https://serval.run/');
 //       }
 //     })
 //     .catch((error) => {
@@ -37,7 +37,7 @@ $('.btn-profile').on('click', function (event) {
   })
     .then((response) => {
       if (response.status === 200) {
-        window.location.assign('http://localhost:3001/profile');
+        window.location.assign('https://serval.run/profile');
       }
     })
     .catch((error) => {
@@ -49,7 +49,7 @@ $('.btn-profile').on('click', function (event) {
           confirmButtonClass: 'btn-danger',
         });
         setTimeout(() => {
-          window.location.assign('http://localhost:3001/signin');
+          window.location.assign('https://serval.run/signin');
         }, 3000);
       } else {
         swal({
@@ -58,7 +58,7 @@ $('.btn-profile').on('click', function (event) {
           confirmButtonClass: 'btn-danger',
         });
         setTimeout(() => {
-          window.location.assign('http://localhost:3001/');
+          window.location.assign('https://serval.run/');
         }, 3000);
       }
     });
@@ -76,7 +76,7 @@ $('.btn-my_project').on('click', function (event) {
     .then((response) => {
       if (response.status === 200) {
         console.log('status 200');
-        window.location.assign('http://localhost:3001/projects');
+        window.location.assign('https://serval.run/projects');
       }
     })
     .catch((error) => {
@@ -88,7 +88,7 @@ $('.btn-my_project').on('click', function (event) {
           confirmButtonClass: 'btn-danger',
         });
         setTimeout(() => {
-          window.location.assign('http://localhost:3001/signin');
+          window.location.assign('https://serval.run/signin');
         }, 3000);
       } else {
         swal({
@@ -97,7 +97,7 @@ $('.btn-my_project').on('click', function (event) {
           confirmButtonClass: 'btn-danger',
         });
         setTimeout(() => {
-          window.location.assign('http://localhost:3001/');
+          window.location.assign('https://serval.run/');
         }, 3000);
       }
     });
