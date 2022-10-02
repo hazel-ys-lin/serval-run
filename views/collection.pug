@@ -34,7 +34,7 @@ block content
               h5.text-secondary.project-id(style='align-self: flex-start; font-weight: 400;') #{projectId}
             .edit-buttons
               //- button.btn.btn-primary.btn-edit_peoject(id=`${projectId}`) EDIT 
-              button.btn.btn-danger.btn-delete_project.mr-0(id=`${projectId}`) DELETE
+              button.btn.btn-danger.btn-delete_project.mr-0(id=`${projectId}` style='font-weight: 700;') DELETE
         .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
         .col-12.align-items-center
           .title-bar.justify-content-between(style='display: flex')
@@ -83,14 +83,14 @@ block content
                             //-   i.h4.fa.fa-solid.fa-gear.text-grey
                             button.btn.btn-delete_environment(id=`${environments[i]._id}` style='padding: 0;')
                               i.h4.fa.fa-solid.fa-trash.text-grey
-                        .mb-0.text-muted(style='font-weight: 300; font-size: 0.7rem;') #{environments[i]._id}
+                        .mb-0.text-muted(style='font-weight: 300; font-size: 0.8rem;') #{environments[i]._id}
                         p.text-secondary #{environments[i].domain_name}
                   - i++
                 .card.shadow.mb-4.mt-0
                   .card-body
                     .row.align-items-center
                       .my-4.col-md-6
-                      button.btn.text-uppercase.btn-create_environment(type='button' data-bs-toggle='modal' data-bs-target='#environmentModal' data-bs-whatever=`${environments[0].project_id}`) Add New Environment
+                      button.btn.text-uppercase.btn-create_environment(type='button' data-bs-toggle='modal' data-bs-target='#environmentModal' data-bs-whatever=`${environments[0].project_id}` style='font-size: 1rem; font-family: "Iunito", sans-serif;') Add New Environment
                     #environmentModal.modal.fade(tabindex='-1' aria-labelledby='environmentModalLabel' aria-hidden='true')
                       .modal-dialog
                         .modal-content
@@ -150,7 +150,7 @@ block content
                     .card-body 
                       .my-4
                         .info.align-items-center.justify-content-between(style='display: flex')
-                          .mb-0.text-muted(style='font-weight: 400; font-size: 0.9rem;') #{userCollections[i].collection._id}
+                          h2 #{userCollections[i].collection.collection_name}
                           .icons.justify-content-between.align-items-center(style='width: 4rem;')
                             a.pr-2(href=`./apis?collectionid=${userCollections[i].collection._id}` style='padding: 0;')
                               i.h5.fa.fa-solid.fa-eye.text-grey
@@ -158,13 +158,13 @@ block content
                             //-   i.h5.fa.fa-solid.fa-gear.text-grey
                             button.btn.btn-delete_collection(id=`${userCollections[i].collection._id}` style='padding: 0;')
                               i.h5.fa.fa-solid.fa-trash.text-grey
-                        h3 #{userCollections[i].collection.collection_name}
+                        .mb-0.text-muted(style='font-weight: 400; font-size: 0.8rem;') #{userCollections[i].collection._id}
                   - i++
                 .card.shadow.mb-4.mt-0
                   .card-body 
                     .row.align-items-center 
                       .col-md-6.my-4
-                      button.btn.text-uppercase.btn-create_collection(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${projectId}`) Add New Collection
+                      button.btn.text-uppercase.btn-create_collection(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${projectId}` style='font-size: 1rem; font-family: "Iunito", sans-serif;') Add New Collection
                     #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
                       .modal-dialog
                         .modal-content
@@ -204,7 +204,7 @@ block content
                       .row.align-items-start(style="flex-direction: column;") 
                         .my-4
                           .info.align-items-center.justify-content-between.mb-4(style='display: flex')
-                            h5.mb-0.text-uppercase.text-muted #{prettyDate(reportData[i].create_time)}
+                            h5.mb-0.text-uppercase.text-muted(style='font-weight: 500;') #{prettyDate(reportData[i].create_time)}
                             button.btn.btn-report-detail(id=`${reportData[i]._id}`)
                               i.h4.fa.fa-solid.fa-chart-pie.text-grey.mb-0
                           .mb-0
@@ -220,10 +220,10 @@ block content
                             else 
                               h1.badge.bg-warning.text-dark.result-badge(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 90%;') RUNNING
                         .col-md-6.border-top.pt-3
-                          p.mb-1 Collection / API / Scenario
+                          p.mb-1(style='font-size: 0.8rem;') Collection / API / Scenario
                           .report-title.list-inline
                             each element in reportData[i].report_title
-                              h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 110%;')= element
+                              h1.list-inline-item.badge.bg-light.text-dark(style='font-size: 90%;')= element
                   -i++      
                 //- .card.shadow.mb-4.mt-0
                 //-   .card-body 
@@ -505,7 +505,7 @@ block content
             confirmButtonClass: "btn-danger",
         })
         setTimeout(()=> {
-          window.location.reload();
+          window.location.assign('./profile');
         }, 2000)
       })
     })

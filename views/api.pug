@@ -24,14 +24,38 @@ block content
                             h5.text-secondary.collection-id(style='align-self: flex-start; font-weight: 400;') #{userApis[0].collectionId}
                         .edit-buttons
                             if !userApis[0].api
-                                button.btn.btn-warning(type='button' disabled='') RUN COLLECTION TEST
+                                button.btn.btn-warning(type='button' disabled='' style='font-weight: 700;') Run Collection Test
                             else
-                                button.btn.btn-warning RUN COLLECTION TEST
+                                button.btn.btn-warning(type='button' data-bs-toggle='modal' data-bs-target='#runCollectionModal' data-bs-whatever=`${userApis[0].collectionId}` style='font-weight: 700;') Run Collection Test
+                                #runCollectionModal.modal.fade(tabindex='-1' aria-labelledby='runCollectionModalLabel' aria-hidden='true' style='font-weight: 700;')
+                                    .modal-dialog.modal-lg
+                                        .modal-content
+                                            .modal-header
+                                                h5#runCollectionModalLabel.modal-title Run Collection Test
+                                                button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                            .modal-body 
+                                                .p-0
+                                                table.table
+                                                    thead
+                                                        tr 
+                                                            th.text-dark Domain
+                                                            th.text-dark Title
+                                                            th.text-dark Run Test
+                                                    tbody
+                                                        if envInfo
+                                                            - let j = 0
+                                                            while j < envInfo.length
+                                                                tr 
+                                                                    td #{envInfo[j].domain_name}
+                                                                    td #{envInfo[j].title}
+                                                                    td 
+                                                                        button.btn.btn-info.btn-collectiontest-in-toggle(type='submit' id=`${userApis[0].collectionId}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
+                                                                - j++
                 .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
                 .col-12.mb-0.align-items-center
                     .title-bar.mb-4.justify-content-between.align-items-center(style="display: flex")
                         h2.h3.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 1.5rem;') APIs
-                        button.btn.btn-success.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userApis[0].collectionId}`) Create API
+                        button.btn.btn-success.btn-create_api(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${userApis[0].collectionId}` style='font-weight: 700;') Create API
                         #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
                             .modal-dialog
                                 .modal-content
@@ -79,11 +103,11 @@ block content
                                 table.table.mb-0
                                     thead 
                                         tr 
-                                            th Name  
-                                            th Method 
-                                            th Endpoint 
-                                            th Severity 
-                                            th Operation 
+                                            th.text-secondary Name  
+                                            th.text-secondary Method 
+                                            th.text-secondary Endpoint 
+                                            th.text-secondary Severity 
+                                            th.text-secondary Operation 
                                     tbody
                                         - let i = 0
                                         while i < userApis.length
@@ -93,8 +117,8 @@ block content
                                                 td #{userApis[i].api.api_endpoint}
                                                 td #{userApis[i].api.severity}
                                                 td
-                                                    button.btn.btn-warning(type='button' data-bs-toggle='modal' data-bs-target='#runAPIModal' data-bs-whatever=`${userApis[i].api._id}`) RUN API TEST
-                                                    #runAPIModal.modal.fade(tabindex='-1' aria-labelledby='runAPIModalLabel' aria-hidden='true')
+                                                    button.btn.btn-warning(type='button' data-bs-toggle='modal' data-bs-target='#runAPIModal' data-bs-whatever=`${userApis[i].api._id}` style='font-weight: 700;') Run API Test
+                                                    #runAPIModal.modal.fade(tabindex='-1' aria-labelledby='runAPIModalLabel' aria-hidden='true' style='font-weight: 700;')
                                                         .modal-dialog.modal-lg
                                                             .modal-content
                                                                 .modal-header
@@ -118,9 +142,9 @@ block content
                                                                                         td 
                                                                                             button.btn.btn-info.btn-apitest-in-toggle(type='submit' id=`${userApis[i].api._id}` domain=`${envInfo[j].domain_name}` title=`${envInfo[j].title}`) Run
                                                                                     - j++
-                                                    button.btn.btn-info.btn-scenarios(type='submit' id=`${userApis[i].api._id}`) Scenarios
+                                                    button.btn.btn-info.btn-scenarios(type='submit' id=`${userApis[i].api._id}` style='font-weight: 700;') Scenarios
                                                     //- button.btn.btn-secondary(type='submit') Edit
-                                                    button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}`) Delete
+                                                    button.btn.btn-danger.btn-delete(type='submit' id=`${userApis[i].api._id}` style='font-weight: 700;') Delete
                                             - i++
     script. 
         $('.btn-create_api').on('click', function(event) {

@@ -118,7 +118,7 @@ const collectionInfoGetModel = async function (collectionId) {
   let collectionInfo = await collectionModel.findOne({
     _id: collectionId,
   });
-  console.log('collectionInfo: ', collectionInfo);
+  // console.log('collectionInfo: ', collectionInfo);
 
   return {
     projectId: collectionInfo.project_id,
