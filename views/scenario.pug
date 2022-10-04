@@ -140,8 +140,8 @@ block content
                                                                         td(style='font-size: 0.875rem;')= val
                                             .justify-content-end.mb-4(style='display: flex;')
                                                 .align-items-center.my-1.edit-buttons.pr-3
-                                                    button.btn.btn-warning(type='button' data-bs-toggle='modal' data-bs-target='#runScenarioModal' data-bs-whatever=`${userScenarios[i].scenario._id}`) RUN SCENARIO TEST
-                                                    #runScenarioModal.modal.fade(tabindex='-1' aria-labelledby='runScenarioModalLabel' aria-hidden='true')
+                                                    button.btn.btn-warning(type='button' data-bs-toggle='modal' data-bs-target=`#runScenarioModal-${userScenarios[i].scenario._id}` data-bs-whatever=`${userScenarios[i].scenario._id}`) RUN SCENARIO TEST
+                                                    .modal.fade(id=`runScenarioModal-${userScenarios[i].scenario._id}` tabindex='-1' aria-labelledby='runScenarioModalLabel' aria-hidden='true')
                                                         .modal-dialog.modal-lg
                                                             .modal-content
                                                                 .modal-header
@@ -171,289 +171,292 @@ block content
                                                     button.btn.btn-danger.btn-delete(id=`${userScenarios[i].scenario._id}`) DELETE
                             - i++
     script. 
-        $('.card-header').on('click', function(){
-            let name = $(this).attr('name');
-            $(`#${name}`).toggle('show');
-        })
+        $(()=>{
+            $('.card-header').on('click', function(){
+                let name = $(this).attr('name');
+                $(`#${name}`).toggle('show');
+            })
 
-        $('#exampleModal').on('shown.bs.modal', function() {
-            // src: https://stackoverflow.com/questions/17086538/codemirror-content-not-visible-in-bootstrap-modal-until-it-is-clicked
-            // initialize codemirror here
-            let editors = Array.from(document.getElementsByClassName("CodeMirror"))
-            editors.forEach((element)=>{
-                element.remove();
-            });
-            let editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-                lineNumbers: true,
-                matchBrackets: true,
-                mode: 'text/x-feature'
-            });
+            $('#exampleModal').on('shown.bs.modal', function() {
+                // src: https://stackoverflow.com/questions/17086538/codemirror-content-not-visible-in-bootstrap-modal-until-it-is-clicked
+                // initialize codemirror here
+                let editors = Array.from(document.getElementsByClassName("CodeMirror"))
+                editors.forEach((element)=>{
+                    element.remove();
+                });
+                let editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                    lineNumbers: true,
+                    matchBrackets: true,
+                    mode: 'text/x-feature'
+                });
 
-            $('.btn-modal-create_scenario').on('click', function(event) {
-                console.log('create scenario in modal clicked')
+                $('.btn-modal-create_scenario').on('click', function(event) {
+                    console.log('create scenario in modal clicked')
+                    event.preventDefault();
+
+                    swal({
+                        title:"", 
+                        text:"Loading...",
+                        icon: "https://www.boasnotas.com/img/loading2.gif",
+                        buttons: false,      
+                        closeOnClickOutside: false,
+                    });
+
+                    const apiId = $('.input_apiid').val();
+                    const featureCode = editor.getValue();
+
+                    axios({
+                        method: 'post',
+                        url: '/editscenario',
+                        data: {
+                            apiId: apiId,
+                            featureCode: featureCode,
+                        },
+                        headers: {'Content-Type': 'application/json'},
+                    })
+                    .then((response) => {
+                        if (response.status === 200) {
+                            swal({
+                                text: 'Create scenario successfully',
+                                icon: "success",
+                                //- confirmButtonClass: "btn-success",
+                            })
+                            setTimeout(()=> {
+                                window.location.reload();
+                            }, 2000)
+                        }
+                    })
+                    .catch((error) => {
+                        console.log('in error');
+                        console.log('catch: ', error)
+                        if (error.response.status === 422) {
+                            swal({
+                                text: 'Compile gherkin script error',
+                                icon: "error",
+                                //- confirmButtonClass: "btn-success",
+                            })
+                            setTimeout(()=> {
+                                window.location.reload();
+                            }, 2000)
+                        } else {
+                            swal({
+                                text: 'Create scenario error',
+                                icon: "error",
+                                confirmButtonClass: "btn-danger",
+                            })
+                            setTimeout(()=> {
+                                window.location.reload();
+                            }, 2000)
+                            //- alert('create scenario error')
+                        }
+                    })
+                })
+            })
+
+
+            $('#exampleModal').on('show.bs.modal', function(event) {
+                let button = event.relatedTarget;
+                let apiId = $('.btn-create_scenario').attr('data-bs-whatever');
+                $('input#api-id').val(apiId).prop('readonly', true);
+            })
+
+            $('.btn-create_scenario').on('click', function(event) {
+                console.log('create_scenario clicked')
+                event.preventDefault();
+            })
+
+            $('.btn-scenariotest-in-modal').on('click', function(event) {
+                console.log('run scenario test in toggle clicked');
                 event.preventDefault();
 
                 swal({
-                    title:"", 
-                    text:"Loading...",
-                    icon: "https://www.boasnotas.com/img/loading2.gif",
+                    title:"Serval is running...", 
+                    //- html: true,
+                    //- icon: "https://i.gifer.com/2yqU.gif",
+                    icon: "https://i.gifer.com/PYh.gif",
                     buttons: false,      
                     closeOnClickOutside: false,
+                    //- timer: 5000,
                 });
 
-                const apiId = $('.input_apiid').val();
-                const featureCode = editor.getValue();
+
+                const apiId = $('.card-title').text().replace('API ID: ', '');
+                const scenarioId = this.id;
+                const domainName = $('.btn-scenariotest-in-toggle').attr('domain');
+                const title = $('.btn-scenariotest-in-toggle').attr('title');
 
                 axios({
                     method: 'post',
-                    url: '/editscenario',
+                    url: '/scenariorun',
                     data: {
                         apiId: apiId,
-                        featureCode: featureCode,
-                    },
-                    headers: {'Content-Type': 'application/json'},
+                        scenarioId: scenarioId,
+                        domainName: domainName,
+                        title: title,
+                        report_info: {
+                            report_level: 1,
+                            report_type: 'scenario',
+                        }
+                    }, 
+                    headers: {'Content-Type': 'application/json'}
                 })
                 .then((response) => {
                     if (response.status === 200) {
                         swal({
-                            text: 'Create scenario successfully',
+                            text: 'Add scenario test to running list successfully',
                             icon: "success",
-                            //- confirmButtonClass: "btn-success",
+                            confirmButtonClass: "btn-success",
                         })
                         setTimeout(()=> {
                             window.location.reload();
                         }, 2000)
+                        //- alert('Run scenario test successfully')
+                        //- window.location.reload();
+                    }
+                })
+                .catch((error) => {
+                    console.log('catch: ', error)
+                    swal({
+                            text: 'Add scenario test to running list error',
+                            icon: "error",
+                            confirmButtonClass: "btn-danger",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('Run scenario test error')
+                })
+            })
+
+
+            $('.btn-delete').on('click', function(event) {
+                console.log('delete_scenario clicked')
+                event.preventDefault();
+
+                const apiId = $('.api-id').text();
+                const scenarioId = this.id;
+                console.log('scenarioId: ', scenarioId)
+
+                axios({
+                    method: 'delete',
+                    url: '/editscenario',
+                    data: {
+                        apiId: apiId,
+                        scenarioId: scenarioId,
+                    },
+                    headers: {'Content-Type': 'application/json'}
+                })
+                .then((response) => {
+                    if (response.status === 200) {
+                        swal({
+                            text: 'Delete scenario successfully',
+                            icon: "success",
+                            confirmButtonClass: "btn-success",
+                        })
+                        setTimeout(()=> {
+                            window.location.reload();
+                        }, 2000)
+                        //- alert('delete scenario successfully')
+                        //- window.location.reload();
                     }
                 })
                 .catch((error) => {
                     console.log('in error');
                     console.log('catch: ', error)
-                    if (error.response.status === 422) {
-                        swal({
-                            text: 'Compile gherkin script error',
-                            icon: "error",
-                            //- confirmButtonClass: "btn-success",
-                        })
-                        setTimeout(()=> {
-                            window.location.reload();
-                        }, 2000)
-                    } else {
-                        swal({
-                            text: 'Create scenario error',
+                    swal({
+                            text: 'Delete scenario error',
                             icon: "error",
                             confirmButtonClass: "btn-danger",
+                    })
+                    setTimeout(()=> {
+                        window.location.reload();
+                    }, 2000)
+                    //- alert('delete scenario error')
+                })
+            })
+
+            $(document).ready(() => {
+                let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+                let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                    return new bootstrap.Popover(popoverTriggerEl)
+                })
+            })
+
+            //- $('#runScenarioModal').on('show.bs.modal', function(event) {
+            //-     console.log('#runScenarioModal')
+            //-     // Button that triggered the modal
+            //-     let button = event.relatedTarget;
+            //-     // Extract info from data-bs-* attributes
+            //-     //- let collectionId = $('.btn-create_api').attr('data-bs-whatever');
+            //-     // If necessary, you could initiate an AJAX request here
+            //-     // and then do the updating in a callback.
+
+            //-     // Update the modal's content.
+            //-     //- $('input#collection-id').val(collectionId).prop('readonly', true);
+            //- })
+
+
+            $('.btn-scenariotest-in-toggle').on('click', function(event) {
+                console.log('run scenario test in toggle clicked');
+                event.preventDefault();
+
+                swal({
+                    title:"Serval is running...", 
+                    //- html: true,
+                    //- icon: "https://i.gifer.com/2yqU.gif",
+                    icon: "https://i.gifer.com/PYh.gif",
+                    buttons: false,      
+                    closeOnClickOutside: false,
+                    //- timer: 5000,
+                });
+
+
+                const apiId = $('.api-id').text();
+                const scenarioId = this.id;
+                const domainName = $('.btn-scenariotest-in-toggle').attr('domain');
+                const title = $('.btn-scenariotest-in-toggle').attr('title');
+
+                axios({
+                    method: 'post',
+                    url: '/scenariorun',
+                    data: {
+                        apiId: apiId,
+                        scenarioId: scenarioId,
+                        domainName: domainName,
+                        title: title,
+                        report_info: {
+                            report_level: 1,
+                            report_type: 'scenario',
+                        }
+                    }, 
+                    headers: {'Content-Type': 'application/json'}
+                })
+                .then((response) => {
+                    if (response.status === 200) {
+                        swal({
+                            text: 'Add scenario test to running list successfully',
+                            icon: "success",
+                            confirmButtonClass: "btn-success",
                         })
                         setTimeout(()=> {
                             window.location.reload();
                         }, 2000)
-                        //- alert('create scenario error')
+                        //- alert('Run scenario test successfully')
+                        //- window.location.reload();
                     }
                 })
-            })
-        })
-
-
-        $('#exampleModal').on('show.bs.modal', function(event) {
-            let button = event.relatedTarget;
-            let apiId = $('.btn-create_scenario').attr('data-bs-whatever');
-            $('input#api-id').val(apiId).prop('readonly', true);
-        })
-
-        $('.btn-create_scenario').on('click', function(event) {
-            console.log('create_scenario clicked')
-            event.preventDefault();
-        })
-
-        $('.btn-scenariotest-in-modal').on('click', function(event) {
-            console.log('run scenario test in toggle clicked');
-            event.preventDefault();
-
-            swal({
-                title:"Serval is running...", 
-                //- html: true,
-                //- icon: "https://i.gifer.com/2yqU.gif",
-                icon: "https://i.gifer.com/PYh.gif",
-                buttons: false,      
-                closeOnClickOutside: false,
-                //- timer: 5000,
-            });
-
-
-            const apiId = $('.card-title').text().replace('API ID: ', '');
-            const scenarioId = this.id;
-            const domainName = $('.btn-scenariotest-in-toggle').attr('domain');
-            const title = $('.btn-scenariotest-in-toggle').attr('title');
-
-            axios({
-                method: 'post',
-                url: '/scenariorun',
-                data: {
-                    apiId: apiId,
-                    scenarioId: scenarioId,
-                    domainName: domainName,
-                    title: title,
-                    report_info: {
-                        report_level: 1,
-                        report_type: 'scenario',
-                    }
-                }, 
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then((response) => {
-                if (response.status === 200) {
+                .catch((error) => {
+                    console.log('catch: ', error)
                     swal({
-                        text: 'Add scenario test to running list successfully',
-                        icon: "success",
-                        confirmButtonClass: "btn-success",
+                            text: 'Add scenario test to running list error',
+                            icon: "error",
+                            confirmButtonClass: "btn-danger",
                     })
                     setTimeout(()=> {
                         window.location.reload();
                     }, 2000)
-                    //- alert('Run scenario test successfully')
-                    //- window.location.reload();
-                }
-            })
-            .catch((error) => {
-                console.log('catch: ', error)
-                swal({
-                        text: 'Add scenario test to running list error',
-                        icon: "error",
-                        confirmButtonClass: "btn-danger",
+                    //- alert('Run scenario test error')
                 })
-                setTimeout(()=> {
-                    window.location.reload();
-                }, 2000)
-                //- alert('Run scenario test error')
             })
-        })
 
-
-        $('.btn-delete').on('click', function(event) {
-            console.log('delete_scenario clicked')
-            event.preventDefault();
-
-            const apiId = $('.api-id').text();
-            const scenarioId = this.id;
-            console.log('scenarioId: ', scenarioId)
-
-            axios({
-                method: 'delete',
-                url: '/editscenario',
-                data: {
-                    apiId: apiId,
-                    scenarioId: scenarioId,
-                },
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then((response) => {
-                if (response.status === 200) {
-                    swal({
-                        text: 'Delete scenario successfully',
-                        icon: "success",
-                        confirmButtonClass: "btn-success",
-                    })
-                    setTimeout(()=> {
-                        window.location.reload();
-                    }, 2000)
-                    //- alert('delete scenario successfully')
-                    //- window.location.reload();
-                }
-            })
-            .catch((error) => {
-                console.log('in error');
-                console.log('catch: ', error)
-                swal({
-                        text: 'Delete scenario error',
-                        icon: "error",
-                        confirmButtonClass: "btn-danger",
-                })
-                setTimeout(()=> {
-                    window.location.reload();
-                }, 2000)
-                //- alert('delete scenario error')
-            })
-        })
-
-        $(document).ready(() => {
-            let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-            let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-                return new bootstrap.Popover(popoverTriggerEl)
-            })
-        })
-
-        $('#runScenarioModal').on('show.bs.modal', function(event) {
-            console.log('#runScenarioModal')
-            // Button that triggered the modal
-            let button = event.relatedTarget;
-            // Extract info from data-bs-* attributes
-            //- let collectionId = $('.btn-create_api').attr('data-bs-whatever');
-            // If necessary, you could initiate an AJAX request here
-            // and then do the updating in a callback.
-
-            // Update the modal's content.
-            //- $('input#collection-id').val(collectionId).prop('readonly', true);
-        })
-
-
-        $('.btn-scenariotest-in-toggle').on('click', function(event) {
-            console.log('run scenario test in toggle clicked');
-            event.preventDefault();
-
-            swal({
-                title:"Serval is running...", 
-                //- html: true,
-                //- icon: "https://i.gifer.com/2yqU.gif",
-                icon: "https://i.gifer.com/PYh.gif",
-                buttons: false,      
-                closeOnClickOutside: false,
-                //- timer: 5000,
-            });
-
-
-            const apiId = $('.api-id').text();
-            const scenarioId = this.id;
-            const domainName = $('.btn-scenariotest-in-toggle').attr('domain');
-            const title = $('.btn-scenariotest-in-toggle').attr('title');
-
-            axios({
-                method: 'post',
-                url: '/scenariorun',
-                data: {
-                    apiId: apiId,
-                    scenarioId: scenarioId,
-                    domainName: domainName,
-                    title: title,
-                    report_info: {
-                        report_level: 1,
-                        report_type: 'scenario',
-                    }
-                }, 
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then((response) => {
-                if (response.status === 200) {
-                    swal({
-                        text: 'Add scenario test to running list successfully',
-                        icon: "success",
-                        confirmButtonClass: "btn-success",
-                    })
-                    setTimeout(()=> {
-                        window.location.reload();
-                    }, 2000)
-                    //- alert('Run scenario test successfully')
-                    //- window.location.reload();
-                }
-            })
-            .catch((error) => {
-                console.log('catch: ', error)
-                swal({
-                        text: 'Add scenario test to running list error',
-                        icon: "error",
-                        confirmButtonClass: "btn-danger",
-                })
-                setTimeout(()=> {
-                    window.location.reload();
-                }, 2000)
-                //- alert('Run scenario test error')
-            })
         })
