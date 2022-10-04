@@ -42,10 +42,10 @@ block content
             if (response.status === 200) {
                 console.log('sign in success');
                 //- alert("Welcome back to ServalRun!");
-                swal({
-                text: 'Welcome back to ServalRun!',
-                icon: 'success',
-                confirmButtonClass: 'btn-success',
+                Swal.fire({
+                    text: 'Welcome back to ServalRun!',
+                    icon: 'success',
+                    confirmButtonClass: 'btn-success',
                 });
                 setTimeout(() => {
                 window.location.assign('./profile');
@@ -55,10 +55,10 @@ block content
             .catch((error) => {
             //- console.log('catch error: ', error)
             if (error.response.status === 403) {
-                swal({
-                text: 'Sign in failed\nPlease check your email or password',
-                icon: 'error',
-                confirmButtonClass: 'btn-danger',
+                Swal.fire({
+                    text: 'Sign in failed\nPlease check your email or password',
+                    icon: 'error',
+                    confirmButtonClass: 'btn-danger',
                 });
                 setTimeout(() => {
                 window.location.reload();
@@ -69,20 +69,20 @@ block content
                 errorArray.push(elem.msg);
                 });
                 let errorMsg = errorArray.join('\n');
-                swal({
-                //- text: 'Please input your information properly',
-                text: errorMsg,
-                icon: 'error',
-                confirmButtonClass: 'btn-danger',
+                Swal.fire({
+                    //- text: 'Please input your information properly',
+                    text: errorMsg,
+                    icon: 'error',
+                    confirmButtonClass: 'btn-danger',
                 });
                 setTimeout(() => {
                 window.location.reload();
                 }, 4000);
             } else {
-                swal({
-                text: 'Sign in error',
-                icon: 'error',
-                confirmButtonClass: 'btn-danger',
+                Swal.fire({
+                    text: 'Sign in error',
+                    icon: 'error',
+                    confirmButtonClass: 'btn-danger',
                 });
                 setTimeout(() => {
                 window.location.reload();

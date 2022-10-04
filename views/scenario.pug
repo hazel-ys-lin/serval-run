@@ -194,10 +194,12 @@ block content
                     console.log('create scenario in modal clicked')
                     event.preventDefault();
 
-                    swal({
+                    Swal.fire({
                         title:"", 
                         text:"Loading...",
-                        icon: "https://www.boasnotas.com/img/loading2.gif",
+                        imageUrl: "https://www.boasnotas.com/img/loading2.gif",
+                        imageWidth: 300,
+                        imageHeight: 300,
                         buttons: false,      
                         closeOnClickOutside: false,
                     });
@@ -216,7 +218,7 @@ block content
                     })
                     .then((response) => {
                         if (response.status === 200) {
-                            swal({
+                            Swal.fire({
                                 text: 'Create scenario successfully',
                                 icon: "success",
                                 //- confirmButtonClass: "btn-success",
@@ -230,7 +232,7 @@ block content
                         console.log('in error');
                         console.log('catch: ', error)
                         if (error.response.status === 422) {
-                            swal({
+                            Swal.fire({
                                 text: 'Compile gherkin script error',
                                 icon: "error",
                                 //- confirmButtonClass: "btn-success",
@@ -239,7 +241,7 @@ block content
                                 window.location.reload();
                             }, 2000)
                         } else {
-                            swal({
+                            Swal.fire({
                                 text: 'Create scenario error',
                                 icon: "error",
                                 confirmButtonClass: "btn-danger",
@@ -269,11 +271,11 @@ block content
                 console.log('run scenario test in toggle clicked');
                 event.preventDefault();
 
-                swal({
+                Swal.fire({
                     title:"Serval is running...", 
                     //- html: true,
                     //- icon: "https://i.gifer.com/2yqU.gif",
-                    icon: "https://i.gifer.com/PYh.gif",
+                    imageUrl: "https://i.gifer.com/PYh.gif",
                     buttons: false,      
                     closeOnClickOutside: false,
                     //- timer: 5000,
@@ -302,7 +304,7 @@ block content
                 })
                 .then((response) => {
                     if (response.status === 200) {
-                        swal({
+                        Swal.fire({
                             text: 'Add scenario test to running list successfully',
                             icon: "success",
                             confirmButtonClass: "btn-success",
@@ -316,7 +318,7 @@ block content
                 })
                 .catch((error) => {
                     console.log('catch: ', error)
-                    swal({
+                    Swal.fire({
                             text: 'Add scenario test to running list error',
                             icon: "error",
                             confirmButtonClass: "btn-danger",
@@ -337,41 +339,53 @@ block content
                 const scenarioId = this.id;
                 console.log('scenarioId: ', scenarioId)
 
-                axios({
-                    method: 'delete',
-                    url: '/editscenario',
-                    data: {
-                        apiId: apiId,
-                        scenarioId: scenarioId,
-                    },
-                    headers: {'Content-Type': 'application/json'}
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are going to delete this scenario",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Delete'
                 })
-                .then((response) => {
-                    if (response.status === 200) {
-                        swal({
-                            text: 'Delete scenario successfully',
-                            icon: "success",
-                            confirmButtonClass: "btn-success",
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        axios({
+                            method: 'delete',
+                            url: '/editscenario',
+                            data: {
+                                apiId: apiId,
+                                scenarioId: scenarioId,
+                            },
+                            headers: {'Content-Type': 'application/json'}
+                        }).then((response) => {
+                            if (response.status === 200) {
+                                Swal.fire({
+                                    text: 'Delete scenario successfully',
+                                    icon: "success",
+                                    confirmButtonClass: "btn-success",
+                                })
+                                setTimeout(()=> {
+                                    window.location.reload();
+                                }, 2000)
+                                //- alert('delete scenario successfully')
+                                //- window.location.reload();
+                            }
                         })
-                        setTimeout(()=> {
-                            window.location.reload();
-                        }, 2000)
-                        //- alert('delete scenario successfully')
-                        //- window.location.reload();
+                        .catch((error) => {
+                            console.log('in error');
+                            console.log('catch: ', error)
+                            Swal.fire({
+                                    text: 'Delete scenario error',
+                                    icon: "error",
+                                    confirmButtonClass: "btn-danger",
+                            })
+                            setTimeout(()=> {
+                                window.location.reload();
+                            }, 2000)
+                            //- alert('delete scenario error')
+                        })
                     }
-                })
-                .catch((error) => {
-                    console.log('in error');
-                    console.log('catch: ', error)
-                    swal({
-                            text: 'Delete scenario error',
-                            icon: "error",
-                            confirmButtonClass: "btn-danger",
-                    })
-                    setTimeout(()=> {
-                        window.location.reload();
-                    }, 2000)
-                    //- alert('delete scenario error')
                 })
             })
 
@@ -400,11 +414,13 @@ block content
                 console.log('run scenario test in toggle clicked');
                 event.preventDefault();
 
-                swal({
+                Swal.fire({
                     title:"Serval is running...", 
                     //- html: true,
                     //- icon: "https://i.gifer.com/2yqU.gif",
-                    icon: "https://i.gifer.com/PYh.gif",
+                    imageUrl: "https://i.gifer.com/PYh.gif",
+                    imageWidth: 300,
+                    imageHeight: 300,
                     buttons: false,      
                     closeOnClickOutside: false,
                     //- timer: 5000,
@@ -433,7 +449,7 @@ block content
                 })
                 .then((response) => {
                     if (response.status === 200) {
-                        swal({
+                        Swal.fire({
                             text: 'Add scenario test to running list successfully',
                             icon: "success",
                             confirmButtonClass: "btn-success",
@@ -447,7 +463,7 @@ block content
                 })
                 .catch((error) => {
                     console.log('catch: ', error)
-                    swal({
+                    Swal.fire({
                             text: 'Add scenario test to running list error',
                             icon: "error",
                             confirmButtonClass: "btn-danger",

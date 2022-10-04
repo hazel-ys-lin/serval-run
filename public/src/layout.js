@@ -9,7 +9,7 @@
 //   })
 //     .then((response) => {
 //       if (response.status === 200) {
-//         swal({
+//         Swal.fire({
 //           text: 'You have logged out',
 //           confirmButtonClass: 'btn-success',
 //         });
@@ -43,7 +43,7 @@ $('.btn-profile').on('click', function (event) {
     .catch((error) => {
       console.log('catch error: ', error);
       if (error.response.status === 403) {
-        swal({
+        Swal.fire({
           text: 'Please log in first',
           icon: 'error',
           confirmButtonClass: 'btn-danger',
@@ -52,7 +52,7 @@ $('.btn-profile').on('click', function (event) {
           window.location.assign('https://serval.run/signin');
         }, 3000);
       } else {
-        swal({
+        Swal.fire({
           text: 'Redirect failed',
           icon: 'error',
           confirmButtonClass: 'btn-danger',
@@ -82,7 +82,7 @@ $('.btn-my_project').on('click', function (event) {
     .catch((error) => {
       console.log('catch error: ', error);
       if (error.response.status === 403) {
-        swal({
+        Swal.fire({
           text: 'Please log in first',
           icon: 'error',
           confirmButtonClass: 'btn-danger',
@@ -91,7 +91,7 @@ $('.btn-my_project').on('click', function (event) {
           window.location.assign('https://serval.run/signin');
         }, 3000);
       } else {
-        swal({
+        Swal.fire({
           text: 'Redirect failed',
           icon: 'error',
           confirmButtonClass: 'btn-danger',

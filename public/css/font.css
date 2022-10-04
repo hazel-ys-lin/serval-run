@@ -1,4 +1,7 @@
-
 .fa:before {
-    font-family: 'Font Awesome 6 Free' !important;
+  font-family: 'Font Awesome 6 Free' !important;
+}
+
+.fa-brands:before {
+  font-family: 'Font Awesome 6 Brands' !important;
 }

@@ -270,7 +270,7 @@ block content
       })
       .then((response) => {
         if (response.status === 200) {
-          swal({
+          Swal.fire({
             text: 'Create environment successfully',
             icon: "success",
             confirmButtonClass: "btn-success",
@@ -286,7 +286,7 @@ block content
         console.log('in error');
         console.log('create environment error')
         if (error.response.status === 403) {
-          swal({
+          Swal.fire({
             //- text: 'Please input your information properly',
             text: 'Please enter valid URL',
             icon: "error",
@@ -296,7 +296,7 @@ block content
             window.location.reload();
           }, 2500)
         } else {
-          swal({
+          Swal.fire({
             text: 'Create environment error',
             icon: "error",
             confirmButtonClass: "btn-danger",
@@ -318,45 +318,53 @@ block content
       const environmentId = this.id;
       console.log('projectId: ', projectId)
 
-      axios({
-        method: 'delete',
-        url: '/editenv',
-        data: {
-          projectId: projectId,
-          environmentId: environmentId,
-        },
-        headers: {'Content-Type': 'application/json'}
+      Swal.fire({
+          title: 'Are you sure?',
+          text: "You are going to delete this environment",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Delete'
       })
-      .then((response) => {
-        if (response.status === 200) {
-          swal({
-            text: 'Delete environment successfully',
-            icon: "success",
-            confirmButtonClass: "btn-success",
+      .then((result) => {
+        if (result.isConfirmed) {
+          axios({
+            method: 'delete',
+            url: '/editenv',
+            data: {
+              projectId: projectId,
+              environmentId: environmentId,
+            },
+            headers: {'Content-Type': 'application/json'}
           })
-          setTimeout(()=> {
-            window.location.reload();
-          }, 2000)
-          //- alert('delete environment successfully')
-          //- //- window.location.assign('./testresult');
-          //- window.location.reload();
+          .then((response) => {
+            if (response.status === 200) {
+              Swal.fire({
+                text: 'Delete environment successfully',
+                icon: "success",
+                confirmButtonClass: "btn-success",
+              })
+              setTimeout(()=> {
+                window.location.reload();
+              }, 2000)
+            }
+          })
+          .catch((error) => {
+            console.log('in error');
+            console.log('catch: ', error)
+            Swal.fire({
+                text: 'Delete environment error',
+                icon: "error",
+                confirmButtonClass: "btn-danger",
+            })
+            setTimeout(()=> {
+              window.location.reload();
+            }, 2000)
+          })
         }
       })
-      .catch((error) => {
-        console.log('in error');
-        console.log('catch: ', error)
-        swal({
-            text: 'Delete environment error',
-            icon: "error",
-            confirmButtonClass: "btn-danger",
-        })
-        setTimeout(()=> {
-          window.location.reload();
-        }, 2000)
-        //- alert('delete environment error')
-      })
     })
-
 
     $('.btn-create_collection').on('click', function(event) {
       console.log('create_collection clicked')
@@ -394,7 +402,7 @@ block content
       })
       .then((response) => {
         if (response.status === 200) {
-          swal({
+          Swal.fire({
             text: 'Create collection successfully',
             icon: "success",
             confirmButtonClass: "btn-success",
@@ -409,7 +417,7 @@ block content
       .catch((error) => {
         console.log('in error');
         console.log('catch collection error')
-        swal({
+        Swal.fire({
             text: 'Create collection error',
             icon: "error",
             confirmButtonClass: "btn-danger",
@@ -429,42 +437,51 @@ block content
       const collectionId = this.id;
       console.log('projectId: ', projectId)
 
-      axios({
-        method: 'delete',
-        url: '/editcollection',
-        data: {
-          projectId: projectId,
-          collectionId: collectionId,
-        },
-        headers: {'Content-Type': 'application/json'}
+      Swal.fire({
+          title: 'Are you sure?',
+          text: "You are going to delete this collection (and the APIs, scenarios related)",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Delete'
       })
-      .then((response) => {
-        if (response.status === 200) {
-          swal({
-            text: 'Delete collection successfully',
-            icon: "success",
-            confirmButtonClass: "btn-success",
+      .then((result) => {
+        if (result.isConfirmed) {
+          axios({
+            method: 'delete',
+            url: '/editcollection',
+            data: {
+              projectId: projectId,
+              collectionId: collectionId,
+            },
+            headers: {'Content-Type': 'application/json'}
           })
-          setTimeout(()=> {
-            window.location.reload();
-          }, 2000)
-          //- alert('delete project successfully')
-          //- window.location.assign('./testresult');
-          //- window.location.reload();
+          .then((response) => {
+            if (response.status === 200) {
+              Swal.fire({
+                text: 'Delete collection successfully',
+                icon: "success",
+                confirmButtonClass: "btn-success",
+              })
+              setTimeout(()=> {
+                window.location.reload();
+              }, 2000)
+            }
+          })
+          .catch((error) => {
+            console.log('in error');
+            console.log('catch: ', error)
+            Swal.fire({
+                text: 'Delete collection error',
+                icon: "error",
+                confirmButtonClass: "btn-danger",
+            })
+            setTimeout(()=> {
+              window.location.reload();
+            }, 2000)
+          })
         }
-      })
-      .catch((error) => {
-        console.log('in error');
-        console.log('catch: ', error)
-        swal({
-            text: 'Delete collection error',
-            icon: "error",
-            confirmButtonClass: "btn-danger",
-        })
-        setTimeout(()=> {
-          window.location.reload();
-        }, 2000)
-        //- alert('delete project error')
       })
     })
 
@@ -476,37 +493,50 @@ block content
       console.log('this.id: ', this.id)
       const projectId = this.id;
 
-      axios({
-        method: 'delete',
-        url: '/editproject',
-        data: {
-          projectId: projectId,
-        },
-        headers: {'Content-Type': 'application/json'}
+      Swal.fire({
+          title: 'Are you sure?',
+          text: "You are going to delete this project (and the collections, APIs, scenarios related)",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Delete'
       })
-      .then((response) => {
-        if (response.status === 200) {
-          swal({
-            text: 'Delete project successfully',
-            icon: "success",
-            confirmButtonClass: "btn-success",
+      .then((result) => {
+        if (result.isConfirmed) {
+          axios({
+            method: 'delete',
+            url: '/editproject',
+            data: {
+              projectId: projectId,
+            },
+            headers: {'Content-Type': 'application/json'}
           })
-          setTimeout(()=> {
-            window.location.reload();
-          }, 2000)
+          .then((response) => {
+            if (response.status === 200) {
+              Swal.fire({
+                text: 'Delete project successfully',
+                icon: "success",
+                confirmButtonClass: "btn-success",
+              })
+              setTimeout(()=> {
+                window.location.assign('./profile');
+              }, 2000)
+            }
+          })
+          .catch((error) => {
+            console.log('in error');
+            console.log('catch: ', error)
+            Swal.fire({
+                text: 'Delete project error',
+                icon: "error",
+                confirmButtonClass: "btn-danger",
+            })
+            setTimeout(()=> {
+              window.location.reload();
+            }, 2000)
+          })
         }
-      })
-      .catch((error) => {
-        console.log('in error');
-        console.log('catch: ', error)
-        swal({
-            text: 'Delete project error',
-            icon: "error",
-            confirmButtonClass: "btn-danger",
-        })
-        setTimeout(()=> {
-          window.location.assign('./profile');
-        }, 2000)
       })
     })
 

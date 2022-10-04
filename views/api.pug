@@ -168,53 +168,66 @@ block content
             const apiId = this.id;
             console.log('apiId: ', apiId)
 
-            axios({
-                method: 'delete',
-                url: '/editapi',
-                data: {
-                    collectionId: collectionId,
-                    apiId: apiId,
-                },
-                headers: {'Content-Type': 'application/json'}
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are going to delete this API (and the scenarios related)",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Delete'
             })
-            .then((response) => {
-                if (response.status === 200) {
-                    swal({
-                        text: 'Delete API successfully',
-                        icon: "success",
-                        confirmButtonClass: "btn-success",
+            .then((result) => {
+                if (result.isConfirmed) {
+                    axios({
+                        method: 'delete',
+                        url: '/editapi',
+                        data: {
+                            collectionId: collectionId,
+                            apiId: apiId,
+                        },
+                        headers: {'Content-Type': 'application/json'}
                     })
-                    setTimeout(()=> {
-                        window.location.reload();
-                    }, 2000)
-                    //- alert('delete API successfully')
-                    //- //- window.location.assign('./testresult');
-                    //- window.location.reload();
+                    .then((response) => {
+                        if (response.status === 200) {
+                            Swal.fire({
+                                text: 'Delete API successfully',
+                                icon: "success",
+                                confirmButtonClass: "btn-success",
+                            })
+                            setTimeout(()=> {
+                                window.location.reload();
+                            }, 2000)
+                            //- alert('delete API successfully')
+                            //- //- window.location.assign('./testresult');
+                            //- window.location.reload();
+                        }
+                    })
+                    .catch((error) => {
+                        console.log('in error');
+                        console.log('catch: ', error)
+                        if (error.response.status === 401) {
+                            Swal.fire({
+                                    text: 'Please log in first',
+                                    icon: "error",
+                                    confirmButtonClass: "btn-danger",
+                            })
+                            setTimeout(()=> {
+                                window.location.reload();
+                            }, 2000)
+                        } else {
+                            Swal.fire({
+                                    text: 'Delete API failed',
+                                    icon: "error",
+                                    confirmButtonClass: "btn-danger",
+                            })
+                            setTimeout(()=> {
+                                window.location.reload();
+                            }, 2000)
+                            //- alert('delete API error')
+                        }
+                    })
                 }
-            })
-            .catch((error) => {
-                console.log('in error');
-                console.log('catch: ', error)
-                if (error.response.status === 401) {
-                    swal({
-                            text: 'Please log in first',
-                            icon: "error",
-                            confirmButtonClass: "btn-danger",
-                    })
-                    setTimeout(()=> {
-                        window.location.reload();
-                    }, 2000)
-                } else {
-                    swal({
-                            text: 'Delete API failed',
-                            icon: "error",
-                            confirmButtonClass: "btn-danger",
-                    })
-                    setTimeout(()=> {
-                        window.location.reload();
-                    }, 2000)
-                    //- alert('delete API error')
-                    }
             })
         })
 
@@ -254,7 +267,7 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    swal({
+                    Swal.fire({
                         text: 'Create api successfully',
                         icon: "success",
                         confirmButtonClass: "btn-success",
@@ -270,7 +283,7 @@ block content
                 console.log('in error');
                 console.log('catch api error')
                 if (error.response.status === 401) {
-                    swal({
+                    Swal.fire({
                             text: 'Please log in first',
                             icon: "error",
                             confirmButtonClass: "btn-danger",
@@ -279,7 +292,7 @@ block content
                         window.location.reload();
                     }, 2000)
                 } else {
-                    swal({
+                    Swal.fire({
                         text: 'Create API failed',
                         icon: "error",
                         confirmButtonClass: "btn-danger",
@@ -309,7 +322,7 @@ block content
             console.log('run api test in toggle clicked');
             event.preventDefault();
 
-            swal({
+            Swal.fire({
                 title:"Serval is running...", 
                 //- html: true,
                 //- icon: "https://i.gifer.com/2yqU.gif",
@@ -342,7 +355,7 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    swal({
+                    Swal.fire({
                         text: 'Add api test to running list successfully',
                         icon: "success",
                         confirmButtonClass: "btn-success",
@@ -357,7 +370,7 @@ block content
             .catch((error) => {
                 console.log('catch: ', error)
                 if (error.response.status === 401) {
-                    swal({
+                    Swal.fire({
                             text: 'Please log in first',
                             icon: "error",
                             confirmButtonClass: "btn-danger",
@@ -366,7 +379,7 @@ block content
                         window.location.reload();
                     }, 2000)
                 } else {
-                    swal({
+                    Swal.fire({
                         text: 'Add api test to running list failed',
                         icon: "error",
                         confirmButtonClass: "btn-danger",
@@ -383,7 +396,7 @@ block content
             console.log('run collection test in toggle clicked');
             event.preventDefault();
 
-            swal({
+            Swal.fire({
                 title:"Serval is running...", 
                 //- html: true,
                 //- icon: "https://i.gifer.com/2yqU.gif",
@@ -414,7 +427,7 @@ block content
             })
             .then((response) => {
                 if (response.status === 200) {
-                    swal({
+                    Swal.fire({
                         text: 'Add collection test to running list successfully',
                         icon: "success",
                         confirmButtonClass: "btn-success",
@@ -429,7 +442,7 @@ block content
             .catch((error) => {
                 console.log('catch: ', error)
                 if (error.response.status === 401) {
-                    swal({
+                    Swal.fire({
                             text: 'Please log in first',
                             icon: "error",
                             confirmButtonClass: "btn-danger",
@@ -438,7 +451,7 @@ block content
                         window.location.reload();
                     }, 2000)
                 } else {
-                    swal({
+                    Swal.fire({
                         text: 'Add collection test to running list failed',
                         icon: "error",
                         confirmButtonClass: "btn-danger",

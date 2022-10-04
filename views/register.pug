@@ -48,10 +48,10 @@ block content
             })
             .then((response) => {
             if (response.status === 200) {
-                swal({
-                text: 'Welcome to servalRun!',
-                icon: 'success',
-                confirmButtonClass: 'btn-success',
+                Swal.fire({
+                    text: 'Welcome to servalRun!',
+                    icon: 'success',
+                    confirmButtonClass: 'btn-success',
                 });
                 setTimeout(() => {
                 window.location.assign('./profile');
@@ -60,10 +60,10 @@ block content
             })
             .catch((error) => {
             if (error.response.status === 403) {
-                swal({
-                text: 'Email already exists. Please sign in.',
-                icon: 'error',
-                confirmButtonClass: 'btn-danger',
+                Swal.fire({
+                    text: 'Email already exists. Please sign in.',
+                    icon: 'error',
+                    confirmButtonClass: 'btn-danger',
                 });
                 setTimeout(() => {
                 window.location.reload();
@@ -74,20 +74,20 @@ block content
                 errorArray.push(elem.msg);
                 });
                 let errorMsg = errorArray.join('\n');
-                swal({
-                //- text: 'Please input your information properly',
-                text: errorMsg,
-                icon: 'error',
-                confirmButtonClass: 'btn-danger',
+                Swal.fire({
+                    //- text: 'Please input your information properly',
+                    text: errorMsg,
+                    icon: 'error',
+                    confirmButtonClass: 'btn-danger',
                 });
                 setTimeout(() => {
                 window.location.reload();
                 }, 4000);
             } else {
-                swal({
-                text: 'Create account error',
-                icon: 'error',
-                confirmButtonClass: 'btn-danger',
+                Swal.fire({
+                    text: 'Create account error',
+                    icon: 'error',
+                    confirmButtonClass: 'btn-danger',
                 });
                 setTimeout(() => {
                 window.location.reload();

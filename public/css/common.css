@@ -39,9 +39,13 @@
   padding: 0 0 0 0.5rem;
 }
 
-
-dt {clear: left;}
-dt, dd {min-height:0.5em;}
+dt {
+  clear: left;
+}
+dt,
+dd {
+  min-height: 0.5em;
+}
 
 .modal {
   z-index: 10000;
@@ -60,16 +64,27 @@ body:not(.layout-fixed) .main-sidebar {
   top: 0;
 }
 
-.card-body.p-0 .table tbody>tr>td:first-of-type, .card-body.p-0 .table tbody>tr>th:first-of-type, .card-body.p-0 .table tfoot>tr>td:first-of-type, .card-body.p-0 .table tfoot>tr>th:first-of-type, .card-body.p-0 .table thead>tr>td:first-of-type, .card-body.p-0 .table thead>tr>th:first-of-type {
+.card-body.p-0 .table tbody > tr > td:first-of-type,
+.card-body.p-0 .table tbody > tr > th:first-of-type,
+.card-body.p-0 .table tfoot > tr > td:first-of-type,
+.card-body.p-0 .table tfoot > tr > th:first-of-type,
+.card-body.p-0 .table thead > tr > td:first-of-type,
+.card-body.p-0 .table thead > tr > th:first-of-type {
   padding-left: 1rem;
 }
 
-*, ::after, ::before {
+*,
+::after,
+::before {
   box-sizing: border-box;
   font-family: 'iunito', sans-serif;
 }
 
-.container, .container-lg, .container-md, .container-sm, .container-xl {
+.container,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl {
   max-width: 95%;
   margin: 0 70px;
 }
@@ -80,9 +95,9 @@ body:not(.layout-fixed) .main-sidebar {
 } */
 
 img.brand-image {
-    opacity: .8; 
-    width: 285px; 
-    height: 99px;
+  opacity: 0.8;
+  width: 285px;
+  height: 99px;
 }
 
 .CodeMirror {
@@ -131,18 +146,19 @@ img.brand-image {
 }
 
 .accordion-button.collapsed {
-  color: #748DA6;
-  background-color: #DAEAF1;
+  color: #748da6;
+  background-color: #daeaf1;
   box-shadow: inset 0 -1px 0 rgb(0 0 0 / 13%);
 }
 
 .accordion-button:not(.collapsed) {
-  color: #748DA6;
-  background-color: #C6DCE4;
+  color: #748da6;
+  background-color: #c6dce4;
   box-shadow: inset 0 -1px 0 rgb(0 0 0 / 13%);
 }
 
-.table td, .table th {
+.table td,
+.table th {
   vertical-align: initial;
 }
 
@@ -151,4 +167,8 @@ img.brand-image {
   display: block;
   justify-content: center;
   align-items: center;
+}
+
+.swal2-container {
+  z-index: 1000000;
 }
