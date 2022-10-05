@@ -196,7 +196,7 @@ block content
 
                     Swal.fire({
                         title:"", 
-                        text:"Loading...",
+                        text:"Serval is running...",
                         imageUrl: "https://www.boasnotas.com/img/loading2.gif",
                         imageWidth: 300,
                         imageHeight: 300,
@@ -273,12 +273,11 @@ block content
 
                 Swal.fire({
                     title:"Serval is running...", 
-                    //- html: true,
-                    //- icon: "https://i.gifer.com/2yqU.gif",
                     imageUrl: "https://i.gifer.com/PYh.gif",
+                    imageWidth: 300,
+                    imageHeight: 300,
                     buttons: false,      
                     closeOnClickOutside: false,
-                    //- timer: 5000,
                 });
 
 
@@ -295,7 +294,7 @@ block content
                         scenarioId: scenarioId,
                         domainName: domainName,
                         title: title,
-                        report_info: {
+                        reportInfo: {
                             report_level: 1,
                             report_type: 'scenario',
                         }
@@ -312,8 +311,6 @@ block content
                         setTimeout(()=> {
                             window.location.reload();
                         }, 2000)
-                        //- alert('Run scenario test successfully')
-                        //- window.location.reload();
                     }
                 })
                 .catch((error) => {
@@ -326,7 +323,6 @@ block content
                     setTimeout(()=> {
                         window.location.reload();
                     }, 2000)
-                    //- alert('Run scenario test error')
                 })
             })
 
@@ -383,7 +379,6 @@ block content
                             setTimeout(()=> {
                                 window.location.reload();
                             }, 2000)
-                            //- alert('delete scenario error')
                         })
                     }
                 })
@@ -416,8 +411,6 @@ block content
 
                 Swal.fire({
                     title:"Serval is running...", 
-                    //- html: true,
-                    //- icon: "https://i.gifer.com/2yqU.gif",
                     imageUrl: "https://i.gifer.com/PYh.gif",
                     imageWidth: 300,
                     imageHeight: 300,
@@ -440,7 +433,7 @@ block content
                         scenarioId: scenarioId,
                         domainName: domainName,
                         title: title,
-                        report_info: {
+                        reportInfo: {
                             report_level: 1,
                             report_type: 'scenario',
                         }
@@ -474,5 +467,4 @@ block content
                     //- alert('Run scenario test error')
                 })
             })
-
         })

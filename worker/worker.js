@@ -20,8 +20,8 @@ const doJob = async function () {
     console.log('[Worker] Queue connect fail or still connecting...');
   }
   console.log('[Worker] Queue connected on port 6379!');
-  // TODO: error handler
 
+  // error handler
   while (true) {
     try {
       let data = await Queue.brpop(QUEUE_KEY, 0);
@@ -31,9 +31,7 @@ const doJob = async function () {
       const { testConfig, testData } = requestObject;
 
       let httpRequestResult = await callHttpRequest(testConfig, testData);
-      let insertTestResult = await exampleResponseInsertModel(
-        httpRequestResult
-      );
+      await exampleResponseInsertModel(httpRequestResult);
     } catch (error) {
       console.log('[Worker] Got job or do job error...');
     }

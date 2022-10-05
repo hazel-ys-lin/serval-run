@@ -14,29 +14,32 @@ const { sendToQueue } = require('../service/queue_service');
 
 // if examples is null, error would happen
 const scenarioRunController = async (req, res) => {
-  const apiId = req.body.apiId;
-  const scenarioId = req.body.scenarioId;
-  const domainName = req.body.domainName;
-  const title = req.body.title;
-  const reportInfo = req.body.report_info;
+  const { apiId, scenarioId, domainName, title, reportInfo } = req.body;
+  // get collection and api info from api ID
   const { collectionId, httpMethod, apiEndpoint } = await apiInfoGetModel(
     apiId
   );
+
+  // get project and environment infro from domain name and title
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
+
+  // get example info from scenario id
   const exampleData = await exampleGetModel(scenarioId);
-  let testData = _.cloneDeep(exampleData);
+
+  // clone same object from example data to do test
+  const testData = _.cloneDeep(exampleData);
   testData.api_id = apiId;
   testData.usableExamples = [];
 
-  let testInfo = {
-    projectId: projectId,
-    envId: envId,
-    collectionId: collectionId,
-    reportInfo: reportInfo,
+  const testInfo = {
+    projectId,
+    envId,
+    collectionId,
+    reportInfo,
   };
 
   // create report
-  let reportObj = await createReportModel(testInfo);
+  const reportObj = await createReportModel(testInfo);
   testData.report_id = reportObj._id;
 
   console.log('%%%%%%%%%%%%hmset');
@@ -47,7 +50,7 @@ const scenarioRunController = async (req, res) => {
 
   // create response and update report
   for (let i = 0; i < testData.examples.length; i++) {
-    let responseObj = await createResponseModel(
+    const responseObj = await createResponseModel(
       testData.api_id,
       testData.scenario_id,
       testData.examples[i]._id,
@@ -63,7 +66,7 @@ const scenarioRunController = async (req, res) => {
   const { usableExamples, ...rest } = testData;
   const newtestData = { examples: usableExamples, ...rest };
 
-  let testConfig = {
+  const testConfig = {
     method: `${httpMethod}`,
     url: `${domainName}${apiEndpoint}`,
     headers: {
@@ -73,8 +76,8 @@ const scenarioRunController = async (req, res) => {
   };
 
   // stringify object data, send scenario array to queue
-  let testAllData = {
-    testConfig: testConfig,
+  const testAllData = {
+    testConfig,
     testData: newtestData,
   };
 
@@ -89,7 +92,7 @@ const scenarioRunController = async (req, res) => {
   //   httpRequestResult
   // );
   // =========== END OF STUFFS SEND TO WORK QUEUE ===========
-  let sendToQueueResult = await sendToQueue(testAllData);
+  const sendToQueueResult = await sendToQueue(testAllData);
 
   if (!sendToQueueResult) {
     return res
@@ -102,23 +105,20 @@ const scenarioRunController = async (req, res) => {
 };
 
 const apiRunController = async (req, res) => {
-  const apiId = req.body.apiId;
-  const domainName = req.body.domainName;
-  const title = req.body.title;
-  const reportInfo = req.body.report_info;
+  const { apiId, domainName, title, reportInfo } = req.body;
   const { collectionId, httpMethod, apiEndpoint } = await apiInfoGetModel(
     apiId
   );
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
 
-  let testInfo = {
-    projectId: projectId,
-    envId: envId,
-    collectionId: collectionId,
-    reportInfo: reportInfo,
+  const testInfo = {
+    projectId,
+    envId,
+    collectionId,
+    reportInfo,
   };
 
-  let reportObj = await createReportModel(testInfo);
+  const reportObj = await createReportModel(testInfo);
 
   // create a hash for the report
   console.log('&&&&&&&&&&&&hmset');
@@ -127,10 +127,10 @@ const apiRunController = async (req, res) => {
     .expire(`reportStatus-${reportObj._id}`, 300)
     .exec();
 
-  let scenarios = await scenarioGetModel(apiId);
-  let testData = [];
+  const scenarios = await scenarioGetModel(apiId);
+  const testData = [];
   for (let i = 0; i < scenarios.length; i++) {
-    let exampleArray = [];
+    const exampleArray = [];
     for (let j = 0; j < scenarios[i].scenario.examples.length; j++) {
       exampleArray.push(scenarios[i].scenario.examples[j].toObject());
     }
@@ -144,7 +144,7 @@ const apiRunController = async (req, res) => {
 
   for (let j = 0; j < testData.length; j++) {
     for (let i = 0; i < testData[j].examples.length; i++) {
-      let responseObj = await createResponseModel(
+      const responseObj = await createResponseModel(
         testData[j].api_id,
         testData[j].scenario_id,
         testData[j].examples[i]._id,
@@ -154,7 +154,7 @@ const apiRunController = async (req, res) => {
     }
   }
 
-  let testConfig = {
+  const testConfig = {
     method: `${httpMethod}`,
     url: `${domainName}${apiEndpoint}`,
     headers: {
@@ -163,12 +163,12 @@ const apiRunController = async (req, res) => {
     timeout: 5000,
   };
 
-  let testAllData = {
-    testConfig: testConfig,
-    testData: testData,
+  const testAllData = {
+    testConfig,
+    testData,
   };
 
-  let sendToQueueResult = await sendToQueue(testAllData);
+  const sendToQueueResult = await sendToQueue(testAllData);
 
   if (!sendToQueueResult) {
     return res.status(403).json({ message: 'run api test error' });
@@ -177,28 +177,25 @@ const apiRunController = async (req, res) => {
 };
 
 const collectionRunController = async (req, res) => {
-  const collectionId = req.body.collectionId;
-  const domainName = req.body.domainName;
-  const title = req.body.title;
-  const reportInfo = req.body.report_info;
+  const { collectionId, domainName, title, reportInfo } = req.body;
 
-  let apiArray = await apiGetModel(collectionId);
-  let apiInfoArray = [];
+  const apiArray = await apiGetModel(collectionId);
+  const apiInfoArray = [];
   for (let i = 0; i < apiArray.length; i++) {
-    let temp = await apiInfoGetModel(apiArray[i].api._id);
+    const temp = await apiInfoGetModel(apiArray[i].api._id);
     temp.api_id = apiArray[i].api._id;
     apiInfoArray.push(temp);
   }
 
   const { projectId, envId } = await projectInfoGetModel(domainName, title);
-  let testInfo = {
-    projectId: projectId,
-    envId: envId,
-    collectionId: collectionId,
-    reportInfo: reportInfo,
+  const testInfo = {
+    projectId,
+    envId,
+    collectionId,
+    reportInfo,
   };
 
-  let reportObj = await createReportModel(testInfo);
+  const reportObj = await createReportModel(testInfo);
   // create a hash for the report
   console.log('*************hmset');
   await Cache.multi()
@@ -206,9 +203,9 @@ const collectionRunController = async (req, res) => {
     .expire(`reportStatus-${reportObj._id}`, 300)
     .exec();
 
-  let queueResultArray = [];
+  const queueResultArray = [];
   for (let l = 0; l < apiInfoArray.length; l++) {
-    let testConfig = {
+    const testConfig = {
       method: `${apiInfoArray[l].httpMethod}`,
       url: `${domainName}${apiInfoArray[l].apiEndpoint}`,
       headers: {
@@ -217,15 +214,15 @@ const collectionRunController = async (req, res) => {
       timeout: 5000,
     };
 
-    let scenarios = [];
-    let temp = await scenarioGetModel(apiInfoArray[l].api_id);
+    const scenarios = [];
+    const temp = await scenarioGetModel(apiInfoArray[l].api_id);
     for (let k = 0; k < temp.length; k++) {
       scenarios.push(temp[k]);
     }
 
-    let testData = [];
+    const testData = [];
     for (let i = 0; i < scenarios.length; i++) {
-      let exampleArray = [];
+      const exampleArray = [];
 
       for (let j = 0; j < scenarios[i].scenario.examples.length; j++) {
         exampleArray.push(scenarios[i].scenario.examples[j].toObject());
@@ -240,7 +237,7 @@ const collectionRunController = async (req, res) => {
 
     for (let j = 0; j < testData.length; j++) {
       for (let i = 0; i < testData[j].examples.length; i++) {
-        let responseObj = await createResponseModel(
+        const responseObj = await createResponseModel(
           testData[j].api_id,
           testData[j].scenario_id,
           testData[j].examples[i]._id,
@@ -250,12 +247,12 @@ const collectionRunController = async (req, res) => {
       }
     }
 
-    let testAllData = {
-      testConfig: testConfig,
+    const testAllData = {
+      testConfig,
       testData,
     };
 
-    let sendToQueueResult = await sendToQueue(testAllData);
+    const sendToQueueResult = await sendToQueue(testAllData);
     queueResultArray.push(sendToQueueResult);
   }
 
