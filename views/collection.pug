@@ -87,9 +87,8 @@ block content
                         p.text-secondary #{environments[i].domain_name}
                   - i++
                 .card.shadow.mb-4.mt-0
-                  .card-body
+                  .card-body(style='display: flex; justify-content: center; height: 100%;')
                     .row.align-items-center
-                      .my-4.col-md-6
                       button.btn.text-uppercase.btn-create_environment(type='button' data-bs-toggle='modal' data-bs-target='#environmentModal' data-bs-whatever=`${environments[0].project_id}` style='font-size: 1rem; font-family: "Iunito", sans-serif;') Add New Environment
                     #environmentModal.modal.fade(tabindex='-1' aria-labelledby='environmentModalLabel' aria-hidden='true')
                       .modal-dialog
@@ -161,9 +160,8 @@ block content
                         .mb-0.text-muted(style='font-weight: 400; font-size: 0.8rem;') #{userCollections[i].collection._id}
                   - i++
                 .card.shadow.mb-4.mt-0
-                  .card-body 
+                  .card-body(style='display: flex; justify-content: center; height: 100%;')
                     .row.align-items-center 
-                      .col-md-6.my-4
                       button.btn.text-uppercase.btn-create_collection(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${projectId}` style='font-size: 1rem; font-family: "Iunito", sans-serif;') Add New Collection
                     #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
                       .modal-dialog

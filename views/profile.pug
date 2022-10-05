@@ -129,10 +129,8 @@ block content
             confirmButtonClass: "btn-success",
           })
           setTimeout(()=> {
-            window.location.reload();
+            window.location.assign(`./collections?projectid=${response.data.projectId}`);
           }, 2000)
-          //- alert('Create project successfully')
-          //- window.location.reload();
         }
       })
       .catch((error) => {

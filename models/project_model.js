@@ -60,8 +60,9 @@ const projectInsertModel = async function (projectInfo) {
       userData.projects
     );
 
+    let inserted;
     if (uniqueProject) {
-      let inserted = await projectModel({
+      inserted = await projectModel({
         user_id: userData._id.toString(),
         user_email: projectInfo.userEmail,
         project_name: projectInfo.projectName,
@@ -86,7 +87,7 @@ const projectInsertModel = async function (projectInfo) {
 
     await session.commitTransaction();
     session.endSession();
-    return true;
+    return inserted._id;
   } catch (error) {
     // If an error occurred, abort the whole transaction and
     // undo any changes that might have happened

@@ -40,8 +40,11 @@ const projectInsertController = async (req, res) => {
   };
 
   let saveProjectResult = await projectInsertModel(projectInfo);
+  console.log();
   if (saveProjectResult) {
-    return res.status(200).json({ message: 'Project inserted' });
+    return res
+      .status(200)
+      .json({ projectId: saveProjectResult, message: 'Project inserted' });
   } else {
     return res.status(403).json({ message: 'Insert project error' });
   }
