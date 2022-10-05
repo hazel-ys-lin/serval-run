@@ -33,7 +33,7 @@ block content
               h1.h1.mb-2.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem; align-self: flex-start;') #{projectName}
               h5.text-secondary.project-id(style='align-self: flex-start; font-weight: 400;') #{projectId}
             .edit-buttons
-              //- button.btn.btn-primary.btn-edit_peoject(id=`${projectId}`) EDIT 
+              button.btn.btn-primary.btn-edit_peoject(id=`${projectId}`) EDIT 
               button.btn.btn-danger.btn-delete_project.mr-0(id=`${projectId}` style='font-weight: 700;') DELETE
         .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
         .col-12.align-items-center
@@ -70,23 +70,23 @@ block content
                               button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
                               button.btn.btn-primary.btn-modal-create_environment(type='submit') Create Environment
             else
-              .card-columns(style='display: flex;')
+              .card-columns(style="display: flex; flex-grow: 1; flex-wrap: wrap;")
                 - let i = 0
                 while i < environments.length
-                  .card.shadow.mb-4.mt-0
-                    .card-body(style='padding: 0.05rem 1.25rem;')
+                  .card.shadow.mb-4.mt-0(style='flex: 1 1 20rem;')
+                    .card-body
                       .my-4
                         .info.align-items-center.justify-content-between(style='display: flex')
                           h3 #{environments[i].title}
-                          .icons.justify-content-between(style='width: 2rem;')
-                            //- button.btn(id=`${environments[i]._id}` style='padding: 0;')
-                            //-   i.h4.fa.fa-solid.fa-gear.text-grey
+                          .icons.justify-content-between(style='width: 4rem;')
+                            button.btn.btn-edit_environment(id=`${environments[i]._id}` style='padding: 0;')
+                              i.h5.fa.fa-solid.fa-pencil.text-grey
                             button.btn.btn-delete_environment(id=`${environments[i]._id}` style='padding: 0;')
-                              i.h4.fa.fa-solid.fa-trash.text-grey
+                              i.h5.fa.fa-solid.fa-trash.text-grey
                         .mb-0.text-muted(style='font-weight: 300; font-size: 0.8rem;') #{environments[i]._id}
                         p.text-secondary #{environments[i].domain_name}
                   - i++
-                .card.shadow.mb-4.mt-0
+                .card.shadow.mb-4.mt-0(style='flex: 1 1 20rem;')
                   .card-body(style='display: flex; justify-content: center; height: 100%;')
                     .row.align-items-center
                       button.btn.text-uppercase.btn-create_environment(type='button' data-bs-toggle='modal' data-bs-target='#environmentModal' data-bs-whatever=`${environments[0].project_id}` style='font-size: 1rem; font-family: "Iunito", sans-serif;') Add New Environment
@@ -142,24 +142,24 @@ block content
                                 button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
                                 button.btn.btn-primary.btn-modal-create_collection(type='submit') Create Collection
             else
-              .card-columns(style="display: flex")
+              .card-columns(style="display: flex; flex-grow: 1; flex-wrap: wrap;")
                 - let i = 0
                 while i < userCollections.length
-                  .card.shadow.mb-4.mt-0
+                  .card.shadow.mb-4.mt-0(style='flex: 1 1 20rem;')
                     .card-body 
                       .my-4
-                        .info.align-items-center.justify-content-between(style='display: flex')
+                        .info.align-items-center.justify-content-between(style='display: flex;')
                           h2 #{userCollections[i].collection.collection_name}
-                          .icons.justify-content-between.align-items-center(style='width: 4rem;')
-                            a.pr-2(href=`./apis?collectionid=${userCollections[i].collection._id}` style='padding: 0;')
-                              i.h5.fa.fa-solid.fa-eye.text-grey
-                            //- button.btn(id=`${userCollections[i].collection._id}` style='padding: 0;')
-                            //-   i.h5.fa.fa-solid.fa-gear.text-grey
-                            button.btn.btn-delete_collection(id=`${userCollections[i].collection._id}` style='padding: 0;')
+                          .icons.justify-content-end.align-items-center(style='width: 5.5rem;')
+                            a.pr-2(href=`./apis?collectionid=${userCollections[i].collection._id}` style='padding: 0; margin: 0; border: 0;')
+                              i.h5.fa.fa-solid.fa-circle-info.text-grey
+                            button.pr-2.btn.btn-edit_collection(id=`${userCollections[i].collection._id}` style='padding: 0; margin: 0; border: 0;')
+                              i.h5.fa.fa-solid.fa-pencil.text-grey
+                            button.pr-2.btn.btn-delete_collection(id=`${userCollections[i].collection._id}` style='padding: 0; margin: 0; border: 0;')
                               i.h5.fa.fa-solid.fa-trash.text-grey
                         .mb-0.text-muted(style='font-weight: 400; font-size: 0.8rem;') #{userCollections[i].collection._id}
                   - i++
-                .card.shadow.mb-4.mt-0
+                .card.shadow.mb-4.mt-0(style='flex: 1 1 20rem;')
                   .card-body(style='display: flex; justify-content: center; height: 100%;')
                     .row.align-items-center 
                       button.btn.text-uppercase.btn-create_collection(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=`${projectId}` style='font-size: 1rem; font-family: "Iunito", sans-serif;') Add New Collection
@@ -194,10 +194,10 @@ block content
                         //- a.pr-2(href='./')
                         //-   i.h1.fa.fa-solid.fa-plus.text-secondary.mb-0
             else
-              .card-columns(style="display: flex")
+              .card-columns(style="display: flex; flex-grow: 1; flex-wrap: wrap;")
                 - let i = 0
                 while i < reportData.length
-                  .card.shadow.mb-4.mt-0
+                  .card.shadow.mb-4.mt-0(style='flex: 1 1 20rem;')
                     .card-body 
                       .row.align-items-start(style="flex-direction: column;") 
                         .my-4
