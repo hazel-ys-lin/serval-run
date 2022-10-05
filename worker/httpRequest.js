@@ -17,7 +17,6 @@ const bodyRequest = async function (testConfig, testData) {
     for (let i = 0; i < testData[j].examples.length; i++) {
       let timeBeforeAxios = Date.now();
       testConfig.data = testData[j].examples[i].example;
-      testConfig.timeout = 5000;
 
       let response;
 

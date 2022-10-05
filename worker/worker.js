@@ -31,6 +31,7 @@ const doJob = async function () {
       const { testConfig, testData } = requestObject;
 
       let httpRequestResult = await callHttpRequest(testConfig, testData);
+      // console.log('httpRequestResultin worker: ', httpRequestResult);
       await exampleResponseInsertModel(httpRequestResult);
     } catch (error) {
       console.log('[Worker] Got job or do job error...');

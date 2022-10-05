@@ -12,15 +12,15 @@ const calculateReport = async function (reportDataArray) {
   // console.log('reportDataArray in calculateReport: ', reportDataArray);
   let calculatedArray = [];
   for (let i = 0; i < reportDataArray.length; i++) {
-    let reportTemp = {};
+    let reportTemp = {
+      projectId: reportDataArray[i].project_id,
+      environmentId: reportDataArray[i].environment_id,
+      collectionId: reportDataArray[i].collection_id,
+      testDate: reportDataArray[i].create_time,
+      type: reportDataArray[i].report_info.report_type.toUpperCase(),
+      reportTitle: reportDataArray[i].report_title,
+    };
 
-    reportTemp.projectId = reportDataArray[i].project_id;
-    reportTemp.environmentId = reportDataArray[i].environment_id;
-    reportTemp.collectionId = reportDataArray[i].collection_id;
-
-    reportTemp.testDate = reportDataArray[i].create_time;
-    reportTemp.type = reportDataArray[i].report_info.report_type.toUpperCase();
-    reportTemp.reportTitle = reportDataArray[i].report_title;
     let responsesAmount = reportDataArray[i].responses.length;
 
     let passAmount = 0;
@@ -31,17 +31,6 @@ const calculateReport = async function (reportDataArray) {
       responseDataResult.push(
         getResponseByReportModel(reportDataArray[i].responses[j].response_id)
       );
-      // let responseData = await getResponseByReportModel(
-      //   reportDataArray[i].responses[j].response_id
-      // );
-
-      //   console.log('responseData: ', responseData);
-      // reportTemp.apiId = responseData.api_id;
-      // reportTemp.scenarioId = responseData.scenario_id;
-      // reportTemp.reportId = responseData.report_id;
-      // //   console.log('responseData in calculateReport: ', responseData);
-      // if (responseData.pass === true) passAmount += 1;
-      // totalTimeLength += Number(responseData.request_time_length);
     }
     let responseData = await Promise.all(responseDataResult);
     for (let j = 0; j < responseData.length; j++) {

@@ -10889,7 +10889,7 @@ svg.navbar-brand-img {
 .navbar-light .navbar-nav .nav-link {
   color: #001a4e;
 }
-.navbar-light .navbar-nav .nav-link:hover {
+.navbar-light .navbar-nav .nav-link:hover  {
   background: #f8f9fa;
   color: #1b68ff;
 }
@@ -15821,4 +15821,9 @@ a.create-account:hover {
   box-shadow: inset 200px 0 0 0 #1b68ff;
   text-decoration: none;
   /* border-radius: 3px; */
+}
+
+.nav-bar-active {
+  background: #f8f9fa;
+  color: #1b68ff;
 }
