@@ -119,6 +119,7 @@ const callHttpRequest = async function (testConfig, testData) {
     console.log(`unknown or not supported http method: ${httpMethod}`);
     return false;
   }
+  // console.log('testConfig, testData in httprequest: ', testConfig, testData);
   return await requestMap[testConfig.method](testConfig, testData);
 };
 

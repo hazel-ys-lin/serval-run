@@ -3,18 +3,6 @@ const QUEUE_KEY = 'requestList';
 const { callHttpRequest } = require('./httpRequest');
 const { exampleResponseInsertModel } = require('./insertResult');
 
-// =========== START OF STUFFS SEND TO WORK QUEUE ===========
-// let httpRequestResult = await callHttpRequest(testConfig, testData);
-
-// let insertTestResult = await exampleResponseInsertModel(
-//   projectId,
-//   envId,
-//   collectionId,
-//   reportInfo,
-//   httpRequestResult
-// );
-// =========== END OF STUFFS SEND TO WORK QUEUE ===========
-
 const doJob = async function () {
   if (Queue.status !== 'ready') {
     console.log('[Worker] Queue connect fail or still connecting...');

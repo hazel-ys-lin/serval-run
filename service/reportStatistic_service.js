@@ -57,6 +57,8 @@ const calculateReport = async function (reportDataArray) {
 
 const titleOfReport = async function (reportArray) {
   let apiId, scenarioId;
+  // FIXME: do the if else before for loop
+  const reportLevelMap = {};
 
   for (let i = 0; i < reportArray.length; i++) {
     let reportTitleArray = [];
@@ -85,7 +87,7 @@ const titleOfReport = async function (reportArray) {
       reportTitle.push(reportTitleArray);
 
       let testResult = await Promise.all(reportTitle[0]);
-      testResult[2] = testResult[2].title;
+      testResult[2] = testResult[2].title; // TODO: the only thing different from level 2 and 1
       reportArray[i].report_title = testResult;
     }
   }
