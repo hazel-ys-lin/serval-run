@@ -1,98 +1,96 @@
 const {
   getReportDetailModel,
   getResponseByReportModel,
+  getReportResponseModel,
 } = require('../models/report_model');
 const {
-  collectionNameModel,
-  apiNameModel,
-} = require('../models/collection_model');
-const { scenarioDetailModel } = require('../models/scenario_model');
+  scenarioDetailModel,
+  exampleDetailGetModel,
+} = require('../models/scenario_model');
+const { generateTitle } = require('./reportTitle_service');
 
-const calculateReport = async function (reportDataArray) {
-  // console.log('reportDataArray in calculateReport: ', reportDataArray);
-  let calculatedArray = [];
-  for (let i = 0; i < reportDataArray.length; i++) {
-    let reportTemp = {
-      projectId: reportDataArray[i].project_id,
-      environmentId: reportDataArray[i].environment_id,
-      collectionId: reportDataArray[i].collection_id,
-      testDate: reportDataArray[i].create_time,
-      type: reportDataArray[i].report_info.report_type.toUpperCase(),
-      reportTitle: reportDataArray[i].report_title,
-    };
+const calculateReport = async function (reportData) {
+  console.log('**************** 1', Date.now());
+  let responsesAmount = reportData.responses.length;
 
-    let responsesAmount = reportDataArray[i].responses.length;
+  let passAmount = 0;
+  let totalTimeLength = 0;
 
-    let passAmount = 0;
-    let totalTimeLength = 0;
-
-    let responseDataResult = [];
-    for (let j = 0; j < reportDataArray[i].responses.length; j++) {
-      responseDataResult.push(
-        getResponseByReportModel(reportDataArray[i].responses[j].response_id)
-      );
-    }
-    let responseData = await Promise.all(responseDataResult);
-    for (let j = 0; j < responseData.length; j++) {
-      reportTemp.apiId = responseData[j].api_id;
-      reportTemp.scenarioId = responseData[j].scenario_id;
-      reportTemp.reportId = responseData[j].report_id;
-      //   console.log('responseData in calculateReport: ', responseData);
-      if (responseData[j].pass === true) passAmount += 1;
-      totalTimeLength += Number(responseData[j].request_time_length);
-    }
-
-    reportTemp.passRate = Math.floor((passAmount / responsesAmount) * 100);
-    reportTemp.passExamples = `${passAmount}/${responsesAmount}`;
-    reportTemp.averageTime =
-      Math.floor((totalTimeLength / responsesAmount) * 100) / 100;
-
-    // console.log('reportTemp', reportTemp);
-    calculatedArray.push(reportTemp);
+  let responseDataResult = [];
+  console.log('**************** 2', Date.now());
+  for (let j = 0; j < reportData.responses.length; j++) {
+    responseDataResult.push(
+      getResponseByReportModel(reportData.responses[j].response_id)
+    );
   }
+  console.log('**************** 3', Date.now());
+  let responseData = await Promise.all(responseDataResult);
+  console.log('**************** 4', Date.now());
+  let reportTemp = {};
+  for (let j = 0; j < responseData.length; j++) {
+    reportTemp.apiId = responseData[j].api_id;
+    reportTemp.scenarioId = responseData[j].scenario_id;
+    reportTemp.reportId = responseData[j].report_id;
+    if (responseData[j].pass === true) passAmount += 1;
+    totalTimeLength += Number(responseData[j].request_time_length);
+  }
+  console.log('**************** 5', Date.now());
+  reportTemp.passRate = Math.floor((passAmount / responsesAmount) * 100);
+  reportTemp.passExamples = `${passAmount}/${responsesAmount}`;
+  reportTemp.averageTime =
+    Math.floor((totalTimeLength / responsesAmount) * 100) / 100;
 
-  //   console.log('calculatedArray: ', calculatedArray);
-  return calculatedArray;
+  return reportTemp;
 };
 
 const titleOfReport = async function (reportArray) {
-  let apiId, scenarioId;
-  // FIXME: do the if else before for loop
-  const reportLevelMap = {};
-
   for (let i = 0; i < reportArray.length; i++) {
-    let reportTitleArray = [];
-    let reportTitle = [];
+    let reportLevel = reportArray[i].report_info.report_level;
+    let collectionId = reportArray[i].collection_id;
+    let apiInfo = await getReportDetailModel(reportArray[i]._id);
+    let apiId = apiInfo.responses[0].api_id;
+    let scenarioId = apiInfo.responses[0].scenario_id;
+
     reportArray[i] = reportArray[i].toObject();
-    reportTitleArray.push(collectionNameModel(reportArray[i].collection_id));
 
-    if (reportArray[i].report_info.report_level === 3) {
-      reportTitle.push(reportTitleArray);
-      let testResult = await Promise.all(reportTitle[0]);
-      reportArray[i].report_title = testResult;
-    } else if (reportArray[i].report_info.report_level === 2) {
-      apiId = await getReportDetailModel(reportArray[i]._id);
-
-      reportTitleArray.push(apiNameModel(apiId.responses[0].api_id));
-      reportTitle.push(reportTitleArray);
-
-      let testResult = await Promise.all(reportTitle[0]);
-      reportArray[i].report_title = testResult;
-    } else if (reportArray[i].report_info.report_level === 1) {
-      apiId = await getReportDetailModel(reportArray[i]._id);
-      reportTitleArray.push(apiNameModel(apiId.responses[0].api_id));
-
-      scenarioId = apiId.responses[0].scenario_id;
-      reportTitleArray.push(scenarioDetailModel(scenarioId));
-      reportTitle.push(reportTitleArray);
-
-      let testResult = await Promise.all(reportTitle[0]);
-      testResult[2] = testResult[2].title; // TODO: the only thing different from level 2 and 1
-      reportArray[i].report_title = testResult;
-    }
+    reportArray[i].report_title = await generateTitle(
+      reportLevel,
+      collectionId,
+      apiId,
+      scenarioId
+    );
   }
 
   return reportArray;
 };
 
-module.exports = { calculateReport, titleOfReport };
+const responseOfReport = async function (reportId) {
+  let reportResponse = await getReportResponseModel(reportId);
+
+  let exampleDetailResult = [];
+  let scenarioInfoResult = [];
+
+  for (let i = 0; i < reportResponse.length; i++) {
+    exampleDetailResult.push(
+      exampleDetailGetModel(
+        reportResponse[i].scenario_id,
+        reportResponse[i].example_id
+      )
+    );
+    scenarioInfoResult.push(scenarioDetailModel(reportResponse[i].scenario_id));
+  }
+
+  let exampleDetail = await Promise.all(exampleDetailResult);
+  let scenarioDetail = await Promise.all(scenarioInfoResult);
+
+  for (let i = 0; i < reportResponse.length; i++) {
+    reportResponse[i] = reportResponse[i].toObject();
+    reportResponse[i].expected_status_code = exampleDetail[i];
+    reportResponse[i].scenario_title = scenarioDetail[i].title;
+    reportResponse[i].description = scenarioDetail[i].description;
+  }
+
+  return reportResponse;
+};
+
+module.exports = { calculateReport, titleOfReport, responseOfReport };

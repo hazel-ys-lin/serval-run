@@ -1,8 +1,13 @@
-const { userModel } = require('./user_model');
-const { projectModel, environmentModel } = require('./project_model');
-const { collectionModel, apiModel } = require('./collection_model');
-const { scenarioModel } = require('./scenario_model');
-const { responseModel, reportModel } = require('./report_model');
+const {
+  userModel,
+  projectModel,
+  environmentModel,
+  collectionModel,
+  apiModel,
+  scenarioModel,
+  responseModel,
+  reportModel,
+} = require('./db_schemas.js');
 
 const projectDeleteModel = async function (projectInfo) {
   const session = await projectModel.startSession();
@@ -281,6 +286,7 @@ const scenarioDeleteModel = async function (scenarioInfo) {
   }
 };
 
+// TODO: model to delete report and related responses
 const reportDeleteModel = async function (reportId) {};
 
 module.exports = {

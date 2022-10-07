@@ -1,50 +1,8 @@
-const pool = require('./db');
-const mongoose = require('mongoose');
-const { userModel } = require('./user_model');
+const { userModel, projectModel, environmentModel } = require('./db_schemas');
 const {
   projectCheck,
   environmentCheck,
 } = require('../service/dbUpdate_service');
-
-const projectSchema = new mongoose.Schema({
-  user_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'user',
-  },
-  user_email: String,
-  project_name: String,
-  environments: [
-    {
-      environment_id: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'environment',
-      },
-      domain_name: String,
-      title: String,
-    },
-  ],
-  collections: [
-    {
-      collection_id: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'collection',
-      },
-      collection_name: String,
-    },
-  ],
-});
-
-const environmentSchema = new mongoose.Schema({
-  project_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'project',
-  },
-  domain_name: String,
-  title: String,
-});
-
-const projectModel = pool.model('project', projectSchema);
-const environmentModel = pool.model('environment', environmentSchema);
 
 const projectInsertModel = async function (projectInfo) {
   const session = await projectModel.startSession();
@@ -119,7 +77,7 @@ const projectGetModel = async function (userEmail) {
 };
 
 const projectInfoGetModel = async function (domainName, title) {
-  let [projectInfo] = await environmentModel.find({
+  let projectInfo = await environmentModel.findOne({
     domain_name: domainName,
     title: title,
   });
@@ -215,8 +173,6 @@ const envInfoGetModel = async function (projectId) {
 };
 
 module.exports = {
-  projectModel,
-  environmentModel,
   projectInsertModel,
   projectGetModel,
   projectInfoGetModel,

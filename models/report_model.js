@@ -1,78 +1,4 @@
-const pool = require('./db');
-const mongoose = require('mongoose');
-const momentTimezone = require('moment-timezone');
-
-const responseSchema = new mongoose.Schema({
-  api_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'api',
-  },
-  scenario_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'scenario',
-  },
-  example_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'scenario',
-  },
-  report_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'report',
-  },
-  response_data: {},
-  response_status: Number,
-  pass: Boolean,
-  request_time: Date,
-  request_time_length: Number,
-});
-
-const reportSchema = new mongoose.Schema({
-  finished: Boolean,
-  create_time: {
-    type: Date,
-    default: momentTimezone.tz(Date.now(), 'Asia/Taipei'),
-  },
-  report_info: {
-    report_level: Number,
-    report_type: String,
-  },
-  project_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'project',
-  },
-  environment_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'environment',
-  },
-  collection_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'collection',
-  },
-  responses: [
-    {
-      api_id: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'api',
-      },
-      scenario_id: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'scenario',
-      },
-      example_id: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'scenario',
-      },
-      response_id: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'response',
-      },
-    },
-  ],
-});
-
-const responseModel = pool.model('response', responseSchema);
-const reportModel = pool.model('report', reportSchema);
-
+const { reportModel, responseModel } = require('./db_schemas');
 // const exampleResponseInsertModel = async function (
 //   // projectId,
 //   // envId,
@@ -369,7 +295,6 @@ const getReportModel = async function (projectId) {
   let reportData = await reportModel.find({
     project_id: projectId,
   });
-  // console.log('reportData in getReportModel: ', reportData);
 
   return reportData;
 };
@@ -380,7 +305,15 @@ const getReportDetailModel = async function (reportId) {
   });
 
   // console.log('reportDetail: ', reportDetail);
+
   return reportDetail;
+  // {
+  //   report_info: reportDetail.report_info,
+  //   create_time: reportDetail.create_time,
+  //   project_id: reportDetail.project_id,
+  //   environment_id: reportDetail.environment_id,
+  //   collection_id: reportDetail.collection_id,
+  // };
 };
 
 const getReportResponseModel = async function (reportId) {
@@ -392,7 +325,7 @@ const getReportResponseModel = async function (reportId) {
 };
 
 const getResponseByReportModel = async function (responseId) {
-  let [responseDetail] = await responseModel.find({
+  let responseDetail = await responseModel.findOne({
     _id: responseId,
   });
 
@@ -400,8 +333,6 @@ const getResponseByReportModel = async function (responseId) {
 };
 
 module.exports = {
-  responseModel,
-  reportModel,
   // exampleResponseInsertModel,
   // apiResponseInsertModel,
   // collectionResponseInsertModel,

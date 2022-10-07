@@ -1,8 +1,4 @@
 const {
-  scenarioDetailModel,
-  exampleDetailGetModel,
-} = require('../models/scenario_model');
-const {
   projectNameGetModel,
   projectGetModel,
 } = require('../models/project_model');
@@ -10,54 +6,23 @@ const {
   getReportStatusModel,
   getReportModel,
   getReportDetailModel,
-  getReportResponseModel,
 } = require('../models/report_model');
 const {
   calculateReport,
   titleOfReport,
+  responseOfReport,
 } = require('../service/reportStatistic_service');
 
 const displayAllReport = async (req, res) => {
   const projectId = req.query.projectid;
 
-  // console.log('*********1', new Date().toISOString());
   let projectName = await projectNameGetModel(projectId);
-  // console.log('projectName in displayAllReport: ', projectName);
-  // console.log('*********2', new Date().toISOString());
   let reportData = await getReportModel(projectId);
-  // console.log('reportData in displayAllReport: ', reportData);
-  // console.log('*********3', new Date().toISOString());
-  // refactored "titleOfReport", it once took too long (5s)
   let reportTitle = await titleOfReport(reportData);
-  // console.log('reportData in reportTitle: ', reportTitle);
-  // console.log('*********4', new Date().toISOString());
 
   for (let i = 0; i < reportTitle.length; i++) {
     reportTitle[i].projectName = projectName;
   }
-  // console.log('*********5', new Date().toISOString());
-
-  // let reportCalculatedResult = [];
-  // // TODO: if reportData[i].finished !== true, dont do the calculate part
-  // for (let i = 0; i < reportData.length; i++) {
-  //   if (reportData[i].finished === true) {
-  //     console.log('*********3', new Date().toISOString());
-  //     let reportTitle = await titleOfReport(reportData); // TODO: can do it later, this function only add title to the api id?
-  //     // console.log('reportTitle: ', reportTitle);
-  //     // reportCalculatedResult.push(calculateReport(reportData));
-  //     // reportCalculatedResult.push(calculateReport(reportData[i]));
-  //     console.log('*********4', new Date().toISOString());
-  //   }
-  // }
-  // console.log('reportCalculatedResult: ', reportCalculatedResult);
-  // let reportCalculated = await Promise.all(reportCalculatedResult);
-  // console.log('reportCalculated: ', reportCalculated);
-
-  // for (let j = 0; j < reportCalculated.length; j++) {
-  //   reportCalculated[j].projectName = projectName;
-  // };
-  // console.log('*********6', new Date().toISOString());
-  // console.log('reportTitle in displayAllReport: ', reportTitle);
 
   if (reportTitle.length !== 0) {
     res.render('reports', {
@@ -98,112 +63,41 @@ const getReportResponseController = async (req, res) => {
     });
   }
 
-  let reportStatus = await getReportStatusModel(reportId);
-  // console.log('reportStatus: ', reportStatus);
-  // console.log('**********', reportId, reportStatus);
-  if (reportStatus) {
-    // console.log('*********1', new Date().toISOString());
-    let reportDetail = await getReportDetailModel(reportId); // won't change after running
-    // console.log('*********2', new Date().toISOString());
+  let responseDisplayArray = [];
+  responseDisplayArray.push(
+    getReportStatusModel(reportId),
+    getReportDetailModel(reportId),
+    responseOfReport(reportId)
+  );
 
-    // 優化calculate的function（使用Promise.all）
-    let reportCalculated = await calculateReport([reportDetail]); //know after running
-    // console.log('*********3', new Date().toISOString());
-    let reportResponse = await getReportResponseModel(reportId); //know after running
-    // console.log('*********4', new Date().toISOString());
+  let responseDisplayResult = await Promise.all(responseDisplayArray);
 
-    let exampleDetailResult = [];
-    let scenarioInfoResult = [];
+  // let reportStatus = await getReportStatusModel(reportId);
+  // let reportDetail = await getReportDetailModel(reportId);
+  // let reportResponse = await responseOfReport(reportId);
 
-    for (let i = 0; i < reportResponse.length; i++) {
-      exampleDetailResult.push(
-        exampleDetailGetModel(
-          reportResponse[i].scenario_id,
-          reportResponse[i].example_id
-        )
-      );
-      scenarioInfoResult.push(
-        scenarioDetailModel(reportResponse[i].scenario_id)
-      );
-      // let exampleDetail = await exampleDetailGetModel(
-      //   reportResponse[i].scenario_id,
-      //   reportResponse[i].example_id
-      // );
-      // let scenarioInfo = await scenarioDetailModel(
-      //   reportResponse[i].scenario_id
-      // );
-      // reportResponse[i] = reportResponse[i].toObject();
-      // reportResponse[i].expected_status_code = exampleDetail;
-      // reportResponse[i].scenario_title = scenarioInfo.title;
-      // reportResponse[i].description = scenarioInfo.description;
-    }
+  let reportStatus = responseDisplayResult[0];
+  let reportDetail = responseDisplayResult[1];
+  let reportResponse = responseDisplayResult[2];
 
-    let exampleDetail = await Promise.all(exampleDetailResult);
-    let scenarioDetail = await Promise.all(scenarioInfoResult);
-
-    for (let i = 0; i < reportResponse.length; i++) {
-      reportResponse[i] = reportResponse[i].toObject();
-      reportResponse[i].expected_status_code = exampleDetail[i];
-      reportResponse[i].scenario_title = scenarioDetail[i].title;
-      reportResponse[i].description = scenarioDetail[i].description;
-    }
-
-    // console.log(`*********8`, new Date().toISOString());
-    // console.log('reportCalculated: ', reportCalculated);
-
+  if (!reportStatus) {
     return res.render('reportdetail', {
+      userProjects: projectList,
       reportStatus: reportStatus,
       reportDetail: reportDetail,
       reportResponse: reportResponse,
-      reportCalculated: reportCalculated,
-      userProjects: projectList,
-    });
-  } else {
-    // console.log('*********1', new Date().toISOString());
-    let reportDetail = await getReportDetailModel(reportId); // won't change after running
-    // console.log('*********2', new Date().toISOString());
-
-    // 優化calculate的function（使用Promise.all）
-    // let reportCalculated = await calculateReport([reportDetail]); //know after running
-    // console.log('*********3', new Date().toISOString());
-    let reportResponse = await getReportResponseModel(reportId); //know after running
-    // console.log('*********4', new Date().toISOString());
-
-    let exampleDetailResult = [];
-    let scenarioInfoResult = [];
-
-    for (let i = 0; i < reportResponse.length; i++) {
-      exampleDetailResult.push(
-        exampleDetailGetModel(
-          reportResponse[i].scenario_id,
-          reportResponse[i].example_id
-        )
-      );
-      scenarioInfoResult.push(
-        scenarioDetailModel(reportResponse[i].scenario_id)
-      );
-    }
-
-    let exampleDetail = await Promise.all(exampleDetailResult);
-    let scenarioDetail = await Promise.all(scenarioInfoResult);
-
-    for (let i = 0; i < reportResponse.length; i++) {
-      reportResponse[i] = reportResponse[i].toObject();
-      reportResponse[i].expected_status_code = exampleDetail[i];
-      reportResponse[i].scenario_title = scenarioDetail[i].title;
-      reportResponse[i].description = scenarioDetail[i].description;
-    }
-
-    // console.log(`*********8`, new Date().toISOString());
-
-    return res.render('reportdetail', {
-      reportStatus: reportStatus,
-      reportDetail: reportDetail,
-      reportResponse: reportResponse,
-      // reportCalculated: reportCalculated,
-      userProjects: projectList,
     });
   }
+
+  let reportCalculated = await calculateReport(reportDetail);
+
+  return res.render('reportdetail', {
+    userProjects: projectList,
+    reportStatus: reportStatus,
+    reportDetail: reportDetail,
+    reportResponse: reportResponse,
+    reportCalculated: reportCalculated,
+  });
 };
 
 module.exports = {

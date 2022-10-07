@@ -53,7 +53,7 @@ const onConnection = (socket) => {
   if (userId) {
     // console.log('in add to usermap handler: ', socket.id);
 
-    // TODO: emit to specific report page (need to send back report id from channel)
+    // TODO: FIXME: emit to specific report page (need to send back report id from channel)
     global.usersMap[userId] = socket.id;
 
     // console.log('global.usersMap: ', global.usersMap);

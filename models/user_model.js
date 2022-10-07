@@ -1,30 +1,10 @@
-const pool = require('./db');
-const mongoose = require('mongoose');
+const { userModel } = require('./db_schemas');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
-  user_name: String,
-  user_email: String,
-  user_role: Number,
-  user_password: String,
-  projects: [
-    {
-      project_id: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'project',
-      },
-      project_name: String,
-    },
-  ],
-});
-
-const userModel = pool.model('user', userSchema);
-
 const userGetModel = async function (userEmail) {
-  let [userData] = await userModel.find({
+  let userData = await userModel.findOne({
     user_email: userEmail,
   });
-  // console.log('userData: ', userData);
   return userData._id;
 };
 
@@ -71,4 +51,4 @@ const userSignInModel = async function (userInfo) {
   }
 };
 
-module.exports = { userModel, userGetModel, userSignUpModel, userSignInModel };
+module.exports = { userGetModel, userSignUpModel, userSignInModel };

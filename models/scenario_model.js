@@ -1,35 +1,7 @@
-const pool = require('./db');
-const mongoose = require('mongoose');
-const { apiModel } = require('./collection_model');
-
-const scenarioSchema = new mongoose.Schema({
-  api_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'api',
-  },
-  title: String,
-  description: String,
-  tags: [String],
-  steps: [
-    {
-      keyword: String,
-      keywordType: String,
-      text: String,
-    },
-  ],
-  examples: [
-    {
-      example: {},
-      expected_response_body: {},
-      expected_status_code: Number,
-    },
-  ],
-});
-
-const scenarioModel = pool.model('scenario', scenarioSchema);
+const { apiModel, scenarioModel } = require('./db_schemas');
 
 const scenarioGetModel = async function (apiId) {
-  let [apiData] = await apiModel.find({
+  let apiData = await apiModel.findOne({
     _id: apiId,
   });
 
@@ -113,7 +85,7 @@ const scenarioDetailModel = async function (scenarioId) {
 };
 
 const exampleGetModel = async function (scenarioId) {
-  let [scenarioData] = await scenarioModel.find({
+  let scenarioData = await scenarioModel.findOne({
     _id: scenarioId,
   });
 
@@ -121,7 +93,7 @@ const exampleGetModel = async function (scenarioId) {
 };
 
 const exampleDetailGetModel = async function (scenarioId, exampleId) {
-  let [exampleDetail] = await scenarioModel.find({
+  let exampleDetail = await scenarioModel.findOne({
     _id: scenarioId,
   });
 
@@ -133,7 +105,6 @@ const exampleDetailGetModel = async function (scenarioId, exampleId) {
 };
 
 module.exports = {
-  scenarioModel,
   scenarioGetModel,
   scenarioInsertModel,
   scenarioDetailModel,

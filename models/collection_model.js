@@ -1,47 +1,5 @@
-const pool = require('./db');
-const mongoose = require('mongoose');
-const { projectModel } = require('./project_model');
+const { projectModel, collectionModel, apiModel } = require('./db_schemas');
 const { collectionCheck, apiCheck } = require('../service/dbUpdate_service');
-
-const collectionSchema = new mongoose.Schema({
-  project_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'project',
-  },
-  collection_name: String,
-  apis: [
-    {
-      api_id: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'api',
-      },
-      api_name: String,
-    },
-  ],
-});
-
-const apiSchema = new mongoose.Schema({
-  collection_id: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'collection',
-  },
-  api_name: String,
-  http_method: String,
-  api_endpoint: String,
-  scenarios: [
-    {
-      scenario_id: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'scenario',
-      },
-      scenario_title: String,
-    },
-  ],
-  severity: Number,
-});
-
-const collectionModel = pool.model('collection', collectionSchema);
-const apiModel = pool.model('api', apiSchema);
 
 const collectionInsertModel = async function (collectionInfo) {
   const session = await collectionModel.startSession();
@@ -187,7 +145,7 @@ const apiInsertModel = async function (apiInfo) {
 };
 
 const apiGetModel = async function (collectionId) {
-  let [collectionData] = await collectionModel.find({
+  let collectionData = await collectionModel.findOne({
     _id: collectionId,
   });
 
@@ -234,8 +192,6 @@ const apiNameModel = async function (apiId) {
 };
 
 module.exports = {
-  collectionModel,
-  apiModel,
   collectionInsertModel,
   collectionGetModel,
   collectionInfoGetModel,
