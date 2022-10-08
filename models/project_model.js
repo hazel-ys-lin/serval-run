@@ -93,6 +93,23 @@ const projectNameGetModel = async function (projectId) {
   return projectData.project_name;
 };
 
+const projectEditModel = async function (projectId, projectNewName) {
+  let editResult = await projectModel.findOneAndUpdate(
+    {
+      _id: projectId,
+    },
+    {
+      project_name: projectNewName,
+    }
+  );
+  // console.log('editResult: ', editResult);
+
+  if (!editResult) {
+    return false;
+  }
+  return true;
+};
+
 const environmentInsertModel = async function (environmentInfo) {
   const session = await environmentModel.startSession();
   session.startTransaction();
@@ -164,6 +181,24 @@ const environmentGetModel = async function (projectId) {
   return environments;
 };
 
+const environmentEditModel = async function (envId, domainName, title) {
+  console.log(envId, domainName, title);
+  let editResult = await environmentModel.findOneAndUpdate(
+    {
+      _id: envId,
+    },
+    {
+      domain_name: domainName,
+      title: title,
+    }
+  );
+
+  if (!editResult) {
+    return false;
+  }
+  return true;
+};
+
 const envInfoGetModel = async function (projectId) {
   let envInfo = await environmentModel.find({
     project_id: projectId,
@@ -185,8 +220,10 @@ module.exports = {
   projectGetModel,
   projectInfoGetModel,
   projectNameGetModel,
+  projectEditModel,
   environmentInsertModel,
   environmentGetModel,
+  environmentEditModel,
   envInfoGetModel,
   envDetailGetModel,
 };

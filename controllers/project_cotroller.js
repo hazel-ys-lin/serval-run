@@ -1,6 +1,8 @@
 const {
   projectInsertModel,
   environmentInsertModel,
+  projectEditModel,
+  environmentEditModel,
 } = require('../models/project_model');
 // const { validationResult } = require('express-validator');
 const {
@@ -35,6 +37,16 @@ const projectDeleteController = async (req, res) => {
     return res.status(200).json({ message: 'Project deleted' });
   } else {
     return res.status(403).json({ message: 'Delete project error' });
+  }
+};
+
+const projectEditController = async function (req, res) {
+  const { projectId, projectNewName } = req.body;
+  let editProjectResult = await projectEditModel(projectId, projectNewName);
+  if (editProjectResult) {
+    return res.status(200).json({ message: 'Update project successfully' });
+  } else {
+    return res.status(403).json({ message: 'Update project failed' });
   }
 };
 
@@ -79,9 +91,21 @@ const envDeleteController = async function (req, res) {
   }
 };
 
+const envEditController = async function (req, res) {
+  const { envId, domainName, title } = req.body;
+  let editEnvResult = await environmentEditModel(envId, domainName, title);
+  if (editEnvResult) {
+    return res.status(200).json({ message: 'Update environment successfully' });
+  } else {
+    return res.status(403).json({ message: 'Update environment failed' });
+  }
+};
+
 module.exports = {
   projectInsertController,
   projectDeleteController,
+  projectEditController,
   envInsertController,
   envDeleteController,
+  envEditController,
 };

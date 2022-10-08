@@ -94,6 +94,23 @@ const collectionNameModel = async function (collectionId) {
   return collectionName.collection_name;
 };
 
+const collectionEditModel = async function (collectionId, collectionName) {
+  let editResult = await collectionModel.findOneAndUpdate(
+    {
+      _id: collectionId,
+    },
+    {
+      collection_name: collectionName,
+    }
+  );
+  console.log('editResult: ', editResult);
+
+  if (!editResult) {
+    return false;
+  }
+  return true;
+};
+
 const apiInsertModel = async function (apiInfo) {
   const session = await apiModel.startSession();
   session.startTransaction();
@@ -191,13 +208,40 @@ const apiNameModel = async function (apiId) {
   return apiName.api_name;
 };
 
+const apiEditModel = async function (
+  apiId,
+  apiName,
+  apiMethod,
+  apiEndpoint,
+  apiSeverity
+) {
+  let editResult = await apiModel.findOneAndUpdate(
+    {
+      _id: apiId,
+    },
+    {
+      api_name: apiName,
+      http_method: apiMethod,
+      api_endpoint: apiEndpoint,
+      severity: apiSeverity,
+    }
+  );
+
+  if (!editResult) {
+    return false;
+  }
+  return true;
+};
+
 module.exports = {
   collectionInsertModel,
   collectionGetModel,
   collectionInfoGetModel,
   collectionNameModel,
+  collectionEditModel,
   apiInsertModel,
   apiGetModel,
   apiInfoGetModel,
   apiNameModel,
+  apiEditModel,
 };

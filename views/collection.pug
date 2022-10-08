@@ -31,7 +31,28 @@ block content
               h1.h1.mb-2.page-title(style='font-family: PF Tempesta Seven Extended, sans-serif; font-size: 2rem; align-self: flex-start;') #{projectName}
               h5.text-secondary.project-id(style='align-self: flex-start; font-weight: 400;') #{projectId}
             .edit-buttons
-              button.btn.btn-primary.btn-edit_peoject(id=`${projectId}`) EDIT 
+              button.btn.btn-primary.btn-edit_project(id=`${projectId}` type='button' data-bs-toggle='modal' data-bs-target='#editProjectModal' data-bs-whatever=`${projectId}` name=`${projectName}` ) EDIT 
+              #editProjectModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                .modal-dialog
+                  .modal-content
+                    .modal-header
+                      h5#exampleModalLabel.modal-title Edit Project
+                      button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                    .modal-body
+                      form
+                        .mb-3
+                          label.col-form-label(for='project-id') Project ID
+                          input#project-id.form-control.input_projectid
+                        .mb-3
+                          label.col-form-label(for='project-old-name') Project Old Name
+                          input#project-old-name.form-control.input_project-old-name(type='string')
+                        .mb-3
+                          label.col-form-label(for='project-new-name') Project New Name
+                          input#project-new-name.form-control.input_project-new-name(type='string')
+                    .modal-footer
+                      button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                      button.btn.btn-primary.btn-edit_project-modal(type='submit') Update Project
+
               button.btn.btn-danger.btn-delete_project.mr-0(id=`${projectId}` style='font-weight: 700;') DELETE
         .title-divider.mb-4(style='height: 0; overflow: hidden; border-top: 1px solid #e9ecef;')
         .col-12.align-items-center
@@ -77,8 +98,28 @@ block content
                         .info.align-items-center.justify-content-between(style='display: flex')
                           h3 #{environments[i].title}
                           .icons.justify-content-between(style='width: 4rem;')
-                            button.btn.btn-edit_environment(id=`${environments[i]._id}` style='padding: 0;')
+                            button.btn.btn-edit_environment(type='button' data-bs-toggle='modal' data-bs-target=`#editEnvironmentModal-${environments[i]._id}` data-bs-whatever=`${environments[i]._id}` domain-name=`${environments[i].domain_name}` title=`${environments[i].title}` style='padding: 0;')
                               i.h5.fa.fa-solid.fa-pencil.text-grey
+                            .environment-edit-modal.modal.fade(id=`editEnvironmentModal-${environments[i]._id}` tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                              .modal-dialog
+                                .modal-content
+                                  .modal-header
+                                    h5#exampleModalLabel.modal-title Edit Environment
+                                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                  .modal-body
+                                    form
+                                      .mb-3
+                                        label.col-form-label(for='environment-id') Environment ID
+                                        input#environment-id.form-control.input_environmentid
+                                      .mb-3
+                                        label.col-form-label(for='environment-domainname') Domain Name
+                                        input#environment-domainname.form-control.input_environment-domainname
+                                      .mb-3
+                                        label.col-form-label(for='environment-title') Title
+                                        input#environment-title.form-control.input_environment-title
+                                  .modal-footer
+                                    button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                                    button.btn.btn-primary.btn-modal-edit_environment(type='submit') Update Environment
                             button.btn.btn-delete_environment(id=`${environments[i]._id}` style='padding: 0;')
                               i.h5.fa.fa-solid.fa-trash.text-grey
                         .mb-0.text-muted(style='font-weight: 300; font-size: 0.8rem;') #{environments[i]._id}
@@ -151,8 +192,28 @@ block content
                           .icons.justify-content-end.align-items-center(style='width: 5.5rem;')
                             a.pr-2(href=`./apis?collectionid=${userCollections[i].collection._id}` style='padding: 0; margin: 0; border: 0;')
                               i.h5.fa.fa-solid.fa-circle-info.text-grey
-                            button.pr-2.btn.btn-edit_collection(id=`${userCollections[i].collection._id}` style='padding: 0; margin: 0; border: 0;')
+                            button.pr-2.btn.btn-edit_collection(type='button' data-bs-toggle='modal' data-bs-target=`#editCollectionModal-${userCollections[i].collection._id}` data-bs-whatever=`${userCollections[i].collection._id}` collection-name=`${userCollections[i].collection.collection_name}` style='padding: 0; margin: 0; border: 0;')
                               i.h5.fa.fa-solid.fa-pencil.text-grey
+                            .collection-edit-modal.modal.fade(id=`editCollectionModal-${userCollections[i].collection._id}` tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                              .modal-dialog
+                                .modal-content
+                                  .modal-header
+                                    h5#exampleModalLabel.modal-title Edit Collection
+                                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                  .modal-body
+                                    form
+                                      .mb-3
+                                        label.col-form-label(for='collection-id') Collection ID
+                                        input#collection-id.form-control.input_collectionid
+                                      .mb-3
+                                        label.col-form-label(for='collection-old-name') Old Collection Name
+                                        input#collection-old-name.form-control.input_old-collection
+                                      .mb-3
+                                        label.col-form-label(for='collection-new-name') New Collection Name
+                                        input#collection-new-name.form-control.input_new-collection
+                                  .modal-footer
+                                    button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                                    button.btn.btn-primary.btn-modal-edit_collection(type='submit') Update Collection
                             button.pr-2.btn.btn-delete_collection(id=`${userCollections[i].collection._id}` style='padding: 0; margin: 0; border: 0;')
                               i.h5.fa.fa-solid.fa-trash.text-grey
                         .mb-0.text-muted(style='font-weight: 400; font-size: 0.8rem;') #{userCollections[i].collection._id}
@@ -306,6 +367,68 @@ block content
     })
 
 
+    $('.btn-edit_environment').on('click', function(event) {
+      let modal = $(this).attr('data-bs-target')
+      $(modal).on('show.bs.modal', function(event) {
+      })
+      
+      let environmentId = $(this).attr('data-bs-whatever');
+      $('input#environment-id').val(environmentId).prop('readonly', true);
+
+      let domainName = $(this).attr('domain-name');
+      $('input#environment-domainname').val(domainName);
+
+      let title = $(this).attr('title');
+      $('input#environment-title').val(title);
+    })
+
+
+    $('.btn-modal-edit_environment').on('click', function(event) {
+      console.log('edit collection clicked')
+      event.preventDefault();
+
+      const environmentId = $('.input_environmentid').val();
+      const newDomainName = $('.input_environment-domainname').val();
+      const newTitle = $('.input_environment-title').val();
+
+      axios({
+        method: 'put',
+        url: '/editenv',
+        data: {
+          envId: environmentId,
+          domainName: newDomainName,
+          title: newTitle,
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          Swal.fire({
+            text: 'Update environment successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+            text: 'Update environment error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+        })
+        setTimeout(()=> {
+          window.location.reload();
+        }, 2000)
+      })
+    })
+
+
+
+
+
     $('.btn-delete_environment').on('click', function(event) {
       console.log('delete_environment clicked')
       event.preventDefault();
@@ -381,6 +504,66 @@ block content
       $('input#project-id').val(projectId).prop('readonly', true);
     })
 
+
+    $('#editProjectModal').on('show.bs.modal', function(event) {
+      console.log('#editProjectModal')
+      // Button that triggered the modal
+      let button = event.relatedTarget;
+      //- // Extract info from data-bs-* attributes
+      let projectId = $('.btn-edit_project').attr('data-bs-whatever');
+      //- // If necessary, you could initiate an AJAX request here
+      //- // and then do the updating in a callback.
+
+      //- // Update the modal's content.
+      $('input#project-id').val(projectId).prop('readonly', true);
+
+      let projectOldName = $('.btn-edit_project').attr('name');
+      $('input#project-old-name').val(projectOldName).prop('readonly', true);
+
+    })
+
+
+    $('.btn-edit_project-modal').on('click', function(event) {
+      console.log('edit project clicked')
+      event.preventDefault();
+
+      const projectId = $('.input_projectid').val();
+      const projectNewName = $('.input_project-new-name').val();
+
+      axios({
+        method: 'put',
+        url: '/editproject',
+        data: {
+          projectId: projectId,
+          projectNewName: projectNewName,
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          Swal.fire({
+            text: 'Update project successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+            text: 'Update project error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+        })
+        setTimeout(()=> {
+          window.location.reload();
+        }, 2000)
+      })
+    })
+
+
     $('.btn-modal-create_collection').on('click', function(event) {
       console.log('create_collection in modal clicked')
       event.preventDefault();
@@ -415,6 +598,64 @@ block content
         console.log('catch collection error')
         Swal.fire({
             text: 'Create collection error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+        })
+        setTimeout(()=> {
+          window.location.reload();
+        }, 2000)
+      })
+    })
+
+    $('.btn-edit_collection').on('click', function(event) {
+      let modal = $(this).attr('data-bs-target')
+      $(modal).on('show.bs.modal', function(event) {
+      })
+      
+      let collectionId = $(this).attr('data-bs-whatever');
+      $('input#collection-id').val(collectionId).prop('readonly', true);
+
+      let oldName = $(this).attr('collection-name');
+      $('input#collection-old-name').val(oldName).prop('readonly', true);
+    })
+
+
+
+    $('.btn-modal-edit_collection').on('click', function(event) {
+      console.log('edit collection clicked')
+      event.preventDefault();
+
+      const collectionId = $('.input_collectionid').val();
+      const collectionNewName = $('.input_new-collection').val();
+
+      axios({
+        method: 'put',
+        url: '/editcollection',
+        data: {
+          collectionId: collectionId,
+          collectionNewName: collectionNewName,
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          Swal.fire({
+            text: 'Update collection successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+          //- alert('create collection successfully')
+          //- window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log('in error');
+        console.log('catch collection error')
+        Swal.fire({
+            text: 'Update collection error',
             icon: "error",
             confirmButtonClass: "btn-danger",
         })

@@ -8,8 +8,10 @@ const {
   collectionInsertModel,
   collectionInfoGetModel,
   collectionGetModel,
+  collectionEditModel,
   apiInsertModel,
   apiGetModel,
+  apiEditModel,
 } = require('../models/collection_model');
 const { getReportModel } = require('../models/report_model');
 const { titleOfReport } = require('../service/reportStatistic_service');
@@ -89,6 +91,19 @@ const collectionDeleteController = async function (req, res) {
   }
 };
 
+const collectionEditController = async function (req, res) {
+  const { collectionId, collectionNewName } = req.body;
+  let editCollectionResult = await collectionEditModel(
+    collectionId,
+    collectionNewName
+  );
+  if (editCollectionResult) {
+    return res.status(200).json({ message: 'Update collection successfully' });
+  } else {
+    return res.status(403).json({ message: 'Update collection failed' });
+  }
+};
+
 const displayApi = async function (req, res) {
   const collectionId = req.query.collectionid;
   const userEmail = req.session.userEmail;
@@ -164,13 +179,29 @@ const apiDeleteController = async function (req, res) {
   }
 };
 
-// TODO: update collection, api controller
+const apiEditController = async function (req, res) {
+  const { apiId, apiName, apiMethod, apiEndpoint, apiSeverity } = req.body;
+  let editApiResult = await apiEditModel(
+    apiId,
+    apiName,
+    apiMethod,
+    apiEndpoint,
+    apiSeverity
+  );
+  if (editApiResult) {
+    return res.status(200).json({ message: 'Update API successfully' });
+  } else {
+    return res.status(403).json({ message: 'Update API failed' });
+  }
+};
 
 module.exports = {
   displayCollection,
   collectionInsertController,
   collectionDeleteController,
+  collectionEditController,
   displayApi,
   apiInsertController,
   apiDeleteController,
+  apiEditController,
 };
