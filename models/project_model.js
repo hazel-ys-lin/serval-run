@@ -172,6 +172,14 @@ const envInfoGetModel = async function (projectId) {
   return envInfo;
 };
 
+const envDetailGetModel = async function (envId) {
+  let envDetail = await environmentModel.findOne({
+    _id: envId,
+  });
+
+  return { domain_name: envDetail.domain_name, title: envDetail.title };
+};
+
 module.exports = {
   projectInsertModel,
   projectGetModel,
@@ -180,4 +188,5 @@ module.exports = {
   environmentInsertModel,
   environmentGetModel,
   envInfoGetModel,
+  envDetailGetModel,
 };

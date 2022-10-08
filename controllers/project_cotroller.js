@@ -1,37 +1,12 @@
-const { userGetModel } = require('../models/user_model');
 const {
   projectInsertModel,
-  projectGetModel,
   environmentInsertModel,
-  environmentGetModel,
 } = require('../models/project_model');
 // const { validationResult } = require('express-validator');
 const {
   projectDeleteModel,
   environmentDeleteModel,
 } = require('../models/delete_model');
-
-const displayProject = async (req, res) => {
-  // if (!req.session.isAuth) {
-  //   return res.status(403).json({ msg: 'Please log in' });
-  // }
-  // get all the projects to array in database
-  const userEmail = req.session.userEmail;
-  // console.log('userEmail: ', userEmail);
-  let userProjects = await projectGetModel(userEmail);
-
-  const userId = await userGetModel(userEmail);
-
-  for (let i = 0; i < userProjects.length; i++) {
-    userProjects[i].user_email = userEmail;
-  }
-  if (userProjects.length !== 0) {
-    return res.render('projects', { userProjects: userProjects });
-  } else {
-    userProjects.push({ user_id: userId });
-    return res.render('projects', { userProjects: userProjects });
-  }
-};
 
 const projectInsertController = async (req, res) => {
   const projectInfo = {
@@ -60,18 +35,6 @@ const projectDeleteController = async (req, res) => {
     return res.status(200).json({ message: 'Project deleted' });
   } else {
     return res.status(403).json({ message: 'Delete project error' });
-  }
-};
-
-const displayEnvironment = async (req, res) => {
-  const projectId = req.query.projectid;
-
-  let environments = await environmentGetModel(projectId);
-  if (environments.length !== 0) {
-    res.render('environments', { environments: environments });
-  } else {
-    environments.push({ project_id: projectId });
-    res.render('environments', { environments: environments });
   }
 };
 
@@ -117,10 +80,8 @@ const envDeleteController = async function (req, res) {
 };
 
 module.exports = {
-  displayProject,
   projectInsertController,
   projectDeleteController,
-  displayEnvironment,
   envInsertController,
   envDeleteController,
 };

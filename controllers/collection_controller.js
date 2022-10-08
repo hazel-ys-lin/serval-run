@@ -32,16 +32,13 @@ const displayCollection = async function (req, res) {
     });
   }
 
-  let userCollections = collectionGetModel(projectId);
-  let environments = environmentGetModel(projectId);
   let projectName = projectNameGetModel(projectId);
-  let reportData = getReportModel(projectId);
 
   let resultArray = await Promise.all([
-    userCollections,
-    environments,
+    collectionGetModel(projectId),
+    environmentGetModel(projectId),
     projectName,
-    reportData,
+    getReportModel(projectId),
   ]);
 
   let reportTitle;
@@ -52,18 +49,6 @@ const displayCollection = async function (req, res) {
     }
   }
 
-  if (userCollections.length !== 0) {
-    return res.render('collection', {
-      userCollections: resultArray[0],
-      environments: resultArray[1],
-      projectName: resultArray[2],
-      projectId: projectId,
-      reportData: reportTitle,
-      userProjects: projectList,
-    });
-  }
-
-  userCollections.push({ projectId: projectId });
   return res.render('collection', {
     userCollections: resultArray[0],
     environments: resultArray[1],

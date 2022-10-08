@@ -28,9 +28,10 @@ const responseSchema = new mongoose.Schema({
 
 const reportSchema = new mongoose.Schema({
   finished: Boolean,
-  calculated: Boolean,
-  passRate: Number,
-  responseCount: Number,
+  pass_rate: Number,
+  responses_amount: Number,
+  pass_examples: Number,
+  average_time: Number,
 
   create_time: {
     type: Date,

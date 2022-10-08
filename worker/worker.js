@@ -24,12 +24,6 @@ const doJob = async function () {
     } catch (error) {
       console.log('[Worker] Got job or do job error...');
     }
-
-    // if (insertTestResult) {
-    //   const reportStatus = { report_id: insertTestResult, status: 1 };
-    //   Queue.publish(CHANNEL_KEY, JSON.stringify(reportStatus));
-    //   console.log(`[Worker] Published report status to channel ${CHANNEL_KEY}`);
-    // }
   }
 };
 

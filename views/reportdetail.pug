@@ -43,25 +43,37 @@ block content
                         .card 
                           .card-header Information
                           .card-body 
-                            #info-text(style='height: 300px; padding: 0px; position: relative;')
+                            #info-text(style='height: 300px; padding: 0px; position: relative; font-size: 0.9rem;')
                               dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
-                                dt Project ID
-                                dd #{reportDetail.project_id}
+                                dt Project Name
+                                dd #{nameArray[0]}
                               dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
-                                dt Environment ID
-                                dd #{reportDetail.environment_id}
+                                dt Environment
+                                dd #{nameArray[1].domain_name} (#{nameArray[1].title})
                               dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
-                                dt Collection ID
-                                dd #{reportDetail.collection_id}
+                                dt Collection Name
+                                dd #{nameArray[2].collectionName}
+                              dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
+                                dt Average Time
+                                if !reportDetail._doc.average_time
+                                  dd.text-muted= 'Pending'
+                                else
+                                  dd= reportDetail._doc.average_time
+                              dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
+                                dt Responses Amount
+                                if !reportDetail._doc.responses_amount
+                                  dd.text-muted= 'Pending'
+                                else
+                                  dd= reportDetail._doc.responses_amount
                               dl(style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
                                 dt Report Type
                                 dd 
                                 if reportDetail.report_info.report_type === 'scenario'
-                                  h1.display-6.badge(style='font-size: 120%; background-color: #809A6F') SCENARIO
+                                  h1.display-6.badge(style='font-size: 110%; background-color: #809A6F') SCENARIO
                                 else if reportDetail.report_info.report_type === 'api'
-                                  h1.display-6.badge(style='font-size: 120%; background-color: #A25B5B') API
+                                  h1.display-6.badge(style='font-size: 110%; background-color: #A25B5B') API
                                 else if reportDetail.report_info.report_type === 'collection'
-                                  h1.display-6.badge(style='font-size: 120%; background-color: #CC9C75') COLLECTION
+                                  h1.display-6.badge(style='font-size: 110%; background-color: #CC9C75') COLLECTION
                               dl.report-status(status=`${reportStatus}` style='align-items: center; border-bottom: 1px solid rgba(0, 0, 0, 0.3); display: flex; justify-content: space-between;')
                                 dt Status
                                 dd(style='font-size: 100%;')
@@ -82,19 +94,19 @@ block content
                                   div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
                                     | Pass
                                     br
-                                    p= reportCalculated.passRate
+                                    p= reportDetail._doc.pass_rate
                                 span#pieLabel1.pieLabel(style='position: absolute; top: 209.5px; left: 418.203px;')
                                   div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
                                     | Fail
                                     br
-                                    p= 100-reportCalculated.passRate
+                                    p= 100-reportDetail._doc.pass_rate
 
                       .examples-histogram
                         .card
                           .card-header  Examples
                           .card-body
-                          if reportCalculated
-                            #bar-chart(examples=`${reportCalculated.passExamples}` style='height: 300px; padding: 0px; position: relative;')
+                          if reportDetail._doc.finished
+                            #bar-chart(examples=`${reportDetail._doc.pass_examples}/${reportDetail._doc.responses_amount}` style='height: 300px; padding: 0px; position: relative;')
                               canvas.flot-base(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
                               canvas.flot-overlay(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
                               .flot-svg(style='position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;')
@@ -135,8 +147,8 @@ block content
                       .card-body
                         .progress
                           if reportStatus
-                            .progress-bar.progress-finished(rate=`${reportCalculated.passRate}` role='progressbar' aria-valuemin='0' aria-valuemax='100')
-                            .progress-bar.progress-failed(rate=`${100-reportCalculated.passRate}` role='progressbar' aria-valuemin='0' aria-valuemax='100')
+                            .progress-bar.progress-finished(rate=`${reportDetail._doc.pass_rate}` role='progressbar' aria-valuemin='0' aria-valuemax='100')
+                            .progress-bar.progress-failed(rate=`${100-reportDetail._doc.pass_rate}` role='progressbar' aria-valuemin='0' aria-valuemax='100')
                           else 
                             .progress-bar.progress-finished(role='progressbar' aria-valuemin='0' aria-valuemax='100')
                             .progress-bar.progress-failed(role='progressbar' aria-valuemin='0' aria-valuemax='100')
@@ -147,9 +159,9 @@ block content
                             h5
                               if reportStatus
                                 br
-                                .badge(style='float: right; background-color: #68B0AB')= `Passed ${reportCalculated.passRate}%`
+                                .badge(style='float: right; background-color: #68B0AB')= `Passed ${reportDetail._doc.pass_rate}%`
                                 br
-                                .badge(style='float: right; background-color: #EA907A')= `Failed ${100-reportCalculated.passRate}%`
+                                .badge(style='float: right; background-color: #EA907A')= `Failed ${100-reportDetail._doc.pass_rate}%`
                                 br
                                 .badge.text-dark(style='float: right; background-color: #FFD36B') Pending 0%
 
