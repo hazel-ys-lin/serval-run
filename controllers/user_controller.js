@@ -5,6 +5,7 @@ const {
   userGetModel,
   userJobModel,
 } = require('../models/user_model');
+const { getReportModel } = require('../models/report_model');
 const { validationResult } = require('express-validator');
 const {
   userCheckService,
@@ -28,33 +29,37 @@ const userSignUpController = async (req, res) => {
     return res.status(422).json({ errorMessages: errors.array() });
   }
 
-  let userCheckResult = await userCheckService(userEmail);
+  try {
+    let userCheckResult = await userCheckService(userEmail);
 
-  if (!userCheckResult) {
-    req.session.msg = 'Email already exists';
-    return res.status(403).json({ msg: 'Email already exists' });
-  }
+    if (!userCheckResult) {
+      req.session.msg = 'Email already exists';
+      return res.status(403).json({ msg: 'Email already exists' });
+    }
 
-  const userInfo = {
-    userName: userName,
-    userEmail: userEmail,
-    userPassword: userPassword,
-    // userPicture: req.body.userPicture,
-  };
+    const userInfo = {
+      userName: userName,
+      userEmail: userEmail,
+      userPassword: userPassword,
+      // userPicture: req.body.userPicture,
+    };
 
-  // encrypted the password
-  userInfo.userPassword = await bcrypt.hash(userInfo.userPassword, 8);
+    // encrypted the password
+    userInfo.userPassword = await bcrypt.hash(userInfo.userPassword, 8);
 
-  let insertUserResult = await userSignUpModel(userInfo);
+    let insertUserResult = await userSignUpModel(userInfo);
 
-  if (!insertUserResult) {
-    return res.status(403).json({ msg: 'create account fail' });
-  } else {
-    req.session.userId = insertUserResult.userId;
-    req.session.userName = insertUserResult.userName;
-    req.session.userEmail = insertUserResult.userEmail;
-    req.session.isAuth = true;
-    return res.status(200).json({ msg: 'create account successfully' });
+    if (!insertUserResult) {
+      return res.status(403).json({ msg: 'create account fail' });
+    } else {
+      req.session.userId = insertUserResult.userId;
+      req.session.userName = insertUserResult.userName;
+      req.session.userEmail = insertUserResult.userEmail;
+      req.session.isAuth = true;
+      return res.status(200).json({ msg: 'create account successfully' });
+    }
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -92,7 +97,7 @@ const userSignInController = async (req, res) => {
       userEmail: userSignInResult.user_email,
     };
 
-    return res.render('profile', { userInfo: userInfo });
+    return res.status(200).json({ msg: 'sign in successfully' });
   } catch (error) {
     console.log('error in user signin controller', error);
     return false;
@@ -131,12 +136,22 @@ const userDisplayController = async (req, res) => {
       projectName: userProjects[i].project_name,
     });
   }
+
+  for (let j = 0; j < projectList.length; j++) {
+    let projectReports = await getReportModel(projectList[j].projectId);
+    if (!projectReports.length) {
+      projectList[j].reports = 0;
+    } else {
+      projectList[j].reports = Number(projectReports.length);
+    }
+  }
+
   // console.log('projectList in userDisplayController: ', projectList);
   let userDetail = await userGetModel(userEmail);
 
   return res.render('profile', {
     userInfo: userInfo,
-    userJob: userDetail.user_job,
+    userDetail: userDetail,
     userProjects: projectList,
   });
 };

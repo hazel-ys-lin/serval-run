@@ -44,13 +44,16 @@ $(function () {
    * BAR CHART
    * ---------
    */
-  // let totalExamples = $('#bar-chart').attr('examples').split('/');
-  // console.log('totalExamples: ', totalExamples);
+  let reportDetail = JSON.parse($('.report-detail').attr('report-detail'));
+  console.log('reportDetail: ', reportDetail);
+
   let bar_data = {
     data: [
-      [1, 5],
-      [2, 2],
-      [3, 3],
+      [1, 6],
+      [2, 0],
+      [3, 0],
+      [4, 0],
+      [5, 0],
     ],
     bars: { show: true },
   };
@@ -70,9 +73,11 @@ $(function () {
     colors: ['#6E85B7'],
     xaxis: {
       ticks: [
-        [1, 'Total'],
-        [2, 'Pass'],
-        [3, 'Fail'],
+        [1, 'stylish'],
+        [2, 'Wolfon'],
+        [3, 'DataCat'],
+        [4, 'filmo'],
+        [5, 'turtlemq'],
       ],
     },
   });

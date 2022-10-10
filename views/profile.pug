@@ -10,7 +10,7 @@ block sidebar
 
 block content
   link(rel='stylesheet', href='../../css/common.css')
-  script(src='/src/profile.js')
+  //- script(src='/src/profile.js')
   script(src='/src/plugins/jquery.js')
   script(src='/src/plugins/jquery.flot.js')
   script(src='/src/plugins/jquery.flot.pie.js')
@@ -32,8 +32,8 @@ block content
                   .text-muted.mb-1(style='font-size: 1rem;') #{userInfo.userEmail}
                   .user-job.align-items-center(style='display: flex;')
                     p.medium.mr-2.mb-0
-                      if userJob 
-                        span.badge.badge-secondary(style='font-size: 100%;') #{userJob}
+                      if userDetail 
+                        span.badge.badge-secondary(style='font-size: 100%;') #{userDetail.user_job}
                       else
                         span.badge.badge-secondary(style='font-size: 100%;') [Edit Your Job]
                     button.pr-2.btn.btn-edit_job-title.mt-0.mb-0.mt-2(type='button' data-bs-toggle='modal' data-bs-target=`#editJobModal` data-bs-whatever=`${userInfo.userEmail}` id=`${userInfo.userId}`)
@@ -82,46 +82,57 @@ block content
           .row.mt-1.align-items-center.mr-0
             .card-columns.basic-info(style='display: flex;')
               .card.shadow.mb-4.mt-0.user-reports-amount
-                .card-header Report Counts
-                .card-body(style='display: flex; align-items: center; justify-content: center; font-size: 10rem;')
-                  .mb-1 25
+                .card-header Project Counts
+                .card-body(style='display: flex; align-items: center; justify-content: center; flex-direction: column; flex-wrap: wrap;')
+                  if userDetail
+                    if userDetail.projects
+                      .mb-1.text-info(style='font-size: 10rem;') #{userDetail.projects.length}
+                  else 
+                    .mb-1 0
+                  .mb-1.text-info projects
               .card.shadow.mb-4.mt-0.user-line-chart
-                .card-header Report Create Line Chart
+                .card-header Report Count Chart 
                 .card-body
-                  #bar-chart(style='height: 300px; padding: 0px; position: relative;')
+                  #bar-chart.report-detail(style='height: 300px; padding: 0px; position: relative;' report-detail=`${JSON.stringify(userProjects)}`)
                     canvas.flot-base(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
                     canvas.flot-overlay(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
                     .flot-svg(style='position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;')
                       svg(style='width: 100%; height: 100%;')
                         g.flot-x-axis.flot-x1-axis.xAxis.x1Axis(style='position: absolute; inset: 0px;')
-                          text.flot-tick-label.tickLabel(x='161.3224431818182' y='294' style='position: absolute; text-align: center;') Total
-                          text.flot-tick-label.tickLabel(x='298.43039772727275' y='294' style='position: absolute; text-align: center;') Passed
-                          text.flot-tick-label.tickLabel(x='430.94460227272725' y='294' style='position: absolute; text-align: center;') Failed
-                          text.flot-tick-label.tickLabel(x='560.4822443181819' y='294' style='position: absolute; text-align: center;') Pending
+                          //- each element in userDetail.projects
+                          //- - let i = 0
+                          //- if userDetail
+                          //-   while i < userProjects.length
+                          //-     text.flot-tick-label.tickLabel.report-graph(x=`${50+90*i}` y='294' style='style=position: absolute; text-align: center; font-size: 1rem;') #{userProjects[i].projectName} 
+                          //-     - i++
+                          //- text.flot-tick-label.tickLabel(x='161.3224431818182' y='294' style='position: absolute; text-align: center;') Total
+                          //- text.flot-tick-label.tickLabel(x='298.43039772727275' y='294' style='position: absolute; text-align: center;') Passed
+                          //- text.flot-tick-label.tickLabel(x='430.94460227272725' y='294' style='position: absolute; text-align: center;') Failed
+                          //- text.flot-tick-label.tickLabel(x='560.4822443181819' y='294' style='position: absolute; text-align: center;') Pending
 
-                        g.flot-y-axis.flot-y1-axis.yAxis.y1Axis(style='position: absolute; inset: 0px;')
-                          text.flot-tick-label.tickLabel(x='8.953125' y='269' style='position: absolute; text-align: right;') 0
-                          text.flot-tick-label.tickLabel(x='8.953125' y='205.5' style='position: absolute; text-align: right;') 5
-                          text.flot-tick-label.tickLabel(x='1' y='15' style='position: absolute; text-align: right;') 20
-                          text.flot-tick-label.tickLabel(x='1' y='142' style='position: absolute; text-align: right;') 10
-                          text.flot-tick-label.tickLabel(x='1' y='78.5' style='position: absolute; text-align: right;') 15
-              .card.shadow.mb-4.mt-0.user-pie-chart
-                .card-header Success Rate
-                .card-body
-                  #donut-chart(style='height: 300px; padding: 0px; position: relative;')
-                    canvas.flot-base(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
-                    canvas.flot-overlay(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
-                    if reportStatus
-                      span#pieLabel0.pieLabel(style='position: absolute; top: 69.5px; left: 440.203px;')
-                        div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
-                          | Pass
-                          br
-                          p= reportCalculated[0].passRate
-                      span#pieLabel1.pieLabel(style='position: absolute; top: 209.5px; left: 418.203px;')
-                        div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
-                          | Fail
-                          br
-                          p= 100-reportCalculated[0].passRate
+                        g.flot-y-axis.flot-y1-axis.yAxis.y1Axis(style='position: absolute; inset: 0px; ')
+                          text.flot-tick-label.tickLabel(x='8.953125' y='269' style='position: absolute; text-align: right; font-size: 1rem;') 0
+                          text.flot-tick-label.tickLabel(x='8.953125' y='205.5' style='position: absolute; text-align: right; font-size: 1rem;') 5
+                          text.flot-tick-label.tickLabel(x='1' y='15' style='position: absolute; text-align: right; font-size: 1rem;') 20
+                          text.flot-tick-label.tickLabel(x='1' y='142' style='position: absolute; text-align: right; font-size: 1rem;') 10
+                          text.flot-tick-label.tickLabel(x='1' y='78.5' style='position: absolute; text-align: right; font-size: 1rem;') 15
+              //- .card.shadow.mb-4.mt-0.user-pie-chart
+              //-   .card-header Success Rate
+              //-   .card-body
+              //-     #donut-chart(style='height: 300px; padding: 0px; position: relative;')
+              //-       canvas.flot-base(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
+              //-       canvas.flot-overlay(width='764' height='300' style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 764.5px; height: 300px;')
+              //-       if reportStatus
+              //-         span#pieLabel0.pieLabel(style='position: absolute; top: 69.5px; left: 440.203px;')
+              //-           div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
+              //-             | Pass
+              //-             br
+              //-             p= reportCalculated[0].passRate
+              //-         span#pieLabel1.pieLabel(style='position: absolute; top: 209.5px; left: 418.203px;')
+              //-           div(style='font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;')
+              //-             | Fail
+              //-             br
+              //-             p= 100-reportCalculated[0].passRate
   script.
     $('.btn-create_project').on('click', function(event) {
       console.log('create_project clicked')
@@ -218,3 +229,57 @@ block content
         }, 2000)
       })
     })
+
+    $(function () {
+      /*
+      * BAR CHART
+      * ---------
+      */
+      let reportDetail = JSON.parse($('.report-detail').attr('report-detail'));
+      console.log('reportDetail: ', reportDetail);
+      let reportName = [];
+
+      let reportData = [];
+      for (let k=0; k < reportDetail.length; k++) {
+        reportName.push([k, reportDetail[k].projectName])
+        reportData.push([k, reportDetail[k].reports])
+      }
+
+      let bar_data = {
+        data: reportData,
+        //- data: [
+        //-   [1, 6],
+        //-   [2, 0],
+        //-   [3, 0],
+        //-   [4, 0],
+        //-   [5, 0],
+        //- ],
+        bars: { show: true },
+      };
+      $.plot('#bar-chart', [bar_data], {
+        grid: {
+          borderWidth: 1,
+          borderColor: '#f3f3f3',
+          tickColor: '#f3f3f3',
+        },
+        series: {
+          bars: {
+            show: true,
+            barWidth: 0.5,
+            align: 'center',
+          },
+        },
+        colors: ['#6E85B7'],
+        xaxis: {
+          ticks: reportName,
+          //- ticks: [
+          //-   [1, 'stylish'],
+          //-   [2, 'Wolfon'],
+          //-   [3, 'DataCat'],
+          //-   [4, 'filmo'],
+          //-   [5, 'turtlemq'],
+          //- ],
+        },
+      });
+      /* END BAR CHART */
+    });

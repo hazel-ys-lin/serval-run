@@ -1,4 +1,4 @@
-const { userModel } = require('../models/user_model');
+const { userModel } = require('../models/db_schemas');
 
 const projectCheck = async function (projectName, projectArray) {
   for (let i = 0; i < projectArray.length; i++) {
@@ -48,15 +48,21 @@ const environmentCheck = async function (domain, title, environmentArray) {
 };
 
 const userCheckService = async function (userEmail) {
-  let findUser = await userModel.findOne({
-    user_email: userEmail,
-  });
-  if (!findUser) {
-    console.log('user check pass');
-    return true;
-  } else {
-    console.log('user check fail');
-    return false;
+  // console.log('userEmail in userCheckService: ', userEmail);
+  try {
+    let findUser = await userModel.findOne({
+      user_email: userEmail,
+    });
+    if (!findUser) {
+      console.log('user check pass');
+      return true;
+    } else {
+      console.log('user check fail');
+      return false;
+    }
+  } catch (error) {
+    console.log('error in userCheckService: ', error);
+    throw error;
   }
 };
 
