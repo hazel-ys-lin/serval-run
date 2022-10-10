@@ -29,10 +29,34 @@ block content
               .row.align-items-center
                 .col-md-7
                   h4.mb-1(style='font-size: 2rem;') #{userInfo.userName}
-                  p.medium.mb-3
-                    span.badge.badge-dark(style='font-size: 100%;') Product Manager
+                  .text-muted.mb-1(style='font-size: 1rem;') #{userInfo.userEmail}
+                  .user-job.align-items-center(style='display: flex;')
+                    p.medium.mr-2.mb-0
+                      if userJob 
+                        span.badge.badge-secondary(style='font-size: 100%;') #{userJob}
+                      else
+                        span.badge.badge-secondary(style='font-size: 100%;') [Edit Your Job]
+                    button.pr-2.btn.btn-edit_job-title.mt-0.mb-0.mt-2(type='button' data-bs-toggle='modal' data-bs-target=`#editJobModal` data-bs-whatever=`${userInfo.userEmail}` id=`${userInfo.userId}`)
+                      i.h5.fa.fa-solid.fa-pencil.text-secondary
+                    #editJobModal.modal.fade(tabindex='-1' aria-labelledby='editJobModalLabel' aria-hidden='true')
+                      .modal-dialog
+                        .modal-content
+                          .modal-header
+                            h5#exampleModalLabel.modal-title Edit Job Title
+                            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                          .modal-body
+                            form
+                              .mb-3
+                                label.col-form-label(for='user-email') User Email
+                                input#user-email.form-control.input_useremail
+                              .mb-3
+                                label.col-form-label(for='job-title') Job Title
+                                input#job-title.form-control.input_job-title
+                          .modal-footer
+                            button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                            button.btn.btn-primary.btn-modal-edit_job-title(type='submit') Update Job Title
               .row.mb-4
-                .col-md-7(style='font-size: 1.2rem;')
+                .col-md-7(style='font-size: 1.2rem; font-weight: 300;')
                   h3.text-muted
                   | Start your test journey with Serval now.
                 button.btn.btn-lg.btn-right.btn-info.btn-create_project(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever='') Create Project
@@ -136,6 +160,56 @@ block content
         console.log('Catch project error')
         Swal.fire({
             text: 'Create project error',
+            icon: "error",
+            confirmButtonClass: "btn-danger",
+        })
+        setTimeout(()=> {
+          window.location.reload();
+        }, 2000)
+      })
+    })
+
+    $('.btn-edit_job-title').on('click', function(event) {
+      //- let modal = $(this).attr('data-bs-target')
+      $('#editJobModal').on('show.bs.modal', function(event) {
+      })
+      
+      let userEmail = $(this).attr('data-bs-whatever');
+      $('input#user-email').val(userEmail).prop('readonly', true);
+
+    })
+
+
+    $('.btn-modal-edit_job-title').on('click', function(event) {
+      console.log('edit job-title in modal clicked')
+      event.preventDefault();
+
+      //- const userId = $('.btn-edit_job-title').id;
+      const jobTitle = $('.input_job-title').val();
+
+      axios({
+        method: 'put',
+        url: '/edituser',
+        data: {
+          jobTitle: jobTitle,
+        },
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          Swal.fire({
+            text: 'Update job title successfully',
+            icon: "success",
+            confirmButtonClass: "btn-success",
+          })
+          setTimeout(()=> {
+            window.location.reload();
+          }, 2000)
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+            text: 'Update job title error',
             icon: "error",
             confirmButtonClass: "btn-danger",
         })

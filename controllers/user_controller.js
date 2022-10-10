@@ -1,5 +1,10 @@
 const { projectGetModel } = require('../models/project_model');
-const { userSignUpModel, userSignInModel } = require('../models/user_model');
+const {
+  userSignUpModel,
+  userSignInModel,
+  userGetModel,
+  userJobModel,
+} = require('../models/user_model');
 const { validationResult } = require('express-validator');
 const {
   userCheckService,
@@ -127,11 +132,24 @@ const userDisplayController = async (req, res) => {
     });
   }
   // console.log('projectList in userDisplayController: ', projectList);
+  let userDetail = await userGetModel(userEmail);
 
   return res.render('profile', {
     userInfo: userInfo,
+    userJob: userDetail.user_job,
     userProjects: projectList,
   });
+};
+
+const userJobUpdateController = async function (req, res) {
+  const { userId } = req.session;
+  const { jobTitle } = req.body;
+  let updateJobResult = await userJobModel(userId, jobTitle);
+  if (updateJobResult) {
+    return res.status(200).json({ message: 'Update Job Title successfully' });
+  } else {
+    return res.status(403).json({ message: 'Update Job Title failed' });
+  }
 };
 
 module.exports = {
@@ -141,4 +159,5 @@ module.exports = {
   userSignInController,
   userLogOutController,
   userDisplayController,
+  userJobUpdateController,
 };

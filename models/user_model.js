@@ -5,7 +5,7 @@ const userGetModel = async function (userEmail) {
   let userData = await userModel.findOne({
     user_email: userEmail,
   });
-  return userData._id;
+  return userData;
 };
 
 const userSignUpModel = async function (userInfo) {
@@ -51,4 +51,25 @@ const userSignInModel = async function (userInfo) {
   }
 };
 
-module.exports = { userGetModel, userSignUpModel, userSignInModel };
+const userJobModel = async function (userId, jobTitle) {
+  let editResult = await userModel.findOneAndUpdate(
+    {
+      _id: userId,
+    },
+    {
+      user_job: jobTitle,
+    }
+  );
+
+  if (!editResult) {
+    return false;
+  }
+  return true;
+};
+
+module.exports = {
+  userGetModel,
+  userSignUpModel,
+  userSignInModel,
+  userJobModel,
+};
