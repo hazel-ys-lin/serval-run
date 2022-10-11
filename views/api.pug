@@ -115,7 +115,10 @@ block content
 										td #{userApis[i].api.api_endpoint}
 										td #{userApis[i].api.severity}
 										td
-											button.btn.btn-warning(type='button' data-bs-toggle='modal' data-bs-target='#runAPIModal' data-bs-whatever=`${userApis[i].api._id}` style='font-weight: 700;') Run API Test
+											if userApis[i].api.scenarios.length === 0
+												button.btn.btn-warning(disabled='' type='button' data-bs-toggle='modal' data-bs-target='#runAPIModal' data-bs-whatever=`${userApis[i].api._id}` style='font-weight: 700;' ) Run API Test
+											else
+												button.btn.btn-warning(type='button' data-bs-toggle='modal' data-bs-target='#runAPIModal' data-bs-whatever=`${userApis[i].api._id}` style='font-weight: 700;' ) Run API Test
 											#runAPIModal.modal.fade(tabindex='-1' aria-labelledby='runAPIModalLabel' aria-hidden='true' style='font-weight: 700;')
 												.modal-dialog.modal-lg
 													.modal-content
