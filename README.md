@@ -13,6 +13,19 @@ email: prettyServal@gmail.com
 password: 123456
 ```
 
+## Badges
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+
+![JavaScript]({https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E})
+![NodeJS]({https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white})
+![AWS]({https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white})
+![MongoDB]({https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white})
+![Redis]({https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white})
+![pug]({https://img.shields.io/badge/Pug-E3C29B?style=for-the-badge&logo=pug&logoColor=black})
+![CodeMirror]({https://img.shields.io/badge/CodeMirror-D30707?style=for-the-badge&logo=CodeMirror&logoColor=white})
+![Socket.IO]({https://img.shields.io/badge/Socket.io-010101?&style=for-the-badge&logo=Socket.io&logoColor=white})
+
 ## Table of Contents
 
 - [Features](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Features)
