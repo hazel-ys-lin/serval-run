@@ -31,13 +31,13 @@ password: 123456
 
 ## Table of Contents
 
-- [Features](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Features)
-- [Introduction](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Introduction)
-- [Technologies](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Technologies)
-- [Architecture](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Architecture)
-- [Usage/Examples](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Usageexamples)
-- [FAQ](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#FAQ)
-- [Author](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Author)
+- [Features](#Features)
+- [Introduction](#Introduction)
+- [Technologies](#Technologies)
+- [Architecture](#Architecture)
+- [Usage/Examples](#Usageexamples)
+- [FAQ](#FAQ)
+- [Author](#Author)
 
 ## Features
 
