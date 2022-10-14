@@ -26,9 +26,11 @@ An automated integration testing and document tool for developers and non-develo
 ## Introduction
 
 We need to write documents when developing.
+
 We also need to write tests when developing.
 
 How about testable documents, which combine these two important tasks and execute it in the meantime?
+
 That's why ServelRun born.
 
 ```gherkin
@@ -59,7 +61,10 @@ For example, this snippet of code (or text) can be compiled into specification d
 
 That's how it works. This is the magic of Gherkin and BDD.
 ServalRun utilized the power of this language, turning single test under single scenario to integration testing.
-Start your test journey now by creating an account. Happy testing!
+
+Start your test journey now by creating an account.
+
+Happy testing!
 
 ## Technologies
 
@@ -141,3 +146,5 @@ However, supporting other testing language is on our to-do list.
 
 - [GitHub](https://github.com/hazel-ys-lin)
 - [LinkedIn](https://www.linkedin.com/in/hazel-lin-yi-sin/)
+
+Or email me at: hazel.ys.lin@gmail.com
