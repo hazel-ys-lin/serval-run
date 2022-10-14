@@ -65,20 +65,17 @@ block content
 
   script.
     $('.btn-create_project').on('click', function(event) {
-      console.log('create_project clicked')
       event.preventDefault();
       //- window.location.assign('./editproject');
     })
 
     $('.btn-collections').on('click', function(event) {
-      console.log('view collection clicked')
       event.preventDefault();
       const projectId = this.id;
       window.location.assign(`./collections?projectid=${projectId}`);
     })
 
     $('.btn-environments').on('click', function(event) {
-      console.log('view environment clicked')
       event.preventDefault();
       const projectId = this.id;
       window.location.assign(`./environments?projectid=${projectId}`);
@@ -86,7 +83,6 @@ block content
 
 
     $('.btn-modal-create_project').on('click', function(event) {
-      console.log('create_project in modal clicked')
       event.preventDefault();
       const projectName = $('.input_project-name').val();
 
@@ -113,7 +109,6 @@ block content
         }
       })
       .catch((error) => {
-        console.log('in error');
         console.log('Catch project error')
         swal({
             text: 'Create project error',
@@ -128,10 +123,8 @@ block content
 
 
     $('.btn-delete').on('click', function(event) {
-      console.log('delete_project clicked')
       event.preventDefault();
 
-      console.log('this.id: ', this.id)
       const projectId = this.id;
 
       axios({
@@ -152,15 +145,9 @@ block content
           setTimeout(()=> {
             window.location.reload();
           }, 2000)
-          //- console.log('response.status: ', response.status);
-          //- alert('delete project successfully')
-          //- //- window.location.assign('./testresult');
-          //- // TODO: settimeout and let page return to show all projects
-          //- window.location.reload();
         }
       })
       .catch((error) => {
-        console.log('in error');
         console.log('catch: ', error)
         swal({
             text: 'Delete project error',
@@ -175,7 +162,6 @@ block content
     })
 
     $('.btn-report').on('click', function(event) {
-      console.log('view project report clicked')
       event.preventDefault();
       const projectId = this.id;
 

@@ -102,7 +102,6 @@ const projectEditModel = async function (projectId, projectNewName) {
       project_name: projectNewName,
     }
   );
-  // console.log('editResult: ', editResult);
 
   if (!editResult) {
     return false;

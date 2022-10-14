@@ -135,14 +135,12 @@ block content
               //-             p= 100-reportCalculated[0].passRate
   script.
     $('.btn-create_project').on('click', function(event) {
-      console.log('create_project clicked')
       event.preventDefault();
       //- window.location.assign('./editproject');
     })
 
 
     $('.btn-modal-create_project').on('click', function(event) {
-      console.log('create_project in modal clicked')
       event.preventDefault();
       const projectName = $('.input_project-name').val();
 
@@ -167,7 +165,6 @@ block content
         }
       })
       .catch((error) => {
-        console.log('in error');
         console.log('Catch project error')
         Swal.fire({
             text: 'Create project error',
@@ -192,7 +189,6 @@ block content
 
 
     $('.btn-modal-edit_job-title').on('click', function(event) {
-      console.log('edit job-title in modal clicked')
       event.preventDefault();
 
       //- const userId = $('.btn-edit_job-title').id;
@@ -236,7 +232,6 @@ block content
       * ---------
       */
       let reportDetail = JSON.parse($('.report-detail').attr('report-detail'));
-      console.log('reportDetail: ', reportDetail);
       let reportName = [];
 
       let reportData = [];

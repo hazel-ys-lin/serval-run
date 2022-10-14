@@ -17,7 +17,6 @@ const projectInsertController = async (req, res) => {
   };
 
   let saveProjectResult = await projectInsertModel(projectInfo);
-  console.log();
   if (saveProjectResult) {
     return res
       .status(200)

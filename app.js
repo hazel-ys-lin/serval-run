@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const morganBody = require('morgan-body');
 
 const app = express();
 const httpServer = require('http').createServer(app);
@@ -8,6 +9,8 @@ const httpServer = require('http').createServer(app);
 app.use(express.static('public'));
 app.set('view engine', 'pug');
 app.use(express.json());
+
+morganBody(app);
 
 const sessionMiddleware = session({
   secret: process.env.SESSION_SECRET,
