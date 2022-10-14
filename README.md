@@ -93,35 +93,35 @@ password: 123456
 
 2. Check Project
 
-[project]()
+![project](https://user-images.githubusercontent.com/61045228/195790995-ff8f84d1-2b86-44a5-96de-f0a56fad470d.gif)
 
 3. Create environment
 
-[environment]()
+![environment](https://user-images.githubusercontent.com/61045228/195791012-d0025bbb-7fff-4294-86f0-a0e6fd36a184.gif)
 
 4. Create collection
 
-[collection]()
+![collection](https://user-images.githubusercontent.com/61045228/195791022-6c974ab1-75e1-4ff5-8049-3bb47f1138fa.gif)
 
 5. The environments and the collections are both editable
 
-[edit]()
+![edit](https://user-images.githubusercontent.com/61045228/195791034-fae11429-251d-4e0b-b70a-9c2708267f6d.gif)
 
 6. Create API
 
-[api]()
+![api](https://user-images.githubusercontent.com/61045228/195791046-116e015a-ba0e-4691-b185-327f3448a4ba.gif)
 
 7. Create scenario
 
-[scenario]()
+![scenario](https://user-images.githubusercontent.com/61045228/195791070-825f05c4-0692-4486-a2d1-02e8810ab589.gif)
 
 8. Run tests in scenario/API/collection level
 
-[run-test]()
+![run-test](https://user-images.githubusercontent.com/61045228/195791076-7c00fbb6-fb38-4c55-854a-fddc716cb63c.gif)
 
 9. Check the reports
 
-[report]()
+![report](https://user-images.githubusercontent.com/61045228/195791093-ac9fbe91-0ace-4330-99f1-64cc17664f37.gif)
 
 ## Demo
 
