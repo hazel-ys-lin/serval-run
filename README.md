@@ -4,6 +4,15 @@
 
 An automated integration testing and document tool for developers and non-developers.
 
+#### Test account
+
+We now welcome everyone join testing our testing service!
+
+```
+email: prettyServal@gmail.com
+password: 123456
+```
+
 ## Table of Contents
 
 - [Features](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Features)
@@ -83,40 +92,57 @@ Happy testing!
 
 ## Usage/Examples
 
-#### Test account
+#### How To Use
+
+1. Sign In
+
+- Here is the test account you may get started without registering a new one:
 
 ```
 email: prettyServal@gmail.com
 password: 123456
 ```
 
-#### How To Use
-
-1. Sign In
-
 ![index&signin](https://user-images.githubusercontent.com/61045228/195796252-315136ba-e659-47c8-bed0-f159c00cdcde.gif)
 
-2. Check Project
+2. View Project
 
 ![project](https://user-images.githubusercontent.com/61045228/195796271-916665ed-543b-44df-8dc1-81aabda9d518.gif)
 
-3. Create environment
+3. Set up environment
+
+- Create environment to use different domain name or IP address to request your API.
+- When setting up new environment, you may add develop stage such as "develop", "staging", or "production", etc.
 
 ![environment](https://user-images.githubusercontent.com/61045228/195796292-6fff5a73-fe7a-4dbf-8138-81757f60b702.gif)
 
 4. Create collection
 
+- Collection may include multiple APIs.
+  - For example, under "user" collection, "sign up", "sign in" and "profile" may all be included.
+- What's better is that ServalRun can run collection test (which means run bulk of APIs) by one click!
+
 ![collection](https://user-images.githubusercontent.com/61045228/195796305-dad51831-7807-4d0e-9491-92967e9a5109.gif)
 
 5. The environments and the collections are both editable
+
+- Click on the pencil icon to modify the environments and collections whenever you want.
 
 ![edit](https://user-images.githubusercontent.com/61045228/195796354-8ae8d7e0-9490-465b-b870-88cc35631229.gif)
 
 6. Create API
 
+- When creating API to test, users need to provide informations as below:
+  - API endpoint
+  - HTTP method
+  - Severity of the API
+
 ![api](https://user-images.githubusercontent.com/61045228/195796374-78e857da-a7da-40e1-96d3-0594119e7974.gif)
 
 7. Create scenario
+
+- Write your first testable document with Gherkin!
+  - There is already a short snippet of gherkin example document in the creating scenario form. Feel free to test it!
 
 ![scenario](https://user-images.githubusercontent.com/61045228/195796399-0a699c6f-7b9b-4fce-a60d-508453f25ea3.gif)
 
@@ -134,7 +160,7 @@ password: 123456
 
 ## FAQ
 
-#### 1. Does ServalRun support other testing language? I have never been using Gherkin to conduct testing before.
+#### Does ServalRun support other testing language? I have never been using Gherkin to conduct testing before.
 
 We feel sorry to inform that ServalRun only support Gherkin to generate testing document by now.
 
