@@ -203,7 +203,6 @@ block content
 
 
 			$('.btn-modal-edit_api').on('click', function(event) {
-				console.log('edit api clicked')
 				event.preventDefault();
 
 				const apiId = $('.input_new_apiid').val();
@@ -237,7 +236,6 @@ block content
 					}
 				})
 				.catch((error) => {
-					console.log('in error');
 					console.log('catch api error')
 					Swal.fire({
 							text: 'Update API failed',
@@ -251,12 +249,10 @@ block content
 			})
 
 			$('.btn-create_api').on('click', function(event) {
-					console.log('create_api clicked')
 					event.preventDefault();
 			})
 
 			$('.btn-scenarios').on('click', function(event) {
-					console.log('view scenario clicked')
 					event.preventDefault();
 					const apiId = this.id;
 					window.location.assign(`./scenarios?apiid=${apiId}`);
@@ -264,12 +260,10 @@ block content
 
 
 			$('.btn-delete').on('click', function(event) {
-					console.log('delete_api clicked')
 					event.preventDefault();
 
 					const collectionId = $('.collection-id').text();
 					const apiId = this.id;
-					console.log('apiId: ', apiId)
 
 					Swal.fire({
 							title: 'Are you sure?',
@@ -307,8 +301,7 @@ block content
 											}
 									})
 									.catch((error) => {
-											console.log('in error');
-											console.log('catch: ', error)
+											console.log('catch error in api delete: ', error)
 											if (error.response.status === 401) {
 													Swal.fire({
 																	text: 'Please log in first',
@@ -335,7 +328,6 @@ block content
 			})
 
 			$('#exampleModal').on('show.bs.modal', function(event) {
-					console.log('#exampleModal')
 					// Button that triggered the modal
 					let button = event.relatedTarget;
 					// Extract info from data-bs-* attributes
@@ -348,7 +340,6 @@ block content
 			})
 
 			$('.btn-modal-create_api').on('click', function(event) {
-					console.log('create_api in modal clicked')
 					event.preventDefault();
 					const collectionId = $('.input_collectionid').val();
 					const apiName = $('.input_api-name').val();
@@ -383,7 +374,6 @@ block content
 							}
 					})
 					.catch((error) => {
-							console.log('in error');
 							console.log('catch api error')
 							if (error.response.status === 401) {
 									Swal.fire({
@@ -409,7 +399,6 @@ block content
 
 
 			$('#runAPIModal').on('show.bs.modal', function(event) {
-					console.log('#runAPIModal')
 					// Button that triggered the modal
 					let button = event.relatedTarget;
 					// Extract info from data-bs-* attributes
@@ -422,7 +411,6 @@ block content
 			})
 
 			$('.btn-apitest-in-toggle').on('click', function(event) {
-					console.log('run api test in toggle clicked');
 					event.preventDefault();
 
 					Swal.fire({

@@ -82,17 +82,6 @@ const projectDeleteModel = async function (projectInfo) {
       .deleteMany({ _id: { $in: scenarioIds } })
       .session(session);
 
-    // console.log(
-    //   'environmentDeleteResult',
-    //   environmentDeleteResult,
-    //   '\ncollectionDeleteResult: ',
-    //   collectionDeleteResult,
-    //   '\napiDeleteResult: ',
-    //   apiDeleteResult,
-    //   '\nscenarioDeleteResult: ',
-    //   scenarioDeleteResult
-    // );
-
     await session.commitTransaction();
     session.endSession();
     return true;
@@ -154,11 +143,8 @@ const collectionDeleteModel = async function (collectionInfo) {
         _id: collectionInfo.collectionId,
       })
       .session(session);
-    // .catch(function (err) {
-    //   console.log(err);
-    // });
 
-    await projectModel
+    let deleted_project = await projectModel
       .findOneAndUpdate(
         { _id: collectionInfo.projectId },
         {
@@ -174,7 +160,6 @@ const collectionDeleteModel = async function (collectionInfo) {
     let apiToDelete = await apiModel
       .find({ collection_id: collectionInfo.collectionId })
       .session(session);
-    // console.log('apiToDelete in collectionDeleteModel: ', apiToDelete);
 
     let apiIds = [];
     for (let i = 0; i < apiToDelete.length; i++) {
@@ -183,9 +168,7 @@ const collectionDeleteModel = async function (collectionInfo) {
     let apideleteResult = await apiModel
       .deleteMany({ collection_id: collectionInfo.collectionId })
       .session(session);
-    // console.log('apideleteResult: ', apideleteResult);
 
-    // console.log('apiIds: ', apiIds);
     let deletemanyResult = await scenarioModel
       .deleteMany({
         api_id: {
@@ -193,7 +176,6 @@ const collectionDeleteModel = async function (collectionInfo) {
         },
       })
       .session(session);
-    // console.log('deletemanyscenarioResult: ', deletemanyResult);
 
     await session.commitTransaction();
     session.endSession();
@@ -218,7 +200,6 @@ const apiDeleteModel = async function (apiInfo) {
         _id: apiInfo.apiId,
       })
       .session(session);
-    // console.log('deleted API: ', deleted);
 
     await collectionModel
       .findOneAndUpdate(
@@ -232,12 +213,10 @@ const apiDeleteModel = async function (apiInfo) {
         }
       )
       .session(session);
-    // console.log('apiInfo.apiId: ', apiInfo.apiId);
 
     let scenarioDeleteResult = await scenarioModel
       .deleteMany({ api_id: apiInfo.apiId })
       .session(session);
-    // console.log('scenarioDeleteResult: ', scenarioDeleteResult);
 
     await session.commitTransaction();
     session.endSession();

@@ -77,13 +77,14 @@ const collectionInsertController = async function (req, res) {
 };
 
 const collectionDeleteController = async function (req, res) {
-  const { projectId, collectionName } = req.body;
+  const { projectId, collectionId } = req.body;
   const collectionInfo = {
     projectId: projectId,
-    collectionName: collectionName,
+    collectionId: collectionId,
   };
 
   let deleteCollectionResult = await collectionDeleteModel(collectionInfo);
+
   if (deleteCollectionResult) {
     return res.status(200).json({ message: 'Collection deleted' });
   } else {

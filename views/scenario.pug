@@ -189,7 +189,6 @@ block content
                 });
 
                 $('.btn-modal-create_scenario').on('click', function(event) {
-                    console.log('create scenario in modal clicked')
                     event.preventDefault();
 
                     Swal.fire({
@@ -227,7 +226,6 @@ block content
                         }
                     })
                     .catch((error) => {
-                        console.log('in error');
                         console.log('catch: ', error)
                         if (error.response.status === 422) {
                             Swal.fire({
@@ -261,12 +259,10 @@ block content
             })
 
             $('.btn-create_scenario').on('click', function(event) {
-                console.log('create_scenario clicked')
                 event.preventDefault();
             })
 
             $('.btn-scenariotest-in-modal').on('click', function(event) {
-                console.log('run scenario test in toggle clicked');
                 event.preventDefault();
 
                 Swal.fire({
@@ -326,12 +322,10 @@ block content
 
 
             $('.btn-delete').on('click', function(event) {
-                console.log('delete_scenario clicked')
                 event.preventDefault();
 
                 const apiId = $('.api-id').text();
                 const scenarioId = this.id;
-                console.log('scenarioId: ', scenarioId)
 
                 Swal.fire({
                     title: 'Are you sure?',
@@ -367,7 +361,6 @@ block content
                             }
                         })
                         .catch((error) => {
-                            console.log('in error');
                             console.log('catch: ', error)
                             Swal.fire({
                                     text: 'Delete scenario error',
@@ -388,20 +381,6 @@ block content
                     return new bootstrap.Popover(popoverTriggerEl)
                 })
             })
-
-            //- $('#runScenarioModal').on('show.bs.modal', function(event) {
-            //-     console.log('#runScenarioModal')
-            //-     // Button that triggered the modal
-            //-     let button = event.relatedTarget;
-            //-     // Extract info from data-bs-* attributes
-            //-     //- let collectionId = $('.btn-create_api').attr('data-bs-whatever');
-            //-     // If necessary, you could initiate an AJAX request here
-            //-     // and then do the updating in a callback.
-
-            //-     // Update the modal's content.
-            //-     //- $('input#collection-id').val(collectionId).prop('readonly', true);
-            //- })
-
 
             $('.btn-scenariotest-in-toggle').on('click', function(event) {
                 console.log('run scenario test in toggle clicked');

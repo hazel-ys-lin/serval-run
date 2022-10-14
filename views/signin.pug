@@ -10,10 +10,10 @@ block content
                         //- h1.h3.mb-3 Sign in
                         .form-group
                             label.sr-only(for='user-email') Email address
-                            input#user-signin-email.form-control.form-control-lg.input_signin-email(type='email' placeholder='serval_meow@gmail.com' required autofocus='')
+                            input#user-signin-email.form-control.form-control-lg.input_signin-email(type='email' placeholder='prettyServal@gmail.com' required autofocus='' value='prettyServal@gmail.com') 
                         .form-group
                             label.sr-only(for='user-password') Password
-                            input#user-signin-password.form-control.form-control-lg.input_signin-password(type='password' placeholder='Password' required)
+                            input#user-signin-password.form-control.form-control-lg.input_signin-password(type='password' placeholder='123456' value='123456' required) 
                         button.btn.btn-lg.btn-primary.btn-block.btn-sign_in(type='submit') Back to Test ➜
                     .text-center(style='padding: 2rem 0;')
                         a.create-account(href='./register') Create account 
@@ -21,7 +21,6 @@ block content
                         p.mt-5.mb-3.text-muted &copy; 2022 ServalRun
     script. 
         $('.btn-sign_in').on('click', function (event) {
-            //- console.log('sign in clicked')
             event.preventDefault();
             const userEmail = $('.input_signin-email').val();
             const userPassword = $('.input_signin-password').val();
@@ -37,8 +36,6 @@ block content
             })
             .then((response) => {
             if (response.status === 200) {
-                console.log('sign in success');
-                //- alert("Welcome back to ServalRun!");
                 Swal.fire({
                     text: 'Welcome back to ServalRun!',
                     icon: 'success',
@@ -50,7 +47,6 @@ block content
             }
             })
             .catch((error) => {
-            //- console.log('catch error: ', error)
             if (error.response.status === 403) {
                 Swal.fire({
                     text: 'Sign in failed\nPlease check your email or password',
