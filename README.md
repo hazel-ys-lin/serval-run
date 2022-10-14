@@ -56,8 +56,8 @@ user system to make user sign in
 For example, this snippet of code (or text) can be compiled into specification datasheet for conducting tests.
 
 - **Feature** means what feature this snippet is going to test.
-- **Scenario Outline** means under this circanstance, all the steps of this test.
-- **Examples** indicates the data which will be send to the target server.
+- **Scenario Outline** means under this circumstance, all the steps of this test.
+- **Examples** indicates the data which will be sent to the target server.
 
 That's how it works. This is the magic of Gherkin and BDD.
 ServalRun utilized the power of this language, turning single test under single scenario to integration testing.
