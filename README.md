@@ -89,7 +89,7 @@ password: 123456
 
 1. Sign In
 
-[index&signin](https://user-images.githubusercontent.com/61045228/195790097-2c74e1d4-defc-4ed1-bdba-41e9186dd777.gif)
+![index&signin](https://user-images.githubusercontent.com/61045228/195790097-2c74e1d4-defc-4ed1-bdba-41e9186dd777.gif)
 
 2. Check Project
 
