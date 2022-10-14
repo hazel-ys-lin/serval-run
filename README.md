@@ -94,39 +94,39 @@ password: 123456
 
 1. Sign In
 
-![index&signin](https://user-images.githubusercontent.com/61045228/195790097-2c74e1d4-defc-4ed1-bdba-41e9186dd777.gif)
+![index&signin](https://user-images.githubusercontent.com/61045228/195796252-315136ba-e659-47c8-bed0-f159c00cdcde.gif)
 
 2. Check Project
 
-![project](https://user-images.githubusercontent.com/61045228/195790995-ff8f84d1-2b86-44a5-96de-f0a56fad470d.gif)
+![project](https://user-images.githubusercontent.com/61045228/195796271-916665ed-543b-44df-8dc1-81aabda9d518.gif)
 
 3. Create environment
 
-![environment](https://user-images.githubusercontent.com/61045228/195791012-d0025bbb-7fff-4294-86f0-a0e6fd36a184.gif)
+![environment](https://user-images.githubusercontent.com/61045228/195796292-6fff5a73-fe7a-4dbf-8138-81757f60b702.gif)
 
 4. Create collection
 
-![collection](https://user-images.githubusercontent.com/61045228/195791022-6c974ab1-75e1-4ff5-8049-3bb47f1138fa.gif)
+![collection](https://user-images.githubusercontent.com/61045228/195796305-dad51831-7807-4d0e-9491-92967e9a5109.gif)
 
 5. The environments and the collections are both editable
 
-![edit](https://user-images.githubusercontent.com/61045228/195791034-fae11429-251d-4e0b-b70a-9c2708267f6d.gif)
+![edit](https://user-images.githubusercontent.com/61045228/195796354-8ae8d7e0-9490-465b-b870-88cc35631229.gif)
 
 6. Create API
 
-![api](https://user-images.githubusercontent.com/61045228/195791046-116e015a-ba0e-4691-b185-327f3448a4ba.gif)
+![api](https://user-images.githubusercontent.com/61045228/195796374-78e857da-a7da-40e1-96d3-0594119e7974.gif)
 
 7. Create scenario
 
-![scenario](https://user-images.githubusercontent.com/61045228/195791070-825f05c4-0692-4486-a2d1-02e8810ab589.gif)
+![scenario](https://user-images.githubusercontent.com/61045228/195796399-0a699c6f-7b9b-4fce-a60d-508453f25ea3.gif)
 
 8. Run tests in scenario/API/collection level
 
-![run-test](https://user-images.githubusercontent.com/61045228/195791076-7c00fbb6-fb38-4c55-854a-fddc716cb63c.gif)
+![run-test](https://user-images.githubusercontent.com/61045228/195796417-b5427eb5-2ada-4bbf-9662-2abe2cb1b1d0.gif)
 
 9. Check the reports
 
-![report](https://user-images.githubusercontent.com/61045228/195791093-ac9fbe91-0ace-4330-99f1-64cc17664f37.gif)
+![report](https://user-images.githubusercontent.com/61045228/195796438-db697d84-bf36-4b45-90ca-33d6e358e38d.gif)
 
 ## Demo
 
