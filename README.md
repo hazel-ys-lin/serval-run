@@ -6,10 +6,12 @@ An automated integration testing and document tool for developers and non-develo
 
 ## Table of Contents
 
-- [Features]()
-- [Introduction]()
-- [Architecture]()
-- [Usage/Examples]()
+- [Features](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Features)
+- [Introduction](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Introduction)
+- [Architecture](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Architecture)
+- [Usage/Examples](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Usage/Examples)
+- [FAQ](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#FAQ)
+- [Author](https://github.com/hazel-ys-lin/serval-run/blob/main/README.md#Author)
 
 ## Features
 
