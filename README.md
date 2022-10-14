@@ -1,5 +1,6 @@
 # ServelRun
 
+![serval-run_logo-2](https://user-images.githubusercontent.com/61045228/195865863-f59a68aa-3924-4f81-913f-ec46fdfd2104.png)
 [ServelRun | Test Your Server as Rapid as Serval](https://serval.run/)
 
 An automated integration testing and document tool for developers and non-developers.
