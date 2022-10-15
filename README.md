@@ -156,7 +156,7 @@ password: 123456
   - HTTP method
   - Severity of the API
 
-![api](https://user-images.githubusercontent.com/61045228/195796374-78e857da-a7da-40e1-96d3-0594119e7974.gif)
+![api](https://user-images.githubusercontent.com/61045228/195984468-f1023b8f-0620-4f74-baa2-e85b586c656d.gif)
 
 7. Create scenario
 
@@ -167,11 +167,13 @@ password: 123456
 
 8. Run tests in scenario/API/collection level
 
-![run-test](https://user-images.githubusercontent.com/61045228/195796417-b5427eb5-2ada-4bbf-9662-2abe2cb1b1d0.gif)
+![run-test](https://user-images.githubusercontent.com/61045228/195984520-49e70510-9229-4317-a51b-6e95063d4a04.gif)
 
 9. Check the reports
 
-![report](https://user-images.githubusercontent.com/61045228/195796438-db697d84-bf36-4b45-90ca-33d6e358e38d.gif)
+![report](https://user-images.githubusercontent.com/61045228/195984535-89f17482-3c32-4e9f-ad8e-e30d2e182892.gif)
+
+![reportdetail](https://user-images.githubusercontent.com/61045228/195984545-4f3edb94-cdfb-4edd-b99c-9cc8d22ad8b9.gif)
 
 ## Demo
 
