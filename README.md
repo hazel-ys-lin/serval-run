@@ -121,15 +121,15 @@ Happy testing!
   - API may include multiple scenarios.
   - You may create scenarios by writing Gherkin.
 
-![1017-test-level-1](https://user-images.githubusercontent.com/61045228/196112656-8307d558-b11c-45f3-9cde-b083d94828ee.png)
+<img src="https://user-images.githubusercontent.com/61045228/196112656-8307d558-b11c-45f3-9cde-b083d94828ee.png" alt="1017-test-level-1" width="200"/>
 
 - For example, under "user" collection, "sign up", "sign in" and "profile" may all be included.
 
   - If there is a project named "STYLiSH", which is an e-commerce website:
-    ![1017-test-level-2](https://user-images.githubusercontent.com/61045228/196112671-dc6211eb-9c3e-48df-a739-06ce252ed0a4.png)
+    <img src="https://user-images.githubusercontent.com/61045228/196112671-dc6211eb-9c3e-48df-a739-06ce252ed0a4.png" alt="1017-test-level-2" width="200"/>
 
 - So the levels may be built as a pyramid:
-  ![1017-test-level-3](https://user-images.githubusercontent.com/61045228/196112694-fab98c8d-f9e0-4e38-b93a-cc96bc7c1d01.png)
+  <img src="https://user-images.githubusercontent.com/61045228/196112694-fab98c8d-f9e0-4e38-b93a-cc96bc7c1d01.png" alt="1017-test-level-3" width="200"/>
 
 #### How To Use
 
