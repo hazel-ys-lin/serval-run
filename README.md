@@ -40,6 +40,8 @@ password: 123456
 - [Technologies](#Technologies)
 - [Architecture](#Architecture)
 - [Usage/Examples](#Usageexamples)
+  - [Explanation of Test Levels](#explanation-of-test-levels)
+  - [How To Use](#how-to-use)
 - [FAQ](#FAQ)
 - [Author](#Author)
 
@@ -112,7 +114,7 @@ Happy testing!
 
 ## Usage/Examples
 
-#### Explanation of Test Levels
+### Explanation of Test Levels
 
 - In ServalRun, you may choose different test level to test your server.
 - The levels include "collection", "API", and "scenario".
@@ -133,7 +135,7 @@ Happy testing!
 
   <img src="https://user-images.githubusercontent.com/61045228/196112694-fab98c8d-f9e0-4e38-b93a-cc96bc7c1d01.png" alt="1017-test-level-3" width="600"/>
 
-#### How To Use
+### How To Use
 
 1. Sign In
 
