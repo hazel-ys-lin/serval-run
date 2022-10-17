@@ -1,7 +1,8 @@
 # ServelRun
 
 ![serval-run_logo-2](https://user-images.githubusercontent.com/61045228/195865863-f59a68aa-3924-4f81-913f-ec46fdfd2104.png)
-[ServelRun | Test Your Server as Rapid as Serval](https://serval.run/)
+
+> [ServelRun | Test Your Server as Rapid as Serval](https://serval.run/)
 
 An automated integration testing and document tool for developers and non-developers.
 
@@ -110,6 +111,25 @@ Happy testing!
   ![1006-serval-run-01](https://user-images.githubusercontent.com/61045228/195749497-3e2b1b62-6815-4dd8-8842-46e159b91ad4.png)
 
 ## Usage/Examples
+
+#### Explanation of Test Levels
+
+- In ServalRun, you may choose different test level to test your server.
+- The levels include "collection", "API", and "scenario".
+  - Project may include multiple collections.
+  - Collection may include multiple APIs.
+  - API may include multiple scenarios.
+  - You may create scenarios by writing Gherkin.
+
+![1017-test-level-1](https://user-images.githubusercontent.com/61045228/196112656-8307d558-b11c-45f3-9cde-b083d94828ee.png)
+
+- For example, under "user" collection, "sign up", "sign in" and "profile" may all be included.
+
+  - If there is a project named "STYLiSH", which is an e-commerce website:
+    ![1017-test-level-2](https://user-images.githubusercontent.com/61045228/196112671-dc6211eb-9c3e-48df-a739-06ce252ed0a4.png)
+
+- So the levels may be built as a pyramid:
+  ![1017-test-level-3](https://user-images.githubusercontent.com/61045228/196112694-fab98c8d-f9e0-4e38-b93a-cc96bc7c1d01.png)
 
 #### How To Use
 
