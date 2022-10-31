@@ -39,6 +39,7 @@ password: 123456
 - [Introduction](#Introduction)
 - [Technologies](#Technologies)
 - [Architecture](#Architecture)
+- [Table Schema](#table-schema)
 - [Usage/Examples](#Usageexamples)
   - [Explanation of Test Levels](#explanation-of-test-levels)
   - [How To Use](#how-to-use)
@@ -111,6 +112,12 @@ Happy testing!
 - Updating real-time test status by [Redis publish/subscribe](https://redis.io/docs/manual/pubsub/)
 - Utilizing WebSocket to update test result charts immediately with [Socket.IO](https://socket.io/)
   ![1006-serval-run-01](https://user-images.githubusercontent.com/61045228/195749497-3e2b1b62-6815-4dd8-8842-46e159b91ad4.png)
+
+## Table Schema
+
+- ServalRun Used MongoDB to suffice multiple levels requirements of storing and structuring testin data
+- By following MongoDB Best practice, we tried to meet the suggestion of embedding and referencing data together
+  ![1031-table-schema-1](https://user-images.githubusercontent.com/61045228/199060989-6743cf00-c667-4e18-8672-53a17cbaca27.png)
 
 ## Usage/Examples
 
