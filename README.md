@@ -115,8 +115,8 @@ Happy testing!
 
 ## Table Schema
 
-- ServalRun Used MongoDB to suffice multiple levels requirements of storing and structuring testin data
-- By following MongoDB Best practice, we tried to meet the suggestion of embedding and referencing data together
+- ServalRun Used MongoDB to suffice multiple levels requirements of storing and structuring testing data
+- By following [MongoDB Best practice](https://www.mongodb.com/developer/products/mongodb/mongodb-schema-design-best-practices/), we tried to meet the suggestion of embedding and referencing data together
   ![1031-table-schema-1](https://user-images.githubusercontent.com/61045228/199060989-6743cf00-c667-4e18-8672-53a17cbaca27.png)
 
 ## Usage/Examples
